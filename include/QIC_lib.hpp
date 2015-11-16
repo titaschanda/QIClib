@@ -47,14 +47,13 @@
 #define _QIC_UNUSED_ 
 #endif
 
-namespace qic
-{ 
-  namespace _precision { namespace
-    {constexpr double eps = 1.0e-12;} } 
-}
-
 
 //include nlopt independent functions, order matters
+#include "QIC_lib_bits/class/exception.hpp"
+#include "QIC_lib_bits/class/singleton.hpp"
+#include "QIC_lib_bits/class/constants.hpp"
+#include "QIC_lib_bits/class/init.hpp"
+
 #include "QIC_lib_bits/basic/type_traits.hpp"
 #include "QIC_lib_bits/basic/as_Mat.hpp"
 #include "QIC_lib_bits/basic/as_Col.hpp"
@@ -63,17 +62,9 @@ namespace qic
 #include "QIC_lib_bits/basic/is_U.hpp"
 #include "QIC_lib_bits/basic/is_pure.hpp"
 #include "QIC_lib_bits/basic/is_valid_state.hpp"
-
-
-#include "QIC_lib_bits/class/exception.hpp"
-#include "QIC_lib_bits/class/singleton.hpp"
-#include "QIC_lib_bits/class/constants.hpp"
-#include "QIC_lib_bits/class/init.hpp"
 #include "QIC_lib_bits/basic/range.hpp"
 
-
 #include "QIC_lib_bits/internal/protect_subs.hpp"
-
 
 #include "QIC_lib_bits/function/conv_to_pure.hpp" 
 #include "QIC_lib_bits/function/generator.hpp" 
@@ -116,5 +107,12 @@ namespace qic
 #include "QIC_lib_bits/discord/deficit.hpp"
 #include "QIC_lib_bits/discord/deficit3.hpp"
 
+
+namespace qic
+{
+  
+
+  
+}
 
 #endif

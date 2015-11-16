@@ -24,6 +24,9 @@
 namespace qic
 {
 
+  //***************************************************************************
+
+
   template <typename T1,typename T2, typename T3>
   inline 
   typename std::enable_if< 
@@ -58,6 +61,9 @@ namespace qic
   }
 
 
+  //****************************************************************************
+
+
   template <typename T1, typename T2>
   inline 
   typename std::enable_if< 
@@ -72,6 +78,10 @@ namespace qic
 		 static_cast<pTr>(1));
   }
   
+
+  //****************************************************************************
+
+
   template <typename T1>
   inline 
   typename std::enable_if< std::is_arithmetic<T1>::value,

@@ -24,6 +24,7 @@
 namespace qic
 {
 
+
   template<typename T1,typename T2>
   inline 
   typename std::enable_if< std::is_arithmetic< pT<T1> >::value 
@@ -46,7 +47,8 @@ namespace qic
     const arma::uword m2 = rho2.n_cols;
   
   
-    if(n1!=n2 || m1!=m2 || (typecheck && !std::is_same< eT<T1> , eT<T2> >::value))
+    if(n1!=n2 || m1!=m2 
+       || (typecheck && !std::is_same< eT<T1> , eT<T2> >::value))
       return false;
     
     else

@@ -24,6 +24,14 @@
 namespace qic
 {
 
+  namespace _precision { namespace
+    {constexpr double eps = 1.0e-12;} } 
+
+
+
+
+
+
   template<typename T1>
   class STATES final: public protect_subs::Singleton< const STATES<T1> >
   {

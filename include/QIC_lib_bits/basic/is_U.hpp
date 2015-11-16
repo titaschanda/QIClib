@@ -50,14 +50,18 @@ namespace qic
 				     * arma::ones< arma::Mat< pT<T1> > >(n,m) 
 				     + static_cast< pT<T1> >(rtol)  
 				     * arma::abs(eye1)) 
-				    - arma::abs(eye1 - arma::eye< arma::Mat< pT<T1> > >(n,m))) >  0.0);
+				    - arma::abs(eye1 
+						- arma::eye< arma::Mat< 
+						pT<T1> > >(n,m)))>  0.0);
 	
 	bool ret2 = 
 	  arma::all(arma::vectorise((static_cast< pT<T1> >(atol) 
 				     * arma::ones< arma::Mat< pT<T1> > >(n,m) 
 				     + static_cast< pT<T1> >(rtol)  
 				     * arma::abs(eye2)) 
-				    - arma::abs(eye2 - arma::eye< arma::Mat< pT<T1> > >(n,m))) >  0.0);
+				    - arma::abs(eye2 
+						- arma::eye< arma::Mat< 
+						pT<T1> > >(n,m))) >  0.0);
 	return (ret1 && ret2);
 
       }
