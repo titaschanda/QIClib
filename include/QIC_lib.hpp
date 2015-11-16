@@ -117,11 +117,4 @@ namespace qic
 #include "QIC_lib_bits/discord/deficit3.hpp"
 
 
-namespace qic
-{
-  
-
-  
-}
-
 #endif
