@@ -6,20 +6,27 @@ It is a header only template library, using [Armadillo](http://arma.sourceforge.
 
 Getting started
 ---------------
+[QIC_lib](http://titas99.github.io/QIC_lib/) is a header only library, so there is no need to compile the source.
+
+
 Download [QIC_lib](http://titas99.github.io/QIC_lib/) either from official [website](http://titas99.github.io/QIC_lib/) or using `git clone` with the command
    
      git clone https://github.com/titas99/QIC_lib.
 
-[QIC_lib](http://titas99.github.io/QIC_lib/) is a header only library, so there is no need to compile the source.
+
 Make sure that you have [Armadillo](http://arma.sourceforge.net/) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), comment out the following line in `include/QIC_lib.hpp`:
 
     #define QIC_LIB_NLOPT
 
 
 Also make sure that you have an C++11 compliant compiler. [gcc](https://gcc.gnu.org/) version 4.8 or later, or [clang](http://clang.llvm.org/) version 3.3 or later is recomended.
+
  
 Include the header `QIC_lib.hpp` in your source code (make sure that your compiler can find the path of the header file) and [QIC_lib](http://titas99.github.io/QIC_lib/) is ready to fly. 
 For example codes, see [here](http://titas99.github.io/QIC_lib/sample.html). You will also find detailed API information [here](http://titas99.github.io/QIC_lib/documentation.html).
+
+
+**Note** Use [openblas](http://www.openblas.net/) or [Intel MKL](https://software.intel.com/en-us/intel-mkl) with [Armadillo](http://arma.sourceforge.net/) for better performance. 
 
 Got a Problem or Question?
 --------------------------

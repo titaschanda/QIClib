@@ -113,18 +113,7 @@ namespace qic
     ~STATES() = default;
   };
 
-  /*
-  template<typename pT>
-  struct States1
-  {
-    static const  STATES<pT>& value = STATES<pT>::get_instance();
-  };
-  */
-
-
-  // template<typename pT>
-  //static const STATES<pT>& States = STATES<pT>::get_instance();
-  
+ 
   static const STATES<double>& states _QIC_UNUSED_ = 
 				STATES<double>::get_instance();
  
