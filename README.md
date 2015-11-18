@@ -14,7 +14,7 @@ Download [QIC_lib](http://titas99.github.io/QIC_lib/) either from official [webs
      git clone https://github.com/titas99/QIC_lib.
 
 
-Make sure that you have [Armadillo](http://arma.sourceforge.net/) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), comment out the following line in `include/QIC_lib.hpp`:
+Make sure that you have [Armadillo](http://arma.sourceforge.net/) (version 5.2 or later) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), comment out the following line in `include/QIC_lib.hpp`:
 
     #define QIC_LIB_NLOPT
 
@@ -26,7 +26,7 @@ Include the header `QIC_lib.hpp` in your source code (make sure that your compil
 For example codes, see [here](http://titas99.github.io/QIC_lib/sample.html). You will also find detailed API information [here](http://titas99.github.io/QIC_lib/documentation.html).
 
 
-**Note** Use [openblas](http://www.openblas.net/) or [Intel MKL](https://software.intel.com/en-us/intel-mkl) with [Armadillo](http://arma.sourceforge.net/) for better performance. 
+**Note:** Link [openblas](http://www.openblas.net/) or [Intel MKL](https://software.intel.com/en-us/intel-mkl) with latest version of [Armadillo](http://arma.sourceforge.net/) for better performance. For more see, [this](http://arma.sourceforge.net/faq.html#dependencies) and [this](https://gist.github.com/bdsatish/5646151). 
 
 Got a Problem or Question?
 --------------------------
