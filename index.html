@@ -15,14 +15,14 @@
     <section class="page-header">
       <h1 class="project-name">Quantum Information and Computation library (QIC_lib)</h1>
       <h2 class="project-tagline">A C++11 library for quantum information and computation based on Armadillo</h2>
-      <a href="https://github.com/titas99/QIC_lib" class="btn">View on GitHub</a>
-      <a href="https://github.com/titas99/QIC_lib/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/titas99/QIC_lib/tarball/master" class="btn">Download .tar.gz</a>
-      
-      <br>
+
       <a href="index.html" class="btn">Home</a>
       <a href="documentation.html" class="btn">API Documentation</a>
       <a href="sample.html" class="btn">Sample Codes</a>
+      <br>
+      <a href="https://github.com/titas99/QIC_lib" class="btn">View on GitHub</a>
+      <a href="https://github.com/titas99/QIC_lib/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/titas99/QIC_lib/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
@@ -34,21 +34,25 @@ It is a header only template library, using <a href="http://arma.sourceforge.net
 
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+QIC_lib is a header only library, so there is no need to compile the source.<br><br>
+
 Download QIC_lib either from the above download link or using <code>git clone</code> with the command <br>
 <code>   
      git clone https://github.com/titas99/QIC_lib.
-</code><br>
-QIC_lib is a header only library, so there is no need to compile the source.
-Make sure that you have <a href=http://arma.sourceforge.net/>Armadillo</a> and <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>Nlopt</a> installed on your system. If you don't want to use <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>Nlopt</a> specific features (like Quantum Discord), comment out the following line in <code>include/QIC_lib.hpp</code>:<br>
+</code><br><br>
+
+Make sure that you have <a href=http://arma.sourceforge.net/>Armadillo</a> (version 5.2 or later) and <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>NLopt</a> installed on your system. If you don't want to use <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>NLopt</a> specific features (like Quantum Discord), comment out the following line in <code>include/QIC_lib.hpp</code>:<br>
 <code>
     #define QIC_LIB_NLOPT
-</code><br>
-Also make sure that you have an C++11 compliant compiler. <a href=https://gcc.gnu.org/>gcc</a> version 4.8 or later, or <a href = http://clang.llvm.org/>clang</a> version 3.3 or later is recomended.<br>
+</code><br><br>
+Also make sure that you have an C++11 compliant compiler. <a href=https://gcc.gnu.org/>gcc</a> version 4.8 or later, or <a href = http://clang.llvm.org/>clang</a> version 3.3 or later is recomended.<br><br>
 
 Include the header <code>QIC_lib.hpp</code> in your source code (make sure that your compiler can find the path of the header file) and QIC_lib is ready to fly. 
-For example codes, see <a href =sample.html>here</a>. You will also find detailed API information <a href = documentation.html>here</a>.
+For example codes, see <a href =sample.html>here</a>. You will also find detailed API information <a href = documentation.html>here</a>.<br><br>
 
 
+
+<b>Note:</b> Link <a href = http://www.openblas.net/>OpenBLAS</a> or <a href = https://software.intel.com/en-us/intel-mkl>Intel MKL</a> with latest version of <a href=http://arma.sourceforge.net/>Armadillo</a> for better performance. For more see, <a href = http://arma.sourceforge.net/faq.html#dependencies>this</a> and <a href = https://gist.github.com/bdsatish/5646151>this</a>. 
 
 <h2>
 <a id="got-a-problem-or-question" class="anchor" href="#got-a-problem-or-question" aria-hidden="true"><span class="octicon octicon-link"></span></a>Got a Problem or Question?</h2>

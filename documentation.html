@@ -13,21 +13,805 @@
     <section class="page-header">
       <h1 class="project-name">Quantum Information and Computation library (QIC_lib)</h1>
       <h2 class="project-tagline">A C++11 library for quantum information and computation based on Armadillo</h2>
-      <a href="https://github.com/titas99/QIC_lib" class="btn">View on GitHub</a>
-      <a href="https://github.com/titas99/QIC_lib/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/titas99/QIC_lib/tarball/master" class="btn">Download .tar.gz</a>
-      
-      <br>
       <a href="index.html" class="btn">Home</a>
       <a href="documentation.html" class="btn">API Documentation</a>
       <a href="sample.html" class="btn">Sample Codes</a>
+      <br>
+      <a href="https://github.com/titas99/QIC_lib" class="btn">View on GitHub</a>
+      <a href="https://github.com/titas99/QIC_lib/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/titas99/QIC_lib/tarball/master" class="btn">Download .tar.gz</a>
+
     </section>
 
     <section class="main-content">
      
       <h1>
-	Coming soon...
+	
       </h1>
+      <a name=top></a>
+      <b>Preamble</b>
+      <br>
+      
+      <tr>
+	<td style="text-align: left; vertical-align: top; width: 50%;">
+	  <ul>
+	    <br>
+	    <li>
+	      Every functions, classes, or constants in QIC_lib belongs to the <code> namespace qic</code>.
+	    </li>
+	    <br>
+	    <li>
+	      First time users may want to have a look on  <a href="sample.html#samples">sample programs</a>.
+	    </li>
+	    <br>
+	    <li>
+	      If you discover any bugs or regressions, please <a href="index.html#found-an-issue-or-bug">report them</a>
+	    </li>
+	    <br>
+	    <li>
+	      Notes on <a href="#api_additions">API additions</a>
+	    </li>
+	  </ul>
+	</td>
+	<td>
+
+	  <br>
+
+
+	  <b>Overview</b>
+	  <ul>
+	    <li><a href="#classes">Classes and constants</a></li>
+	    <li><a href="#functions">Functions</a></li>
+	    <li><a href="#discord">Discord like functions</a></li>
+	  </ul>
+	  <br>
+
+
+	  <a name="classes"></a>
+	  <b>Classes and constants</b>
+	  <ul>
+	    <table>
+	      <tbody>
+		<tr><td><a href="#eps"> _precision::eps     </td><td>  </td><td> Precision for floating point arithmetic</td></tr>
+		<tr><td><a href="#init"> Init     </td><td>  </td><td> Class for library initialization</td></tr>
+		<tr><td><a href="#states"> STATES&lttype&gt, states, fstates  </td><td>  </td><td> Several predefined basis states, projectors and operators</td></tr>
+		<tr><td><a href="#func"> Func&lttype&gt, func, funcf  </td><td>  </td><td> Several predefined functions to be used with <a href = #funcm_sym><code>funcm_sym</code></a> or <a href = #funcm_gen><code>funcm_gen</code></a>
+</td></tr>
+		
+	      </tbody>
+	    </table>
+	  </ul>
+	  <br>
+
+
+
+	  <a name="functions"></a>
+	  <b>Functions</b>
+	  <ul>
+	    <table>
+	      <tbody>
+		<tr><td><a href="#is_H"> is_H  </td><td>  </td><td> Hermiticity check</td></tr>
+		<tr><td><a href="#is_U"> is_U  </td><td>  </td><td> Unitarity check</td></tr>
+		<tr><td><a href="#is_pure"> is_pure  </td><td>  </td><td>Check purity of a density matrix</td></tr>
+		<tr><td><a href="#is_valid_state"> is_valid_state  </td><td>  </td><td> Check whether the matrix represents a valid quantum state</td></tr>
+		<tr><td><a href="#is_equal"> is_equal  </td><td>  </td><td>Check whether two matrices are equal</td></tr>
+		<tr><td><a href="#range"> range  </td><td>  </td><td> Similar to Python's range() function. Useful in range-based for loops</td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td><a href="#TrX"> TrX  </td><td>  </td><td> Partial trace</td></tr>
+		<tr><td><a href="#Tx"> Tx  </td><td>  </td><td> Partial transpose</td></tr>
+		<tr><td><a href="#sysperm"> sysperm  </td><td>  </td><td> Permute subsystems of a quantum state</td></tr>
+		<tr><td><a href="#sqrtm_sym"> sqrtm_sym  </td><td>  </td><td>Principal square root of matrix for real symmetric or Hermitian matrices</td></tr>
+		<tr><td><a href="#sqrtm_gen"> sqrtm_gen  </td><td>  </td><td>Principal square root of matrix for general square matrices</td></tr>
+		<tr><td><a href="#powm_sym"> powm_sym  </td><td>  </td><td>Matrix power for real symmetric or Hermitian matrices</td></tr>
+		<tr><td><a href="#powm_gen"> powm_gen  </td><td>  </td><td>Matrix power for general square matrices</td></tr>
+		<tr><td><a href="#expm_sym"> expm_sym  </td><td>  </td><td>Matrix exponential for real symmetric or Hermitian matrices</td></tr>
+		<tr><td><a href="#expm_gen"> expm_gen  </td><td>  </td><td>Matrix exponential for general square matrices</td></tr>
+		<tr><td><a href="#funcm_sym"> funcm_sym  </td><td>  </td><td>Matrix function for real symmetric or Hermitian matrices</td></tr>
+		<tr><td><a href="#funcm_gen"> funcm_gen  </td><td>  </td><td>Matrix function for general square matrices</td></tr>
+		<tr><td><a href="#tensor"> tensor  </td><td>  </td><td> Tensor product of arbitrary no. of  matrices</td></tr>
+		<tr><td><a href="#tensor_pow"> tensor_pow  </td><td>  </td><td>Tensor product power</td></tr>		
+		<tr><td><a href="#absm"> absm  </td><td>  </td><td>Matrix absolute value of a square matrix</td></tr>
+		<tr><td><a href="#schatten"> schatten  </td><td>  </td><td>Schatten p-norm of a matrix</td></tr>
+		<tr><td><a href="#conv_to_pure"> conv_to_pure  </td><td>  </td><td>Convert density matrix of a pure state to a column vector</td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td><a href="#entropy"> entropy  </td><td>  </td><td>von Neumann entropy of a quantum state</td></tr>
+		<tr><td><a href="#shannon"> shannon  </td><td>  </td><td>Shannon entropy of a probability distribution</td></tr>
+		<tr><td><a href="#renyi"> renyi  </td><td>  </td><td>Renyi entropy of a quantum state</td></tr>
+		<tr><td><a href="#renyi_prob"> renyi_prob  </td><td>  </td><td>Renyi entropy of a probability distribution</td></tr>
+		<tr><td><a href="#tsallis"> tsallis  </td><td>  </td><td>Tsallis entropy of a quantum state</td></tr>
+		<tr><td><a href="#tsallis_prob"> tsallis_prob  </td><td>  </td><td>Tsallis entropy of a probability distribution</td></tr>
+		<tr><td><a href="#mutual_info"> mutual_info  </td><td>  </td><td>Quantum mutual information between 2 subsystems of a quantum state</td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td><a href="#entanglement"> entanglement  </td><td>  </td><td>Entanglement entropy of a pure quantum state</td></tr>
+		<tr><td><a href="#neg"> neg  </td><td>  </td><td> Negativity of a quantum state</td></tr>
+		<tr><td><a href="#log_neg"> log_neg  </td><td>  </td><td>Logarithmic negativity of a quantum state</td></tr>
+		<tr><td><a href="#concurrence"> concurrence  </td><td>  </td><td>Concurrence of a two-qubit quantum state</td></tr>
+		<tr><td><a href="#EoF"> EoF  </td><td>  </td><td>Entanglement of formation of a two-qubit quantum state</td></tr>
+		<tr><td><a href="#ent_check_CMC"> ent_check_CMC  </td><td>  </td><td> Check if a bipartite state is entangled or not 
+		    (based on covariant matrix formulation)</td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td><a href="#HS_dist"> HS_dist  </td><td>  </td><td>Hilbert-Schmidt distance between two density matrices</td></tr>	      
+		<tr><td><a href="#tr_dist"> tr_dist  </td><td>  </td><td>Trace distance between two density matrices</td></tr>
+		<tr><td><a href="#HS_dist"> bures_dist  </td><td>  </td><td>Bures distance between two density matrices</td></tr>
+		<tr><td><a href="#HS_dist"> fidelity  </td><td>  </td><td>Fidelity between two density matrices</td></tr>
+
+
+
+	      </tbody>
+	    </table>
+	  </ul>
+	  <a href=#top>Go to top</a>
+	  <br><br>
+
+
+
+	  <a name="discord"></a>
+	  <b>Discord like functions</b>
+	  <ul>
+	    <li> <b>Note:</b> These functions depend on <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>NLopt</a>. </li> <br>
+	    <table>
+	      <tbody>
+		<tr><td><a href="discord"> discord  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="discord"> discord3  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="discord_reg"> discord_reg  </td><td>  </td><td>Constrained regular quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="discord3_reg"> discord3_reg  </td><td>  </td><td> Constrained regular quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
+
+		<tr><td><a href="deficit"> deficit  </td><td>  </td><td> Quantum work deficit of a density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="deficit3"> deficit3  </td><td>  </td><td> Quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="deficit_reg"> deficit_reg  </td><td>  </td><td>Constrained regular quantum work deficit of a  density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="deficit3_reg"> deficit3_reg  </td><td>  </td><td> Constrained regular quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
+
+
+
+	      </tbody>
+	    </table>
+	  </ul>
+	  <a href=#top>Go to top</a>
+	  <br><br>
+
+
+
+
+
+	  <hr><hr>
+
+In this documentation the <i>mat</i>, <i>cx_mat</i>, <i>vec</i>, and <i>cx_vec</i>  type is used for convenience. 
+But every function should also work with <i>float</i> counterparts, like <i>fmat</i>, <i>cx_fmat</i>, <i>fvec</i>, and <i>cx_fvec</i>.
+
+<hr><hr>
+
+	  <h3>Classes and constants</h3>
+	  <hr> <br>
+
+
+	  <a name=eps></a>
+	  <b>_precision::eps</b><br><br>
+	  <ul>
+	    <li> Precision for floating point arithmetic. Every number <i>less than</i> <code>_precision::eps</code> will be treated as zero.</li>
+	    <li> Default value for <code>_precision::eps</code> is <code>1e-12</code>. It can be changed by editing <code>include/QIC_lib_bits/class/constants.hpp</code> file.</li>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+
+	  <a name=init></a>
+	  <b>Init</b><br><br>
+	  <ul>
+	    <li>  Class for library initialization.</li><br>
+	    <li> Used by <code>  static const Init& init = Init::get_instance(); </code>. <br> See <code>include/QIC_lib_bits/class/init.hpp</code> file for details. </li>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+
+	  <a name=states></a>
+	  <b>STATES&lttype&gt<br> states <br> fstates</b><br><br>
+	  <ul>
+	    <li> Several predefined <i> complex </i> basis states, projectors and operators. <code>type</code> can be either <code>double</code> or <code>float</code>.</li><br>
+	    <li> Used by <code>   static const STATES&ltdouble&gt& states  = STATES&ltdouble&gt::get_instance(); </code> and <br> 
+	      <code>static const STATES&ltfloat&gt& fstates  = STATES&ltfloat&gt::get_instance(); </code>. <br>
+See <code>include/QIC_lib_bits/class/init.hpp</code> file for details. </li><br>
+
+	    <li> <code>states.S</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of Pauli matrices. <code>states.S(0)</code>, <code>states.S(1)</code>, <code>states.S(2)</code>, and <code>states.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, and <i> &sigma;<sub>z</sub></i>.</li><br>
+	    <li> <code>states.basis2</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 2-dimensional basis vectors. <code>states.basis(0,i)</code> and <code>states.basis(1,i)</code> are respectively |0&gt and |1&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). <code>states.proj2</code>
+returns corresponding projectors.</li><br>
+	   <li> <code>states.basis3</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 3-dimensional basis vectors. <code>states.basis(0,i)</code>, <code>states.basis(1,i)</code> and <code>states.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). <code>states.proj3</code> returns corresponding projectors.</li><br>
+	   <li> Example:
+	     <pre>
+	       auto& S1 = states.S(1); // \sigma_x matrix
+
+	       auto& plus = states.basis2(0,1); // |+&gt state
+
+	       auto& proj_plus = states.proj2(0,1); // |+&gt&lt+| projector
+
+	       auto& U = states.basis3(0,3); // 1st eigenvector of 
+                                             //Spin S_z operator in 3-dim
+
+	       auto& M = states.basis3(1,3); // 2nd eigenvector of 
+                                             //Spin S_z operator in 3-dim
+	       </pre>
+	     </li>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=func></a>
+	  <b>Func&lttype&gt<br> func <br> funcf</b><br><br>
+	  <ul>
+	    <li> Class with several predefined static member functions to be used with <a href = #funcm_sym><code>funcm_sym</code></a> or <a href = #funcm_gen><code>funcm_gen</code></a>.</li><br>
+	    <li> <code>func</code> is an alias for <code>Func&lt;double&gt;</code> and <code>funcf</code> is an alias for <code>Func&lt;float&gt;</code>.</li><br>
+	    <li> Every member function takes one <i>complex</i> type and returns one <i>complex</i> type.</li><br>
+	    <li> List of member functions:
+	      <ul>
+		<li> func::sin</li>
+		<li> func::cos</li>
+		<li> func::tan</li><br>
+		<li> func::asin</li>
+		<li> func::acos</li>
+		<li> func::atan</li><br>
+		<li> func::sinh</li>
+		<li> func::cosh</li>
+		<li> func::tanh</li><br>
+		<li> func::asinh</li>
+		<li> func::acosh</li>
+		<li> func::atanh</li><br>
+		<li> func::sqrt</li>
+		<li> func::log</li>
+		<li> func::log2</li><br>
+		<li> func::real</li>
+		<li> func::imag</li>
+		<li> func::norm</li><br>
+	      </ul>
+	    </li>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+
+
+	  <hr><hr>
+	  
+	  <h3>Functions</h3>
+	  <hr> <br>
+
+
+	  
+	  <a name=is_H></a>
+	  <b>is_H(A)<br>is_H(A,atol,rtol)</b><br><br>
+	  <ul>
+	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric or Hermitian, else <code>false</code>.</li><br>
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-10</code> and <code>rtol = 1e-18</code>.</li>
+	
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+	  <hr><br>
+	  
+
+
+
+	  <a name=is_U></a>
+	  <b>is_U(A)<br>is_U(A,atol,rtol)</b><br><br>
+	  <ul>
+	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal or unitary, else <code>false</code>.</li><br>
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-10</code> and <code>rtol = 1e-18</code>.</li>
+	
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+	  <hr><br>
+	  
+
+
+
+	  <a name=is_pure></a>
+	  <b>is_pure(A)<br>is_pure(A,check_norm=false)<br>is_pure(A,check_norm=false,tol)</b><br><br>
+	  <ul>
+	    <li> Check purity of a density matrix. Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li><br>
+	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = false</code> and normalisation of the state will not be checked and <code>tol = _precision::eps</code>.</li>
+	    
+	    </ul>
+	  <a href=#top>Go to top</a>
+	  
+	  
+	  <hr><br>
+	  
+
+
+	  <a name=is_valid_state></a>
+	  <b>is_valid_state(A)<br>is_valid_state(A,tol)</b><br><br>
+	  <ul>
+	    <li> Check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a valid quantum state, else <code>false</code>.</li><br>
+	    <li> <code>tol</code> is optional, by default <code>tol = _precision::eps</code>.</li><br>
+	    <li> Note: Normalisation will always be checked.</li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+	  
+	  
+	  <hr><br>
+
+
+
+	  <a name=is_equal></a>
+	  <b>is_equal(A,B)<br>is_equal(A,B,typecheck=false)<br>is_equal(A,B,typecheck=false,atol,rtol)</b><br><br>
+	  <ul>
+	    <li> Check whether two matrices are equal. Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise equal, else <code>false</code>.</li><br>
+	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types of <code>A</code> and <code>B</code> will not be checked.
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-10</code> and <code>rtol = 1e-18</code>.</li>
+	
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+	  <hr><br>
+
+
+	  <a name=range></a>
+	  <b>range(stop)<br>range(start,stop)<br>range(start,stop,step)</b><br><br>
+	  <ul>
+	    <li> Similar to Python's <code>range()</code> function. Useful in range-based <code>for</code> loops. Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) <code>start</code> to (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li><br>
+	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li>
+	
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+	  <hr><br>
+
+
+
+
+	  <a name=TrX></a>
+	  <b>TrX(A,subsys) <br> TrX(A,subsys,dim) </b><br><br>
+	  <ul>
+	    <li> Partial trace of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of traced out subsystems.</li><br>
+	    <li> <code>A</code> can be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned <code>int</code> or <code>uvec</code> containing dimensions of every subystem. When it is unsigned <code>int</code>, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>subsys</code> starts from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+
+		cx_mat B = randn&lt;cx_mat&gt;(12,12); // 12x12 matrix
+		B *= B.t(); // make hermitian
+		B /= trace(B); //normalise
+
+                // trace out 2nd and 3rd party
+                auto A1 = TrX(A,{2,3}); // all dim are 2, total 3 parties
+
+                // trace out 2nd and 3rd party
+                auto B1 = TrX(B,{2,3},{2,3,2}); // explicitly writen dimensions
+	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+	  <hr><br>
+
+
+
+	  <a name=Tx></a>
+	  <b>Tx(A,subsys) <br> Tx(A,subsys,dim) </b><br><br>
+	  <ul>
+	    <li> Partial transpose of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of transposed subsystems.</li><br>
+	    <li> <code>A</code> can be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned <code>int</code> or <code>uvec</code> containing dimensions of every subystem. When it is unsigned <code>int</code>, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>subsys</code> starts from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+
+		cx_mat B = randn&lt;cx_mat&gt;(12,12); // 12x12 matrix
+		B *= B.t(); // make hermitian
+		B /= trace(B); //normalise
+
+                // transpose 2nd and 3rd party
+                auto A1 = Tx(A,{2,3}); // all dim are 2, total 3 parties
+
+                // transpose 2nd and 3rd party
+                auto B1 = Tx(B,{2,3},{2,3,2}); // explicitly writen dimensions
+	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=sysperm></a>
+	  <b>sysperm(A,subsys) <br> sysperm(A,subsys,dim) </b><br><br>
+	  <ul>
+	    <li> Permute subsystems of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of permuted subsystems.</li><br>
+	    <li> <code>A</code> can be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned <code>int</code> or <code>uvec</code> containing dimensions of every subystem. When it is unsigned <code>int</code>, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>subsys</code> starts from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+
+		cx_mat B = randn&lt;cx_mat&gt;(12,12); // 12x12 matrix
+		B *= B.t(); // make hermitian
+		B /= trace(B); //normalise
+
+                // permute 2nd and 3rd party
+                auto A1 = sysperm(A,{1,3,2}); // all dim are 2, total 3 parties
+
+                // permute 2nd and 3rd party
+                auto B1 = sysperm(B,{1,3,2},{2,3,2}); // explicitly writen dimensions
+                                                      // for B1, dim = {2,2,3} 
+	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=sqrtm_sym></a>
+	  <b>sqrtm_sym(A)</b><br><br>
+	  <ul>
+	    <li>Principal square root of matrix for real symmetric or Hermitian matrices.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li><br>
+	    <li> Note: <code>sqrtm_sym</code> is faster than <a href = #sqrtm_gen><code>sqrtm_gen</code></a>. For real symmetric or Hermitian matrices always use
+	      <code>sqrtm_sym</code>.</li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		A *= A.t(); // make hermitian
+		
+		auto sqrtA = sqrtm_sym(A);  
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=sqrtm_gen></a>
+	  <b>sqrtm_gen(A)</b><br><br>
+	  <ul>
+	    <li>Principal square root of matrix for general square matrices.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li><br>
+	    <li> Note: <a href = #sqrtm_sym><code>sqrtm_sym</code></a> is faster than <code>sqrtm_gen</code>. For real symmetric or Hermitian matrices always use
+	      <a href = #sqrtm_sym><code>sqrtm_sym</code></a>.</li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5); 
+		
+		auto sqrtA = sqrtm_gen(A);  
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=powm_sym></a>
+	  <b>powm_sym(A,n)</b><br><br>
+	  <ul>
+	    <li>Matrix power for real symmetric or Hermitian matrices.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not <i>integer type</i>), even for <i>positive real</i> matrices.
+If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li><br>
+	    <li> Note: <code>powm_sym</code> is faster than <a href = #powm_gen><code>powm_gen</code></a>. For real symmetric or Hermitian matrices always use
+	      <code>powm_sym</code>.</li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		A *= A.t(); // make hermitian
+		
+		auto A_3 = powm_sym(A,3);
+
+		auto A_3.14 = powm_sym(A,3.14);  
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+
+	  <a name=powm_gen></a>
+	  <b>powm_gen(A,n)</b><br><br>
+	  <ul>
+	    <li>Matrix power for general square matrices.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not <i>integer type</i>), even for <i>positive real</i> matrices.
+If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li><br>
+	    <li> Note: <a href = #powm_sym><code>powm_sym</code></a> is faster than <code>powm_gen</code>. For real symmetric or Hermitian matrices always use
+	      <a href = #powm_sym><code>powm_sym</code></a>.</li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		
+		auto A_3 = powm_gen(A,3);
+
+		auto A_3.14 = powm_gen(A,3.14);  
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=expm_sym></a>
+	  <b>expm_sym(A)<br>expm_sym(A,n)</b><br><br>
+	  <ul>
+	    <li>Matrix exponential for real symmetric or Hermitian matrices.<code>expm_sym(A,n)</code> calculates <i>exp(n*A)</i>.    </li><br>
+	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	    <li> Note: <code>expm_sym</code> is slower but more accurate than <a href = #expm_gen><code>expm_gen</code></a> or <a href=http://arma.sourceforge.net/>Armadillo's</a> <a href = http://arma.sourceforge.net/docs.html#expmat><code>expmat</code></a>. </li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		A *= A.t(); // make hermitian
+		
+		auto A_e = expm_sym(A);
+
+		complex&lt;double&gt; I (0.0,1.0);
+		auto AI_e = expm_sym(A,I);
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+
+
+	  <hr><br>
+
+
+	  
+	  <a name=expm_gen></a>
+	  <b>expm_gen(A)</b><br><br>
+	  <ul>
+	    <li>Matrix exponential for general square matrices.    </li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). </li><br>
+	    <li> Note: <code>expm_gen</code> is basically same as <a href=http://arma.sourceforge.net/>Armadillo's</a> <a href = http://arma.sourceforge.net/docs.html#expmat><code>expmat</code></a>. </li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		
+		auto A_e = expm_gen(A);
+
+		complex&lt;double&gt; I (0.0,1.0);
+		auto AI_e = expm_gen(I*A);
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=funcm_sym></a>
+	  <b>funcm_sym(A,function pointer)<br>funcm_sym(A,functor)<br>funcm_sym(A,lambda function)</b><br><br>
+	  <ul>
+	    <li><a href = https://en.wikipedia.org/wiki/Matrix_function>Matrix function</a> for real symmetric or Hermitian matrices.   </li><br>
+	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
+	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <a href=#func><code>Func&lt;type&gt;</code></a> class.</li><br>
+	    <li> Note: <code>funcm_sym</code> is faster than <a href = #funcm_gen><code>funcm_gen</code></a>. For real symmetric or Hermitian matrices always use
+	      <code>funcm_sym</code>. </li><br>
+	    <li> Note: If you want to transform the matrix element-wise, use <a href=http://arma.sourceforge.net/docs.html#transform><code>.transform</code></a> instead.</li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		A *= A.t(); // make hermitian
+		
+		//define a lambda function
+		auto sinm = [](complex&lt;double&gt; a){return std::sin(a);};
+
+		auto A_sin = funcm_sym(A,sinm); // calculate sin(A)
+
+		auto A_sin2 = funcm_sym(A,func::sin); // same as A_sin, 
+		                                      //using <code>Func&lt;type&gt;</code> class
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=funcm_gen></a>
+	  <b>funcm_gen(A,function pointer)<br>funcm_gen(A,functor)<br>funcm_gen(A,lambda function)</b><br><br>
+	  <ul>
+	    <li><a href = https://en.wikipedia.org/wiki/Matrix_function>Matrix function</a> for general square matrices.   </li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
+	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <a href=#func><code>Func&lt;type&gt;</code></a> class.</li><br>
+	    <li> Note: <a href = #funcm_sym><code>funcm_sym</code></a> is faster than <code>funcm_gen</code>. For real symmetric or Hermitian matrices always use
+	      <a href = #funcm_sym><code>funcm_sym</code></a>.</li><br>
+	    <li> Note: If you want to transform the matrix element-wise, use <a href=http://arma.sourceforge.net/docs.html#transform><code>.transform</code></a> instead.</li><br>
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		
+		//define a lambda function
+		auto sinm = [](complex&lt;double&gt; a){return std::sin(a);}; 
+
+		auto A_sin = funcm_gen(A,sinm); // calculate sin(A)
+
+		auto A_sin2 = funcm_gen(A,func::sin); // same as A_sin, 
+		                                      // using <code>Func&lt;type&gt;</code> class
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=tensor></a>
+	  <b>tensor(A,B,...)</b><br><br>
+	  <ul>
+	    <li>Tensor product of arbitrary no. of matrices <code>A,B,...</code>.   </li><br>
+	    <li> Can also take <code>std::vector</code> and <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of matrices.</li><br>
+	    
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5); //complex matrix
+		cx_mat B = randn&lt;cx_mat&gt;(4,4); //complex matrix
+		cx_mat C = randn&lt;cx_mat&gt;(3,3); //complex matrix
+		mat D = randn&lt;mat&gt;(6,6); //real matrix
+		
+		auto T1 = tensor(A,B,C,D); // tensor product of A,B,C,D 
+
+		std::vector<cx_mat> V = {A,B,C};
+		auto T2 = tensor(V); // tensor product of A,B,C
+		  
+		auto T3 = tensor({A,B,C}); // same as above  
+
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+	  <hr><br>
+
+	  
+	  <a name=tensor_pow></a>
+	  <b>tensor_pow(A,n)</b><br><br>
+	  <ul>
+	    <li>Tensor product power of a matrix.   </li><br>
+	    <li>Returns <i>A <sup>&otimes;n</sup></i> .</li><br>
+	    
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5);
+		
+		auto T = tensor_pow(A,3);  
+  	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+	  <hr><br>
+
+	  
+	  <a name=absm></a>
+	  <b>absm(A)</b><br><br>
+	  <ul>
+	    <li>Matrix absolute value of a square matrix.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li>Returns <code>sqrtm_sym((rho.t()*rho))</code>.</li>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+	  
+	  <a name=schatten></a>
+	  <b>schatten(A)</b><br><br>
+	  <ul>
+	    <li>Schatten p-norm of a matrix.</li><br>
+	    <li> <code>p</code> has to be greater than equal to <i>0</i>.</li><br>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+	  
+	  <a name=conv_to_pure></a>
+	  <b>conv_to_pure(A)</b><br><br>
+	  <ul>
+	    <li>Convert density matrix of a pure state to a column vector.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> If <code>A</code> is a column vector, then it is returned back. </li><br>
+	    <li> If <code>A</code> is not a pure state, then eigenvector corresponding to highest eigenvalue is returned. To make sure use <a href=#is_pure><code>is_pure</code></a> function.</li><br>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+<h2> Incomplete... Under progress... </h2>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/titas99/QIC_lib">Quantum Information and Computation library (QIC_lib)</a> is maintained by <a href="https://github.com/titas99">titas99</a>.</span>
