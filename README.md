@@ -15,7 +15,10 @@ Make sure that you have [Armadillo](http://arma.sourceforge.net/) and [NLopt](ht
 
     #define QIC_LIB_NLOPT
 
-Include the `QIC_lib.hpp` in your source code (make sure that your compiler can find the path of the header file) and [QIC_lib](http://titas99.github.io/QIC_lib/) is ready to fly. 
+
+Also make sure that you have an C++11 compliant compiler. [gcc](https://gcc.gnu.org/) version 4.8 or later, or [clang](http://clang.llvm.org/) version 3.3 or later is recomended.
+ 
+Include the header `QIC_lib.hpp` in your source code (make sure that your compiler can find the path of the header file) and [QIC_lib](http://titas99.github.io/QIC_lib/) is ready to fly. 
 For example codes, see [here](http://titas99.github.io/QIC_lib/sample.html). You will also find detailed API information [here](http://titas99.github.io/QIC_lib/documentation.html).
 
 Got a Problem or Question?
