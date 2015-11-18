@@ -34,15 +34,41 @@ It is a header only template library, using <a href="http://arma.sourceforge.net
 
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+Download QIC_lib either from the above download link or using <code>git clone</code> with the command <br>
+<code>   
+     git clone https://github.com/titas99/QIC_lib.
+</code><br>
+QIC_lib is a header only library, so there is no need to compile the source.
+Make sure that you have <a href=http://arma.sourceforge.net/>Armadillo</a> and <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>Nlopt</a> installed on your system. If you don't want to use <a href = http://ab-initio.mit.edu/wiki/index.php/NLopt>Nlopt</a> specific features (like Quantum Discord), comment out the following line in <code>include/QIC_lib.hpp</code>:<br>
+<code>
+    #define QIC_LIB_NLOPT
+</code><br>
+Also make sure that you have an C++11 compliant compiler. <a href=https://gcc.gnu.org/>gcc</a> version 4.8 or later, or <a href = http://clang.llvm.org/>clang</a> version 3.3 or later is recomended.<br>
+
+Include the header <code>QIC_lib.hpp</code> in your source code (make sure that your compiler can find the path of the header file) and QIC_lib is ready to fly. 
+For example codes, see <a href =sample.html>here</a>. You will also find detailed API information <a href = documentation.html>here</a>.
+
+
 
 <h2>
 <a id="got-a-problem-or-question" class="anchor" href="#got-a-problem-or-question" aria-hidden="true"><span class="octicon octicon-link"></span></a>Got a Problem or Question?</h2>
+If you have a question about how to use QIC_lib, create a new issue at <a href = https://github.com/titas99/QIC_lib/issues>issue tracker</a> labelled <code>discussion</code>.
 
 <h2>
 <a id="found-an-issue-or-bug" class="anchor" href="#found-an-issue-or-bug" aria-hidden="true"><span class="octicon octicon-link"></span></a>Found an Issue or Bug?</h2>
+If you found a bug in the source code or a mistake in any kind of documentation, please let us know by adding an issue to the  <a href = https://github.com/titas99/QIC_lib/issues>issue tracker</a>. <br><br>
+
+
+You are welcomed to submit a pull request with your fix afterwards, if at hand.
+
 
 <h2>
 <a id="requesting-a-feature" class="anchor" href="#requesting-a-feature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requesting a Feature?</h2>
+
+If you are missing some features within QIC_lib, feel free to ask us about it by adding a new request to the <a href = https://github.com/titas99/QIC_lib/issues>issue tracker</a> labelled <code>feature request</code>.<br><br>
+
+Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.
+
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
