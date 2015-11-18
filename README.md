@@ -7,10 +7,14 @@ It is a header only template library, using [Armadillo](http://arma.sourceforge.
 Getting started
 ---------------
 Download [QIC_lib](http://titas99.github.io/QIC_lib/) either from official [website](http://titas99.github.io/QIC_lib/) or using `git clone` with the command
-    git clone https://github.com/titas99/QIC_lib.
+   
+     git clone https://github.com/titas99/QIC_lib.
+
 [QIC_lib](http://titas99.github.io/QIC_lib/) is a header only library, so there is no need to compile the source.
 Make sure that you have [Armadillo](http://arma.sourceforge.net/) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), comment out the following line in `include/QIC_lib.hpp`:
+
     #define QIC_LIB_NLOPT
+
 Include the `QIC_lib.hpp` in your source code (make sure that your compiler can find the path of the header file) and [QIC_lib](http://titas99.github.io/QIC_lib/) is ready to fly. 
 For example codes, see [here](http://titas99.github.io/QIC_lib/sample.html). You will also find detailed API information [here](http://titas99.github.io/QIC_lib/documentation.html).
 
