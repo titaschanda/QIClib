@@ -20,25 +20,25 @@
  */
 
 
-
-
-
 #ifndef _QIC_LIB_HPP
 #define _QIC_LIB_HPP
 
 
-//include basic
+
 #include<iostream>
 #include<iomanip>
 #include<cmath>
 #include<complex> 
 #include<stdexcept>
-
-//include armadillo
+#include<type_traits>
 #include<armadillo>
 
-//include nlopt
-#include<nlopt.hpp>
+
+#define QIC_LIB_NLOPT
+// Comment out the previous line, if you don't want to use
+// NLopt dependent features
+
+
 
 
 #if (__GNUC__ && !__clang__)
@@ -48,7 +48,6 @@
 #endif
 
 
-//include nlopt independent functions, order matters
 #include "QIC_lib_bits/class/exception.hpp"
 #include "QIC_lib_bits/class/singleton.hpp"
 #include "QIC_lib_bits/class/constants.hpp"
@@ -77,7 +76,7 @@
 #include "QIC_lib_bits/function/funcm.hpp"
 #include "QIC_lib_bits/function/tensor.hpp"
 
-
+#include "QIC_lib_bits/function/absm.hpp" 
 #include "QIC_lib_bits/function/apply_ctrl.hpp" 
 #include "QIC_lib_bits/function/apply.hpp" 
 #include "QIC_lib_bits/function/entropy.hpp"
@@ -90,21 +89,24 @@
 #include "QIC_lib_bits/function/distance.hpp"
 #include "QIC_lib_bits/function/channel.hpp"
 #include "QIC_lib_bits/function/schmidt.hpp"
+#include "QIC_lib_bits/function/schatten.hpp"
 
 
+#ifdef QIC_LIB_NLOPT
 
+// NLopt dependent features
+
+#include<nlopt.hpp>
 #include "QIC_lib_bits/discord/default_config.hpp"
 #include "QIC_lib_bits/discord/discord_reg.hpp"
 #include "QIC_lib_bits/discord/discord3_reg.hpp"
 #include "QIC_lib_bits/discord/deficit_reg.hpp"
 #include "QIC_lib_bits/discord/deficit3_reg.hpp"
-//   //
-
-
-//include nlopt dependent functions
 #include "QIC_lib_bits/discord/discord.hpp"
 #include "QIC_lib_bits/discord/discord3.hpp"
 #include "QIC_lib_bits/discord/deficit.hpp"
 #include "QIC_lib_bits/discord/deficit3.hpp"
+
+#endif
 
 #endif
