@@ -115,6 +115,8 @@
 		<tr><td><a href="#absm"> absm  </td><td>  </td><td>Matrix absolute value of a square matrix</td></tr>
 		<tr><td><a href="#schatten"> schatten  </td><td>  </td><td>Schatten p-norm of a matrix</td></tr>
 		<tr><td><a href="#conv_to_pure"> conv_to_pure  </td><td>  </td><td>Convert density matrix of a pure state to a column vector</td></tr>
+		<tr><td><a href="#mket"> mket  </td><td>  </td><td> Multipartite qudit pure state </td></tr>
+		<tr><td><a href="#mproj"> mproj  </td><td>  </td><td> Multipartite qudit projector </td></tr>
 		<tr><td>  </td><td>  </td><td> </td></tr>
 		<tr><td>  </td><td>  </td><td> </td></tr>
 		<tr><td><a href="#entropy"> entropy  </td><td>  </td><td>von Neumann entropy of a quantum state</td></tr>
@@ -133,12 +135,19 @@
 		<tr><td><a href="#EoF"> EoF  </td><td>  </td><td>Entanglement of formation of a two-qubit quantum state</td></tr>
 		<tr><td><a href="#ent_check_CMC"> ent_check_CMC  </td><td>  </td><td> Check if a bipartite state is entangled or not 
 		    (based on covariant matrix formulation)</td></tr>
+		<tr><td><a href="#schmidt"> schmidt  </td><td>  </td><td> Schmidt decomposition of a bipartite pure state</td></tr>
+		<tr><td><a href="#schmidt_base"> schmidtA, schmidtB, schmidtAB
+		 schmidtA_full, schmidtB_full, schmidtAB_full </td><td>  </td><td> Schmidt vectors of a bipartite pure state</td></tr>
 		<tr><td>  </td><td>  </td><td> </td></tr>
 		<tr><td>  </td><td>  </td><td> </td></tr>
 		<tr><td><a href="#HS_dist"> HS_dist  </td><td>  </td><td>Hilbert-Schmidt distance between two density matrices</td></tr>	      
 		<tr><td><a href="#tr_dist"> tr_dist  </td><td>  </td><td>Trace distance between two density matrices</td></tr>
 		<tr><td><a href="#HS_dist"> bures_dist  </td><td>  </td><td>Bures distance between two density matrices</td></tr>
 		<tr><td><a href="#HS_dist"> fidelity  </td><td>  </td><td>Fidelity between two density matrices</td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td><a href="#apply"> apply  </td><td>  </td><td>Apply a gate to a quantum state</td></tr>	      
+		<tr><td><a href="#apply_ctrl"> apply_ctrl  </td><td>  </td><td>Apply a controlled-gate to a quantum state</td></tr>
 
 
 
@@ -227,6 +236,9 @@ See <code>include/QIC_lib_bits/class/init.hpp</code> file for details. </li><br>
 	    <li> <code>states.basis2</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 2-dimensional basis vectors (<code>const cx_vec</code>). <code>states.basis(0,i)</code> and <code>states.basis(1,i)</code> are respectively |0&gt and |1&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>states.proj2</code>
 returns corresponding projectors (<code>const cx_mat</code>).</li><br>
 	   <li> <code>states.basis3</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 3-dimensional basis vectors (<code>const cx_vec</code>). <code>states.basis(0,i)</code>, <code>states.basis(1,i)</code> and <code>states.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>states.proj3</code> returns corresponding projectors (<code>const cx_mat</code>).</li><br>
+	    <li> <b>Note:</b> You cannot take a copy of the whole <code>STATES&lttype&gt</code> class, but you can take reference to <code>const</code>. For this use <code>const STATES&ltdouble&gt& SOMENAME  = STATES&ltdouble&gt::get_instance();</code>. <br>
+	      For each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference to <code>const</code> (See the following example).</li><br> 
+
 	   <li> Example:
 	     <pre>
 	       const cx_mat& S1 = states.S(1); // \sigma_x matrix, take reference
@@ -826,6 +838,86 @@ If <code>n</code> is of <i>integer type</i> matrix element type will be preserve
 
 
 
+
+	  <hr><br>
+
+	  
+	  <a name=mket></a>
+	  <b>mket(mask) <br>
+	    mket&lt;element type&gt;(mask) <br> 
+	    mket(mask,dim) <br>
+	    mket&lt;element type&gt;(mask,dim)<br> </b><br><br>
+	  <ul>
+	    <li>Create multipartite qubit pure state according to <i>mask</i> <code>uvec</code> (See following example).</li><br>
+	    <li> <code>element type</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of returned column vector.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li>Example:
+	      <pre>
+		cx_vec A = mket({0,0,1}); // |001&gt; state
+		                          // each subsystem is qubit
+
+		vec B = mket&lt;double&gt;({0,0,1}); // same a above
+		                               // but real vector returned
+		
+		vec C = mket&lt;double&gt;({0,0,1},2); // same a above
+		  		
+		cx_vec D = mket({0,2,1},{2,3,2}); //|021&gt; state
+                                                  // 1st and 3rd party are qubit
+                                                  // 2nd one is qutrit
+
+		vec E = mket&lt;double&gt;({0,2,1},{2,3,2}); //same as above
+                                                       // but real vector returned
+	      </pre>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+
+
+
+
+	  <hr><br>
+
+	  
+	  <a name=mproj></a>
+	  <b>mproj(mask) <br>
+	    mproj&lt;element type&gt;(mask) <br> 
+	    mproj(mask,dim) <br>
+	    mproj&lt;element type&gt;(mask,dim)<br> </b><br><br>
+	  <ul>
+	    <li>Create multipartite qubit projectors according to <i>mask</i> <code>uvec</code> (See following example).</li><br>
+	    <li> <code>element type</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of returned column vector.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li>Example:
+	      <pre>
+		cx_mat A = mproj({0,0,1}); // |001&gt;&lt;001| projector
+		                           // each subsystem is qubit
+
+		mat B = mproj&lt;double&gt;({0,0,1}); // same a above
+		                                // but real matrix returned
+		
+		mat C = mproj&lt;double&gt;({0,0,1},2); // same a above
+		  		
+		cx_mat D = mproj({0,2,1},{2,3,2}); //|021&gt;&lt;021| projector
+                                                   // 1st and 3rd party are qubit
+                                                   // 2nd one is qutrit
+
+		mat E = mproj&lt;double&gt;({0,2,1},{2,3,2}); //same as above
+                                                        // but real matrix returned
+	      </pre>
+	  </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+
+
+
 	  <hr><br>
 	  
 	  
@@ -1113,7 +1205,74 @@ If <code>n</code> is of <i>integer type</i> matrix element type will be preserve
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Returns <code>true</code> if <code>A</code> is entangled, else <code>false</code>. It also can detect large part of bound entangled states.</li><br>
 	    <li> The first case assumes both the subsystems have same dimension. <code>dim</code> is an unsigned integer type stating the dimensions of both the subsystems.</li><br>
-	    <li> The second case applies if the subsystems have different  dimensions. <code>dim1</code> and <code>dim2</code> are unsigned integer types stating the dimensions of 1st and 2nd parties respectively.</li><br>
+	    <li> The second case applies if the subsystems have different  dimensions. <code>dim1</code> and <code>dim2</code> are unsigned integer types stating the dimensions of 1st and 2nd parties respectively.</li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+	  <hr><br>
+	  
+	  
+	  <a name=schmidt></a>
+	  <b>vec S = schmidt(A,dim) <br > schmidt(A,dim,S,U,V) </b><br><br>
+	  <ul>
+	    <li> Schmidt decomposition of a bipartite pure state.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li><br>
+	    <li> <code>S</code> is a real vector containing Schmidt coefficients. <code>U</code> and <code>V</code> are matrices that store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron( U.col(i) , V.col(i) )</code>.</li><br>
+	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using <a href=#conv_to_pure><code>conv_to_pure</code></a>.</li><br>
+	    <li> If decomposition fails then <code>vec S = schmidt(A,dim)</code> throws <code>std::runtime_error exception</code>, and <code>schmidt(A,dim,S,U,V)</code> returns <code>false</code> and resets <code>S</code>, <code>U</code>, and <code>V</code>.</li><br>
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+
+		vec S1 = schmidt(A,{2,4});
+
+		vec S;
+		cx_mat U,V;
+		schmidt(A,{2,4},S,U,V);
+		</pre>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+	  <hr><br>
+	  
+	  
+	  <a name=schmidt_base></a>
+	  <b>schmidtA(A,dim) <br > schmidtA_full(A,dim) <br>
+	    schmidtB(A,dim) <br > schmidtB_full(A,dim)<br>
+	    schmidtAB(A,dim) <br > schmidtAB_full(A,dim)</b><br><br>
+	  <ul>
+	    <li> Schmidt vectors of a bipartite pure state.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li><br>
+	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using <a href=#conv_to_pure><code>conv_to_pure</code></a>.</li><br>
+	    
+	    <li> <code>schmidtA(A,dim)</code> returns truncated Schmidt basis on Alice's side in a column-wise manner, while <code>schmidtA_full(A,dim)</code> returns full Schmidt basis on Alice's side.</li><br>
+	    <li> <code>schmidtB(A,dim)</code> returns truncated Schmidt basis on Bob's side in a column-wise manner, while <code>schmidtB_full(A,dim)</code> returns full Schmidt basis on Bob's side.</li><br>
+	    <li> <code>schmidtAB(A,dim)</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of matrices containing truncated Schmidt basis on both sides in a column-wise manner, while <code>schmidtAB_full(A,dim)</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of matrices containing full Schmidt basis on both side.</li><br>
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		cx_mat V = schmidtB(A,{2,4}); // V is 4x2 matrix
+		
+		cx_mat Vf = schmidtB_full(A,{2,4}); // Vf is 4x4 matrix
+
+		field&lt;cx_mat&gt; AB = schmidtAB(A,{2,4});
+		//AB(0) == Schmidt basis on Alice's side
+		//AB(1) == Schmidt basis on Bob's side
+		</pre>
 	    </ul>
 	  <a href=#top>Go to top</a>
 
@@ -1176,8 +1335,97 @@ If <code>n</code> is of <i>integer type</i> matrix element type will be preserve
 
 
 
+	  <hr><br>
 
-<h2> Incomplete... Under progress... </h2>
+
+
+
+	  <a name=apply></a>
+	  <b>apply(A,U,subsys) <br> apply(A,U,subsys,dim) </b><br><br>
+	  <ul>
+	    <li>Apply a gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> containing the indices of applicable subsystems.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> Dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+
+		const cx_mat& U1 = states.S(1); // \sigma_x gate
+		
+		cx_mat U2 = kron(states.S(1),states.S(1)); 
+		// kron(\sigma_x,\sigma_x) gate 
+
+                cx_mat A1 = apply(A,U1,{2}); // all dim are 2, total 3 parties
+
+                cx_mat A2 = apply(A,U2,{1,3},{2,2,2}); // explicitly writen dimensions
+	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+	  <hr><br>
+
+
+
+
+	  <a name=apply_ctrl></a>
+	  <b>apply_ctrl(A,U,ctrl,subsys) <br> apply_ctrl(A,U,ctrl,subsys,dim) </b><br><br>
+	  <ul>
+	    <li>Apply a controlled-gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> containing the indices of applicable subsystems, and <code>ctrl</code> is a <code>uvec</code> containing the indices of control subsystems.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> Dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
+	    <li> All control subsystems must have same dimensions.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+
+		const cx_mat& U1 = states.S(1); // \sigma_x gate
+		
+		cx_mat U2 = kron(states.S(1),states.S(1)); 
+		// kron(\sigma_x,\sigma_x) gate 
+
+                cx_mat A1 = apply_ctrl(A,U1,{1},{2}); // all dim are 2, total 3 parties
+
+                cx_mat A2 = apply_ctrl(A,U2,{2},{1,3},{2,2,2}); 
+		// explicitly writen dimensions
+	      </pre>
+	      </li>
+	    </ul>
+	  <a href=#top>Go to top</a>
+
+
+
+
+
+
+
+	  <h3> Incomplete... Under progress... </h3>
+
+
+
+	  <hr><hr>
+	  <a name=api_additions></a>
+	  <h3>API Additions</h3>
+	  <hr> <br>
+
+
+
+
+	  <b>Version 0.0.2</b><br><br>
+	  <ul>
+	    <li> <a href=#absm><code>absm</code></a> added.</li>
+	    <li> <a href=#schatten><code>schatten</code></a> added.</li>
+	    </ul>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIC_lib">Quantum Information and Computation library (QIC_lib)</a> is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
