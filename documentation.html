@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>QIC_lib</title>
+    <meta name="author" content="Titas Chanda"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -191,7 +192,7 @@ But every function should also work with <i>float</i> counterparts, like <i>fmat
 	  <a name=eps></a>
 	  <b>_precision::eps</b><br><br>
 	  <ul>
-	    <li> Precision for floating point arithmetic. Every number <i>less than</i> <code>_precision::eps</code> will be treated as zero.</li>
+	    <li> Precision for floating point arithmetic. Every number <i>less than</i> <code>_precision::eps</code> will be treated as zero.</li><br>
 	    <li> Default value for <code>_precision::eps</code> is <code>1e-12</code>. It can be changed by editing <code>include/QIC_lib_bits/class/constants.hpp</code> file.</li>
 	  </ul>
 	  <a href=#top>Go to top</a>
@@ -223,9 +224,9 @@ But every function should also work with <i>float</i> counterparts, like <i>fmat
 See <code>include/QIC_lib_bits/class/init.hpp</code> file for details. </li><br>
 
 	    <li> <code>states.S</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of Pauli matrices. <code>states.S(0)</code>, <code>states.S(1)</code>, <code>states.S(2)</code>, and <code>states.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, and <i> &sigma;<sub>z</sub></i>.</li><br>
-	    <li> <code>states.basis2</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 2-dimensional basis vectors. <code>states.basis(0,i)</code> and <code>states.basis(1,i)</code> are respectively |0&gt and |1&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). <code>states.proj2</code>
+	    <li> <code>states.basis2</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 2-dimensional basis vectors. <code>states.basis(0,i)</code> and <code>states.basis(1,i)</code> are respectively |0&gt and |1&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>states.proj2</code>
 returns corresponding projectors.</li><br>
-	   <li> <code>states.basis3</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 3-dimensional basis vectors. <code>states.basis(0,i)</code>, <code>states.basis(1,i)</code> and <code>states.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). <code>states.proj3</code> returns corresponding projectors.</li><br>
+	   <li> <code>states.basis3</code> returns <a href = http://arma.sourceforge.net/docs.html#field><code>field</code></a> of 3-dimensional basis vectors. <code>states.basis(0,i)</code>, <code>states.basis(1,i)</code> and <code>states.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>states.proj3</code> returns corresponding projectors.</li><br>
 	   <li> Example:
 	     <pre>
 	       auto& S1 = states.S(1); // \sigma_x matrix
@@ -370,8 +371,20 @@ returns corresponding projectors.</li><br>
 	  <b>range(stop)<br>range(start,stop)<br>range(start,stop,step)</b><br><br>
 	  <ul>
 	    <li> Similar to Python's <code>range()</code> function. Useful in range-based <code>for</code> loops. Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) <code>start</code> to (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li><br>
-	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li>
-	
+	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li><br>
+	    <li> Example:
+	      <pre>
+		for(auto&& i : range(10))
+		{
+		// i from 0 to 9
+		//do something
+		}
+		
+		auto R1 = range(2,10,2); 
+		auto R2 = range(10,-1.5,-0.5);
+	      </pre>
+	    </li>
+
 	    </ul>
 	  <a href=#top>Go to top</a>
 
