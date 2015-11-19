@@ -61,11 +61,11 @@ a {
 
 @media screen and (min-width: 64em) {
   .page-header {
-    padding: 5rem 6rem; } }
+    padding: 2rem 6rem; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .page-header {
-    padding: 3rem 4rem; } }
+    padding: 2rem 4rem; } }
 
 @media screen and (max-width: 42em) {
   .page-header {
@@ -77,15 +77,15 @@ a {
 
 @media screen and (min-width: 64em) {
   .project-name {
-    font-size: 3.25rem; } }
+    font-size: 2.5rem; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
   .project-name {
-    font-size: 2.25rem; } }
+    font-size: 2.0rem; } }
 
 @media screen and (max-width: 42em) {
   .project-name {
-    font-size: 1.75rem; } }
+    font-size: 1.5rem; } }
 
 .project-tagline {
   margin-bottom: 2rem;
@@ -184,7 +184,7 @@ a {
   .main-content table th {
     font-weight: bold; }
   .main-content table th, .main-content table td {
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 1.2rem;
     border: 1px solid #e9ebec; }
 .main-content dl {
   padding: 0; }
