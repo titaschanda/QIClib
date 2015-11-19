@@ -23,6 +23,8 @@ Also make sure that you have an C++11 compliant compiler. [gcc](https://gcc.gnu.
 
  
 Include the header `QIC_lib.hpp` in your source code (make sure that your compiler can find the path of the header file) and [QIC_lib](http://titaschanda.github.io/QIC_lib/) is ready to fly. 
+
+
 For example codes, see [here](http://titaschanda.github.io/QIC_lib/sample.html). You will also find detailed API information [here](http://titaschanda.github.io/QIC_lib/documentation.html).
 
 
