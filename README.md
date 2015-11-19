@@ -28,7 +28,7 @@ Include the header `QIC_lib.hpp` in your source code (make sure that your compil
 For example codes, see [here](http://titaschanda.github.io/QIC_lib/sample.html). You will also find detailed API information [here](http://titaschanda.github.io/QIC_lib/documentation.html).
 
 
-**Note:** Link [OpenBLAS](http://www.openblas.net/) or [Intel MKL](https://software.intel.com/en-us/intel-mkl) with latest version of [Armadillo](http://arma.sourceforge.net/) for better performance. For more see, [this](http://arma.sourceforge.net/faq.html#dependencies) and [this](https://gist.github.com/bdsatish/5646151). 
+**Note:** Link [OpenBLAS](http://www.openblas.net/) or [Intel MKL](https://software.intel.com/en-us/intel-mkl) with latest version of [Armadillo](http://arma.sourceforge.net/) for better performance. For more see, [this](http://arma.sourceforge.net/faq.html#dependencies) and [this](https://gist.github.com/bdsatish/5646151). Also turn on compiler optimisations, e.g., in [gcc](https://gcc.gnu.org/) or [clang](http://clang.llvm.org/) add `-O3 -march=native` flag during compilation.
 
 Got a Problem or Question?
 --------------------------
