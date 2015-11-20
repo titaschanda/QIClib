@@ -6,3 +6,5 @@ Version 0.0.2 - November 18, 2015
     - Added schatten norm
 	
 Version 0.0.3 - Development branch
+    - Added dsum
+    - bug-fix in tensor
