@@ -121,11 +121,11 @@ a {
   font-size: 0.9rem;
   color: #383e41;
   background-color: #f3f6fa;
-  border-radius: 0.3rem; }
+  border-radius: 0.1rem; }
 .main-content pre {
   padding: 0.8rem;
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace;
   color: #567482;
   word-wrap: normal;
