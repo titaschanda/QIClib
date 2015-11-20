@@ -118,7 +118,9 @@
 		<tr><td><a href="#funcm_sym"> funcm_sym  </td><td>  </td><td>Matrix function for real symmetric or Hermitian matrices</td></tr>
 		<tr><td><a href="#funcm_gen"> funcm_gen  </td><td>  </td><td>Matrix function for general square matrices</td></tr>
 		<tr><td><a href="#tensor"> tensor  </td><td>  </td><td> Tensor product of arbitrary no. of  matrices</td></tr>
-		<tr><td><a href="#tensor_pow"> tensor_pow  </td><td>  </td><td>Tensor product power</td></tr>		
+		<tr><td><a href="#tensor_pow"> tensor_pow  </td><td>  </td><td>Tensor product power</td></tr>	
+		<tr><td><a href="#dsum"> dsum  </td><td>  </td><td> Direct sum of arbitrary no. of  matrices</td></tr>
+		<tr><td><a href="#dsum_pow"> dsum_pow  </td><td>  </td><td>Direct sum power</td></tr>		
 		<tr><td><a href="#absm"> absm  </td><td>  </td><td>Matrix absolute value of a square matrix</td></tr>
 		<tr><td><a href="#schatten"> schatten  </td><td>  </td><td>Schatten p-norm of a matrix</td></tr>
 		<tr><td><a href="#conv_to_pure"> conv_to_pure  </td><td>  </td><td>Convert density matrix of a pure state to a column vector</td></tr>
@@ -798,6 +800,70 @@
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+	  
+	  <hr><br>
+
+
+	  <a name=dsum></a>
+	  <b>dsum(A,B,...)</b><br><br>
+	  <ul>
+	    <li>Direct sum of arbitrary no. of matrices <code>A,B,...</code>.   </li><br>
+	    <li> Can also take <code>std::vector</code> and <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of matrices.</li><br>
+	    
+	    <li> Example:
+
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(5,5); 
+		cx_mat B = randn&lt;cx_mat&gt;(4,4); 
+		cx_mat C = randn&lt;cx_mat&gt;(3,3); 
+		cx_mat D = randn&lt;cx_mat&gt;(6,6); 
+		
+		cx_mat T1 = dsum(A,B,C,D);  
+
+		std::vector&lt;cx_mat&gt; V = {A,B,C,D};
+		cx_mat T2 = dsum(V); 
+		
+		cx_mat T3 = dsum({A,B,C});  
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=dsum_pow></a>
+	  <b>dsum_pow(A,n)</b><br><br>
+	  <ul>
+	    <li>Direct sum power of a matrix.   </li><br>
+	    <li>Returns <i>A <sup>&oplus;n</sup></i> .</li>
+	    
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	  <hr><br>
@@ -1959,7 +2025,14 @@
 	  <hr> <br>
 
 
+	  <b>Version 0.0.3</b><br><br>
+	  <ul>
+	    <li> <a href=#dsum><code>dsum</code></a> and <a href=#dsum_pow><code>dsum_pow</code></a> added.</li>
+	    <li> Fixed a bug in <a href=#tensor><code>tensor</code></a>.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
 
+	  <hr><br>
 
 	  <b>Version 0.0.2</b><br><br>
 	  <ul>
