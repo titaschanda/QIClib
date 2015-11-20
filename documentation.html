@@ -172,15 +172,15 @@
 	    <li> <b>Note:</b> These functions depend on <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>. </li> <br>
 	    <table>
 	      <tbody>
-		<tr><td><a href="discord"> discord  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="discord"> discord3  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
-		<tr><td><a href="discord_reg"> discord_reg  </td><td>  </td><td>Constrained regular quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="discord3_reg"> discord3_reg  </td><td>  </td><td> Constrained regular quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="#discord"> discord  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="#discord3"> discord3  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="#discord_reg"> discord_reg  </td><td>  </td><td>Constrained regular quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="#discord3_reg"> discord3_reg  </td><td>  </td><td> Constrained regular quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
 
-		<tr><td><a href="deficit"> deficit  </td><td>  </td><td> Quantum work deficit of a density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="deficit3"> deficit3  </td><td>  </td><td> Quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
-		<tr><td><a href="deficit_reg"> deficit_reg  </td><td>  </td><td>Constrained regular quantum work deficit of a  density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="deficit3_reg"> deficit3_reg  </td><td>  </td><td> Constrained regular quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="#deficit"> deficit  </td><td>  </td><td> Quantum work deficit of a density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="#deficit3"> deficit3  </td><td>  </td><td> Quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="#deficit_reg"> deficit_reg  </td><td>  </td><td>Constrained regular quantum work deficit of a  density matrix where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="#deficit3_reg"> deficit3_reg  </td><td>  </td><td> Constrained regular quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
 
 
 
@@ -1411,11 +1411,417 @@
 
 
 
+	  <hr><hr>
+
+	  <h3>Discord like functions</h3>
+	  <hr> <br>
 
 
 
 
-	  <h3> Incomplete... Under progress... </h3>
+	  <a name=discord></a>
+	  <b>discord(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qubit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>discord</code> returns a <code>vec</code>, where the first term is the value of quantum discord and 2nd and 3rd are optimized values of &theta; and &phi; respectively;</li><br>
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>
+	    <li> <b>Helper functions:</b><br>
+	      <code>discord</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <ul>
+		<li> <code>void set_discord_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_discord_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
+		<li> <code>void set_discord_global_xtol(double a = 4e-2)</code> : Set global optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_discord_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_discord_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
+		<li> <code>void set_discord_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_discord_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_discord_theta_phi_range(double a = 1,double b = 2)</code>: Set &theta;-&phi; range as multiples of &pi;.</li><br>
+		<li> <code>void set_discord_theta_phi_initial(double a = 0.1,double b = 0.1)</code>: Set inital &theta;-&phi; value as multiples of &pi;.</li><br>
+		<li> <code>void set_discord_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
+	      </ul>
+	    </li><br>
+
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		// change default global optimization algorithm
+		set_discord_global_opt(nlopt::GN_DIRECT_L_RAND);
+
+		// change default local optimization algorithm
+		set_discord_local_opt(nlopt::LN_SBPLX);
+
+		double disc = discord(A,2,{2,2,2})(0); // measurement is done 
+		                                       //on 2nd party
+		double theta = discord(A,2,{2,2,2})(1); //optimized theta value
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+
+	  <a name=discord3></a>
+	  <b>discord3(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qutrit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <b>Helper functions:</b><br>
+	      <code>discord3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <ul>
+		<li> <code>void set_discord3_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_discord3_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
+		<li> <code>void set_discord3_global_xtol(double a = 0.25)</code> : Set global optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_discord3_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_discord3_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
+		<li> <code>void set_discord3_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_discord3_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_discord3_angle_range(vec a = 2 * ones&lt;vec&gt;(5) )</code>: Set range of angles as multiples of &pi;.</li><br>
+		<li> <code>void set_discord3_angle_initial(vec a = 0.1 * ones&lt;vec&gt;(5) )</code>: Set inital values of angles as multiples of &pi;.</li><br>
+		<li> <code>void set_discord3_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
+	      </ul>
+	    </li><br>
+
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(18,18); // 18x18 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		// change default global optimization algorithm
+		set_discord3_global_opt(nlopt::GN_DIRECT_L_RAND);
+
+		// change default local optimization algorithm
+		set_discord3_local_opt(nlopt::LN_SBPLX);
+
+		double disc = discord3(A,2,{2,3,3}); // measurement is done on 2nd party
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+
+
+
+	  <a name=discord_reg></a>
+	  <b>discord_reg(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qubit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>discord_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum discord.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		vec disc = discord_reg(A,2,{2,2,2}); // measurement is done 
+                                                     // on 2nd party
+
+		double Cdisk = min(disk); // Constrained regular quantum discord
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+
+
+
+	  <a name=discord3_reg></a>
+	  <b>discord3_reg(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qutrit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>discord3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum discord.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(18,18); // 18x18 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		vec disc = discord3_reg(A,2,{2,3,3}); // measurement is done 
+                                                     // on 2nd party
+
+		double Cdisk = min(disk); // Constrained regular quantum discord
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+	  <a name=deficit></a>
+	  <b>deficit(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qubit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>deficit</code> returns a <code>vec</code>, where the first term is the value of quantum work deficit and 2nd and 3rd are optimized values of &theta; and &phi; respectively;</li><br>
+		    
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <b>Helper functions:</b><br>
+	      <code>deficit</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <ul>
+		<li> <code>void set_deficit_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_deficit_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
+		<li> <code>void set_deficit_global_xtol(double a = 4e-2)</code> : Set global optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_deficit_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_deficit_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
+		<li> <code>void set_deficit_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_deficit_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_deficit_theta_phi_range(double a = 1,double b = 2)</code>: Set &theta;-&phi; range as multiples of &pi;.</li><br>
+		<li> <code>void set_deficit_theta_phi_initial(double a = 0.1,double b = 0.1)</code>: Set inital &theta;-&phi; value as multiples of &pi;.</li><br>
+		<li> <code>void set_deficit_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
+	      </ul>
+	    </li><br>
+
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		// change default global optimization algorithm
+		set_deficit_global_opt(nlopt::GN_DIRECT_L_RAND);
+
+		// change default local optimization algorithm
+		set_deficit_local_opt(nlopt::LN_SBPLX);
+
+		double def = deficit(A,2,{2,2,2})(0); // measurement is done 
+		                                      // on 2nd party
+		double theta = deficit(A,2,{2,2,2})(1); // optimized theta value
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+
+	  <a name=deficit3></a>
+	  <b>deficit3(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qutrit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <b>Helper functions:</b><br>
+	      <code>deficit3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <ul>
+		<li> <code>void set_deficit3_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_deficit3_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
+		<li> <code>void set_deficit3_global_xtol(double a = 0.25)</code> : Set global optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_deficit3_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_deficit3_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
+		<li> <code>void set_deficit3_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
+		<li> <code>void set_deficit3_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
+
+		<li> <code>void set_deficit3_angle_range(vec a = 2 * ones&lt;vec&gt;(5) )</code>: Set range of angles as multiples of &pi;.</li><br>
+		<li> <code>void set_deficit3_angle_initial(vec a = 0.1 * ones&lt;vec&gt;(5) )</code>: Set inital values of angles as multiples of &pi;.</li><br>
+		<li> <code>void set_deficit3_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
+	      </ul>
+	    </li><br>
+
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(18,18); // 18x18 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		// change default global optimization algorithm
+		set_deficit3_global_opt(nlopt::GN_DIRECT_L_RAND);
+
+		// change default local optimization algorithm
+		set_deficit3_local_opt(nlopt::LN_SBPLX);
+
+		double def = deficit3(A,2,{2,3,3}); // measurement is done on 2nd party
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+
+
+
+	  <a name=deficit_reg></a>
+	  <b>deficit_reg(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qubit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>deficit_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum work deficit.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		vec disc = deficit_reg(A,2,{2,2,2}); // measurement is done 
+                                                     // on 2nd party
+
+		double Cdisk = min(disk); // Constrained regular quantum work deficit
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+	  <hr> <br>
+
+
+
+
+
+
+
+	  <a name=deficit3_reg></a>
+	  <b>deficit3_reg(A,subsys,dim)</b><br><br>
+	  <ul>
+	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li> Measured subsystem has to be a qutrit system.</li><br>
+	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li> <code>deficit3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum work deficit.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Example:
+	      <pre>
+		cx_mat A = randn&lt;cx_mat&gt;(18,18); // 18x18 matrix
+		A *= A.t(); // make hermitian
+		A /= trace(A); //normalise
+		
+		vec disc = deficit3_reg(A,2,{2,3,3}); // measurement is done 
+                                                      // on 2nd party
+
+		double Cdisk = min(disk); // Constrained regular quantum work deficit
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
 
 
 
