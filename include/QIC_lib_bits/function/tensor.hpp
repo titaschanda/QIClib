@@ -45,8 +45,11 @@ namespace qic
   template<typename T1,typename T2, typename... T3>
   inline 
   typename std::enable_if< is_comparable_pT<T1,T2,T3...>::value,
-			   arma::Mat< typename eT_promoter_var<T1,T2,T3...>::type > 
-			   >::type tensor(const T1& rho1,const T2& rho2, const T3&... rho3)
+			   arma::Mat< typename eT_promoter_var<
+					T1,T2,T3...>::type > 
+			   >::type tensor(const T1& rho1,
+					  const T2& rho2, 
+					  const T3&... rho3)
   {
     return arma::kron(rho1,
 		      tensor(rho2,rho3...)).eval();
@@ -95,7 +98,7 @@ namespace qic
 
     for (auto&& a : rho)
       if ( a.eval().n_elem == 0  )
-            throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
+	throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 #endif
 
     auto ret = rho[0].eval();
@@ -110,7 +113,8 @@ namespace qic
 
   template<typename T1>
   inline 
-  typename arma::Mat<T1> tensor(const std::initializer_list< arma::Mat<T1> >& rho)
+  typename arma::Mat<T1> tensor(const std::initializer_list< 
+				arma::Mat<T1> >& rho)
   {
     return tensor(static_cast< std::vector< arma::Mat<T1> > >(rho));
   }
