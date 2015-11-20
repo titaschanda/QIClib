@@ -24,59 +24,48 @@
 namespace qic
 {
 
-
-  template <typename T1>
-  inline
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   T1&&
-			   >::type tensor(T1&& rho1)
-  {
-    return std::forward<T1>(rho1);
-  }
-
-
   template<typename T1, typename T2>
   inline 
   typename std::enable_if< is_comparable_pT<T1,T2>::value,
 			   arma::Mat< typename eT_promoter_var<T1,T2>::type >
-			   >::type  tensor(T1&& rho1,T2&& rho2)
+			   >::type  tensor(const T1& rho1,const T2& rho2)
   {
     return arma::kron(rho1,rho2).eval();
   }
 
 
-  template<typename T1, typename... T2>
+  template<typename T1,typename T2, typename... T3>
   inline 
-  typename std::enable_if< is_comparable_pT<T1,T2...>::value,
-			 arma::Mat< typename eT_promoter_var<T1,T2...>::type > 
-			 >::type tensor(T1&& rho1,T2&&... rho2)
+  typename std::enable_if< is_comparable_pT<T1,T2,T3...>::value,
+			   arma::Mat< typename eT_promoter_var<T1,T2,T3...>::type > 
+			   >::type tensor(const T1& rho1,const T2& rho2, const T3&... rho3)
   {
     return arma::kron(rho1,
-		      tensor(rho2...)).eval();
+		      tensor(rho2,rho3...)).eval();
   }
 
 
 
   template<typename T1>
   inline 
-  typename std::enable_if< std::is_arithmetic<T1>::value,
+  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 			   arma::Mat< eT<T1> >
 			   >::type tensor(const arma::field<T1>& rho)
   {
     
 #ifndef QIC_LIB_NO_DEBUG
-    if (rho.n_elems == 0)
+    if (rho.n_elem == 0)
       throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 
     for (auto&& a : rho)
-      if ( a.eval().n_elems == 0  )
+      if ( a.eval().n_elem == 0  )
 	throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 #endif
 
     auto ret = rho.at(0).eval();
     
-    for(arma::uword i = 1 ; i < rho.n_elems ; ++i)
-      ret = arma::kron(ret,rho.at(0));
+    for(arma::uword i = 1 ; i < rho.n_elem ; ++i)
+      ret = arma::kron(ret,rho.at(i));
 
     return ret;
 
@@ -87,7 +76,7 @@ namespace qic
 
   template<typename T1>
   inline 
-  typename std::enable_if< std::is_arithmetic<T1>::value,
+  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 			   arma::Mat< eT<T1> >
 			   >::type tensor(const std::vector<T1>& rho)
   {
@@ -97,7 +86,7 @@ namespace qic
       throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 
     for (auto&& a : rho)
-      if ( a.eval().n_elems == 0  )
+      if ( a.eval().n_elem == 0  )
             throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 #endif
 
@@ -113,11 +102,9 @@ namespace qic
 
   template<typename T1>
   inline 
-  typename std::enable_if< std::is_arithmetic<T1>::value,
-			   arma::Mat< eT<T1> >
-			   >::type tensor(const std::initializer_list<T1>& rho)
+  typename arma::Mat<T1> tensor(const std::initializer_list< arma::Mat<T1> >& rho)
   {
-    return tensor(static_cast< std::vector<T1> >(rho));
+    return tensor(static_cast< std::vector< arma::Mat<T1> > >(rho));
   }
 
 
