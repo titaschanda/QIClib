@@ -28,8 +28,16 @@ namespace qic
   inline 
   typename std::enable_if< is_comparable_pT<T1,T2>::value,
 			   arma::Mat< typename eT_promoter_var<T1,T2>::type >
-			   >::type  tensor(const T1& rho1,const T2& rho2)
+			   >::type  tensor(const T1& rho11,const T2& rho12)
   {
+    const auto& rho1 = as_Mat(rho11);
+    const auto& rho2 = as_Mat(rho12);
+
+#ifndef QIC_LIB_NO_DEBUG
+    if( rho1.n_elem == 0 || rho2.n_elem == 0 )
+      throw Exception("qic::tensor",Exception::type::ZERO_SIZE);
+#endif
+
     return arma::kron(rho1,rho2).eval();
   }
 
