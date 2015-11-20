@@ -75,6 +75,7 @@
 #include "QIC_lib_bits/function/sqrtm.hpp"
 #include "QIC_lib_bits/function/funcm.hpp"
 #include "QIC_lib_bits/function/tensor.hpp"
+#include "QIC_lib_bits/function/dsum.hpp"
 #include "QIC_lib_bits/function/absm.hpp" 
 
 #include "QIC_lib_bits/function/apply_ctrl.hpp" 
