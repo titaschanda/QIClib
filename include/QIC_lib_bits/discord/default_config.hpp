@@ -45,7 +45,7 @@ namespace qic
       nlopt::algorithm _discord3_local_opt = nlopt::LN_COBYLA;
       double _discord3_local_xtol = _precision::eps;
       double _discord3_local_ftol = 0;
-      arma::vec  _discord3_angle_range = 1.0*arma::ones<arma::vec>(5);
+      arma::vec  _discord3_angle_range = 2.0*arma::ones<arma::vec>(5);
       arma::vec _discord3_angle_ini = 0.1*arma::ones<arma::vec>(5);
       double _discord3_prob_tol = _precision::eps;
 

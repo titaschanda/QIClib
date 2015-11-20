@@ -228,7 +228,7 @@ namespace qic
 
 
       std::vector<double> x(2);
-      x[0] = protect::_discord_theta_ini; x[1] = protect::_discord_phi_ini;
+      x[0] = protect::_discord_theta_ini*arma::datum::pi; x[1] = protect::_discord_phi_ini*arma::datum::pi;
 
       double minf1;
       double minf;

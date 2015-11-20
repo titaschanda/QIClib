@@ -194,7 +194,7 @@ namespace qic
       lb[0] = 0.0; lb[1] = 0.0;
       ub[0]=protect::_deficit_theta_range*arma::datum::pi; ub[1] = protect::_deficit_phi_range*arma::datum::pi;
       std::vector<double> x(2);
-      x[0] = protect::_deficit_theta_ini; x[1] = protect::_deficit_phi_ini;
+      x[0] = protect::_deficit_theta_ini*arma::datum::pi; x[1] = protect::_deficit_phi_ini*arma::datum::pi;
       double minf1;
       double minf;
     

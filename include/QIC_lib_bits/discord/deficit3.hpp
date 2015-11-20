@@ -222,13 +222,13 @@ namespace qic
       for(arma::uword i=0;i<5;i++)
 	{
 	  lb[i] = 0.0;
-	  ub[i]=protect::_deficit3_angle_range.at(i)*arma::datum::pi;
+	  ub[i] = protect::_deficit3_angle_range.at(i)*arma::datum::pi;
 	}
 
       std::vector<double> x(5);
       for(arma::uword i=0;i<5;i++)
 	{
-	  x[i] =protect::_deficit3_angle_ini.at(i);
+	  x[i] = protect::_deficit3_angle_ini.at(i)*arma::datum::pi;
 	}
 
       double minf1;
