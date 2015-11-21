@@ -10,3 +10,5 @@ Version 0.0.3 - November 21, 2015
     - bug-fix in tensor
 
 Version 0.0.4 - Development Branch
+    - added conv_to_HS
+    - added conv_to_std
