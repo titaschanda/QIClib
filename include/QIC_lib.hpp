@@ -65,8 +65,6 @@
 
 #include "QIC_lib_bits/internal/protect_subs.hpp"
 
-#include "QIC_lib_bits/function/conv_to_pure.hpp" 
-#include "QIC_lib_bits/function/generator.hpp" 
 #include "QIC_lib_bits/function/Tx.hpp"
 #include "QIC_lib_bits/function/TrX.hpp"
 #include "QIC_lib_bits/function/sysperm.hpp"
@@ -77,6 +75,9 @@
 #include "QIC_lib_bits/function/tensor.hpp"
 #include "QIC_lib_bits/function/dsum.hpp"
 #include "QIC_lib_bits/function/absm.hpp" 
+#include "QIC_lib_bits/function/conv_to_pure.hpp" 
+#include "QIC_lib_bits/function/generator.hpp" 
+#include "QIC_lib_bits/function/pauli.hpp" 
 
 #include "QIC_lib_bits/function/apply_ctrl.hpp" 
 #include "QIC_lib_bits/function/apply.hpp" 
