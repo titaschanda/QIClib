@@ -24,13 +24,14 @@
 namespace qic 
 {
 
-  template<typename T1>
+  template<typename T1,typename TR =  
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+				    arma::Mat< eT<T1> > 
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
-			   arma::Mat< eT<T1> > 
-			   >::type Tx(const T1& rho1,
-				      arma::uvec sys,
-				      arma::uvec dim)
+  TR Tx(const T1& rho1,
+	arma::uvec sys,
+	arma::uvec dim)
   {
     auto p = as_Mat(rho1); 
     
@@ -130,13 +131,14 @@ namespace qic
 
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+				    arma::Mat< eT<T1> > 
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
-			   arma::Mat< eT<T1> > 
-			   >::type Tx(const T1& rho1,
-				      arma::uvec sys,
-				      arma::uword dim = 2)
+  TR Tx(const T1& rho1,
+	arma::uvec sys,
+	arma::uword dim = 2)
   {
     const auto& p = as_Mat(rho1); 
     

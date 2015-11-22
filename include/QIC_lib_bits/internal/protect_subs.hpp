@@ -30,6 +30,9 @@ namespace qic
     {
 
 
+      //************************************************************************
+
+
       template<typename T1, typename T2>
       inline
       typename std::enable_if< std::is_arithmetic< pT<T1> >::value && 
@@ -57,6 +60,152 @@ namespace qic
       }
 
 
+      //************************************************************************
+
+
+      template<typename T1>
+      struct int_tag 
+      { typedef int_tag type; 
+	typedef arma::Mat< eT<T1> > ret_type;
+      };
+
+      template<typename T1>
+      struct nonint_tag 
+      {
+	typedef nonint_tag type; 
+	typedef arma::Mat< std::complex< pT<T1> > > ret_type;
+      };
+
+      template<typename T1, typename T2>
+      struct powm_tag : std::conditional< std::is_integral<T2>::value,
+					  int_tag<T1>,nonint_tag<T1> 
+					  >::type {};
+
+
+      //************************************************************************
+
+
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+					arma::Mat< std::complex< pT<T1> > > 
+					>::type >
+      inline
+      TR powm_gen_implement(const T1& rho1 ,const T2& P, nonint_tag<T1>)
+    
+      {
+	const auto& rho = as_Mat(rho1);
+    
+#ifndef QIC_LIB_NO_DEBUG  
+	if(rho.n_elem == 0)
+	  throw Exception("qic::powm_gen",Exception::type::ZERO_SIZE);
+    
+	if(rho.n_rows != rho.n_cols)
+	  throw Exception("qic::powm_gen",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+
+	arma::Col<std::complex< pT<T1> > > eigval;
+	arma::Mat<std::complex< pT<T1> > > eigvec;
+	arma::eig_gen(eigval,eigvec,rho);
+
+	return eigvec
+	  * diagmat(arma::pow(eigval,P))
+	  * eigvec.i();
+      
+      }
+
+
+      //************************************************************************
+
+
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+					arma::Mat< eT<T1> > 
+					>::type>
+      inline
+      TR powm_gen_implement(const T1& rho1 ,const T2& P,int_tag<T1>)
+  
+      {
+	const auto& rho = as_Mat(rho1);
+
+#ifndef QIC_LIB_NO_DEBUG  
+	if(rho.n_elem == 0)
+	  throw Exception("qic::powm_gen",Exception::type::ZERO_SIZE);
+    
+	if(rho.n_rows != rho.n_cols)
+	  throw Exception("qic::powm_gen",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+    
+	if(P < 0)
+	  return POWM_GEN_INT(rho.i().eval(),
+			      abs(P));
+	else 
+	  return POWM_GEN_INT(rho,P); 
+    
+      }  
+
+
+      //************************************************************************
+
+      
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+					arma::Mat<std::complex< pT<T1> > > 
+					>::type>
+      TR powm_sym_implement(const T1& rho1 ,const T2& P,nonint_tag<T1>)
+  
+      {
+	const auto& rho = as_Mat(rho1);
+
+
+#ifndef QIC_LIB_NO_DEBUG    
+	if(rho.n_elem == 0)
+	  throw Exception("qic::powm_sym",Exception::type::ZERO_SIZE);
+    
+	if(rho.n_rows!=rho.n_cols)
+	  throw Exception("qic::powm_sym",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+   
+	arma::Col< pT<T1> > eigval;
+	arma::Mat< eT<T1> > eigvec;
+	arma::eig_sym(eigval,eigvec,rho,"std");
+
+	return eigvec 
+	  * arma::diagmat(arma::pow(arma::conv_to< 
+				    arma::Col< 
+				    std::complex< pT<T1> > 
+				    > >::from(eigval),P)) 
+	  * eigvec.t();
+      }
+  
+
+      //************************************************************************
+
+
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+					arma::Mat< eT<T1> > 
+					>::type>
+      inline 
+      TR powm_sym_implement(const T1& rho1 ,const T2& P,int_tag<T1>)
+      {
+	const auto& rho = as_Mat(rho1);
+
+#ifndef QIC_LIB_NO_DEBUG  
+	if(rho.n_elem == 0)
+	  throw Exception("qic::powm_sym",Exception::type::ZERO_SIZE);
+    
+	if(rho.n_rows != rho.n_cols)
+	  throw Exception("qic::powm_sym",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+	if(P < 0)
+	  return POWM_GEN_INT(rho.i().eval(),
+			      abs(P));
+	else 
+	  return POWM_GEN_INT(rho,P); 
+      }
+
+
+      //************************************************************************
 
   
       template<typename T1>
@@ -81,7 +230,7 @@ namespace qic
       }
 
 
-
+      //************************************************************************
 
 
       inline void dim_collapse_sys(arma::uvec& dim, arma::uvec& sys)
@@ -147,6 +296,9 @@ namespace qic
 	sys = std::move(sys2);
 	dim = dim2;
       }
+
+
+      //************************************************************************
 
 
       inline void dim_collapse_sys_ctrl(arma::uvec& dim, 
@@ -246,9 +398,6 @@ namespace qic
 	ctrl = std::move(ctrl2);
 	dim = dim2;
       }
-
-
-
 
     }
   }
