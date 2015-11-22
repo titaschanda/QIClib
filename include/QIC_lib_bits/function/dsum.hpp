@@ -24,11 +24,12 @@
 namespace qic
 {
   
-  template<typename T1, typename T2>
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_same< eT<T1>, eT<T2> >::value,
+				    arma::Mat< eT<T1> >
+				    >::type>
   inline 
-  typename std::enable_if< std::is_same< eT<T1>, eT<T2> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type  dsum(const T1& rho11,const T2& rho12)
+  TR  dsum(const T1& rho11,const T2& rho12)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);
@@ -56,12 +57,14 @@ namespace qic
 
 
   
-  template<typename T1, typename T2, typename... T3>
+  template<typename T1, typename T2, typename... T3,
+	   typename TR = 
+	   typename std::enable_if< 
+	     is_all_same< eT<T1>,eT<T2>,eT<T3>...>::value,
+	     arma::Mat< eT<T1> > 
+	     >::type>
   inline 
-  typename std::enable_if< is_all_same< eT<T1>,eT<T2>,eT<T3>...>::value,
-			   arma::Mat< eT<T1> > 
-			   >::type dsum(const T1& rho1,const T2& rho2, 
-					const T3&... rho3)
+  TR dsum(const T1& rho1,const T2& rho2,const T3&... rho3)
   {
     return dsum(rho1,
 		dsum(rho2,rho3...));
@@ -69,11 +72,12 @@ namespace qic
 
 
   
-  template<typename T1>
+  template<typename T1, typename TR =
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> >
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type dsum(const arma::field<T1>& rho)
+  TR dsum(const arma::field<T1>& rho)
   {
     
 #ifndef QIC_LIB_NO_DEBUG
@@ -111,11 +115,12 @@ namespace qic
 
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> >
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type dsum(const std::vector<T1>& rho)
+  TR dsum(const std::vector<T1>& rho)
   {
     
 #ifndef QIC_LIB_NO_DEBUG
@@ -146,11 +151,10 @@ namespace qic
 	m += rho[i].eval().n_cols;
       }
 
-
     return ret;
-
-
   }
+
+
 
 
   template<typename T1>
@@ -163,12 +167,13 @@ namespace qic
 
 
 
-  template <typename T1>
+  template <typename T1, typename TR = 
+	    typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				     arma::Mat< eT<T1> >
+				     >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type dsum_pow(const T1& rho1,
-					    arma::uword n)
+  TR dsum_pow(const T1& rho1,
+	      arma::uword n)
   {
     
     const auto& rho = as_Mat(rho1);
