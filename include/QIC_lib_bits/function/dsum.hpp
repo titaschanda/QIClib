@@ -29,7 +29,7 @@ namespace qic
 				    arma::Mat< eT<T1> >
 				    >::type>
   inline 
-  TR  dsum(const T1& rho11,const T2& rho12)
+  TR dsum(const T1& rho11,const T2& rho12)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);
@@ -61,7 +61,7 @@ namespace qic
 	   typename TR = 
 	   typename std::enable_if< 
 	     is_all_same< eT<T1>,eT<T2>,eT<T3>...>::value,
-	     arma::Mat< eT<T1> > 
+	     arma::Mat< eT<T1> >
 	     >::type>
   inline 
   TR dsum(const T1& rho1,const T2& rho2,const T3&... rho3)
@@ -164,6 +164,8 @@ namespace qic
   {
     return dsum(static_cast< std::vector< arma::Mat<T1> > >(rho));
   }
+
+
 
 
 

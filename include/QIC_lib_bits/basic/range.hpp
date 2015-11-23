@@ -27,14 +27,16 @@ namespace qic
   //***************************************************************************
 
 
-  template <typename T1,typename T2, typename T3>
-  inline 
-  typename std::enable_if< 
-    std::is_arithmetic<T1>::value 
-  && std::is_arithmetic<T2>::value
-  && std::is_arithmetic<T3>::value,
-    std::vector< typename  is_promotable_var<T1,T2,T3>::type > 
-    >::type range(T1 start, T2 stop, T3 step)
+  template <typename T1,typename T2, typename T3, typename TR = 
+	    typename std::enable_if< std::is_arithmetic<T1>::value 
+				     && std::is_arithmetic<T2>::value
+				     && std::is_arithmetic<T3>::value,
+				     std::vector< 
+				       typename 
+				       is_promotable_var<T1,T2,T3>::type > 
+				     >::type >
+    inline 
+    TR range(T1 start, T2 stop, T3 step)
   {
     using pTr = typename is_promotable_var<T1,T2,T3>::type;
     
@@ -64,13 +66,15 @@ namespace qic
   //****************************************************************************
 
 
-  template <typename T1, typename T2>
-  inline 
-  typename std::enable_if< 
-    std::is_arithmetic<T1>::value 
-  && std::is_arithmetic<T2>::value,
-    std::vector< typename  is_promotable_var<T1,T2>::type > 
-    >::type range(T1 start, T2 stop)
+  template <typename T1, typename T2, typename TR =  
+	    typename std::enable_if< std::is_arithmetic<T1>::value 
+				     && std::is_arithmetic<T2>::value,
+				     std::vector< 
+				       typename  
+				       is_promotable_var<T1,T2>::type > 
+				     >::type>
+    inline 
+    TR range(T1 start, T2 stop)
   {
     using pTr = typename  is_promotable_var<T1,T2>::type;
     return range(static_cast<pTr>(start), 
@@ -82,11 +86,12 @@ namespace qic
   //****************************************************************************
 
 
-  template <typename T1>
+  template <typename T1, typename TR = 
+	    typename std::enable_if< std::is_arithmetic<T1>::value,
+				     std::vector<T1> 
+				     >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic<T1>::value,
-			   std::vector<T1> 
-			   >::type range(T1 stop)
+  TR range(T1 stop)
   {
     return range(static_cast<T1>(0), stop, static_cast<T1>(1));
   }
