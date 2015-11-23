@@ -25,17 +25,18 @@ namespace qic
 {
 
 
-  template<typename T1,typename T2>
+  template<typename T1,typename T2, typename =   
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value 
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_comparable_pT<T1,T2>::value, 
+				    void 
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value 
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value, 
-			   bool 
-			   >::type is_equal(const T1& rho11,
-					   const T2& rho12,
-					   bool typecheck = false,
-					   const double& atol = 1.0e-10, 
-					   const double& rtol = 1.0e-8)
+  bool is_equal(const T1& rho11,
+		const T2& rho12,
+		bool typecheck = false,
+		const double& atol = 1.0e-10, 
+		const double& rtol = 1.0e-8)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);

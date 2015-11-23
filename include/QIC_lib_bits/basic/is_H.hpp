@@ -24,13 +24,14 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename =   
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+				    void 
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
-			   bool 
-			   >::type is_H(const T1& rho1, 
-					const double& atol = 1.0e-10, 
-					const double& rtol = 1.0e-8)
+  bool is_H(const T1& rho1, 
+	    const double& atol = 1.0e-10, 
+	    const double& rtol = 1.0e-8)
   {
     const auto& rho = as_Mat(rho1);
     

@@ -24,13 +24,14 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename =   
+	   typename std::enable_if< std::is_floating_point< pT<T1> >::value,  
+				    void
+				    >::type>
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,  
-			   bool
-			   >::type is_pure(const T1& rho1, 
-					   bool check_norm = true,
-					   const double& tol = _precision::eps)
+  bool is_pure(const T1& rho1, 
+	       bool check_norm = true,
+	       const double& tol = _precision::eps)
   {
     const auto& rho = as_Mat(rho1);
      
