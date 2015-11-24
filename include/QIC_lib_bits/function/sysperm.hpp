@@ -24,13 +24,14 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename TR =   
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> >
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type sysperm(const T1& rho1,
-					   const arma::uvec& sys,
-					   const arma::uvec& dim)
+  TR sysperm(const T1& rho1,
+	     const arma::uvec& sys,
+	     const arma::uvec& dim)
   {
     const auto& p = as_Mat(rho1); 
     const arma::uword n = dim.n_elem; 
@@ -167,13 +168,14 @@ namespace qic
       }
   }
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> > 
-			   >::type sysperm(const T1& rho1,
-					   const arma::uvec& sys,
-					   arma::uword dim = 2)
+  TR sysperm(const T1& rho1,
+	     const arma::uvec& sys,
+	     arma::uword dim = 2)
   {
     const auto& p = as_Mat(rho1); 
     

@@ -24,13 +24,14 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type neg(const T1& rho1,
-				       arma::uvec sys, 
-				       arma::uvec dim)
+  TR neg(const T1& rho1,
+	 arma::uvec sys, 
+	 arma::uvec dim)
   {
     const auto& p = as_Mat(rho1);
 
@@ -71,25 +72,38 @@ namespace qic
     return Neg;
   }
     
+
+
+
+
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type log_neg(const T1& rho1, 
-					   arma::uvec sys, 
-					   arma::uvec dim)
+  TR log_neg(const T1& rho1, 
+	     arma::uvec sys, 
+	     arma::uvec dim)
   {
     return std::log2(2.0*neg(rho1,std::move(sys),std::move(dim))+1.0);
   }
   
-  template<typename T1>
+
+
+
+
+
+
+
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type neg(const T1& rho1,
-				       arma::uvec sys,
-				       arma::uword dim = 2)
+  TR neg(const T1& rho1,
+	 arma::uvec sys,
+	 arma::uword dim = 2)
   {
       
     const auto& p = as_Mat(rho1); 
@@ -120,13 +134,19 @@ namespace qic
 
   }
 
-  template<typename T1>
+
+
+
+
+
+  template<typename T1, typename TR =  
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type log_neg(const T1& rho1, 
-					   arma::uvec sys, 
-					   arma::uword dim = 2)
+  TR log_neg(const T1& rho1, 
+	     arma::uvec sys, 
+	     arma::uword dim = 2)
   {
     return std::log2(2.0*neg(rho1,std::move(sys),dim)+1.0);
   }

@@ -27,12 +27,13 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Col< pT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Col< pT<T1> > 
-			   >::type schmidt(const T1& rho1, 
-					   const arma::uvec& dim)
+  TR schmidt(const T1& rho1, 
+	     const arma::uvec& dim)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -74,15 +75,16 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    bool 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   bool 
-			   >::type schmidt(const T1& rho1, 
-					   const arma::uvec& dim,
-					   arma::Col< pT<T1> >& S,
-					   arma::Mat< eT<T1> >& U, 
-					   arma::Mat< eT<T1> >& V)
+  schmidt(const T1& rho1, 
+	  const arma::uvec& dim,
+	  arma::Col< pT<T1> >& S,
+	  arma::Mat< eT<T1> >& U, 
+	  arma::Mat< eT<T1> >& V)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -137,12 +139,13 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> >
+				    >::type >
   inline
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type schmidtA(const T1& rho1, 
-					    const arma::uvec& dim)
+  TR schmidtA(const T1& rho1, 
+	      const arma::uvec& dim)
   {  
     const auto& rho = as_Mat(rho1);
     
@@ -197,12 +200,13 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> > 
-			   >::type schmidtB(const T1& rho1, 
-					    const arma::uvec& dim)
+  TR schmidtB(const T1& rho1, 
+	      const arma::uvec& dim)
   {
     const auto& rho = as_Mat(rho1);
     
@@ -256,12 +260,13 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::field< arma::Mat< eT<T1> > > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::field< arma::Mat< eT<T1> > > 
-			   >::type schmidtAB(const T1& rho1, 
-					     const arma::uvec& dim)
+  TR schmidtAB(const T1& rho1, 
+	       const arma::uvec& dim)
   {
     const auto& rho = as_Mat(rho1);
     
@@ -321,12 +326,13 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> > 
-			   >::type schmidtA_full(const T1& rho1, 
-						 const arma::uvec& dim)
+  TR schmidtA_full(const T1& rho1, 
+		   const arma::uvec& dim)
   {
     const auto& rho = as_Mat(rho1);
     
@@ -379,12 +385,13 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> >
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> >
-			   >::type schmidtB_full(const T1& rho1, 
-						 const arma::uvec& dim)
+  TR schmidtB_full(const T1& rho1, 
+		   const arma::uvec& dim)
   {
     const auto& rho = as_Mat(rho1);
     
@@ -437,12 +444,13 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::field< arma::Mat< eT<T1> > > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::field< arma::Mat< eT<T1> > > 
-			   >::type schmidtAB_full(const T1& rho1, 
-						  const arma::uvec& dim)
+  TR schmidtAB_full(const T1& rho1, 
+		    const arma::uvec& dim)
   {
     const auto& rho = as_Mat(rho1);
     

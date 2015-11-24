@@ -28,7 +28,7 @@ namespace qic
 	   typename std::enable_if< is_comparable_pT<T1,T2>::value,
 				    arma::Mat<
 				      typename eT_promoter_var<T1,T2>::type >
-				    >::type>
+				    >::type >
   inline 
   TR tensor(const T1& rho11,const T2& rho12)
   {
@@ -48,7 +48,7 @@ namespace qic
 	   typename std::enable_if< is_comparable_pT<T1,T2,T3...>::value,
 				    arma::Mat< typename eT_promoter_var<
 						 T1,T2,T3...>::type > 
-				    >::type>
+				    >::type >
   inline 
   TR tensor(const T1& rho1,
 	    const T2& rho2, 
@@ -63,7 +63,7 @@ namespace qic
   template<typename T1, typename TR = 
 	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 				    arma::Mat< eT<T1> >
-				    >::type>
+				    >::type >
   inline 
   TR tensor(const arma::field<T1>& rho)
   {
@@ -92,7 +92,7 @@ namespace qic
   template<typename T1, typename TR = 
 	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 				    arma::Mat< eT<T1> >
-				    >::type>
+				    >::type >
   inline 
   TR tensor(const std::vector<T1>& rho)
   {
@@ -129,7 +129,7 @@ namespace qic
   template <typename T1, typename TR = 
 	    typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 				     arma::Mat< eT<T1> >
-				     >::type>
+				     >::type >
   inline 
   TR tensor_pow(const T1& rho1,
 		arma::uword n)

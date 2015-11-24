@@ -32,9 +32,10 @@ namespace qic
   inline 
   TR powm_gen(const T1& rho1 ,const T2& P)
   {
-    return _internal::protect_subs::powm_gen_implement(rho1,P,
-						       typename _internal::
-						       protect_subs::powm_tag<T1,T2>::type{});
+    return _internal::protect_subs::
+      powm_gen_implement(rho1,P,
+			 typename _internal::
+			 protect_subs::powm_tag<T1,T2>::type{});
   }
 
 
@@ -49,9 +50,10 @@ namespace qic
   inline 
   TR powm_sym(const T1& rho1 ,const T2& P)
   {
-    return _internal::protect_subs::powm_sym_implement(rho1,P,
-						       typename _internal::
-						       protect_subs::powm_tag<T1,T2>::type{});
+    return _internal::protect_subs::
+      powm_sym_implement(rho1,P,
+			 typename _internal::
+			 protect_subs::powm_tag<T1,T2>::type{});
   }
 
 

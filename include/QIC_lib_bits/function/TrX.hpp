@@ -27,7 +27,7 @@ namespace qic
   template<typename T1, typename TR = 
 	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 				    arma::Mat< eT<T1> >
-				    >::type>
+				    >::type >
   inline 
   TR TrX(const T1& rho1, 
 	 arma::uvec sys, 
@@ -157,7 +157,7 @@ namespace qic
   template<typename T1, typename TR = 
 	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
 				    arma::Mat< eT<T1> > 
-				    >::type>
+				    >::type >
   inline 
   TR TrX(const T1& rho1,
 	 arma::uvec sys,

@@ -24,11 +24,12 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename TR =   
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat<std::complex< pT<T1> > > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat<std::complex< pT<T1> > > 
-			   >::type sqrtm_sym(const T1& rho1)
+  TR sqrtm_sym(const T1& rho1)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -54,11 +55,12 @@ namespace qic
  
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat<std::complex< pT<T1> > > 
+				    >::type >
   inline
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat<std::complex< pT<T1> > > 
-			   >::type sqrtm_gen(const T1& rho1)
+  TR sqrtm_gen(const T1& rho1)
   {
     const auto& rho = as_Mat(rho1);
 

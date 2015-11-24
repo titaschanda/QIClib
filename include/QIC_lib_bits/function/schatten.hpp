@@ -23,11 +23,12 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type schatten(const T1& rho1, pT<T1> p)
+  TR schatten(const T1& rho1, pT<T1> p)
   {
     const auto& rho = as_Mat(rho1);
 
