@@ -77,10 +77,10 @@ namespace qic
   
   template<typename T1, typename TR = 
 	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-				    bool 
+				    void 
 				    >::type >
   inline 
-  schmidt(const T1& rho1, 
+  bool schmidt(const T1& rho1, 
 	  const arma::uvec& dim,
 	  arma::Col< pT<T1> >& S,
 	  arma::Mat< eT<T1> >& U, 

@@ -24,12 +24,13 @@
 namespace qic
 {
 
-  template<typename T1, typename functor>
+  template<typename T1, typename functor, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< std::complex< pT<T1> > >
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< std::complex< pT<T1> > >
-			   >::type funcm_sym(const T1& rho1, 
-					     functor P)
+  TR funcm_sym(const T1& rho1, 
+	       functor P)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -56,12 +57,13 @@ namespace qic
  
 
 
-  template<typename T1, typename functor>
+  template<typename T1, typename functor, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat<std::complex< pT<T1> > > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat<std::complex< pT<T1> > > 
-			   >::type funcm_gen(const T1& rho1, 
-					     functor P)
+  TR funcm_gen(const T1& rho1, 
+	       functor P)
   {
     const auto& rho = as_Mat(rho1);
 

@@ -26,12 +26,13 @@ namespace qic
 
   //****************************************************************************
 
-  template<typename T1>
+  template<typename T1, typename TR =  
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type mutual_info(const T1& rho1, 
-					       arma::uvec dim)
+  TR mutual_info(const T1& rho1, 
+		 arma::uvec dim)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -74,14 +75,15 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type mutual_info(const T1& rho1,
-					       arma::uvec sys1,
-					       arma::uvec sys2,
-					       arma::uvec dim)
+  TR mutual_info(const T1& rho1,
+		 arma::uvec sys1,
+		 arma::uvec sys2,
+		 arma::uvec dim)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -154,14 +156,15 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type mutual_info(const T1& rho1,
-					       arma::uvec sys1,
-					       arma::uvec sys2,
-					       arma::uword dim = 2)
+  TR mutual_info(const T1& rho1,
+		 arma::uvec sys1,
+		 arma::uvec sys2,
+		 arma::uword dim = 2)
   {
     const auto& rho = as_Mat(rho1);
 
