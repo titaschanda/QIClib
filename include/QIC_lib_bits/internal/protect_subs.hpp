@@ -33,12 +33,13 @@ namespace qic
       //************************************************************************
 
 
-      template<typename T1, typename T2>
-      inline
-      typename std::enable_if< std::is_arithmetic< pT<T1> >::value && 
-      std::is_integral<T2>::value,
-			       arma::Mat< eT<T1> > 
-			       >::type POWM_GEN_INT(const T1& rho,const T2& P)
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value && 
+					std::is_integral<T2>::value,
+					arma::Mat< eT<T1> > 
+					>::type >
+	inline
+	TR POWM_GEN_INT(const T1& rho,const T2& P)
       {
  
 	if (P == 0 )
@@ -208,12 +209,13 @@ namespace qic
       //************************************************************************
 
   
-      template<typename T1>
+      template<typename T1, typename TR = 
+	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+					arma::Mat< eT<T1> > 
+					>::type >
       inline 
-      typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			       arma::Mat< eT<T1> > 
-			       >::type TENSOR_POW(const T1& rho, 
-						  arma::uword n)
+      TR TENSOR_POW(const T1& rho, 
+		    arma::uword n)
       {
   
 	if (n == 1)
