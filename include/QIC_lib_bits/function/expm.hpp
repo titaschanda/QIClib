@@ -23,12 +23,13 @@
 
 namespace qic
 {
-  template<typename T1, typename T2>
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< std::complex< pT<T1> > > 
+				    >::type >
   inline
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< std::complex< pT<T1> > > 
-			   >::type expm_sym(const T1& rho1,
-					    const std::complex<T2>& a)
+  TR expm_sym(const T1& rho1,
+	      const std::complex<T2>& a)
   {
     const auto& H = as_Mat(rho1);
 
@@ -49,14 +50,17 @@ namespace qic
   
   
 
-  template<typename T1, typename T2>
-  inline 
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic<T2>::value,
-    arma::Mat< eT<T1> > 
-    >::type expm_sym(const T1& rho1,
-		     const T2& a)
+
+
+
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic<T2>::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
+    inline 
+    TR expm_sym(const T1& rho1,
+		const T2& a)
   {
     const auto& H = as_Mat(rho1);
 
@@ -84,11 +88,12 @@ namespace qic
 
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> > 
-			   >::type expm_sym(const T1& rho1)
+  TR expm_sym(const T1& rho1)
   {
     const auto& H = as_Mat(rho1);
 
@@ -114,11 +119,15 @@ namespace qic
 
 
 
-  template<typename T1>
+
+
+
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> > 
-			   >::type expm_gen(const T1& rho1)
+  TR expm_gen(const T1& rho1)
   {
     auto A = as_Mat(rho1);
 

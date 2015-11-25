@@ -24,11 +24,12 @@
 namespace qic 
 {
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1> 
-			   >::type EoF(const T1& rho1)
+  TR EoF(const T1& rho1)
   {
     const auto& p = as_Mat(rho1); 
 

@@ -26,11 +26,12 @@ namespace qic
 
   // ***************************************************************************
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    pT<T1>
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   pT<T1>
-			   >::type entropy(const T1& rho1)
+  TR entropy(const T1& rho1)
   {
     const auto& rho = as_Mat(rho1);    
 
@@ -67,11 +68,12 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if < std::is_floating_point< eT<T1> >::value,
+				     eT<T1> 
+				     >::type >
   inline 
-  typename std::enable_if < std::is_floating_point< eT<T1> >::value,
-			    eT<T1> 
-			    >::type shannon(const T1& prob1)
+  TR shannon(const T1& prob1)
   {
     const auto& prob = as_Mat(prob1);
 
@@ -98,11 +100,12 @@ namespace qic
   //****************************************************************************
 
   
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_floating_point<T1>::value,
+				    T1 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_floating_point<T1>::value,
-			   T1 
-			   >::type shannon(const std::vector<T1>& prob1)
+  TR shannon(const std::vector<T1>& prob1)
   {
     return shannon(static_cast< arma::Col<T1> >(prob1));
   }
@@ -111,12 +114,12 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_arithmetic<T1>::value,
+				    T1 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic<T1>::value,
-			   T1 
-			   >::type shannon(const std::initializer_list<T1>& 
-					   prob1)
+  TR shannon(const std::initializer_list<T1>& prob1)
   {
     return shannon(static_cast< arma::Col<double> >(prob1));
   }
@@ -125,12 +128,13 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_floating_point< pT<T1> >::value,
+				    pT<T1>
+				    >::type >
   inline 
-  typename std::enable_if< std::is_floating_point< pT<T1> >::value,
-			   pT<T1>
-			   >::type renyi(const T1& rho1, 
-					 const pT<T1>& alpha)
+  TR renyi(const T1& rho1, 
+	   const pT<T1>& alpha)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -180,12 +184,13 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_floating_point< eT<T1> >::value,
+				    eT<T1>
+				    >::type >
   inline 
-  typename std::enable_if< std::is_floating_point< eT<T1> >::value,
-			   eT<T1>
-			   >::type renyi_prob(const T1& prob1, 
-					      const eT<T1>& alpha)
+  TR renyi_prob(const T1& prob1, 
+		const eT<T1>& alpha)
   {
     const auto& prob2 = as_Mat(prob1);
 
@@ -227,13 +232,12 @@ namespace qic
 
   //****************************************************************************
 
-  template<typename T1, typename T2>
-  inline 
-  typename std::enable_if < 
-    std::is_floating_point<T1>::value 
-  && std::is_arithmetic<T2>::value,
-    T1 >::type 
-    renyi_prob(const std::vector<T1>& prob1,const T2& alpha)
+  template<typename T1, typename T2, typename TR =  
+	   typename std::enable_if < std::is_floating_point<T1>::value 
+				     && std::is_arithmetic<T2>::value,
+				     T1 >::type >
+    inline 
+    TR renyi_prob(const std::vector<T1>& prob1,const T2& alpha)
   {
     return renyi_prob(static_cast< arma::Col<T1> >(prob1),
 		      static_cast<T1>(alpha));
@@ -243,13 +247,12 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1, typename T2>
-  inline 
-  typename std::enable_if < 
-    std::is_arithmetic<T1>::value
-  && std::is_arithmetic<T2>::value,
-    T1 >::type 
-    renyi_prob(const std::initializer_list<T1>& prob1,const T2& alpha)
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if < std::is_arithmetic<T1>::value
+				     && std::is_arithmetic<T2>::value,
+				     T1 >::type >
+    inline 
+    TR renyi_prob(const std::initializer_list<T1>& prob1,const T2& alpha)
   {
     return renyi_prob(static_cast< arma::Col<double> >(prob1),
 		      static_cast<double>(alpha));
@@ -259,12 +262,13 @@ namespace qic
   // ***************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_floating_point< pT<T1> >::value,
+				    pT<T1> 
+				    >::value >
   inline 
-  typename std::enable_if< std::is_floating_point< pT<T1> >::value,
-			   pT<T1> 
-			   >::value tsallis(const T1& rho1, 
-					    const pT<T1>& alpha)
+  TR tsallis(const T1& rho1, 
+	     const pT<T1>& alpha)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -309,12 +313,13 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1>
+  template<typename T1, typename TR = 
+	   typename std::enable_if< std::is_floating_point< eT<T1> >::value,
+				    eT<T1> 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_floating_point< eT<T1> >::value,
-			   eT<T1> 
-			   >::type tsallis_prob(const T1& prob1, 
-						const eT<T1>& alpha)
+  TR tsallis_prob(const T1& prob1, 
+		  const eT<T1>& alpha)
   {
     const auto& prob2 = as_Mat(prob1);
 
@@ -351,13 +356,12 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1,typename T2>
-  inline 
-  typename std::enable_if < 
-    std::is_floating_point<T1>::value
-  && std::is_arithmetic<T2>::value,
-    T1 >::type 
-    tsallis_prob(const std::vector<T1>& prob1,const T2& alpha)
+  template<typename T1,typename T2, typename TR = 
+	   typename std::enable_if < std::is_floating_point<T1>::value
+				     && std::is_arithmetic<T2>::value,
+				     T1 >::type >
+    inline 
+    TR tsallis_prob(const std::vector<T1>& prob1,const T2& alpha)
   {
     return tsallis_prob(static_cast< arma::Col<T1> >(prob1),
 			static_cast<T1>(alpha));
@@ -367,13 +371,12 @@ namespace qic
   //****************************************************************************
 
 
-  template<typename T1,typename T2>
-  inline 
-  typename std::enable_if < 
-    std::is_arithmetic<T1>::value
-  && std::is_arithmetic<T2>::value,
-    T1 >::type 
-    tsallis_prob(const std::initializer_list<T1>& prob1,const T2& alpha)
+  template<typename T1,typename T2, typename TR = 
+	   typename std::enable_if < std::is_arithmetic<T1>::value
+				     && std::is_arithmetic<T2>::value,
+				     T1 >::type >
+    inline 
+    TR tsallis_prob(const std::initializer_list<T1>& prob1,const T2& alpha)
   {
     return renyi_prob(static_cast< arma::Col<double> >(prob1),
 		      static_cast<double>(alpha));
