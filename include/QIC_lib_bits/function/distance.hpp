@@ -24,14 +24,14 @@
 namespace qic
 { 
 
-  template<typename T1, typename T2>
-  inline 
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value,
-    pT<T1>
-    >::type HS_dist(const T1& rho11,const T2& rho12)
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_same_pT<T1,T2>::value,
+				    pT<T1>
+				    >::type >
+    inline 
+    TR HS_dist(const T1& rho11,const T2& rho12)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);
@@ -53,14 +53,14 @@ namespace qic
 
 
 
-  template<typename T1, typename T2>
-  inline
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value,
-    pT<T1>
-    >::type tr_dist(const T1& rho11,const T2& rho12)
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_same_pT<T1,T2>::value,
+				    pT<T1>
+				    >::type >
+    inline
+    TR tr_dist(const T1& rho11,const T2& rho12)
   {
     
     const auto& rho1 = as_Mat(rho11);
@@ -82,15 +82,16 @@ namespace qic
     return arma::sum(arma::abs(eig1))*0.5;
   }
     
+  
 
-  template<typename T1, typename T2>
-  inline 
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value,
-    pT<T1>
-    >::type fidelity(const T1& rho11,const T2& rho12)
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_same_pT<T1,T2>::value,
+				    pT<T1>
+				    >::type >
+    inline 
+    TR fidelity(const T1& rho11,const T2& rho12)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);   
@@ -112,14 +113,14 @@ namespace qic
   }
 
 
-  template<typename T1, typename T2>
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_same_pT<T1,T2>::value,
+				    pT<T1>
+				    >::type >
   inline
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value,
-    pT<T1>
-    >::type bures_dist(const T1& rho11,const T2& rho12)
+  TR bures_dist(const T1& rho11,const T2& rho12)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);

@@ -23,12 +23,13 @@
 
 namespace qic
 {
-  template<typename T1>
+  template<typename T1, typename = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    void
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   bool 
-			   >::type ent_check_CMC(const T1& rho1,
-						 arma::uword dim)
+  bool ent_check_CMC(const T1& rho1,
+		     arma::uword dim)
   {
     const auto& rho = as_Mat(rho1);
 
@@ -115,13 +116,16 @@ namespace qic
   }
 
 
-  template<typename T1>
+
+
+  template<typename T1, typename = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    void
+				    >::type >
   inline
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   bool
-			   >::type ent_check_CMC(const T1& rho1,
-						 arma::uword dim1, 
-						 arma::uword dim2)
+  bool ent_check_CMC(const T1& rho1,
+		   arma::uword dim1, 
+		   arma::uword dim2)
   {
     const auto& rho = as_Mat(rho1);
 

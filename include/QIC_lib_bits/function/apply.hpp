@@ -24,17 +24,18 @@
 namespace qic 
 {
 
-  template<typename T1, typename T2>
-  inline 
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value,
-    arma::Mat< typename eT_promoter_var<T1,T2>::type >  
-    >::type apply(const T1& rho1, 
-		       const T2& A, 
-		       arma::uvec sys, 
-		       arma::uvec dim)
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_same_pT<T1,T2>::value,
+				    arma::Mat< 
+				      typename eT_promoter_var<T1,T2>::type >  
+				    >::type >
+    inline 
+    TR apply(const T1& rho1, 
+	     const T2& A, 
+	     arma::uvec sys, 
+	     arma::uvec dim)
   {
 
     const auto& p = as_Mat(rho1); 
@@ -82,17 +83,18 @@ namespace qic
   }
 
 
-  template<typename T1, typename T2>
-  inline  
-  typename std::enable_if< 
-    std::is_arithmetic< pT<T1> >::value
-  && std::is_arithmetic< pT<T2> >::value
-  && is_comparable_pT<T1,T2>::value,
-    arma::Mat< typename eT_promoter_var<T1,T2>::type >   
-    >::type apply(const T1& rho1, 
-		  const T2& A, 
-		  arma::uvec sys, 
-		  arma::uword dim = 2)
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value
+				    && std::is_arithmetic< pT<T2> >::value
+				    && is_same_pT<T1,T2>::value,
+				    arma::Mat< 
+				      typename eT_promoter_var<T1,T2>::type >   
+				    >::type >
+    inline  
+    TR apply(const T1& rho1, 
+	     const T2& A, 
+	     arma::uvec sys, 
+	     arma::uword dim = 2)
   {
     const auto& rho = as_Mat(rho1); 
     

@@ -137,7 +137,7 @@ namespace qic
     
 	if(P < 0)
 	  return POWM_GEN_INT(rho.i().eval(),
-			      abs(P));
+			      -P);
 	else 
 	  return POWM_GEN_INT(rho,P); 
     
@@ -199,7 +199,7 @@ namespace qic
 #endif
 	if(P < 0)
 	  return POWM_GEN_INT(rho.i().eval(),
-			      abs(P));
+			      -P);
 	else 
 	  return POWM_GEN_INT(rho,P); 
       }

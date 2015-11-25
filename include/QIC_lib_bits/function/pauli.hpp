@@ -52,7 +52,8 @@ namespace qic
     for(arma:: uword j = 0 ; j < 4 ; ++j)
       {   
 	for(arma::uword i = 0 ; i < 4 ; ++i)
-	  ret.at(i,j) = std::real(arma::trace( arma::kron(S.at(i),S.at(j)) * p));
+	  ret.at(i,j) = std::real(arma::trace( arma::kron(S.at(i),S.at(j)) 
+					       * p));
       }
     return ret;
 

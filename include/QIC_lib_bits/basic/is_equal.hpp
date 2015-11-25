@@ -28,9 +28,9 @@ namespace qic
   template<typename T1,typename T2, typename =   
 	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value 
 				    && std::is_arithmetic< pT<T2> >::value
-				    && is_comparable_pT<T1,T2>::value, 
+				    && is_same_pT<T1,T2>::value,
 				    void 
-				    >::type>
+				    >::type >
   inline 
   bool is_equal(const T1& rho11,
 		const T2& rho12,
@@ -46,8 +46,7 @@ namespace qic
     const arma::uword m1 = rho1.n_cols;
     const arma::uword n2 = rho2.n_rows;
     const arma::uword m2 = rho2.n_cols;
-  
-  
+    
     if(n1!=n2 || m1!=m2 
        || (typecheck && !std::is_same< eT<T1> , eT<T2> >::value))
       return false;

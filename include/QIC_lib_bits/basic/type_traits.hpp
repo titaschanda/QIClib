@@ -105,22 +105,20 @@ namespace qic
 
 
   template<typename T1, typename... T2>
-  struct is_comparable_pT : std::true_type {};
+  struct is_same_pT : std::true_type {};
 
 
   template<typename T1, typename T2>
-  struct is_comparable_pT<T1,T2> : std::integral_constant
+  struct is_same_pT<T1,T2> : std::integral_constant
   < bool,
-    std::is_same< eT<T1>,eT<T2> >::value 
-    || std::is_same< pT<T1>,eT<T2> >::value 
-    || std::is_same< eT<T1>,pT<T2> >::value
+    std::is_same< pT<T1>, pT<T2> >::value 
     > {};
   
   template<typename T1, typename T2, typename... T3>
-  struct is_comparable_pT<T1,T2,T3...> : std::integral_constant
+  struct is_same_pT<T1,T2,T3...> : std::integral_constant
   < bool,
-    is_comparable_pT<T1,T2>::value
-    && is_comparable_pT<T1,T3...>::value
+    is_same_pT<T1,T2>::value
+    && is_same_pT<T1,T3...>::value
     > {};
 
 

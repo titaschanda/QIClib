@@ -23,11 +23,12 @@
 namespace qic
 {
 
-  template<typename T1>
+  template<typename T1, typename TR =
+	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+				    arma::Mat< eT<T1> > 
+				    >::type >
   inline 
-  typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
-			   arma::Mat< eT<T1> > 
-			   >::type absm(const T1& rho1)
+  TR absm(const T1& rho1)
   {
     const auto& rho  = as_Mat(rho1);
 

@@ -25,7 +25,7 @@ namespace qic
 {
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_comparable_pT<T1,T2>::value,
+	   typename std::enable_if< is_same_pT<T1,T2>::value,
 				    arma::Mat<
 				      typename eT_promoter_var<T1,T2>::type >
 				    >::type >
@@ -45,7 +45,7 @@ namespace qic
 
 
   template<typename T1,typename T2, typename... T3, typename TR = 
-	   typename std::enable_if< is_comparable_pT<T1,T2,T3...>::value,
+	   typename std::enable_if< is_same_pT<T1,T2,T3...>::value,
 				    arma::Mat< typename eT_promoter_var<
 						 T1,T2,T3...>::type > 
 				    >::type >
