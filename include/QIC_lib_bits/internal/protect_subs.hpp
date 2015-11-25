@@ -249,7 +249,7 @@ namespace qic
 	    for(arma::uword i = 0 ; i < onedim.n_elem; ++i)
 	      {
 		dim.shed_row(onedim.at(i) - i);
-		arma::uvec sysf = arma::find(sys > onedim.at(i) - syscount  );
+		arma::uvec sysf = arma::find(sys > onedim.at(i) - syscount);
 		if(sysf.n_elem != 0)
 		  {
 		    ++syscount;
