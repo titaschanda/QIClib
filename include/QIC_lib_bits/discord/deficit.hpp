@@ -27,34 +27,34 @@ namespace qic
   namespace 
   { 
 
-    inline void set_deficit_global_opt(nlopt::algorithm a)
+    inline void set_deficit_global_opt(nlopt::algorithm a) noexcept
     {protect::_deficit_global_opt = a;}
     
-    inline void set_deficit_global_xtol(double a) 
+    inline void set_deficit_global_xtol(double a) noexcept
     {protect::_deficit_global_xtol = a;}
     
-    inline void set_deficit_global_ftol(double a) 
+    inline void set_deficit_global_ftol(double a) noexcept
     {protect::_deficit_global_ftol = a;}
     
-    inline void set_deficit_global(bool a) 
+    inline void set_deficit_global(bool a) noexcept
     {protect::_deficit_global = a;}
 
-    inline void set_deficit_local_opt(nlopt::algorithm a) 
+    inline void set_deficit_local_opt(nlopt::algorithm a) noexcept
     {protect::_deficit_local_opt = a;}
     
-    inline void set_deficit_local_xtol(double a) 
+    inline void set_deficit_local_xtol(double a) noexcept
     {protect::_deficit_local_xtol = a;}
     
-    inline void set_deficit_local_ftol(double a) 
+    inline void set_deficit_local_ftol(double a) noexcept
     {protect::_deficit_local_ftol = a;}
 
-    inline void set_deficit_theta_phi_range(double a,double b)
+    inline void set_deficit_theta_phi_range(double a,double b) noexcept
     {
       protect::_deficit_theta_range = a;
       protect::_deficit_phi_range = b;
     }
     
-    inline void set_deficit_theta_phi_initial(double a,double b)
+    inline void set_deficit_theta_phi_initial(double a,double b) noexcept
     {
       protect::_deficit_theta_ini = a;
       protect::_deficit_phi_ini = b;
@@ -89,7 +89,8 @@ namespace qic
 
 
       template <typename T1>
-      double def_def(const std::vector<double>& x, std::vector<double>& grad, void* my_func_data)
+      double def_def(const std::vector<double>& x, 
+		     std::vector<double>& grad, void* my_func_data)
       {
 
 	typedef typename T1::elem_type eT;
@@ -99,15 +100,19 @@ namespace qic
 	pT theta = static_cast<pT>(x[0]);
 	pT phi = static_cast<pT>(x[1]);
 
-	TO_PASS_def<arma::Mat<eT> >* pB = static_cast< TO_PASS_def< arma::Mat<eT> >* >(my_func_data);
+	TO_PASS_def<arma::Mat<eT> >* pB = static_cast< 
+	  TO_PASS_def< arma::Mat<eT> >* 
+	  >(my_func_data);
     
 	auto& u = STATES<pT>::get_instance().basis2.at(0,0);
 	auto& d = STATES<pT>::get_instance().basis2.at(1,0);
 
-	arma::Mat< std::complex<pT> > proj1 = std::cos(static_cast<pT>(0.5)*theta)*u 
+	arma::Mat< std::complex<pT> > proj1 = 
+	  std::cos(static_cast<pT>(0.5)*theta)*u 
 	  + std::exp(I*phi)*std::sin(static_cast<pT>(0.5)*theta)*d;
 	
-	arma::Mat< std::complex<pT> > proj2 = std::sin(static_cast<pT>(0.5)*theta)*u 
+	arma::Mat< std::complex<pT> > proj2 = 
+	  std::sin(static_cast<pT>(0.5)*theta)*u 
 	  - std::exp(I*phi)*std::cos(static_cast<pT>(0.5)*theta)*d;
   
 	proj1 *= proj1.t();
@@ -142,8 +147,10 @@ namespace qic
 
 
 
-    template<typename T1>
-    typename arma::Col<typename T1::pod_type>::template fixed<3> deficit(const T1& rho1,arma::uword nodal, arma::uvec dim)
+    template<typename T1, typename TR = 
+	     typename arma::Col<typename T1::pod_type>::template fixed<3> >
+    inline
+    TR deficit(const T1& rho1,arma::uword nodal, arma::uvec dim)
     {
       typedef typename T1::elem_type eT;
       typedef typename T1::pod_type pT;
@@ -186,15 +193,20 @@ namespace qic
       arma::Mat<pT> eye3 = arma::eye< arma::Mat<pT> >(dim2,dim2);
       arma::Mat<pT> eye4 = arma::eye< arma::Mat<pT> >(dim3,dim3);
 
-      protect::TO_PASS_def< arma::Mat<eT> > pass(rho,eye2,eye3,eye4,nodal,party_no);
+      protect::TO_PASS_def< arma::Mat<eT> > 
+	pass(rho,eye2,eye3,eye4,nodal,party_no);
 
       std::vector<double> lb(2);
       std::vector<double> ub(2);
     
       lb[0] = 0.0; lb[1] = 0.0;
-      ub[0]=protect::_deficit_theta_range*arma::datum::pi; ub[1] = protect::_deficit_phi_range*arma::datum::pi;
+      ub[0]=protect::_deficit_theta_range*arma::datum::pi; 
+      ub[1] = protect::_deficit_phi_range*arma::datum::pi;
+      
       std::vector<double> x(2);
-      x[0] = protect::_deficit_theta_ini*arma::datum::pi; x[1] = protect::_deficit_phi_ini*arma::datum::pi;
+      x[0] = protect::_deficit_theta_ini*arma::datum::pi; 
+      x[1] = protect::_deficit_phi_ini*arma::datum::pi;
+      
       double minf1;
       double minf;
     
@@ -219,7 +231,9 @@ namespace qic
       
       pT D = -S_A_B + static_cast<pT>(minf);
        
-      typename arma::Col<pT>::template fixed<3> ret { D , static_cast<pT>(x[0]) , static_cast<pT>(x[1]) };
+      typename arma::Col<pT>::template fixed<3> 
+	ret { D , static_cast<pT>(x[0]) , static_cast<pT>(x[1]) };
+      
       return(ret);
     
     }

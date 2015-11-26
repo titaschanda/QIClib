@@ -27,31 +27,31 @@ namespace qic
   namespace
   {
 
-    inline void set_deficit3_global_opt(nlopt::algorithm a)
+    inline void set_deficit3_global_opt(nlopt::algorithm a) noexcept
     {protect::_deficit3_global_opt = a;}
 
-    inline void set_deficit3_global_xtol(double a)
+    inline void set_deficit3_global_xtol(double a) noexcept
     {protect::_deficit3_global_xtol = a;}
 
-    inline void set_deficit3_global_ftol(double a)
+    inline void set_deficit3_global_ftol(double a) noexcept
     {protect::_deficit3_global_ftol = a;}
 
-    inline void set_deficit3_global(bool a)
+    inline void set_deficit3_global(bool a) noexcept
     {protect::_deficit3_global = a;}
 
-    inline void set_deficit3_local_opt(nlopt::algorithm a)
+    inline void set_deficit3_local_opt(nlopt::algorithm a) noexcept
     {protect::_deficit3_local_opt = a;}
 
-    inline void set_deficit3_local_xtol(double a)
+    inline void set_deficit3_local_xtol(double a) noexcept
     {protect::_deficit3_local_xtol = a;}
 
-    inline void set_deficit3_local_ftol(double a)
+    inline void set_deficit3_local_ftol(double a) noexcept
     {protect::_deficit3_local_ftol = a;}
 
-    inline void set_deficit3_angle_range(arma::vec a)
+    inline void set_deficit3_angle_range(arma::vec a) noexcept
     {protect::_deficit3_angle_range = a;}
 
-    inline void set_deficit3_angle_initial(arma::vec a)
+    inline void set_deficit3_angle_initial(arma::vec a) noexcept
     {protect::_deficit3_angle_ini = a;}
 
 
@@ -89,7 +89,8 @@ namespace qic
 
 
       template<typename T1>
-      double def_def3(const std::vector<double>& x, std::vector<double>& grad,void* my_func_data)
+      double def_def3(const std::vector<double>& x, 
+		      std::vector<double>& grad,void* my_func_data)
       {
         typedef typename T1::elem_type eT;
         typedef typename T1::pod_type pT;
@@ -106,22 +107,38 @@ namespace qic
 
 
 
-        TO_PASS_def3< arma::Mat<eT> >* pB = static_cast< TO_PASS_def3< arma::Mat<eT> >* >(my_func_data);
+        TO_PASS_def3< arma::Mat<eT> >* pB = 
+	  static_cast< TO_PASS_def3< arma::Mat<eT> >* >(my_func_data);
 
 	auto& U = STATES<pT>::get_instance().basis3.at(0,0);
 	auto& M = STATES<pT>::get_instance().basis3.at(1,0);
 	auto& D = STATES<pT>::get_instance().basis3.at(2,0);
 
-        arma::Mat< std::complex<pT> > proj1 = std::cos(theta1)*std::cos(theta2)*U 
-	  - std::exp(I*phi1)*( std::exp(I*del)*std::sin(theta1)*std::cos(theta2)*std::cos(theta3) + std::sin(theta2)*std::sin(theta3))*M
-	  + std::exp(I*phi2) * (-std::exp(I*del)*std::sin(theta1)*std::cos(theta2)*std::sin(theta3) + std::sin(theta2)*std::cos(theta3))*D;
+        arma::Mat< std::complex<pT> > proj1 = 
+	  std::cos(theta1)*std::cos(theta2)*U 
+	  - std::exp(I*phi1)*( std::exp(I*del)*std::sin(theta1) 
+			       * std::cos(theta2)*std::cos(theta3) 
+			       + std::sin(theta2)*std::sin(theta3) ) * M
+	  + std::exp(I*phi2) * ( -std::exp(I*del)*std::sin(theta1)
+				 * std::cos(theta2)*std::sin(theta3) 
+				 + std::sin(theta2)*std::cos(theta3) ) * D;
 
-        arma::Mat< std::complex<pT> > proj2 = std::exp(-I*del)*std::sin(theta1)*U
-	  + std::exp(I*phi1)*std::cos(theta1)*std::cos(theta3)*M + std::exp(I*phi2)*std::cos(theta1)*std::sin(theta3)*D;
+        arma::Mat< std::complex<pT> > proj2 = 
+	  std::exp(-I*del)*std::sin(theta1)*U
+	  + std::exp(I*phi1)*std::cos(theta1) 
+	  * std::cos(theta3)*M + std::exp(I*phi2) 
+	  * std::cos(theta1)*std::sin(theta3)*D;
 
-        arma::Mat< std::complex<pT> > proj3 = std::cos(theta1)*std::sin(theta2)*U
-	  + std::exp(I*phi1) * (-std::exp(I*del)*std::sin(theta1)*std::sin(theta2)*std::cos(theta3) + std::cos(theta2)*std::sin(theta3))*M
-	  - std::exp(I*phi2) * ( std::exp(I*del)*std::sin(theta1)*std::sin(theta2)*std::sin(theta3) + std::cos(theta2)*std::cos(theta3))*D;
+        arma::Mat< std::complex<pT> > proj3 = 
+	  std::cos(theta1)*std::sin(theta2)*U
+	  + std::exp(I*phi1) * ( -std::exp(I*del) 
+				 * std::sin(theta1) 
+				 * std::sin(theta2)*std::cos(theta3) 
+				 + std::cos(theta2)*std::sin(theta3)) * M
+	  - std::exp(I*phi2) * ( std::exp(I*del) 
+				 * std::sin(theta1) 
+				 * std::sin(theta2)*std::sin(theta3) 
+				 + std::cos(theta2)*std::cos(theta3) ) * D;
 
         proj1 *= proj1.t();
         proj2 *= proj2.t();
@@ -165,8 +182,10 @@ namespace qic
 
 
 
-    template<typename T1>
-    typename T1::pod_type deficit3(const T1& rho1,arma::uword nodal, arma::uvec dim)
+    template<typename T1, typename TR = 
+	     typename T1::pod_type >
+    inline
+    TR deficit3(const T1& rho1,arma::uword nodal, arma::uvec dim)
     {
       typedef typename T1::elem_type eT;
       typedef typename T1::pod_type pT;
@@ -214,7 +233,8 @@ namespace qic
 
 
 
-      protect::TO_PASS_def3< arma::Mat<eT> > pass(rho,eye2,eye3,eye4,nodal,party_no);
+      protect::TO_PASS_def3< arma::Mat<eT> > 
+	pass(rho,eye2,eye3,eye4,nodal,party_no);
 
       std::vector<double> lb(5);
       std::vector<double> ub(5);
