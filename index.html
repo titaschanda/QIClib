@@ -57,7 +57,7 @@
 	git clone https://github.com/titaschanda/QIC_lib.
       </code><br><br>
 
-      Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (version 5.2 or later) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), comment out the following line in <code>include/QIC_lib.hpp</code>:<br>
+      Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (version 4.2 or later) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), comment out the following line in <code>include/QIC_lib.hpp</code>:<br>
       <code>
 	#define QIC_LIB_NLOPT
       </code><br><br>
@@ -71,7 +71,7 @@
 
 
 
-      <b>Note:</b> Link <a href = "http://www.openblas.net/">OpenBLAS</a> or <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a> with latest version of <a href="http://arma.sourceforge.net/">Armadillo</a> for better performance. For more see, <a href = "http://arma.sourceforge.net/faq.html#dependencies">this</a> and <a href = "https://gist.github.com/bdsatish/5646151">this</a>. Also turn on compiler optimizations, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-O3 -march=native</code> flag during compilation. 
+      <b>Note:</b> Instead of using standard <a href = "http://www.netlib.org/blas">BLAS</a>, link <a href = "http://www.openblas.net/">OpenBLAS</a>,  <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a> with latest version of <a href="http://arma.sourceforge.net/">Armadillo</a> for better performance. For more see, <a href = "http://arma.sourceforge.net/faq.html#dependencies">this</a> and <a href = "https://gist.github.com/bdsatish/5646151">this</a>. Also turn on compiler optimizations, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-O3 -march=native</code> flag during compilation. 
 
       <h2>
 	<a id="got-a-problem-or-question" class="anchor" href="#got-a-problem-or-question" aria-hidden="true"><span class="octicon octicon-link"></span></a>Got a Problem or Question?</h2>

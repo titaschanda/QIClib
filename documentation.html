@@ -1902,7 +1902,7 @@
 
 	    <li> <b> What are the basic dependencies of QIC_lib?</b><br>
 	      <ul>
-		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> C++ linear algebra library (version 5.2 or later), with  <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
+		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> C++ linear algebra library (version 4.2 or later), with  <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
 		  <a href = "http://www.netlib.org/blas">BLAS</a> implementations.</li>
 		<li> A C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8 or later, or <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended. </li>
 		<li>  <a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> nonlinear optimization library for certain features. See <a href ="index.html#getting-started"> getting started</a> section.
@@ -1947,11 +1947,11 @@
 	    <li> <b> Instead of using other popular C++ linear algebra libraries, why did QIC_lib choose <a href="http://arma.sourceforge.net/">Armadillo</a>?</b>
 	      <ul>
 		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> is fast, efficient and reliable.</li>
-		<li> It has nice API.</li>
+		<li> It has nice API, which is deliberately similar to Matlab.</li>
 		<li> It supports modern C++11 features, like move semantics or initialiser list initialization, which indeed increase efficiency and usability.</li>
 		<li> It has rapid developement process.</li>
 		<li> It can make use of high performance  multi-threaded <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
-		  <a href = "http://www.netlib.org/blas">BLAS</a> replacements like <a href = "http://www.openblas.net/">OpenBLAS</a> or <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>.</li>
+		  <a href = "http://www.netlib.org/blas">BLAS</a> replacements like <a href = "http://www.openblas.net/">OpenBLAS</a>, <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a>.</li>
 	      </ul>
 	    </li>
 
