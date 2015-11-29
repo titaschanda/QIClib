@@ -67,9 +67,9 @@ namespace qic
     if( arma::prod(dim)!= p.n_rows)
       throw Exception("qic::apply",Exception::type::DIMS_MISMATCH_MATRIX);
 
-    if( arma::prod(dim(sys-1)) != A.n_rows )
+    if( arma::prod(dim(sys-1)) != A1.n_rows )
       throw Exception("qic::apply",
-		      Exception::type::MATRIX_MISMATCH_SUBSYS);
+		      Exception::type::DIMS_MISMATCH_MATRIX);
 
     if(sys.n_elem > dim.n_elem 
        || arma::find_unique(sys).eval().n_elem != sys.n_elem 
@@ -113,9 +113,6 @@ namespace qic
     
     if(dim == 0)
       throw Exception("qic::apply",Exception::type::INVALID_DIMS);
-
-    if( arma::prod(dim)!= rho.n_rows)
-      throw Exception("qic::apply",Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
   
     arma::uword n = static_cast<arma::uword>

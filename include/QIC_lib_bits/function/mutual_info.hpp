@@ -91,6 +91,7 @@ namespace qic
     if(rho.n_cols == 1)
       checkV = false;
 
+    arma::uvec sys12 = arma::join_cols(sys1,sys2);
         
 #ifndef QIC_LIB_NO_DEBUG
     if(rho.n_elem == 0)
@@ -107,9 +108,7 @@ namespace qic
     if(prod(dim)!= rho.n_rows)
       throw Exception("qic::mutual_info", 
 		      Exception::type::DIMS_MISMATCH_MATRIX);
-
-    arma::uvec sys12 = arma::join_cols(sys1,sys2);
-    
+   
     if(sys12.n_elem > dim.n_elem 
        || arma::find_unique(sys12).eval().n_elem != sys12.n_elem 
        || arma::any(sys12 > dim.n_elem) || arma::any(sys12 == 0) )

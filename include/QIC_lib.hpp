@@ -52,6 +52,8 @@
 #include "QIC_lib_bits/class/singleton.hpp"
 #include "QIC_lib_bits/class/constants.hpp"
 #include "QIC_lib_bits/class/init.hpp"
+#include "QIC_lib_bits/class/random_devices.hpp"
+
 
 #include "QIC_lib_bits/basic/type_traits.hpp"
 #include "QIC_lib_bits/basic/as_Mat.hpp"
@@ -79,8 +81,10 @@
 #include "QIC_lib_bits/function/generator.hpp" 
 #include "QIC_lib_bits/function/pauli.hpp" 
 
+
 #include "QIC_lib_bits/function/apply_ctrl.hpp" 
 #include "QIC_lib_bits/function/apply.hpp" 
+#include "QIC_lib_bits/function/measure.hpp" 
 #include "QIC_lib_bits/function/entropy.hpp"
 #include "QIC_lib_bits/function/entanglement.hpp"
 #include "QIC_lib_bits/function/neg.hpp"

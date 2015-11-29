@@ -1,5 +1,5 @@
 /*
- * This file contains modified version of Singleton class
+ * This file contains modified version of random_devices class
  * released as a part of Quantum++-v0.8.6 by Vlad Gheorghiu 
  * (vgheorgh@gmail.com) under GPLv3, see <https://github.com/vsoftco/qpp>.
  *
@@ -23,42 +23,29 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 namespace qic
 {
 
-  namespace protect_subs
-  { 
-    template<typename T>
-    class Singleton
-    {
-    protected:
-      Singleton() noexcept = default;
-      Singleton(const Singleton&) = delete;
-      Singleton& operator=(const Singleton&) = delete;
-      virtual ~Singleton() = default;    
-    public:
-      static T& get_instance() noexcept(std::is_nothrow_constructible<T>::value)
-      {
-        static T instance;
-        return instance;
-      }
-      
-#ifndef _NO_THREAD_LOCAL
+  class RandomDevices final : public protect_subs::Singleton<RandomDevices> 
+  {
+    friend class protect_subs::Singleton<RandomDevices>;
 
-      thread_local static T& get_thread_local_instance()
-	noexcept(std::is_nothrow_constructible<T>::value)
-      {
-	thread_local static T instance;
-        return instance;
-      }
+    std::random_device rd;
+  public:
+    std::mt19937 rng;
+  private:
+    RandomDevices() : rd{}, rng{rd()}
+    {}
 
+    ~RandomDevices() = default;
+  };
+
+#ifdef _NO_THREAD_LOCAL
+  static RandomDevices& rdevs _QIC_UNUSED_= RandomDevices::get_instance();
+#else
+  thread_local static RandomDevices& rdevs _QIC_UNUSED_ =
+    RandomDevices::get_thread_local_instance();
 #endif
 
-
-    };
-  }
-
-}
+} 
 

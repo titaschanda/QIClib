@@ -47,7 +47,8 @@ namespace qic
     bool checkV = true;
     if(p.n_cols == 1)
       checkV = false;
-
+    
+    arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0)-1) : 1;
 
 #ifndef QIC_LIB_NO_DEBUG
     if(p.n_elem == 0)
@@ -64,7 +65,7 @@ namespace qic
     if(A1.n_rows!=A1.n_cols)
       throw Exception("qic::apply_ctrl",Exception::type::MATRIX_NOT_SQUARE);
     
-    arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0)-1) : 1;
+
     for (arma::uword i = 1; i < ctrl.n_elem; ++i)
       if (dim.at(ctrl.at(i)-1) != d)
 	throw Exception("qic::apply_ctrl",Exception::type::DIMS_NOT_EQUAL);
@@ -75,9 +76,9 @@ namespace qic
     if( arma::prod(dim)!= p.n_rows)
       throw Exception("qic::apply_ctrl",Exception::type::DIMS_MISMATCH_MATRIX);
 
-    if( arma::prod(dim(sys-1)) != A.n_rows )
+    if( arma::prod(dim(sys-1)) != A1.n_rows )
       throw Exception("qic::apply_ctrl",
-		      Exception::type::MATRIX_MISMATCH_SUBSYS);
+		      Exception::type::DIMS_MISMATCH_MATRIX);
 
     const arma::uvec ctrlsys = arma::join_cols(sys,ctrl);
     
