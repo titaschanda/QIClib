@@ -272,7 +272,7 @@ namespace qic
   
 
   //****************************************************************************
-
+  
 
   template<typename T1, typename T2, typename TR = 
 	   typename std::enable_if< std::is_floating_point< pT<T1> >::value

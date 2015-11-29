@@ -25,7 +25,8 @@ namespace qic
 {
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_same_pT<T1,T2>::value,
+	   typename std::enable_if< is_arma_type_var<T1,T2>::value
+				    && is_same_pT<T1,T2>::value,
 				    arma::Mat<
 				      typename eT_promoter_var<T1,T2>::type >
 				    >::type >
@@ -45,7 +46,8 @@ namespace qic
 
 
   template<typename T1,typename T2, typename... T3, typename TR = 
-	   typename std::enable_if< is_same_pT<T1,T2,T3...>::value,
+	   typename std::enable_if< is_arma_type_var<T1,T2,T3...>::value
+				    && is_same_pT<T1,T2,T3...>::value,
 				    arma::Mat< typename eT_promoter_var<
 						 T1,T2,T3...>::type > 
 				    >::type >
@@ -61,7 +63,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_arma_type_var<T1>::value,
 				    arma::Mat< eT<T1> >
 				    >::type >
   inline 
@@ -90,7 +92,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_arma_type_var<T1>::value,
 				    arma::Mat< eT<T1> >
 				    >::type >
   inline 
@@ -127,7 +129,7 @@ namespace qic
 
 
   template <typename T1, typename TR = 
-	    typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	    typename std::enable_if< is_arma_type_var<T1>::value,
 				     arma::Mat< eT<T1> >
 				     >::type >
   inline 
