@@ -27,7 +27,7 @@ namespace qic
   // ***************************************************************************
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    pT<T1>
 				    >::type >
   inline 
@@ -69,7 +69,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if < std::is_floating_point< eT<T1> >::value,
+	   typename std::enable_if < is_floating_point_var< eT<T1> >::value,
 				     eT<T1> 
 				     >::type >
   inline 
@@ -101,7 +101,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_floating_point<T1>::value,
+	   typename std::enable_if< is_floating_point_var<T1>::value,
 				    T1 
 				    >::type >
   inline 
@@ -129,7 +129,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    pT<T1>
 				    >::type >
   inline 
@@ -185,7 +185,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_floating_point< eT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< eT<T1> >::value,
 				    eT<T1>
 				    >::type >
   inline 
@@ -233,7 +233,7 @@ namespace qic
   //****************************************************************************
 
   template<typename T1, typename T2, typename TR =  
-	   typename std::enable_if < std::is_floating_point<T1>::value 
+	   typename std::enable_if < is_floating_point_var<T1>::value 
 				     && std::is_arithmetic<T2>::value,
 				     T1 >::type >
     inline 
@@ -263,7 +263,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    pT<T1> 
 				    >::value >
   inline 
@@ -314,7 +314,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_floating_point< eT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< eT<T1> >::value,
 				    eT<T1> 
 				    >::type >
   inline 
@@ -357,7 +357,7 @@ namespace qic
 
 
   template<typename T1,typename T2, typename TR = 
-	   typename std::enable_if < std::is_floating_point<T1>::value
+	   typename std::enable_if < is_floating_point_var<T1>::value
 				     && std::is_arithmetic<T2>::value,
 				     T1 >::type >
     inline 

@@ -29,8 +29,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -140,9 +141,9 @@ namespace qic
     
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< 
-				      pT< arma::Mat<T2> > >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT< arma::Mat<T2> > 
+				      >::value
 				    && is_same_pT<T1, arma::Mat<T2> >::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -166,8 +167,9 @@ namespace qic
   
   
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -275,8 +277,9 @@ namespace qic
   
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -362,8 +365,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -469,9 +473,9 @@ namespace qic
 
   
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< 
-				      pT< arma::Mat<T2> > >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT< arma::Mat<T2> > 
+				      >::value
 				    && is_same_pT<T1,arma::Mat<T2> >::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -499,8 +503,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -606,8 +611,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -657,9 +663,9 @@ namespace qic
 
   
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< 
-				      pT< arma::Mat<T2> > >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT< arma::Mat<T2> > 
+				      >::value
 				    && is_same_pT<T1,arma::Mat<T2> >::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -687,8 +693,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -738,8 +745,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,
@@ -827,8 +835,9 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_floating_point< pT<T1> >::value
-				    && std::is_floating_point< pT<T2> >::value
+	   typename std::enable_if< is_floating_point_var< 
+				      pT<T1>, pT<T2> 
+				      >::value
 				    && is_same_pT<T1,T2>::value,
 				    std::tuple< arma::uword, 
 						arma::Col< pT<T1> >,

@@ -183,7 +183,9 @@ namespace qic
 
 
     template<typename T1, typename TR = 
-	     typename T1::pod_type >
+	     typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+				      typename T1::pod_type 
+				      >::type >
     inline
     TR deficit3(const T1& rho1,arma::uword nodal, arma::uvec dim)
     {

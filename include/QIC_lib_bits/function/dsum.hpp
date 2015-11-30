@@ -25,7 +25,8 @@ namespace qic
 {
   
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< std::is_same< eT<T1>, eT<T2> >::value,
+	   typename std::enable_if< is_arma_type_var<T1,T2>::value
+				    && std::is_same< eT<T1>, eT<T2> >::value,
 				    arma::Mat< eT<T1> >
 				    >::type>
   inline 
@@ -59,12 +60,13 @@ namespace qic
   
   template<typename T1, typename T2, typename... T3,
 	   typename TR = 
-	   typename std::enable_if< 
-	     is_all_same< eT<T1>,eT<T2>,eT<T3>...>::value,
-	     arma::Mat< eT<T1> >
-	     >::type>
-  inline 
-  TR dsum(const T1& rho1,const T2& rho2,const T3&... rho3)
+	   typename std::enable_if< is_arma_type_var<T1,T2,T3...>::value
+				    && is_all_same< 
+				      eT<T1>,eT<T2>,eT<T3>...>::value,
+				    arma::Mat< eT<T1> >
+				    >::type>
+    inline 
+    TR dsum(const T1& rho1,const T2& rho2,const T3&... rho3)
   {
     return dsum(rho1,
 		dsum(rho2,rho3...));
@@ -73,7 +75,7 @@ namespace qic
 
   
   template<typename T1, typename TR =
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_arma_type_var<T1>::value,
 				    arma::Mat< eT<T1> >
 				    >::type>
   inline 
@@ -116,7 +118,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_arma_type_var<T1>::value,
 				    arma::Mat< eT<T1> >
 				    >::type>
   inline 
@@ -159,8 +161,7 @@ namespace qic
 
   template<typename T1>
   inline 
-  typename arma::Mat<T1> dsum(const std::initializer_list< 
-			      arma::Mat<T1> >& rho)
+  arma::Mat<T1> dsum(const std::initializer_list< arma::Mat<T1> >& rho)
   {
     return dsum(static_cast< std::vector< arma::Mat<T1> > >(rho));
   }
@@ -170,7 +171,7 @@ namespace qic
 
 
   template <typename T1, typename TR = 
-	    typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	    typename std::enable_if< is_arma_type_var<T1>::value,
 				     arma::Mat< eT<T1> >
 				     >::type>
   inline 

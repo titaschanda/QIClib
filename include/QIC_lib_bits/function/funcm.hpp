@@ -25,7 +25,7 @@ namespace qic
 {
 
   template<typename T1, typename functor, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Mat< std::complex< pT<T1> > >
 				    >::type >
   inline 
@@ -58,7 +58,7 @@ namespace qic
 
 
   template<typename T1, typename functor, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Mat<std::complex< pT<T1> > > 
 				    >::type >
   inline 

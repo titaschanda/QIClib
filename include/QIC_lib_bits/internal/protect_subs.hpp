@@ -34,7 +34,7 @@ namespace qic
 
 
       template<typename T1, typename T2, typename TR = 
-	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value && 
+	       typename std::enable_if< is_arma_type_var<T1>::value && 
 					std::is_integral<T2>::value,
 					arma::Mat< eT<T1> > 
 					>::type >
@@ -87,7 +87,7 @@ namespace qic
 
 
       template<typename T1, typename T2, typename TR = 
-	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+	       typename std::enable_if< is_floating_point_var< pT<T1> >::value, 
 					arma::Mat< std::complex< pT<T1> > > 
 					>::type >
       inline
@@ -119,7 +119,7 @@ namespace qic
 
 
       template<typename T1, typename T2, typename TR = 
-	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+	       typename std::enable_if< is_floating_point_var< pT<T1> >::value, 
 					arma::Mat< eT<T1> > 
 					>::type>
       inline
@@ -149,7 +149,7 @@ namespace qic
 
       
       template<typename T1, typename T2, typename TR = 
-	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	       typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 					arma::Mat<std::complex< pT<T1> > > 
 					>::type>
       TR powm_sym_implement(const T1& rho1 ,const T2& P,nonint_tag<T1>)
@@ -183,7 +183,7 @@ namespace qic
 
 
       template<typename T1, typename T2, typename TR = 
-	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value, 
+	       typename std::enable_if< is_floating_point_var< pT<T1> >::value, 
 					arma::Mat< eT<T1> > 
 					>::type>
       inline 
@@ -210,7 +210,7 @@ namespace qic
 
   
       template<typename T1, typename TR = 
-	       typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	       typename std::enable_if< is_arma_type_var<T1>::value,
 					arma::Mat< eT<T1> > 
 					>::type >
       inline 

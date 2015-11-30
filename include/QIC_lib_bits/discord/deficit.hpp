@@ -147,8 +147,12 @@ namespace qic
 
 
 
-    template<typename T1, typename TR = 
-	     typename arma::Col<typename T1::pod_type>::template fixed<3> >
+    template<typename T1, typename TR =
+	     typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+				      typename arma::Col<
+					typename T1::pod_type >::
+				      template fixed<3> 
+				      >::type >
     inline
     TR deficit(const T1& rho1,arma::uword nodal, arma::uvec dim)
     {

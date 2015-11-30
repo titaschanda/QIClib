@@ -24,8 +24,13 @@
 namespace qic
 {
 
-  template<typename T1>
-  typename arma::Col<typename T1::pod_type>::template fixed<3> deficit3_reg(const T1& rho1, arma::uword nodal, arma::uvec dim)
+  template<typename T1, typename TR =
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value, 
+				    typename arma::Col<
+				      typename T1::pod_type >::
+				    template fixed<3>
+				    >::type >
+  TR deficit3_reg(const T1& rho1, arma::uword nodal, arma::uvec dim)
   {
     typedef typename T1::pod_type pT;
 
@@ -44,7 +49,8 @@ namespace qic
       throw Exception("qic::deficit3_reg",Exception::type::INVALID_DIMS);
       
     if( dim1 != rho.n_rows)
-      throw Exception("qic::deficit3_reg", Exception::type::DIMS_MISMATCH_MATRIX);
+      throw Exception("qic::deficit3_reg", 
+		      Exception::type::DIMS_MISMATCH_MATRIX);
 
     if(nodal<=0 || nodal > party_no)
       throw Exception("qic::deficit3_reg", "Invalid measured party index");
@@ -73,9 +79,14 @@ namespace qic
       for(arma::uword i=0;i<3;++i)
 	{
       
-	  arma::Mat< std::complex<pT> > proj1 = STATES<pT>::get_instance().proj3.at(0,i+1);
-	  arma::Mat< std::complex<pT> > proj2 = STATES<pT>::get_instance().proj3.at(1,i+1);
-	  arma::Mat< std::complex<pT> > proj3 = STATES<pT>::get_instance().proj3.at(2,i+1);
+	  arma::Mat< std::complex<pT> > proj1 = 
+	    STATES<pT>::get_instance().proj3.at(0,i+1);
+	  
+	  arma::Mat< std::complex<pT> > proj2 = 
+	    STATES<pT>::get_instance().proj3.at(1,i+1);
+	  
+	  arma::Mat< std::complex<pT> > proj3 = 
+	    STATES<pT>::get_instance().proj3.at(2,i+1);
 
   
 	  if(nodal ==1)

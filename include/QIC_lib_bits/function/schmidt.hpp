@@ -28,7 +28,7 @@ namespace qic
 
 
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Col< pT<T1> > 
 				    >::type >
   inline 
@@ -76,7 +76,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    void 
 				    >::type >
   inline 
@@ -140,7 +140,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Mat< eT<T1> >
 				    >::type >
   inline
@@ -201,7 +201,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Mat< eT<T1> > 
 				    >::type >
   inline 
@@ -261,7 +261,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::field< arma::Mat< eT<T1> > > 
 				    >::type >
   inline 
@@ -327,7 +327,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Mat< eT<T1> > 
 				    >::type >
   inline 
@@ -386,7 +386,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::Mat< eT<T1> >
 				    >::type >
   inline 
@@ -445,7 +445,7 @@ namespace qic
 
   
   template<typename T1, typename TR = 
-	   typename std::enable_if< std::is_arithmetic< pT<T1> >::value,
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 				    arma::field< arma::Mat< eT<T1> > > 
 				    >::type >
   inline 
