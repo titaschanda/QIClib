@@ -92,13 +92,16 @@ namespace qic
     
     arma::Col< pT<T1> > prob(Ks.size());
     arma::field< mattype > outstates(Ks.size());    
-  
+
+    if(checkV)
+      outstates.fill(arma::zeros<mattype>(rho.n_rows,rho.n_cols));
+    else 
+      outstates.fill(arma::zeros<mattype>(1,rho.n_cols));
 
     if(checkV)
       {
 	for (arma::uword i = 0; i < Ks.size(); ++i)
         {
-	  outstates.at(i) = arma::zeros<mattype>(rho.n_rows,rho.n_cols);
 	  mattype tmp;
 	  if(checkK)
 	    tmp = Ks[i].eval() * Ks[i].eval().t() 
@@ -115,7 +118,6 @@ namespace qic
       {
 	for (arma::uword i = 0; i < Ks.size(); ++i)
 	  {
-	    outstates.at(i) = arma::zeros<mattype>(1,rho.n_cols);
 	    mattype tmp;
 	    if(checkK)
 	      tmp = Ks[i].eval() * Ks[i].eval().t() * rho;
@@ -130,7 +132,6 @@ namespace qic
     std::discrete_distribution<arma::uword> dd(prob.begin(),
     					       prob.end());
     arma::uword result = dd(rdevs.rng);
-    
     return std::make_tuple(result,prob,outstates);
 	
 
@@ -230,12 +231,17 @@ namespace qic
 
     arma::Col< pT<T1> > prob(Ks.n_elem);
     arma::field< mattype > outstates(Ks.n_elem);
+
+    if(checkV)
+      outstates.fill(arma::zeros<mattype>(rho.n_rows,rho.n_cols));
+    else 
+      outstates.fill(arma::zeros<mattype>(1,rho.n_cols));
+
     
     if(checkV)
       {
 	for (arma::uword i = 0; i < Ks.n_elem; ++i)
         {
-	  outstates.at(i) = arma::zeros<mattype>(rho.n_rows,rho.n_cols);
 	  mattype tmp;
 	  if(checkK)
 	    tmp = Ks.at(i).eval() * Ks.at(i).eval().t() 
@@ -252,7 +258,6 @@ namespace qic
       {
 	for (arma::uword i = 0; i < Ks.size(); ++i)
 	  {
-	    outstates.at(i) = arma::zeros<mattype>(1,rho.n_cols);
 	    mattype tmp ;
 	    if(checkK)
 	      tmp = Ks.at(i).eval() * Ks.at(i).eval().t() * rho;
@@ -326,12 +331,17 @@ namespace qic
     
     arma::Col< pT<T1> > prob(U.n_cols);
     arma::field< mattype > outstates(U.n_cols);
+
+    if(checkV)
+      outstates.fill(arma::zeros<mattype>(rho.n_rows,rho.n_cols));
+    else 
+      outstates.fill(arma::zeros<mattype>(1,rho.n_cols));
     
+
     if(checkV)
       {
 	for (arma::uword i = 0; i < U.n_cols; ++i)
         {
-	  outstates.at(i) = arma::zeros<mattype>(rho.n_rows,rho.n_cols);
 	  mattype tmp = U.col(i) * U.col(i).t()
 	    * rho * U.col(i) * U.col(i).t();
 	  prob.at(i) = std::abs(arma::trace(tmp)); 
@@ -344,7 +354,6 @@ namespace qic
       {
 	for (arma::uword i = 0; i < U.n_cols; ++i)
 	  {
-	    outstates.at(i) = arma::zeros<mattype>(1,rho.n_cols);
 	    mattype tmp = U.col(i) * U.col(i).t() * rho;
 	    prob.at(i) = std::pow(arma::norm(as_Col(tmp)),2); 
 	    if (prob.at(i) > _precision::eps)
@@ -445,9 +454,10 @@ namespace qic
     arma::Col< pT<T1> > prob(Ks.size());
     arma::field< mattype > outstates(Ks.size());    
     
+    outstates.fill(arma::zeros<mattype>(Dsysbar,Dsysbar));
+
     for (arma::uword i = 0; i < Ks.size(); ++i)
       {
-	outstates.at(i) = arma::zeros<mattype>(Dsysbar,Dsysbar);
 	mattype tmp;
 	if(checkK)
 	  tmp = apply(rho,(Ks[i].eval()*Ks[i].eval().t()).eval(),sys,dim);
@@ -582,10 +592,12 @@ namespace qic
       checkK = true;
     arma::Col< pT<T1> > prob(Ks.n_elem);
     arma::field< mattype > outstates(Ks.n_elem);    
+
+    outstates.fill(arma::zeros<mattype>(Dsysbar,Dsysbar));
+
     
     for (arma::uword i = 0; i < Ks.n_elem; ++i)
       {
-	outstates.at(i) = arma::zeros<mattype>(Dsysbar,Dsysbar);
 	mattype tmp;
 	if(checkK)
 	  tmp = apply(rho,(Ks.at(i).eval()*Ks.at(i).eval().t()).eval(),sys,dim);
@@ -812,9 +824,11 @@ namespace qic
     arma::Col< pT<T1> > prob(U.n_cols);
     arma::field< mattype > outstates(U.n_cols);    
     
+    outstates.fill(arma::zeros<mattype>(Dsysbar,Dsysbar));
+
+
     for (arma::uword i = 0; i < U.n_cols; ++i)
       {
-	outstates.at(i) = arma::zeros<mattype>(Dsysbar,Dsysbar);
 	mattype tmp = apply(rho,(U.col(i)*U.col(i).t()).eval(),sys,dim);
 	tmp = TrX(tmp,sys,dim);
 	prob.at(i) = std::abs(arma::trace(tmp)); 

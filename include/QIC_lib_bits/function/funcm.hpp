@@ -41,10 +41,15 @@ namespace qic
     if(rho.n_rows!=rho.n_cols)
       throw Exception("qic::funcm_sym",Exception::type::MATRIX_NOT_SQUARE);
 #endif
+
+    char* method = "std";
+    if(rho.n_rows > 20)
+      method = "dc";
+
    
     arma::Col< pT<T1> > eigval;
     arma::Mat< eT<T1> > eigvec;
-    arma::eig_sym(eigval,eigvec,rho,"std");
+    arma::eig_sym(eigval,eigvec,rho,method);
 
     return 
       eigvec
