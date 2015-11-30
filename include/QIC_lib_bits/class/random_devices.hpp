@@ -32,7 +32,13 @@ namespace qic
 
     std::random_device rd;
   public:
+
+#ifdef ARMA_64BIT_WORD
+    std::mt19937_64 rng;
+#else
     std::mt19937 rng;
+#endif
+
   private:
     RandomDevices() : rd{}, rng{rd()}
     {}

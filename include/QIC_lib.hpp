@@ -31,6 +31,7 @@
 #include<complex> 
 #include<stdexcept>
 #include<type_traits>
+#include<tuple>
 #include<armadillo>
 
 
