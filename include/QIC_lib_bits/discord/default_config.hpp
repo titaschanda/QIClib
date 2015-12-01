@@ -30,12 +30,6 @@ namespace qic
     namespace protect
     {
 
-  
-
-      double _discord_reg_prob_tol = _precision::eps;
-      double _discord3_reg_prob_tol = _precision::eps;
-
-
       //nlopt dependent configs
 
       nlopt::algorithm _discord3_global_opt = nlopt::GN_DIRECT_L;
