@@ -124,6 +124,9 @@
 		<tr><td><a href="#absm"> absm  </td><td>  </td><td>Matrix absolute value of a square matrix</td></tr>
 		<tr><td><a href="#schatten"> schatten  </td><td>  </td><td>Schatten p-norm of a matrix</td></tr>
 		<tr><td><a href="#conv_to_pure"> conv_to_pure  </td><td>  </td><td>Convert density matrix of a pure state to a column vector</td></tr>
+		<tr><td><a href="#conv_to_HS"> conv_to_HS  </td><td>  </td><td>Convert 2-qubit density matrix from the standard basis to the Hilbert-Schmidt basis </td></tr>
+		<tr><td><a href="#conv_to_std"> conv_to_std  </td><td>  </td><td>Convert 2-qubit density matrix from the Hilbert-Schmidt basis back to the standard basis</td></tr>
+
 		<tr><td><a href="#mket"> mket  </td><td>  </td><td> Multipartite qudit pure state </td></tr>
 		<tr><td><a href="#mproj"> mproj  </td><td>  </td><td> Multipartite qudit projector </td></tr>
 		<tr><td>  </td><td>  </td><td> </td></tr>
@@ -210,8 +213,10 @@
 	  <a name=eps></a>
 	  <b>_precision::eps</b><br><br>
 	  <ul>
-	    <li> Precision for floating point arithmetic. Every number <i>less than</i> <code>_precision::eps</code> will be treated as zero.</li><br>
-	    <li> Default value for <code>_precision::eps</code> is <code>1e-12</code>. It can be changed by editing <code>include/QIC_lib_bits/class/constants.hpp</code> file.</li>
+	    <li> Precision for floating point arithmetic. </li><br> 
+	    <li>Every <code>double</code> <i>less than</i> <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
+	    <li>Every <code>float</code> <i>less than</i> <code>_precision::eps&lt;float&gt;::value</code> will be treated as zero.</li><br>
+	    <li> Default value for <code>_precision::eps&lt;double&gt;::value</code> is <code>1e-12</code>, and <code>_precision::eps&lt;float&gt;::value</code> is <code>1e-6</code>. It can be changed by editing <code>include/QIC_lib_bits/class/constants.hpp</code> file.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -319,7 +324,7 @@
 	  <b>is_H(A)<br>is_H(A,atol,rtol)</b><br><br>
 	  <ul>
 	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric or Hermitian, else <code>false</code>.</li><br>
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-10</code> and <code>rtol = 1e-18</code>.</li>
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-2 * _precision::eps&lt;POD_TYPE&gt;::value</code> and <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -334,8 +339,7 @@
 	  <b>is_U(A)<br>is_U(A,atol,rtol)</b><br><br>
 	  <ul>
 	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal or unitary, else <code>false</code>.</li><br>
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-10</code> and <code>rtol = 1e-18</code>.</li>
-	    
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-2 * _precision::eps&lt;POD_TYPE&gt;::value</code> and <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>	    
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -346,10 +350,10 @@
 
 
 	  <a name=is_pure></a>
-	  <b>is_pure(A)<br>is_pure(A,check_norm=false)<br>is_pure(A,check_norm=false,tol)</b><br><br>
+	  <b>is_pure(A)<br>is_pure(A,check_norm=true)<br>is_pure(A,check_norm=ture,tol)</b><br><br>
 	  <ul>
 	    <li> Check purity of a density matrix. Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li><br>
-	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = false</code> and normalisation of the state will not be checked and <code>tol = _precision::eps</code>.</li>
+	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and normalisation of the state will not be checked and <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -363,7 +367,7 @@
 	  <b>is_valid_state(A)<br>is_valid_state(A,tol)</b><br><br>
 	  <ul>
 	    <li> Check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a valid quantum state, else <code>false</code>.</li><br>
-	    <li> <code>tol</code> is optional, by default <code>tol = _precision::eps</code>.</li><br>
+	    <li> <code>tol</code> is optional, by default <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li><br>
 	    <li> Note: Normalisation will always be checked.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -378,7 +382,7 @@
 	  <ul>
 	    <li> Check whether two matrices are equal. Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise equal, else <code>false</code>.</li><br>
 	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types of <code>A</code> and <code>B</code> will not be checked.
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-10</code> and <code>rtol = 1e-18</code>.</li>
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-2 * _precision::eps&lt;POD_TYPE&gt;::value</code> and <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>	 
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -903,6 +907,33 @@
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
 	    <li> If <code>A</code> is a column vector, then it is returned back. </li><br>
 	    <li> If <code>A</code> is not a pure state, then eigenvector corresponding to highest eigenvalue is returned. To make sure use <a href="#is_pure"><code>is_pure</code></a> function.</li><br>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+	  <hr><br>
+
+
+	  <a name=conv_to_HS></a>
+	  <b>conv_to_HS(A)</b><br><br>
+	  <ul>
+	    <li>Convert 2-qubit density matrix from the standard basis to the Hilbert-Schmidt basis.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of 4x4.</li><br>
+	    <li> Always returns a real matrix.</li><br>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+	  <hr><br>
+
+
+	  <a name=conv_to_std></a>
+	  <b>conv_to_std(A)</b><br><br>
+	  <ul>
+	    <li>Convert 2-qubit density matrix from the Hilbert-Schmidt basis to the standard basis.</li><br>
+	    <li> <code>A</code> has to be a real square matrix (<code>mat</code>) of 4x4.</li><br>
+	    <li> Always returns a complex matrix.</li><br>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
