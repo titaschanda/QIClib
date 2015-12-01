@@ -79,9 +79,9 @@
 #include "QIC_lib_bits/function/dsum.hpp"
 #include "QIC_lib_bits/function/absm.hpp" 
 #include "QIC_lib_bits/function/conv_to_pure.hpp" 
+#include "QIC_lib_bits/function/pauli.hpp" 
 #include "QIC_lib_bits/function/purify.hpp" 
 #include "QIC_lib_bits/function/generator.hpp" 
-#include "QIC_lib_bits/function/pauli.hpp" 
 
 
 #include "QIC_lib_bits/function/apply_ctrl.hpp" 

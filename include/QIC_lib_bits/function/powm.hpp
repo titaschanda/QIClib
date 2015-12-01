@@ -57,4 +57,29 @@ namespace qic
   }
 
 
+
+
+  template<typename T1, typename T2, typename TR = 
+	   typename std::enable_if< is_arma_type_var<T1>::value
+				    && std::is_unsigned<T2>::value
+				    && std::is_integral<T2>::value,
+				    arma::Mat< eT<T1> >
+				    >::type>
+  inline 
+  TR powm_uword(const T1& rho1 ,const T2& P)
+  {
+    const auto& rho = as_Mat(rho1);
+    
+#ifndef QIC_LIB_NO_DEBUG  
+    if(rho.n_elem == 0)
+      throw Exception("qic::powm_uword",Exception::type::ZERO_SIZE);
+    
+    if(rho.n_rows != rho.n_cols)
+      throw Exception("qic::powm_uword",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+    return _internal::protect_subs::POWM_GEN_INT(rho,P); 
+  }
+
+
+
 }
