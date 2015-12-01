@@ -339,7 +339,7 @@ namespace qic
     
     const auto& prob = as_Col(prob2);
 
-    if( std::abs(alpha - 1) < static_cast< eT<T1> >(_precision::eps< pT<T1> >::value) )
+    if( std::abs(alpha - 1) < _precision::eps< pT<T1> >::value )
       return std::log(2.0)*shannon(prob);
 
     else

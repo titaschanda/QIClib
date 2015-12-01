@@ -64,7 +64,7 @@ namespace qic
 	  arma::eig_sym(eigval,eigvec,rho,"std");
 
 	arma::uword dim = rho.n_rows;
-	arma::uword dimE = arma::sum(eigval > static_cast< pT<T1> >(tol));
+	arma::uword dimE = arma::sum(eigval > tol);
 
 	arma::Col< eT<T1> > ret = arma::zeros< arma::Col< eT<T1> > >(dim*dimE);
 	
