@@ -57,7 +57,7 @@ namespace qic
 
     for(auto& i : eig)
       {
-	if( i  <  static_cast< pT<T1> >(_precision::eps) )
+	if( i  <  _precision::eps< pT<T1> >::value )
 	  i = 0.0;
       }
 

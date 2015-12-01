@@ -30,8 +30,8 @@ namespace qic
 				    >::type>
   inline 
   bool is_valid_state(const T1& rho1,
-		      const double& tol = 
-		      _precision::eps)
+		      const pT<T1>& tol = 
+		      _precision::eps< pT<T1> >::value)
   {
     const auto& rho = as_Mat(rho1);
      
@@ -43,8 +43,9 @@ namespace qic
 
     else
       {
-	if(std::abs(arma::trace(rho)-1.0) > static_cast< pT<T1> >(tol) 
-	   || arma::any(arma::eig_sym(rho) < -static_cast< pT<T1> >(tol)) )
+	if(std::abs(std::abs(arma::trace(rho))-1.0) 
+	   > tol  
+	   || arma::any(arma::eig_sym(rho) < - tol ) )
 	  return false;
 	else
 	  return true;

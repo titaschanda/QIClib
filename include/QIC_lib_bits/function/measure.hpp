@@ -109,7 +109,7 @@ namespace qic
 	  else
 	    tmp = Ks[i].eval() * rho * Ks[i].eval().t();
 	  prob.at(i) = std::abs(arma::trace(tmp)); 
-	  if (prob.at(i) > _precision::eps)
+	  if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	    outstates.at(i) = tmp / prob.at(i);
         }
       }
@@ -124,7 +124,7 @@ namespace qic
 	    else
 	      tmp = Ks[i].eval() * rho;
 	    prob.at(i) = std::pow(arma::norm(as_Col(tmp)),2); 
-	    if (prob.at(i) > _precision::eps)
+	    if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	      outstates.at(i) = tmp / std::sqrt(prob.at(i));
 	  }
       }
@@ -249,7 +249,7 @@ namespace qic
 	  else
 	    tmp = Ks.at(i).eval() * rho * Ks.at(i).eval().t();
 	  prob.at(i) = std::abs(arma::trace(tmp)); 
-	  if (prob.at(i) > _precision::eps)
+	  if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	    outstates.at(i) = tmp / prob.at(i);
         }
       }
@@ -264,7 +264,7 @@ namespace qic
 	    else
 	      tmp = Ks.at(i).eval() * rho;
 	    prob.at(i) = std::pow(arma::norm(as_Col(tmp)),2); 
-	    if (prob.at(i) > _precision::eps)
+	    if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	      outstates.at(i) = tmp / std::sqrt(prob.at(i));
 	  }
       }
@@ -345,7 +345,7 @@ namespace qic
 	  mattype tmp = U.col(i) * U.col(i).t()
 	    * rho * U.col(i) * U.col(i).t();
 	  prob.at(i) = std::abs(arma::trace(tmp)); 
-	  if (prob.at(i) > _precision::eps)
+	  if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	    outstates.at(i) = tmp / prob.at(i);
         }
       }
@@ -356,7 +356,7 @@ namespace qic
 	  {
 	    mattype tmp = U.col(i) * U.col(i).t() * rho;
 	    prob.at(i) = std::pow(arma::norm(as_Col(tmp)),2); 
-	    if (prob.at(i) > _precision::eps)
+	    if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	      outstates.at(i) = tmp / std::sqrt(prob.at(i));
 	  }
       }
@@ -465,7 +465,7 @@ namespace qic
 	  tmp = apply(rho,Ks[i].eval(),sys,dim);
 	tmp = TrX(tmp,sys,dim);
 	prob.at(i) = std::abs(arma::trace(tmp)); 
-	if (prob.at(i) > _precision::eps)
+	if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	  outstates.at(i) = tmp / prob.at(i);
       }
     
@@ -605,7 +605,7 @@ namespace qic
 	  tmp = apply(rho,Ks.at(i).eval(),sys,dim);
 	tmp = TrX(tmp,sys,dim);
 	prob.at(i) = std::abs(arma::trace(tmp)); 
-	if (prob.at(i) > _precision::eps)
+	if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	  outstates.at(i) = tmp / prob.at(i);
       }
     
@@ -832,7 +832,7 @@ namespace qic
 	mattype tmp = apply(rho,(U.col(i)*U.col(i).t()).eval(),sys,dim);
 	tmp = TrX(tmp,sys,dim);
 	prob.at(i) = std::abs(arma::trace(tmp)); 
-	if (prob.at(i) > _precision::eps)
+	if (prob.at(i) > _precision::eps< pT<T1> >::value)
 	  outstates.at(i) = tmp / prob.at(i);
       }
     

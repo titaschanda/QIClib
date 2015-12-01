@@ -67,7 +67,7 @@ namespace qic
     pT<T1> Neg = 0.0;
     
     for(const auto& i : eigval )
-      Neg += (std::abs(i) >= static_cast< pT<T1> >(_precision::eps) ) ?  
+      Neg += (std::abs(i) >= _precision::eps< pT<T1> >::value ) ?  
 	0.5*( std::abs(i)-i) : 0 ;
     return Neg;
   }

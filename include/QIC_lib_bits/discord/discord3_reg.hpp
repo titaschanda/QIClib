@@ -32,8 +32,6 @@ namespace qic
 				    >::type >
   TR discord3_reg(const T1& rho1,arma::uword nodal, arma::uvec dim)
   {
-    typedef typename T1::pod_type pT; 
-
     const auto& rho = as_Mat(rho1);
     arma::uword party_no = dim.n_elem;
     arma::uword dim1 = arma::prod(dim);
@@ -87,23 +85,23 @@ namespace qic
     for(arma::uword i = nodal ; i < party_no ; ++i)
       dim3 *= dim.at(i);
 	  
-    arma::Mat<pT> eye2 = arma::eye< arma::Mat<pT> >(dim1,dim1);
-    arma::Mat<pT> eye3 = arma::eye< arma::Mat<pT> >(dim2,dim2);
-    arma::Mat<pT> eye4 = arma::eye< arma::Mat<pT> >(dim3,dim3);
+    arma::Mat< pT<T1> > eye2 = arma::eye< arma::Mat< pT<T1> > >(dim1,dim1);
+    arma::Mat< pT<T1> > eye3 = arma::eye< arma::Mat< pT<T1> > >(dim2,dim2);
+    arma::Mat< pT<T1> > eye4 = arma::eye< arma::Mat< pT<T1> > >(dim3,dim3);
 
-    typename arma::Col<pT>::template fixed<3> disc;
+    typename arma::Col< pT<T1> >::template fixed<3> disc;
 
     for(arma::uword i=0;i<3;++i)
       {
       
-	arma::Mat< std::complex<pT> > proj1 = 
-	  STATES<pT>::get_instance().proj3.at(0,i+1);
+	arma::Mat< std::complex< pT<T1> > > proj1 = 
+	  STATES< pT<T1> >::get_instance().proj3.at(0,i+1);
 	
-	arma::Mat< std::complex<pT> > proj2 = 
-	  STATES<pT>::get_instance().proj3.at(1,i+1);
+	arma::Mat< std::complex< pT<T1> > > proj2 = 
+	  STATES< pT<T1> >::get_instance().proj3.at(1,i+1);
 	
-	arma::Mat< std::complex<pT> > proj3 = 
-	  STATES<pT>::get_instance().proj3.at(2,i+1);
+	arma::Mat< std::complex< pT<T1> > > proj3 = 
+	  STATES< pT<T1> >::get_instance().proj3.at(2,i+1);
   
 	if(nodal==1)
 	  {
@@ -127,28 +125,28 @@ namespace qic
   
   
 
-	arma::Mat< std::complex<pT> > rho_1 = (proj1*rho*proj1);
-	arma::Mat< std::complex<pT> > rho_2 = (proj2*rho*proj2);
-	arma::Mat< std::complex<pT> > rho_3 = (proj3*rho*proj3);
+	arma::Mat< std::complex< pT<T1> > > rho_1 = (proj1*rho*proj1);
+	arma::Mat< std::complex< pT<T1> > > rho_2 = (proj2*rho*proj2);
+	arma::Mat< std::complex< pT<T1> > > rho_3 = (proj3*rho*proj3);
  
 
-	pT p1 = std::real(arma::trace(rho_1));
-	pT p2 = std::real(arma::trace(rho_2));
-	pT p3 = std::real(arma::trace(rho_3));
+	pT<T1> p1 = std::real(arma::trace(rho_1));
+	pT<T1> p2 = std::real(arma::trace(rho_2));
+	pT<T1> p3 = std::real(arma::trace(rho_3));
 
 
-	pT S_max =0.0;
-	if( p1 > static_cast<pT>(_precision::eps) )
+	pT<T1> S_max =0.0;
+	if( p1 > _precision::eps< pT<T1> >::value )
 	  {
 	    rho_1 /= p1;
 	    S_max += p1 * entropy(rho_1);
 	  }
-	if( p2 > static_cast<pT>(_precision::eps) )
+	if( p2 > _precision::eps< pT<T1> >::value )
 	  {
 	    rho_2 /= p2;
 	    S_max += p2 * entropy(rho_2);
 	  }
-	if( p3 > static_cast<pT>(_precision::eps) ) 
+	if( p3 > _precision::eps< pT<T1> >::value ) 
 	  {
 	    rho_3 /= p3;
 	    S_max += p3 * entropy(rho_3);

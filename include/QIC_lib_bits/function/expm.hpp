@@ -41,13 +41,14 @@ namespace qic
       throw Exception("qic::expm_sym",Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-    char* method = "std";
-    if(H.n_rows > 20)
-      method = "dc";
-
     arma::Col< pT<T1> > eigval;
     arma::Mat< eT<T1> > eigvec;
-    arma::eig_sym(eigval,eigvec,H,method);
+    
+    if(H.n_rows > 20)
+      arma::eig_sym(eigval,eigvec,H,"dc");
+    else
+      arma::eig_sym(eigval,eigvec,H,"std");
+
 	
     return eigvec * arma::diagmat(arma::exp(a*eigval)) * eigvec.t();
   }
@@ -76,14 +77,14 @@ namespace qic
       throw Exception("qic::expm_sym",Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-    char* method = "std";
-    if(H.n_rows > 20)
-      method = "dc";
-
 
     arma::Col< pT<T1> > eigval;
     arma::Mat< eT<T1> > eigvec;
-    arma::eig_sym(eigval,eigvec,H,method);
+
+    if(H.n_rows > 20)
+      arma::eig_sym(eigval,eigvec,H,"dc");
+    else
+      arma::eig_sym(eigval,eigvec,H,"std");
 	
     return  
       eigvec 
@@ -114,14 +115,16 @@ namespace qic
       throw Exception("qic::expm_sym",Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-    char* method = "std";
-    if(H.n_rows > 20)
-      method = "dc";
-
 
     arma::Col< pT<T1> > eigval;
     arma::Mat< eT<T1> > eigvec;
-    arma::eig_sym(eigval,eigvec,H,method);
+
+    if(H.n_rows > 20)
+      arma::eig_sym(eigval,eigvec,H,"dc");
+    else
+      arma::eig_sym(eigval,eigvec,H,"std");
+
+
 	
     return 
       eigvec 

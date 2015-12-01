@@ -21,52 +21,64 @@
 
 
 
-namespace qic 
+namespace qic
 {
 
+  // ***************************************************************************
+  
   template<typename T1, typename TR = 
 	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    pT<T1> 
+				    arma::Col< eT<T1> >
 				    >::type >
   inline 
-  TR EoF(const T1& rho1)
+  TR purify(const T1& rho1, 
+	    const pT<T1>& tol = _precision::eps< pT<T1> >::value)
   {
-    const auto& p = as_Mat(rho1); 
+    const auto& rho = as_Mat(rho1);    
 
     bool checkV = true;
-    if(p.n_cols == 1)
+    if(rho.n_cols == 1)
       checkV = false;
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(p.n_elem == 0)
-      throw Exception("qic::EoF",Exception::type::ZERO_SIZE);
+    if(rho.n_elem == 0)
+      throw Exception("qic::purify",Exception::type::ZERO_SIZE);
 
     if(checkV)
-      if(p.n_rows!=p.n_cols)
-	throw Exception("qic::EoF",
+      if(rho.n_rows != rho.n_cols)
+	throw Exception("qic::purify",
 			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    
-    if (p.n_rows != 4)
-      throw Exception("qic::EoF",Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
     if(!checkV)
-      return entanglement(p,{2,2});
+      return rho;
 
     else
       {
-	pT<T1> ret = 0.5*(1.0 + std::sqrt(1.0 - std::pow(concurrence(p),2.0))) ;
-	pT<T1> ret2(0.0);
-	if(ret > _precision::eps< pT<T1> >::value )
-	  ret2 -= ret*std::log2(ret);
-	if(1.0-ret > _precision::eps< pT<T1> >::value )
-	  ret2 -= (1.0-ret)*std::log2(1.0-ret);
-	return ret2;
+	arma::Col< pT<T1> > eigval;
+	arma::Mat< eT<T1> > eigvec;
+	
+	if(rho.n_rows > 20)
+	  arma::eig_sym(eigval,eigvec,rho,"dc");
+	else
+	  arma::eig_sym(eigval,eigvec,rho,"std");
+
+	arma::uword dim = rho.n_rows;
+	arma::uword dimE = arma::sum(eigval > static_cast< pT<T1> >(tol));
+
+	arma::Col< eT<T1> > ret = arma::zeros< arma::Col< eT<T1> > >(dim*dimE);
+	
+	for(arma::uword i = 0 ; i < dimE ; ++i)
+	  for(arma::uword j = 0 ; j < dim ; ++j)
+	    ret(i + dimE*j) = std::sqrt(eigval.at(dim-i-1))*eigvec.at(j,dim-i-1);
+	
+	return ret;
+
       }
   }
-    
-  
- 
+   
+
+
 }
 
-
+    

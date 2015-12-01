@@ -58,7 +58,7 @@ namespace qic
 	pT<T1> S = 0.0;
 
 	for (const auto& i :eig)
-	  S -= i > static_cast< pT<T1> >(_precision::eps) ? 
+	  S -= i > _precision::eps< pT<T1> >::value ? 
 	    i * std::log2(i) : 0;
 	return S;
       }
@@ -84,14 +84,14 @@ namespace qic
     if(prob.n_cols != 1)
       throw Exception("qic::shannon",Exception::type::MATRIX_NOT_CVECTOR);
     
-    if( arma::any(as_Col(prob) < -static_cast< eT<T1> >(_precision::eps))  )
+    if( arma::any(as_Col(prob) < - _precision::eps< pT<T1> >::value)  )
       throw Exception("qic::shannon","Invalid probaility distribution");
 #endif
 
     eT<T1> S = 0.0;
     
     for (const auto& i : prob)
-      S -= i > static_cast< eT<T1> >(_precision::eps) ? 
+      S -= i > _precision::eps< pT<T1> >::value ? 
 	i * std::log2(i) : 0;
     return S;
   }
@@ -150,11 +150,11 @@ namespace qic
       if(rho.n_rows != rho.n_cols)
 	throw Exception("qic::renyi",
 			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    if(alpha < 0)
+    if(alpha < -_precision::eps< pT<T1> >::value)
       throw Exception("qic::renyi",Exception::type::OUT_OF_RANGE);
 #endif
 
-    if(alpha < static_cast< pT<T1> >(_precision::eps))
+    if(alpha < _precision::eps< pT<T1> >::value)
       return std::log2(static_cast< pT<T1> >(rho.n_rows));
     
     else if(!checkV)
@@ -162,7 +162,7 @@ namespace qic
 
     else
       {
-	if( std::abs(alpha - 1) < static_cast< pT<T1> >(_precision::eps) )
+	if( std::abs(alpha - 1) < _precision::eps< pT<T1> >::value )
 	  return entropy(rho);
 
 	else if(alpha == arma::Datum< pT<T1> >::inf)
@@ -173,7 +173,7 @@ namespace qic
 	    auto eig = arma::eig_sym(rho);
 	    pT<T1> ret(0.0);
 	    for(const auto& x : eig)
-	      ret += x > static_cast< pT<T1> >(_precision::eps) ?
+	      ret += x > _precision::eps< pT<T1> >::value ?
 		std::pow(x,alpha) : 0;
 	    return std::log2(ret)/(1.0-alpha);
 	  }
@@ -201,19 +201,19 @@ namespace qic
     if(prob2.n_cols != 1)
       throw Exception("qic::renyi_prob",
 		      Exception::type::MATRIX_NOT_CVECTOR);
-    if(alpha < 0)
+    if(alpha < -_precision::eps< pT<T1> >::value)
       throw Exception("qic::renyi_prob",Exception::type::OUT_OF_RANGE);
 
-    if(arma::any(as_Col(prob2)  < - static_cast< eT<T1> >(_precision::eps)))
+    if(arma::any(as_Col(prob2)  < - _precision::eps< pT<T1> >::value))
       throw Exception("qic::renyi","Invalid probaility distribution");
 #endif
     
     const auto& prob = as_Col(prob2);
 
-    if(alpha < static_cast< eT<T1> >(_precision::eps))
+    if(alpha < _precision::eps< pT<T1> >::value)
       return std::log2(static_cast< eT<T1> >(prob.n_elem));
     
-    else if( std::abs(alpha - 1) < static_cast< eT<T1> >(_precision::eps) )
+    else if( std::abs(alpha - 1) < _precision::eps< pT<T1> >::value )
       return shannon(prob);
 
     else if(alpha == arma::Datum< eT<T1> >::inf)
@@ -223,7 +223,7 @@ namespace qic
       {
 	eT<T1> ret (0.0);
 	for(const auto& x : prob)
-	  ret += x > static_cast< eT<T1> >(_precision::eps) ?
+	  ret += x > _precision::eps< pT<T1> >::value ?
 	    std::pow(x,alpha) : 0;
 	return std::log2(ret)/(1.0-alpha);
       }
@@ -284,7 +284,7 @@ namespace qic
       if(rho.n_rows != rho.n_cols)
 	throw Exception("qic::tsallis",
 			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    if(alpha < 0)
+    if(alpha < -_precision::eps< pT<T1> >::value)
       throw Exception("qic::tsallis",Exception::type::OUT_OF_RANGE);
 #endif
 
@@ -294,7 +294,7 @@ namespace qic
 
     else
       {
-	if( std::abs(alpha - 1) < static_cast< pT<T1> >(_precision::eps) )
+	if( std::abs(alpha - 1) < _precision::eps< pT<T1> >::value )
 	  return std::log(2.0)*entropy(std::forward<T1>(rho));
 
 	else
@@ -302,7 +302,7 @@ namespace qic
 	    auto eig = arma::eig_sym(rho);
 	    pT<T1> ret(0.0);
 	    for(const auto& x : eig)
-	      ret += x > static_cast< pT<T1> >(_precision::eps) ?
+	      ret += x > _precision::eps< pT<T1> >::value ?
 		std::pow(x,alpha) : 0;
 	    return (ret-1.0)/(1.0-alpha);
 	  }
@@ -333,20 +333,20 @@ namespace qic
     if(alpha < 0)
       throw Exception("qic::tsallis_prob",Exception::type::OUT_OF_RANGE);
 
-    if(arma::any(as_Col(prob2)  < - static_cast< eT<T1> >(_precision::eps)))
+    if(arma::any(as_Col(prob2)  < - _precision::eps< pT<T1> >::value))
       throw Exception("qic::tsallis","Invalid probaility distribution");
 #endif
     
     const auto& prob = as_Col(prob2);
 
-    if( std::abs(alpha - 1) < static_cast< eT<T1> >(_precision::eps) )
+    if( std::abs(alpha - 1) < static_cast< eT<T1> >(_precision::eps< pT<T1> >::value) )
       return std::log(2.0)*shannon(prob);
 
     else
       {
 	eT<T1> ret (0.0);
 	for(const auto& x : prob)
-	  ret += x > static_cast< eT<T1> >(_precision::eps) ?
+	  ret += x > _precision::eps< pT<T1> >::value ?
 	    std::pow(x,alpha) : 0;
 	return (ret-1.0)/(1.0-alpha);
       }

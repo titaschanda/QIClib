@@ -24,9 +24,21 @@
 namespace qic
 {
 
-  namespace _precision { namespace
-    {constexpr double eps = 1.0e-12;} } 
+  namespace _precision 
+  {
 
+    template<typename T>
+    struct eps
+    {
+      static const T value;
+    };
+    
+    template<> const double eps<double>::value = 1.0e-12;
+    template<> const float eps<float>::value = 1.0e-6;
+
+  }
+  
+      
 
 
 

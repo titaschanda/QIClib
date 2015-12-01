@@ -34,8 +34,8 @@ namespace qic
   bool is_equal(const T1& rho11,
 		const T2& rho12,
 		bool typecheck = false,
-		const double& atol = 1.0e-10, 
-		const double& rtol = 1.0e-8)
+		const pT<T1>& atol = 1.0e-2 * _precision::eps< pT<T1> >::value, 
+		const pT<T1>& rtol = 10 * _precision::eps< pT<T1> >::value)
   {
     const auto& rho1 = as_Mat(rho11);
     const auto& rho2 = as_Mat(rho12);
@@ -53,9 +53,9 @@ namespace qic
     else
       {
 	return  
-	  arma::all(arma::vectorise((static_cast< pT<T1> >(atol) 
+	  arma::all(arma::vectorise((atol 
 				     * arma::ones< arma::Mat< pT<T1> > >(n1,m1) 
-				     + static_cast< pT<T1> >(rtol)  
+				     + rtol  
 				     * arma::abs(rho1)) 
 				    - arma::abs(rho1-rho2)) >  0.0);
       }

@@ -31,13 +31,13 @@ namespace qic
   inline 
   bool is_pure(const T1& rho1, 
 	       bool check_norm = true,
-	       const double& tol = _precision::eps)
+	       const pT<T1>& tol = _precision::eps< pT<T1> >::value)
   {
     const auto& rho = as_Mat(rho1);
      
     if( (rho.n_rows == 1) || (rho.n_cols == 1)  )
       {      
-	if (arma::norm(rho) == 1 || !check_norm)
+	if ( std::abs(arma::norm(rho)- 1) < tol || !check_norm)
 	  return true;
 	else 
 	  return false;
@@ -46,12 +46,13 @@ namespace qic
     else if(!is_H(rho))
       return false;
 
-    else if(rank(rho,static_cast< pT<T1> >(tol)) != 1)
+    else if(arma::rank(rho) != 1)
       return false;
 
     else
       {
-	if(std::abs(arma::trace(rho)-1.0) < static_cast< pT<T1> >(tol) 
+	if(std::abs(std::abs(arma::trace(rho))-1.0) 
+	   < tol 
 	   || !check_norm)
 	  return true;
 	else

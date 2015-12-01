@@ -30,8 +30,8 @@ namespace qic
 				    >::type>
   inline 
   bool is_U(const T1& rho1, 
-	    const double& atol = 1.0e-10, 
-	    const double& rtol = 1.0e-8)
+	    const pT<T1>& atol = 1.0e-2 * _precision::eps< pT<T1> >::value, 
+	    const pT<T1>& rtol = 10 * _precision::eps< pT<T1> >::value)
   {
     const auto& rho = as_Mat(rho1);
     
@@ -47,18 +47,18 @@ namespace qic
 	arma::Mat< eT<T1> > eye2 = rho.t()*rho;
 	
 	bool ret1 = 
-	  arma::all(arma::vectorise((static_cast< pT<T1> >(atol) 
+	  arma::all(arma::vectorise(( atol 
 				     * arma::ones< arma::Mat< pT<T1> > >(n,m) 
-				     + static_cast< pT<T1> >(rtol)  
+				     + rtol  
 				     * arma::abs(eye1)) 
 				    - arma::abs(eye1 
 						- arma::eye< arma::Mat< 
 						pT<T1> > >(n,m)))>  0.0);
 	
 	bool ret2 = 
-	  arma::all(arma::vectorise((static_cast< pT<T1> >(atol) 
+	  arma::all(arma::vectorise((atol 
 				     * arma::ones< arma::Mat< pT<T1> > >(n,m) 
-				     + static_cast< pT<T1> >(rtol)  
+				     + rtol  
 				     * arma::abs(eye2)) 
 				    - arma::abs(eye2 
 						- arma::eye< arma::Mat< 
