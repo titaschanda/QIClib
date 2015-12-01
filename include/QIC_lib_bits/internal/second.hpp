@@ -29,9 +29,9 @@ namespace qic
     namespace protect_subs
     {
 
-
+      
       //************************************************************************
-
+      
 
       template<typename T1, typename T2, typename TR = 
 	       typename std::enable_if< is_arma_type_var<T1>::value && 

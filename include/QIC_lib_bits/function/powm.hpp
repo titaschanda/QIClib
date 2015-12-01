@@ -81,5 +81,4 @@ namespace qic
   }
 
 
-
 }

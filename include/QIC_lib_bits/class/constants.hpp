@@ -38,11 +38,6 @@ namespace qic
 
   }
   
-      
-
-
-
-
 
   template<typename T1>
   class STATES final: public protect_subs::Singleton< const STATES<T1> >

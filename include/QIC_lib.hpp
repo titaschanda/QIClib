@@ -32,6 +32,7 @@
 #include<stdexcept>
 #include<type_traits>
 #include<tuple>
+#include<random>
 #include<armadillo>
 
 
@@ -55,6 +56,7 @@
 #include "QIC_lib_bits/class/init.hpp"
 #include "QIC_lib_bits/class/random_devices.hpp"
 
+#include "QIC_lib_bits/internal/first.hpp"
 
 #include "QIC_lib_bits/basic/type_traits.hpp"
 #include "QIC_lib_bits/basic/as_Mat.hpp"
@@ -65,8 +67,9 @@
 #include "QIC_lib_bits/basic/is_pure.hpp"
 #include "QIC_lib_bits/basic/is_valid_state.hpp"
 #include "QIC_lib_bits/basic/range.hpp"
+#include "QIC_lib_bits/basic/random.hpp"
 
-#include "QIC_lib_bits/internal/protect_subs.hpp"
+#include "QIC_lib_bits/internal/second.hpp"
 
 #include "QIC_lib_bits/function/Tx.hpp"
 #include "QIC_lib_bits/function/TrX.hpp"

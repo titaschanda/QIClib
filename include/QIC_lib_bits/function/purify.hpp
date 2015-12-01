@@ -70,7 +70,8 @@ namespace qic
 	
 	for(arma::uword i = 0 ; i < dimE ; ++i)
 	  for(arma::uword j = 0 ; j < dim ; ++j)
-	    ret(i + dimE*j) = std::sqrt(eigval.at(dim-i-1))*eigvec.at(j,dim-i-1);
+	    ret(i + dimE*j) = std::sqrt(eigval.at(dim-i-1)) 
+	      * eigvec.at(j,dim-i-1);
 	
 	return ret;
 
