@@ -49,14 +49,14 @@
 #define _QIC_UNUSED_ 
 #endif
 
+#include "QIC_lib_bits/internal/first.hpp"
+#include "QIC_lib_bits/internal/singleton.hpp"
 
 #include "QIC_lib_bits/class/exception.hpp"
-#include "QIC_lib_bits/class/singleton.hpp"
 #include "QIC_lib_bits/class/constants.hpp"
 #include "QIC_lib_bits/class/init.hpp"
 #include "QIC_lib_bits/class/random_devices.hpp"
 
-#include "QIC_lib_bits/internal/first.hpp"
 
 #include "QIC_lib_bits/basic/type_traits.hpp"
 #include "QIC_lib_bits/basic/as_Mat.hpp"

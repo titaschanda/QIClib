@@ -26,23 +26,34 @@ namespace qic
 
   namespace _precision 
   {
+    template<typename T, typename Enable =
+	     typename std::enable_if<std::is_floating_point<T>::value,void
+				     >::type
+	     >
+    struct eps;
+
 
     template<typename T>
-    struct eps
-    {
-      static const T value;
-    };
-    
-    template<> const double eps<double>::value = 1.0e-12;
-    template<> const float eps<float>::value = 1.0e-6;
+    struct eps<T>
 
+    { 
+      static constexpr T value = std::is_same<T,double>::value ?
+	1.0e-12 : 1.0e-6;
+    };
+   
+    template<typename T>
+    constexpr T  eps<T>::value;
   }
-  
+
+
+
+
 
   template<typename T1>
-  class STATES final: public protect_subs::Singleton< const STATES<T1> >
+  class STATES final : 
+    public _internal::protect_subs::Singleton< const STATES<T1> >
   {
-    friend class protect_subs::Singleton< const STATES<T1> >;
+    friend class _internal::protect_subs::Singleton< const STATES<T1> >;
   public:
     arma::field< typename arma::Mat< std::complex<T1> >::template fixed<2,2> > 
       S;

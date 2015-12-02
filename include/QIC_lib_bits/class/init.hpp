@@ -30,9 +30,9 @@ namespace qic
 {
 
 
-  class Init final : public protect_subs::Singleton<const Init> 
+  class Init final : public _internal::protect_subs::Singleton<const Init> 
   {
-    friend class protect_subs::Singleton<const Init>;
+    friend class _internal::protect_subs::Singleton<const Init>;
   private:
     Init()
       {

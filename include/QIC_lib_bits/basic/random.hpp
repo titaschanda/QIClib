@@ -35,35 +35,23 @@ namespace qic
 				    >::type > 
     inline 
     TR randU(const arma::uword& N,
-	     const pT<T1>& a = 0, 
-	     const pT<T1>& b = 1)
+	     const arma::Col< pT<T1> >& range = {0,1})
   {
-    std::uniform_real_distribution< pT<T1> > dis(a, b);
-    arma::Col< eT<T1> > ret(N);
     
-    eT<T1>* mem = ret.memptr();
-    arma::uword ii, jj;
+#ifndef QIC_LIB_NO_DEBUG
+    if( range.n_elem != 2)
+      throw Exception("qic::randU","Not a range");
+#endif
+    
+    std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
+    arma::Col< eT<T1> > ret(N);
 
     if( std::is_same< eT<T1> ,pT<T1> >::value)
-      {
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng);
-	  }
-      }
-
+      ret.imbue( [&](){return dis(rdevs.rng);} );
     else
       {
-	auto& I = std::conditional< std::is_same< eT<T1> ,pT<T1> >::value, 
-				    _internal::protect_subs::cond_I0< eT<T1> >, 
-				    _internal::protect_subs::cond_I1< eT<T1> > 
-				    >::type::value ;
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	  }
+	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
       }
     
     return ret;
@@ -81,37 +69,25 @@ namespace qic
     inline 
     TR randU(const arma::uword& m,
 	     const arma::uword& n,
-	     const pT<T1>& a = 0, 
-	     const pT<T1>& b = 1)
+	     const arma::Col< pT<T1> >& range = {0,1})
   {
-    std::uniform_real_distribution< pT<T1> > dis(a, b);
+
+#ifndef QIC_LIB_NO_DEBUG
+    if( range.n_elem != 2)
+      throw Exception("qic::randU","Not a range");
+#endif
+    
+    std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
     arma::Mat< eT<T1> > ret(m,n);
     
-    eT<T1>* mem = ret.memptr();
-    arma::uword ii, jj;
-    arma::uword N = ret.n_elem;
-
     if( std::is_same< eT<T1> ,pT<T1> >::value)
-      {
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng);
-	  }
-      }
-
+      ret.imbue( [&](){return dis(rdevs.rng);} );
     else
       {
-	auto& I = std::conditional< std::is_same< eT<T1> ,pT<T1> >::value, 
-				    _internal::protect_subs::cond_I0< eT<T1> >, 
-				    _internal::protect_subs::cond_I1< eT<T1> > 
-				    >::type::value ;
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	  }
+	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
       }
+
 
     return ret;
   }
@@ -127,35 +103,23 @@ namespace qic
 				    >::type > 
     inline 
     TR randN(const arma::uword& N,
-	     const pT<T1>& mean = 0, 
-	     const pT<T1>& sd = 1)
+	     const arma::Col< pT<T1> >& meansd = {0,1})
   {
-    std::normal_distribution< pT<T1> > dis(mean, sd);
+
+#ifndef QIC_LIB_NO_DEBUG
+    if( meansd.n_elem != 2)
+      throw Exception("qic::randN","Not a proper mean and standard deviation");
+#endif
+    
+    std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
     arma::Col< eT<T1> > ret(N);
     
-    eT<T1>* mem = ret.memptr();
-    arma::uword ii, jj;
-
     if( std::is_same< eT<T1> ,pT<T1> >::value)
-      {
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng);
-	  }
-      }
-
+      ret.imbue( [&](){return dis(rdevs.rng);} );
     else
       {
-	auto& I = std::conditional< std::is_same< eT<T1> ,pT<T1> >::value, 
-				    _internal::protect_subs::cond_I0< eT<T1> >, 
-				    _internal::protect_subs::cond_I1< eT<T1> > 
-				    >::type::value ;
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	  }
+	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
       }
     
     return ret;
@@ -173,36 +137,24 @@ namespace qic
     inline 
     TR randN(const arma::uword& m,
 	     const arma::uword& n,
-	     const pT<T1>& mean = 0, 
-	     const pT<T1>& sd = 1)
+	     const arma::Col< pT<T1> >& meansd = {0,1})
   {
-    std::normal_distribution< pT<T1> > dis(mean, sd);
+
+
+#ifndef QIC_LIB_NO_DEBUG
+    if( meansd.n_elem != 2)
+      throw Exception("qic::randN","Not a proper mean and standard deviation");
+#endif
+    
+    std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
     arma::Mat< eT<T1> > ret(m,n);
     
-    eT<T1>* mem = ret.memptr();
-    arma::uword ii, jj;
-    arma::uword N = ret.n_elem;
-
     if( std::is_same< eT<T1> ,pT<T1> >::value)
-      {
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng);
-	  }
-      }
-
+      ret.imbue( [&](){return dis(rdevs.rng);} );
     else
       {
-	auto& I = std::conditional< std::is_same< eT<T1> ,pT<T1> >::value, 
-				    _internal::protect_subs::cond_I0< eT<T1> >, 
-				    _internal::protect_subs::cond_I1< eT<T1> > 
-				    >::type::value ;
-	for(ii=0, jj=1; jj < N; ii+=2, jj+=2)
-	  {
-	    mem[ii] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	    mem[jj] = dis(rdevs.rng) + I * dis(rdevs.rng);
-	  }
+	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
       }
 
     return ret;

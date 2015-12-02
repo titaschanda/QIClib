@@ -28,37 +28,41 @@
 namespace qic
 {
 
-  namespace protect_subs
-  { 
-    template<typename T>
-    class Singleton
-    {
-    protected:
-      Singleton() noexcept = default;
-      Singleton(const Singleton&) = delete;
-      Singleton& operator=(const Singleton&) = delete;
-      virtual ~Singleton() = default;    
-    public:
-      static T& get_instance() noexcept(std::is_nothrow_constructible<T>::value)
+  namespace _internal
+  {
+
+    namespace protect_subs
+    { 
+      template<typename T>
+      class Singleton
       {
-        static T instance;
-        return instance;
-      }
+      protected:
+	Singleton() noexcept = default;
+	Singleton(const Singleton&) = delete;
+	Singleton& operator=(const Singleton&) = delete;
+	virtual ~Singleton() = default;    
+      public:
+	static T& get_instance() 
+	  noexcept(std::is_nothrow_constructible<T>::value)
+	{
+	  static T instance;
+	  return instance;
+	}
       
 #ifndef _NO_THREAD_LOCAL
 
-      static T& get_thread_local_instance()
-	noexcept(std::is_nothrow_constructible<T>::value)
-      {
-	thread_local static T instance;
-        return instance;
-      }
+	static T& get_thread_local_instance()
+	  noexcept(std::is_nothrow_constructible<T>::value)
+	{
+	  thread_local static T instance;
+	  return instance;
+	}
 
 #endif
 
 
-    };
+      };
+    }
+
   }
-
 }
-

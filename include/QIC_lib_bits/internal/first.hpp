@@ -30,19 +30,22 @@ namespace qic
     namespace protect_subs
     {
      
-      template<typename T1>
-      struct cond_I1
+      template<typename T>
+      struct cond_I
       {
-	static const T1 value;
-      };
-      template<typename T1> const T1 cond_I1<T1>::value = {0,1};
+	static constexpr T value = 0;
+      }; 
+
+      template<typename T>
+      struct cond_I< std::complex<T> >
+      {
+	static constexpr std::complex<T> value = {0,1};
+      }; 
+
+      template<typename T1> constexpr T1 cond_I<T1>::value;
       
-      template<typename T1>
-      struct cond_I0
-      {
-	static const T1 value;
-      };
-      template<typename T1> const T1 cond_I0<T1>::value = 0;
+      template<typename T1> 
+      constexpr std::complex<T1> cond_I< std::complex<T1> >::value;
       
 
     }

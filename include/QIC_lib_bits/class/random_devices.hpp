@@ -26,18 +26,32 @@
 namespace qic
 {
 
-  class RandomDevices final : public protect_subs::Singleton<RandomDevices> 
+  class RandomDevices final 
+    : public _internal::protect_subs::Singleton<RandomDevices> 
   {
-    friend class protect_subs::Singleton<RandomDevices>;
+    friend class _internal::protect_subs::Singleton<RandomDevices>;
 
     std::random_device rd;
   public:
 
 #ifdef ARMA_64BIT_WORD
     std::mt19937_64 rng;
+    using seed_type = std::mt19937_64::result_type;
 #else
     std::mt19937 rng;
+    using seed_type = std::mt19937::result_type;
 #endif
+
+    inline void set_seed(seed_type a)
+    {
+      rng.seed(a);
+    }
+
+    inline void set_seed_random()
+    {
+      rng.seed(rd());
+    }
+
 
   private:
     RandomDevices() : rd{}, rng{rd()}
@@ -54,4 +68,5 @@ namespace qic
 #endif
 
 } 
+
 
