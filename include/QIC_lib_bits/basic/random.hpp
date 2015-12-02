@@ -40,7 +40,7 @@ namespace qic
     
 #ifndef QIC_LIB_NO_DEBUG
     if( range.n_elem != 2)
-      throw Exception("qic::randU","Not a range");
+      throw Exception("qic::randU","Not proper range");
 #endif
     
     std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
@@ -74,7 +74,7 @@ namespace qic
 
 #ifndef QIC_LIB_NO_DEBUG
     if( range.n_elem != 2)
-      throw Exception("qic::randU","Not a range");
+      throw Exception("qic::randU","Not proper range");
 #endif
     
     std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
@@ -108,7 +108,7 @@ namespace qic
 
 #ifndef QIC_LIB_NO_DEBUG
     if( meansd.n_elem != 2)
-      throw Exception("qic::randN","Not a proper mean and standard deviation");
+      throw Exception("qic::randN","Not proper mean and standard deviation");
 #endif
     
     std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
@@ -143,7 +143,7 @@ namespace qic
 
 #ifndef QIC_LIB_NO_DEBUG
     if( meansd.n_elem != 2)
-      throw Exception("qic::randN","Not a proper mean and standard deviation");
+      throw Exception("qic::randN","Not proper mean and standard deviation");
 #endif
     
     std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
