@@ -163,4 +163,89 @@ namespace qic
 
   //****************************************************************************
 
+
+  template<typename T1, typename TR =
+	   typename std::enable_if< is_arma_type_var<T1>::value
+				    && arma::is_Col<T1>::value,
+				    arma::Col< eT<T1> >
+				    >::type > 
+    inline 
+    TR randI(const arma::uword& N,
+	     const arma::Col< arma::sword >& range = 
+	       { std::is_unsigned< pT<T1> >::value ? 
+		   0 : std::numeric_limits< arma::sword >::min(),
+		   std::numeric_limits< arma::sword >::max()})
+  {
+    
+#ifndef QIC_LIB_NO_DEBUG
+    if( range.n_elem != 2)
+      throw Exception("qic::randI","Not proper range");
+    
+    if( std::is_unsigned< pT<T1> >::value && arma::any(range < 0) )
+      throw Exception("qic::randI","Negative range for unsigned type");
+#endif
+    
+    std::uniform_int_distribution< arma::sword > dis(range.at(0), range.at(1));
+    arma::Col< eT<T1> > ret(N);
+
+    if( std::is_same< eT<T1> ,pT<T1> >::value)
+      ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng));} );
+    else
+      {
+	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+	ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng)) 
+	      + I * static_cast< pT<T1> >(dis(rdevs.rng));} );
+      }
+    
+    return ret;
+  }
+
+
+  //****************************************************************************
+
+
+  template<typename T1, typename TR =
+	   typename std::enable_if< is_arma_type_var<T1>::value
+				    && arma::is_Mat_only<T1>::value,
+				    arma::Mat< eT<T1> >
+				    >::type >
+    inline 
+    TR randI(const arma::uword& m,
+	     const arma::uword& n,
+	     const arma::Col< arma::sword >& range = 
+	       { std::is_unsigned< pT<T1> >::value ? 
+		   0 : std::numeric_limits< arma::sword >::min(),
+		   std::numeric_limits< arma::sword >::max()})
+  {
+
+#ifndef QIC_LIB_NO_DEBUG
+    if( range.n_elem != 2)
+      throw Exception("qic::randI","Not proper range");
+    
+    if( std::is_unsigned< pT<T1> >::value && arma::any(range < 0) )
+      throw Exception("qic::randI","Negative range for unsigned type");
+#endif
+    
+    std::uniform_int_distribution< arma::sword > dis(range.at(0), range.at(1));
+    arma::Mat< eT<T1> > ret(m,n);
+    
+    if( std::is_same< eT<T1> ,pT<T1> >::value)
+      ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng));} );
+    else
+      {
+	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+	ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng)) 
+	      + I * static_cast< pT<T1> >(dis(rdevs.rng));} );
+      }
+
+    return ret;
+  }
+
+
+  //****************************************************************************
+
+
+
+
+
 }

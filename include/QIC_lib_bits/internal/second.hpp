@@ -33,6 +33,9 @@ namespace qic
       //************************************************************************
       
 
+
+      // More efficient than iterative counterpart, as iterative one needs
+      // extra copy constructor
       template<typename T1, typename T2, typename TR = 
 	       typename std::enable_if< is_arma_type_var<T1>::value && 
 					std::is_integral<T2>::value,
