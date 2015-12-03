@@ -244,8 +244,105 @@ namespace qic
 
   //****************************************************************************
 
+  template<typename T1, typename = 
+	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
+  inline 
+  arma::Mat< std::complex<T1> > randH(const arma::uword& m)	   
+  {
+
+    std::complex<T1> I = {0.0,1.0};
+    arma::Mat< std::complex<T1> > ret = 
+      2.0 * randU< arma::Mat< std::complex<T1> > >(m,m) - (1.0 + I) 
+      * arma::ones< arma::Mat< std::complex<T1> > >(m,m);
+
+    return ret + ret.t();
+  }
 
 
+  //****************************************************************************
+  
+  
+  inline arma::cx_mat randH(const arma::uword& m)	   
+  {
+    return randH<double>(m);
+  }
+
+
+  //****************************************************************************
+
+  template<typename T1, typename = 
+	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
+  inline 
+  arma::Col< std::complex<T1> > randPsi(const arma::uword& m)	   
+  {
+    auto ret = randN< arma::Col< std::complex<T1> > >(m);
+    return ret/arma::norm(ret);
+  }
+
+
+  //****************************************************************************
+  
+  inline arma::cx_vec randPsi(const arma::uword& m)	   
+  {
+    return randPsi<double>(m);
+  }
+
+  //****************************************************************************
+
+  template<typename T1, typename = 
+	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
+  inline 
+  arma::Mat< std::complex<T1> > randRho(const arma::uword& m)	   
+  {
+    arma::Mat< std::complex<T1> > ret = 10 * randH<T1>(m);
+    ret *= ret.t();
+    return ret/arma::trace(ret);
+  }
+
+
+  //****************************************************************************
+  
+  inline arma::cx_mat randRho(const arma::uword& m)	   
+  {
+    return randRho<double>(m);
+  }
+
+
+  //****************************************************************************
+
+  
+  template<typename T1, typename = 
+	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
+  inline 
+  arma::Mat< std::complex<T1> > randUnitary(const arma::uword& m)	   
+  {
+    arma::Mat< std::complex<T1> > A = 
+      randN< arma::Mat< std::complex<T1> > >(m,m) 
+      * std::sqrt(static_cast<T1>(0.5));
+
+    arma::Mat< std::complex<T1> > Q,R;
+    arma::qr(Q,R,A);
+
+    arma::Col< std::complex<T1> > P = 
+      arma::conv_to< arma::Col< std::complex<T1> > 
+		     >::from(randU< arma::Col<T1> >(m));
+
+    std::complex<T1> I = {0.0,1.0};
+    auto& PI = arma::Datum<T1>::pi; 
+    for(auto& i : P)
+      i = std::exp( static_cast<T1>(2.) * PI * I * i);
+
+    return arma::diagmat(P) * Q ;
+    
+  }
+
+
+  //****************************************************************************
+  
+  inline arma::cx_mat randUnitary(const arma::uword& m)	   
+  {
+    return randUnitary<double>(m);
+  }
 
 
 }

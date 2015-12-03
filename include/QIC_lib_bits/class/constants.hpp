@@ -37,7 +37,8 @@ namespace qic
     struct eps<T>
 
     { 
-      static constexpr T value = std::is_same<T,double>::value ?
+      static constexpr T value = 
+	std::is_same<T,double>::value || std::is_same<T,long double>::value ?
 	1.0e-12 : 1.0e-6;
     };
    
