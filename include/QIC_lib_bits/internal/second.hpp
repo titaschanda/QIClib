@@ -71,6 +71,13 @@ namespace qic
       };
 
       template<typename T1>
+      struct uint_tag 
+      { typedef uint_tag type; 
+	typedef arma::Mat< eT<T1> > ret_type;
+      };
+
+
+      template<typename T1>
       struct nonint_tag 
       {
 	typedef nonint_tag type; 
@@ -79,7 +86,11 @@ namespace qic
 
       template<typename T1, typename T2>
       struct powm_tag : std::conditional< std::is_integral<T2>::value,
-					  int_tag<T1>,nonint_tag<T1> 
+					  typename 
+					  std::conditional< std::is_unsigned<T2>::value,
+							    uint_tag<T1>,
+							    int_tag<T1> >::type,
+					  nonint_tag<T1> 
 					  >::type {};
 
 
@@ -142,6 +153,33 @@ namespace qic
 	else 
 	  return POWM_GEN_INT(rho,P); 
     
+      }  
+
+
+      //************************************************************************
+
+
+
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< is_arma_type_var<T1>::value, 
+					arma::Mat< eT<T1> > 
+					>::type>
+      inline
+      TR powm_gen_implement(const T1& rho1 ,const T2& P,uint_tag<T1>)
+  
+      {
+	const auto& rho = as_Mat(rho1);
+
+#ifndef QIC_LIB_NO_DEBUG  
+	if(rho.n_elem == 0)
+	  throw Exception("qic::powm_gen",Exception::type::ZERO_SIZE);
+    
+	if(rho.n_rows != rho.n_cols)
+	  throw Exception("qic::powm_gen",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+    
+	return POWM_GEN_INT(rho,P); 
+	
       }  
 
 
@@ -214,6 +252,30 @@ namespace qic
       //************************************************************************
 
   
+      template<typename T1, typename T2, typename TR = 
+	       typename std::enable_if< is_arma_type_var<T1>::value, 
+					arma::Mat< eT<T1> > 
+					>::type>
+      inline 
+      TR powm_sym_implement(const T1& rho1 ,const T2& P,uint_tag<T1>)
+      {
+	const auto& rho = as_Mat(rho1);
+
+#ifndef QIC_LIB_NO_DEBUG  
+	if(rho.n_elem == 0)
+	  throw Exception("qic::powm_sym",Exception::type::ZERO_SIZE);
+    
+	if(rho.n_rows != rho.n_cols)
+	  throw Exception("qic::powm_sym",Exception::type::MATRIX_NOT_SQUARE);
+#endif
+	
+	return POWM_GEN_INT(rho,P); 
+      }
+
+
+      //************************************************************************
+
+
       template<typename T1, typename TR = 
 	       typename std::enable_if< is_arma_type_var<T1>::value,
 					arma::Mat< eT<T1> > 

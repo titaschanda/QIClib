@@ -25,7 +25,10 @@ namespace qic
 {
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value, 
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
+				    || (is_arma_type_var<T1>::value
+				    && std::is_unsigned<T2>::value
+				    && std::is_integral<T2>::value), 
 				    typename _internal::protect_subs::
 				    powm_tag<T1,T2>::ret_type
 				    >::type>
@@ -43,7 +46,10 @@ namespace qic
 
 
   template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value, 
+	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
+				    || (is_arma_type_var<T1>::value
+				    && std::is_unsigned<T2>::value
+				    && std::is_integral<T2>::value), 
 				    typename _internal::protect_subs::
 				    powm_tag<T1,T2>::ret_type
 				    >::type>
@@ -57,7 +63,7 @@ namespace qic
   }
 
 
-
+  /*
 
   template<typename T1, typename T2, typename TR = 
 	   typename std::enable_if< is_arma_type_var<T1>::value
@@ -79,6 +85,6 @@ namespace qic
 #endif
     return _internal::protect_subs::POWM_GEN_INT(rho,P); 
   }
-
+  */
 
 }
