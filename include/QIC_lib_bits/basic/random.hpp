@@ -21,328 +21,313 @@
 
 
 
-namespace qic
-{
-  
-
-  //****************************************************************************
+namespace qic {
 
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
-				    && arma::is_Col<T1>::value,
-				    arma::Col< eT<T1> >
-				    >::type > 
-    inline 
+//****************************************************************************
+
+
+template< typename T1, typename TR =
+         typename std::enable_if< is_floating_point_var< pT<T1> >::value
+                                  && arma::is_Col<T1>::value,
+                                  arma::Col< eT<T1> >
+                                  >::type >
+    inline
     TR randU(const arma::uword& N,
-	     const arma::Col< pT<T1> >& range = {0,1})
-  {
-    
+             const arma::Col< pT<T1> >& range = {0, 1}
+             ) {
 #ifndef QIC_LIB_NO_DEBUG
-    if( range.n_elem != 2)
-      throw Exception("qic::randU","Not proper range");
+  if ( range.n_elem != 2 )
+    throw Exception("qic::randU", "Not proper range");
 #endif
-    
-    std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
-    arma::Col< eT<T1> > ret(N);
 
-    if( std::is_same< eT<T1> ,pT<T1> >::value)
-      ret.imbue( [&](){return dis(rdevs.rng);} );
-    else
-      {
-	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
-	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
-      }
-    
-    return ret;
+  std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
+  arma::Col< eT<T1> > ret(N);
+
+  if ( std::is_same< eT<T1>, pT<T1> >::value ) {
+    ret.imbue( [&dis](){return dis(rdevs.rng);} );
+
+  } else {
+    auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+    ret.imbue( [&dis, &I](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
   }
+  return ret;
+}
 
 
-  //****************************************************************************
+//****************************************************************************
 
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
-				    && arma::is_Mat_only<T1>::value,
-				    arma::Mat< eT<T1> >
-				    >::type >
-    inline 
+template< typename T1, typename TR =
+         typename std::enable_if< is_floating_point_var< pT<T1> >::value
+                                  && arma::is_Mat_only<T1>::value,
+                                  arma::Mat< eT<T1> >
+                                  >::type >
+    inline
     TR randU(const arma::uword& m,
-	     const arma::uword& n,
-	     const arma::Col< pT<T1> >& range = {0,1})
-  {
-
+             const arma::uword& n,
+             const arma::Col< pT<T1> >& range = {0, 1}
+             ) {
 #ifndef QIC_LIB_NO_DEBUG
-    if( range.n_elem != 2)
-      throw Exception("qic::randU","Not proper range");
+  if ( range.n_elem != 2 )
+    throw Exception("qic::randU", "Not proper range");
 #endif
-    
-    std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
-    arma::Mat< eT<T1> > ret(m,n);
-    
-    if( std::is_same< eT<T1> ,pT<T1> >::value)
-      ret.imbue( [&](){return dis(rdevs.rng);} );
-    else
-      {
-	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
-	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
-      }
 
+  std::uniform_real_distribution< pT<T1> > dis(range.at(0), range.at(1));
+  arma::Mat< eT<T1> > ret(m, n);
 
-    return ret;
+  if ( std::is_same< eT<T1>, pT<T1> >::value ) {
+    ret.imbue( [&dis](){return dis(rdevs.rng);} );
+
+  } else {
+    auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+    ret.imbue( [&dis, &I](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
   }
+  return ret;
+}
 
 
-  //****************************************************************************
+//****************************************************************************
 
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
-				    && arma::is_Col<T1>::value,
-				    arma::Col< eT<T1> >
-				    >::type > 
-    inline 
+template< typename T1, typename TR =
+         typename std::enable_if< is_floating_point_var< pT<T1> >::value
+                                  && arma::is_Col<T1>::value,
+                                  arma::Col< eT<T1> >
+                                  >::type >
+    inline
     TR randN(const arma::uword& N,
-	     const arma::Col< pT<T1> >& meansd = {0,1})
-  {
-
+             const arma::Col< pT<T1> >& meansd = {0, 1}
+             ) {
 #ifndef QIC_LIB_NO_DEBUG
-    if( meansd.n_elem != 2)
-      throw Exception("qic::randN","Not proper mean and standard deviation");
+  if ( meansd.n_elem != 2 )
+    throw Exception("qic::randN", "Not proper mean and standard deviation");
 #endif
-    
-    std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
-    arma::Col< eT<T1> > ret(N);
-    
-    if( std::is_same< eT<T1> ,pT<T1> >::value)
-      ret.imbue( [&](){return dis(rdevs.rng);} );
-    else
-      {
-	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
-	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
-      }
-    
-    return ret;
+
+  std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
+  arma::Col< eT<T1> > ret(N);
+
+  if ( std::is_same< eT<T1>, pT<T1> >::value ) {
+    ret.imbue( [&dis](){return dis(rdevs.rng);} );
+
+  } else {
+    auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+    ret.imbue( [&dis, &I](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
   }
+  return ret;
+}
 
 
-  //****************************************************************************
+//****************************************************************************
 
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
-				    && arma::is_Mat_only<T1>::value,
-				    arma::Mat< eT<T1> >
-				    >::type > 
-    inline 
+template< typename T1, typename TR =
+         typename std::enable_if< is_floating_point_var< pT<T1> >::value
+                                  && arma::is_Mat_only<T1>::value,
+                                  arma::Mat< eT<T1> >
+                                  >::type >
+    inline
     TR randN(const arma::uword& m,
-	     const arma::uword& n,
-	     const arma::Col< pT<T1> >& meansd = {0,1})
-  {
-
-
+             const arma::uword& n,
+             const arma::Col< pT<T1> >& meansd = {0, 1}
+             ) {
 #ifndef QIC_LIB_NO_DEBUG
-    if( meansd.n_elem != 2)
-      throw Exception("qic::randN","Not proper mean and standard deviation");
+  if ( meansd.n_elem != 2 )
+    throw Exception("qic::randN", "Not proper mean and standard deviation");
 #endif
-    
-    std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
-    arma::Mat< eT<T1> > ret(m,n);
-    
-    if( std::is_same< eT<T1> ,pT<T1> >::value)
-      ret.imbue( [&](){return dis(rdevs.rng);} );
-    else
-      {
-	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
-	ret.imbue( [&](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
-      }
 
-    return ret;
+  std::normal_distribution< pT<T1> > dis(meansd.at(0), meansd.at(1));
+  arma::Mat< eT<T1> > ret(m, n);
+
+  if ( std::is_same< eT<T1>, pT<T1> >::value ) {
+    ret.imbue( [&dis](){return dis(rdevs.rng);} );
+
+  } else {
+    auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+    ret.imbue( [&dis, &I](){return dis(rdevs.rng) + I * dis(rdevs.rng);} );
   }
+  return ret;
+}
 
 
-  //****************************************************************************
+//****************************************************************************
 
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_arma_type_var<T1>::value
-				    && arma::is_Col<T1>::value,
-				    arma::Col< eT<T1> >
-				    >::type > 
-    inline 
+template< typename T1, typename TR =
+         typename std::enable_if< is_arma_type_var<T1>::value
+                                  && arma::is_Col<T1>::value,
+                                  arma::Col< eT<T1> >
+                                  >::type >
+    inline
     TR randI(const arma::uword& N,
-	     const arma::Col< arma::sword >& range = 
-	       { std::is_unsigned< pT<T1> >::value ? 
-		   0 : std::numeric_limits< arma::sword >::min(),
-		   std::numeric_limits< arma::sword >::max()})
-  {
-    
+             const arma::Col< arma::sword >& range =
+             { std::is_unsigned< pT<T1> >::value ?
+                   0 : std::numeric_limits< arma::sword >::min(),
+                   std::numeric_limits< arma::sword >::max() }
+             ) {
 #ifndef QIC_LIB_NO_DEBUG
-    if( range.n_elem != 2)
-      throw Exception("qic::randI","Not proper range");
-    
-    if( std::is_unsigned< pT<T1> >::value && arma::any(range < 0) )
-      throw Exception("qic::randI","Negative range for unsigned type");
+  if ( range.n_elem != 2 )
+    throw Exception("qic::randI", "Not proper range");
+
+  if ( std::is_unsigned< pT<T1> >::value && arma::any(range < 0) )
+    throw Exception("qic::randI", "Negative range for unsigned type");
 #endif
-    
-    std::uniform_int_distribution< arma::sword > dis(range.at(0), range.at(1));
-    arma::Col< eT<T1> > ret(N);
 
-    if( std::is_same< eT<T1> ,pT<T1> >::value)
-      ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng));} );
-    else
-      {
-	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
-	ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng)) 
-	      + I * static_cast< pT<T1> >(dis(rdevs.rng));} );
-      }
-    
-    return ret;
+  std::uniform_int_distribution< arma::sword > dis(range.at(0), range.at(1));
+  arma::Col< eT<T1> > ret(N);
+
+  if ( std::is_same< eT<T1>, pT<T1> >::value ) {
+    ret.imbue( [&dis](){return static_cast< pT<T1> >(dis(rdevs.rng));} );
+
+  } else {
+    auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+    ret.imbue( [&dis, &I](){return static_cast< pT<T1> >(dis(rdevs.rng))
+            + I * static_cast< pT<T1> >(dis(rdevs.rng));});
   }
+  return ret;
+}
 
 
-  //****************************************************************************
+//****************************************************************************
 
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_arma_type_var<T1>::value
-				    && arma::is_Mat_only<T1>::value,
-				    arma::Mat< eT<T1> >
-				    >::type >
-    inline 
+template< typename T1, typename TR =
+         typename std::enable_if< is_arma_type_var<T1>::value
+                                  && arma::is_Mat_only<T1>::value,
+                                  arma::Mat< eT<T1> >
+                                  >::type >
+    inline
     TR randI(const arma::uword& m,
-	     const arma::uword& n,
-	     const arma::Col< arma::sword >& range = 
-	       { std::is_unsigned< pT<T1> >::value ? 
-		   0 : std::numeric_limits< arma::sword >::min(),
-		   std::numeric_limits< arma::sword >::max()})
-  {
-
+             const arma::uword& n,
+             const arma::Col< arma::sword >& range =
+             { std::is_unsigned< pT<T1> >::value ?
+                   0 : std::numeric_limits< arma::sword >::min(),
+                   std::numeric_limits< arma::sword >::max() }
+             ) {
 #ifndef QIC_LIB_NO_DEBUG
-    if( range.n_elem != 2)
-      throw Exception("qic::randI","Not proper range");
-    
-    if( std::is_unsigned< pT<T1> >::value && arma::any(range < 0) )
-      throw Exception("qic::randI","Negative range for unsigned type");
+  if ( range.n_elem != 2 )
+    throw Exception("qic::randI", "Not proper range");
+
+  if ( std::is_unsigned< pT<T1> >::value && arma::any(range < 0) )
+    throw Exception("qic::randI", "Negative range for unsigned type");
 #endif
-    
-    std::uniform_int_distribution< arma::sword > dis(range.at(0), range.at(1));
-    arma::Mat< eT<T1> > ret(m,n);
-    
-    if( std::is_same< eT<T1> ,pT<T1> >::value)
-      ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng));} );
-    else
-      {
-	auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
-	ret.imbue( [&](){return static_cast< pT<T1> >(dis(rdevs.rng)) 
-	      + I * static_cast< pT<T1> >(dis(rdevs.rng));} );
-      }
 
-    return ret;
+  std::uniform_int_distribution< arma::sword > dis(range.at(0), range.at(1));
+  arma::Mat< eT<T1> > ret(m, n);
+
+  if ( std::is_same< eT<T1>, pT<T1> >::value ) {
+    ret.imbue( [&dis](){return static_cast< pT<T1> >(dis(rdevs.rng));} );
+
+  } else {
+    auto& I = _internal::protect_subs::cond_I< eT<T1> >::value;
+    ret.imbue( [&dis, &I](){return static_cast< pT<T1> >(dis(rdevs.rng))
+            + I * static_cast< pT<T1> >(dis(rdevs.rng));});
   }
 
-
-  //****************************************************************************
-
-  template<typename T1, typename = 
-	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
-  inline 
-  arma::Mat< std::complex<T1> > randH(const arma::uword& m)	   
-  {
-
-    std::complex<T1> I = {0.0,1.0};
-    arma::Mat< std::complex<T1> > ret = 
-      2.0 * randU< arma::Mat< std::complex<T1> > >(m,m) - (1.0 + I) 
-      * arma::ones< arma::Mat< std::complex<T1> > >(m,m);
-
-    return ret + ret.t();
-  }
+  return ret;
+}
 
 
-  //****************************************************************************
-  
-  
-  inline arma::cx_mat randH(const arma::uword& m)	   
-  {
-    return randH<double>(m);
-  }
+//****************************************************************************
+
+template< typename T1, typename =
+         typename std::enable_if< is_floating_point_var<T1>::value >::type >
+inline
+arma::Mat< std::complex<T1> > randHermitian(const arma::uword& m
+                                            ) {
+  std::complex<T1> I = {0.0, 1.0};
+  arma::Mat< std::complex<T1> > ret =
+      2.0 * randU< arma::Mat< std::complex<T1> > >(m, m) - (1.0 + I)
+      * arma::ones< arma::Mat< std::complex<T1> > >(m, m);
+
+  return ret + ret.t();
+}
 
 
-  //****************************************************************************
-
-  template<typename T1, typename = 
-	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
-  inline 
-  arma::Col< std::complex<T1> > randPsi(const arma::uword& m)	   
-  {
-    auto ret = randN< arma::Col< std::complex<T1> > >(m);
-    return ret/arma::norm(ret);
-  }
+//****************************************************************************
 
 
-  //****************************************************************************
-  
-  inline arma::cx_vec randPsi(const arma::uword& m)	   
-  {
-    return randPsi<double>(m);
-  }
-
-  //****************************************************************************
-
-  template<typename T1, typename = 
-	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
-  inline 
-  arma::Mat< std::complex<T1> > randRho(const arma::uword& m)	   
-  {
-    arma::Mat< std::complex<T1> > ret = 10 * randH<T1>(m);
-    ret *= ret.t();
-    return ret/arma::trace(ret);
-  }
+inline arma::cx_mat randHermitian(const arma::uword& m
+                                  ) {
+  return randHermitian<double>(m);
+}
 
 
-  //****************************************************************************
-  
-  inline arma::cx_mat randRho(const arma::uword& m)	   
-  {
-    return randRho<double>(m);
-  }
+//****************************************************************************
+
+template< typename T1, typename =
+         typename std::enable_if< is_floating_point_var<T1>::value >::type >
+inline
+arma::Col< std::complex<T1> > randPsi(const arma::uword& m
+                                      ) {
+  auto ret = randN< arma::Col< std::complex<T1> > >(m);
+  return ret/arma::norm(ret);
+}
 
 
-  //****************************************************************************
+//****************************************************************************
 
-  
-  template<typename T1, typename = 
-	   typename std::enable_if< is_floating_point_var<T1>::value >::type >
-  inline 
-  arma::Mat< std::complex<T1> > randUnitary(const arma::uword& m)	   
-  {
-    arma::Mat< std::complex<T1> > A = 
-      randN< arma::Mat< std::complex<T1> > >(m,m) 
+
+inline arma::cx_vec randPsi(const arma::uword& m
+                            ) {
+  return randPsi<double>(m);
+}
+
+//****************************************************************************
+
+template< typename T1, typename =
+         typename std::enable_if< is_floating_point_var<T1>::value >::type >
+inline
+arma::Mat< std::complex<T1> > randRho(const arma::uword& m
+                                      ) {
+  arma::Mat< std::complex<T1> > ret = 10 * randHermitian<T1>(m);
+  ret *= ret.t();
+  return ret/arma::trace(ret);
+}
+
+
+//****************************************************************************
+
+inline arma::cx_mat randRho(const arma::uword& m
+                            ) {
+  return randRho<double>(m);
+}
+
+
+//****************************************************************************
+
+
+template< typename T1, typename =
+         typename std::enable_if< is_floating_point_var<T1>::value >::type >
+inline
+arma::Mat< std::complex<T1> > randUnitary(const arma::uword& m
+                                          ) {
+  arma::Mat< std::complex<T1> > A =
+      randN< arma::Mat< std::complex<T1> > >(m, m)
       * std::sqrt(static_cast<T1>(0.5));
 
-    arma::Mat< std::complex<T1> > Q,R;
-    arma::qr(Q,R,A);
+  arma::Mat< std::complex<T1> > Q, R;
+  arma::qr(Q, R, A);
 
-    arma::Col< std::complex<T1> > P = 
-      arma::conv_to< arma::Col< std::complex<T1> > 
-		     >::from(randU< arma::Col<T1> >(m));
+  arma::Col< std::complex<T1> > P =
+      arma::conv_to< arma::Col< std::complex<T1> >
+                     >::from(randU< arma::Col<T1> >(m));
 
-    std::complex<T1> I = {0.0,1.0};
-    auto& PI = arma::Datum<T1>::pi; 
-    for(auto& i : P)
-      i = std::exp( static_cast<T1>(2.) * PI * I * i);
+  std::complex<T1> I = {0.0, 1.0};
+  auto& PI = arma::Datum<T1>::pi;
+  for (auto& i : P)
+    i = std::exp(static_cast<T1>(2.) * PI * I * i);
 
-    return arma::diagmat(P) * Q ;
-    
-  }
-
-
-  //****************************************************************************
-  
-  inline arma::cx_mat randUnitary(const arma::uword& m)	   
-  {
-    return randUnitary<double>(m);
-  }
-
-
+  return arma::diagmat(P) * Q;
 }
+
+
+//****************************************************************************
+
+inline arma::cx_mat randUnitary(const arma::uword& m
+                                ) {
+  return randUnitary<double>(m);
+}
+
+
+}  // namespace qic

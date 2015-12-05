@@ -21,45 +21,41 @@
 
 
 
-namespace qic
-{
+namespace qic {
 
-  template<typename T1, typename =   
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,  
-				    void
-				    >::type>
-  inline 
-  bool is_pure(const T1& rho1, 
-	       bool check_norm = true,
-	       const pT<T1>& tol = _precision::eps< pT<T1> >::value)
-  {
-    const auto& rho = as_Mat(rho1);
-     
-    if( (rho.n_rows == 1) || (rho.n_cols == 1)  )
-      {      
-	if ( std::abs(arma::norm(rho)- 1) < tol || !check_norm)
-	  return true;
-	else 
-	  return false;
-      }
 
-    else if(!is_H(rho))
-      return false;
+template< typename T1, typename =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   void
+                                   >::type >
+inline
+bool is_pure(const T1& rho1,
+             bool check_norm = true,
+             const pT<T1>& tol = _precision::eps< pT<T1> >::value
+             ) {
+  const auto& rho = as_Mat(rho1);
 
-    else if(arma::rank(rho) != 1)
-      return false;
-
+  if ( (rho.n_rows == 1) || (rho.n_cols == 1) ) {
+    if ( std::abs(arma::norm(rho)- 1) < tol || !check_norm)
+      return true;
     else
-      {
-	if(std::abs(std::abs(arma::trace(rho))-1.0) 
-	   < tol 
-	   || !check_norm)
-	  return true;
-	else
-	  return false;
-      }
+      return false;
 
+  } else if ( !is_H(rho) ) {
+    return false;
+
+  } else if ( arma::rank(rho) != 1 ) {
+    return false;
+
+  } else {
+    if ( std::abs(std::abs(arma::trace(rho))-1.0 )
+         < tol
+         || !check_norm)
+      return true;
+    else
+      return false;
   }
-
 }
+
+}  // namespace qic
 

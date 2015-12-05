@@ -24,17 +24,16 @@
 #define _QIC_LIB_HPP
 
 
-
+#include<armadillo>
 #include<iostream>
 #include<iomanip>
 #include<cmath>
-#include<complex> 
+#include<complex>
 #include<stdexcept>
 #include<type_traits>
 #include<tuple>
 #include<random>
-#include<armadillo>
-
+#include<limits>
 
 #define QIC_LIB_NLOPT
 // Comment out the previous line, if you don't want to use
@@ -45,8 +44,8 @@
 
 #if (__GNUC__ && !__clang__)
 #define _QIC_UNUSED_  __attribute__ ((unused))
-#else 
-#define _QIC_UNUSED_ 
+#else
+#define _QIC_UNUSED_
 #endif
 
 #include "QIC_lib_bits/internal/first.hpp"
@@ -80,16 +79,16 @@
 #include "QIC_lib_bits/function/funcm.hpp"
 #include "QIC_lib_bits/function/tensor.hpp"
 #include "QIC_lib_bits/function/dsum.hpp"
-#include "QIC_lib_bits/function/absm.hpp" 
-#include "QIC_lib_bits/function/conv_to_pure.hpp" 
-#include "QIC_lib_bits/function/pauli.hpp" 
-#include "QIC_lib_bits/function/purify.hpp" 
-#include "QIC_lib_bits/function/generator.hpp" 
+#include "QIC_lib_bits/function/absm.hpp"
+#include "QIC_lib_bits/function/conv_to_pure.hpp"
+#include "QIC_lib_bits/function/pauli.hpp"
+#include "QIC_lib_bits/function/purify.hpp"
+#include "QIC_lib_bits/function/generator.hpp"
 
 
-#include "QIC_lib_bits/function/apply_ctrl.hpp" 
-#include "QIC_lib_bits/function/apply.hpp" 
-#include "QIC_lib_bits/function/measure.hpp" 
+#include "QIC_lib_bits/function/apply_ctrl.hpp"
+#include "QIC_lib_bits/function/apply.hpp"
+#include "QIC_lib_bits/function/measure.hpp"
 #include "QIC_lib_bits/function/entropy.hpp"
 #include "QIC_lib_bits/function/entanglement.hpp"
 #include "QIC_lib_bits/function/neg.hpp"

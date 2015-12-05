@@ -20,21 +20,20 @@
  */
 
 
-namespace qic
-{
+namespace qic {
 
-  //***************************************************************************
+//***************************************************************************
 
-  template <typename T1>
-  inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& m) noexcept
-  {return static_cast< const arma::Col<T1>& >(m);}
-  
-
-  //***************************************************************************
+template <typename T1>
+inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& m) noexcept
+{return static_cast< const arma::Col<T1>& >(m);}
 
 
-  template <typename T1>
-  inline const arma::Col<T1>& as_Col(const arma::Col<T1>& m) noexcept 
-  {return m;}
-  
-}
+//***************************************************************************
+
+
+template <typename T1>
+inline const arma::Col<T1>& as_Col(const arma::Col<T1>& m) noexcept
+{return m;}
+
+}  // namespace qic

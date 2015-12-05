@@ -21,70 +21,45 @@
 
 
 
-namespace qic
-{
+namespace qic {
 
-  template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
-				    || (is_arma_type_var<T1>::value
-				    && std::is_unsigned<T2>::value
-				    && std::is_integral<T2>::value), 
-				    typename _internal::protect_subs::
-				    powm_tag<T1,T2>::ret_type
-				    >::type>
-  inline 
-  TR powm_gen(const T1& rho1 ,const T2& P)
-  {
-    return _internal::protect_subs::
-      powm_gen_implement(rho1,P,
-			 typename _internal::
-			 protect_subs::powm_tag<T1,T2>::type{});
-  }
+template< typename T1, typename T2, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value
+                                   || (is_arma_type_var<T1>::value
+                                       && std::is_unsigned<T2>::value
+                                       && std::is_integral<T2>::value),
+    typename _internal::protect_subs::
+    powm_tag<T1, T2>::ret_type
+    >::type >
 
-
-
-
-
-  template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value
-				    || (is_arma_type_var<T1>::value
-				    && std::is_unsigned<T2>::value
-				    && std::is_integral<T2>::value), 
-				    typename _internal::protect_subs::
-				    powm_tag<T1,T2>::ret_type
-				    >::type>
-  inline 
-  TR powm_sym(const T1& rho1 ,const T2& P)
-  {
-    return _internal::protect_subs::
-      powm_sym_implement(rho1,P,
-			 typename _internal::
-			 protect_subs::powm_tag<T1,T2>::type{});
-  }
-
-
-  /*
-
-  template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_arma_type_var<T1>::value
-				    && std::is_unsigned<T2>::value
-				    && std::is_integral<T2>::value,
-				    arma::Mat< eT<T1> >
-				    >::type>
-  inline 
-  TR powm_uword(const T1& rho1 ,const T2& P)
-  {
-    const auto& rho = as_Mat(rho1);
-    
-#ifndef QIC_LIB_NO_DEBUG  
-    if(rho.n_elem == 0)
-      throw Exception("qic::powm_uword",Exception::type::ZERO_SIZE);
-    
-    if(rho.n_rows != rho.n_cols)
-      throw Exception("qic::powm_uword",Exception::type::MATRIX_NOT_SQUARE);
-#endif
-    return _internal::protect_subs::POWM_GEN_INT(rho,P); 
-  }
-  */
-
+    inline
+    TR powm_gen(const T1& rho1, const T2& P
+                ) {
+  return _internal::protect_subs::
+      powm_gen_implement(rho1, P,
+                         typename _internal::
+                         protect_subs::powm_tag<T1, T2>::type{});
 }
+
+
+
+
+
+template< typename T1, typename T2, typename TR =
+         typename std::enable_if< is_floating_point_var< pT<T1> >::value
+                                  || (is_arma_type_var<T1>::value
+                                      && std::is_unsigned<T2>::value
+                                      && std::is_integral<T2>::value),
+    typename _internal::protect_subs::
+    powm_tag<T1, T2>::ret_type
+    >::type>
+    inline
+    TR powm_sym(const T1& rho1, const T2& P
+                ) {
+  return _internal::protect_subs::
+      powm_sym_implement(rho1, P,
+                         typename _internal::
+                         protect_subs::powm_tag<T1, T2>::type{});
+}
+
+}  // namespace qic

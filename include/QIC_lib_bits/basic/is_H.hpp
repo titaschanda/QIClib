@@ -21,38 +21,37 @@
 
 
 
-namespace qic
-{
+namespace qic {
 
-  template<typename T1, typename =   
-	   typename std::enable_if< is_arma_type_var<T1>::value, 
-				    void 
-				    >::type>
-  inline 
-  bool is_H(const T1& rho1, 
-	    const pT<T1>& atol = 1.0e-2 * _precision::eps< pT<T1> >::value, 
-	    const pT<T1>& rtol = 10 * _precision::eps< pT<T1> >::value)
-  {
-    const auto& rho = as_Mat(rho1);
-    
-    const arma::uword n = rho.n_rows;
-    const arma::uword m = rho.n_cols;
-   
-    if(n!=m)
-      return false;
-    
-    else
-      {
-	return  
-	  arma::all(arma::vectorise((atol 
-				     * arma::ones< arma::Mat< pT<T1> > >(n,m) 
-				     + rtol  
-				     * arma::abs(rho)) 
-				    - arma::abs(rho-rho.t())) >  0.0);
-      }
+template< typename T1, typename =
+          typename std::enable_if< is_arma_type_var<T1>::value,
+                                   void
+                                   >::type >
+inline
+bool is_H(const T1& rho1,
+          const pT<T1>& atol =  _precision::eps< pT<T1> >::value,
+          const pT<T1>& rtol = 10 * _precision::eps< pT<T1> >::value
+          )  {
+  const auto& rho = as_Mat(rho1);
+
+  const arma::uword n = rho.n_rows;
+  const arma::uword m = rho.n_cols;
+
+  if ( n != m ) {
+    return false;
+
+  } else {
+    return
+        arma::all(arma::vectorise(
+            (atol
+             * arma::ones< arma::Mat< pT<T1> > >(n, m)
+             + rtol
+             * arma::abs(rho))
+            - arma::abs(rho-rho.t())) >  0.0);
   }
-
-
 }
+
+
+}  // namespace qic
 
 
