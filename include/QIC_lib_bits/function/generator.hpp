@@ -21,121 +21,116 @@
 
 
 
-namespace qic
-{
+namespace qic {
 
-  template<typename T1>
-  inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim)
-  {
-    arma::uword m = mask.n_elem;
-    arma::uword D = arma::prod(dim);
-    
+template<typename T1>
+inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim
+                          ) {
+  arma::uword m = mask.n_elem;
+  arma::uword D = arma::prod(dim);
+
 #ifndef QIC_LIB_NO_DEBUG
-    if(m == 0)
-      throw Exception("qic::mket", Exception::type::ZERO_SIZE);
-    
-    if (dim.n_elem ==0 || D == 0)
-      throw Exception("qic::mket", Exception::type::INVALID_DIMS);
-    
-    if (m != dim.n_elem)
+  if ( m == 0 )
+    throw Exception("qic::mket", Exception::type::ZERO_SIZE);
+
+  if ( dim.n_elem ==0 || D == 0 )
+    throw Exception("qic::mket", Exception::type::INVALID_DIMS);
+
+  if ( m != dim.n_elem )
+    throw Exception("qic::mket", Exception::type::SUBSYS_MISMATCH_DIMS);
+
+  for ( arma::uword i = 0 ; i < m ; ++i )
+    if ( mask.at(i) >= dim.at(i) )
       throw Exception("qic::mket", Exception::type::SUBSYS_MISMATCH_DIMS);
-   
-    for (arma::uword i = 0 ; i < m ; ++i)
-      if (mask.at(i) >= dim.at(i))
-	throw Exception("qic::mket",Exception::type::SUBSYS_MISMATCH_DIMS);
 #endif
 
-    arma::uvec product = arma::ones<arma::uvec>(m);
-    for(arma::sword i = m-2 ; i >= 0 ; --i)
-      product.at(i)=product.at(i+1)*dim.at(i+1);
-    
-    product %= mask;
-    
-    arma::Col<T1> ret = arma::zeros< arma::Col<T1> >(D);
-    ret.at(arma::sum(product)) = static_cast<T1>(1);
-    return ret;
-      
-  }
+  arma::uvec product = arma::ones<arma::uvec>(m);
+  for ( arma::sword i = m-2 ; i >= 0 ; --i )
+    product.at(i) = product.at(i+1) * dim.at(i+1);
 
-  inline arma::cx_vec mket(const arma::uvec& mask, const arma::uvec& dim)
-  {
-    return mket<arma::cx_double>(mask,dim);
-  }
+  product %= mask;
 
-
-  template<typename T1>
-  inline arma::Col<T1> mket(const arma::uvec& mask, arma::uword d = 2)
-  {
-    arma::uvec dim(mask.n_elem);
-    dim.fill(d);
-    return mket<T1>(mask,dim);
-  }
-
-
-  inline arma::cx_vec mket(const arma::uvec& mask, arma::uword d = 2)
-  {
-    arma::uvec dim(mask.n_elem);
-    dim.fill(d);
-    return mket<arma::cx_double>(mask,dim);
-  }
-
-
-  template<typename T1>
-  inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim)
-  {
-    arma::uword m = mask.n_elem;
-    arma::uword D = arma::prod(dim);
-    
-#ifndef QIC_LIB_NO_DEBUG
-    if(m == 0)
-      throw Exception("qic::mproj", Exception::type::ZERO_SIZE);
-    
-    if (dim.n_elem ==0 || D == 0)
-      throw Exception("qic::mproj", Exception::type::INVALID_DIMS);
-    
-    if (m != dim.n_elem)
-      throw Exception("qic::mproj", Exception::type::SUBSYS_MISMATCH_DIMS);
-   
-    for (arma::uword i = 0 ; i < m ; ++i)
-      if (mask.at(i) >= dim.at(i))
-	throw Exception("qic::mproj",Exception::type::SUBSYS_MISMATCH_DIMS);
-#endif
-
-    arma::uvec product = arma::ones<arma::uvec>(m);
-    for(arma::sword i = m-2 ; i >= 0 ; --i)
-      product.at(i)=product.at(i+1)*dim.at(i+1);
-    
-    product %= mask;
-    
-    arma::Mat<T1> ret = arma::zeros< arma::Mat<T1> >(D,D);
-    arma::uword pos = arma::sum(product);
-    ret.at(pos,pos) = static_cast<T1>(1);
-    return ret;
-      
-  }
-
-  inline arma::cx_mat mproj(const arma::uvec& mask, const arma::uvec& dim)
-  {
-    return mproj<arma::cx_double>(mask,dim);
-  }
-
-
-  template<typename T1>
-  inline arma::Mat<T1> mproj(const arma::uvec& mask, arma::uword d = 2)
-  {
-    arma::uvec dim(mask.n_elem);
-    dim.fill(d);
-    return mproj<T1>(mask,dim);
-  }
-
-  inline arma::cx_mat mproj(const arma::uvec& mask, arma::uword d = 2)
-  {
-    arma::uvec dim(mask.n_elem);
-    dim.fill(d);
-    return mproj<arma::cx_double>(mask,dim);
-  }
-
-
-
-
+  arma::Col<T1> ret = arma::zeros< arma::Col<T1> >(D);
+  ret.at(arma::sum(product)) = static_cast<T1>(1);
+  return ret;
 }
+
+inline arma::cx_vec mket(const arma::uvec& mask, const arma::uvec& dim
+                         ) {
+  return mket<arma::cx_double>(mask, dim);
+}
+
+
+template<typename T1>
+inline arma::Col<T1> mket(const arma::uvec& mask, arma::uword d = 2
+                          ) {
+  arma::uvec dim(mask.n_elem);
+  dim.fill(d);
+  return mket<T1>(mask, dim);
+}
+
+
+inline arma::cx_vec mket(const arma::uvec& mask, arma::uword d = 2
+                         ) {
+  arma::uvec dim(mask.n_elem);
+  dim.fill(d);
+  return mket<arma::cx_double>(mask, dim);
+}
+
+
+template<typename T1>
+inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim
+                           ) {
+  arma::uword m = mask.n_elem;
+  arma::uword D = arma::prod(dim);
+
+#ifndef QIC_LIB_NO_DEBUG
+  if ( m == 0 )
+    throw Exception("qic::mproj", Exception::type::ZERO_SIZE);
+
+  if (dim.n_elem ==0 || D == 0)
+    throw Exception("qic::mproj", Exception::type::INVALID_DIMS);
+
+  if (m != dim.n_elem)
+    throw Exception("qic::mproj", Exception::type::SUBSYS_MISMATCH_DIMS);
+
+  for ( arma::uword i = 0 ; i < m ; ++i )
+    if ( mask.at(i) >= dim.at(i) )
+      throw Exception("qic::mproj", Exception::type::SUBSYS_MISMATCH_DIMS);
+#endif
+
+  arma::uvec product = arma::ones<arma::uvec>(m);
+  for ( arma::sword i = m-2 ; i >= 0 ; --i )
+    product.at(i) = product.at(i+1) * dim.at(i+1);
+
+  product %= mask;
+
+  arma::Mat<T1> ret = arma::zeros< arma::Mat<T1> >(D, D);
+  arma::uword pos = arma::sum(product);
+  ret.at(pos, pos) = static_cast<T1>(1);
+  return ret;
+}
+
+inline arma::cx_mat mproj(const arma::uvec& mask, const arma::uvec& dim
+                          ) {
+  return mproj<arma::cx_double>(mask, dim);
+}
+
+
+template<typename T1>
+inline arma::Mat<T1> mproj(const arma::uvec& mask, arma::uword d = 2
+                           ) {
+  arma::uvec dim(mask.n_elem);
+  dim.fill(d);
+  return mproj<T1>(mask, dim);
+}
+
+inline arma::cx_mat mproj(const arma::uvec& mask, arma::uword d = 2
+                          ) {
+  arma::uvec dim(mask.n_elem);
+  dim.fill(d);
+  return mproj<arma::cx_double>(mask, dim);
+}
+
+
+}  // namespace qic

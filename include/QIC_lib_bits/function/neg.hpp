@@ -21,137 +21,126 @@
 
 
 
-namespace qic
-{
+namespace qic {
 
-  template<typename T1, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    pT<T1> 
-				    >::type >
-  inline 
-  TR neg(const T1& rho1,
-	 arma::uvec sys, 
-	 arma::uvec dim)
-  {
-    const auto& p = as_Mat(rho1);
+template< typename T1, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   pT<T1>
+                                   >::type >
+inline
+TR neg(const T1& rho1,
+       arma::uvec sys,
+       arma::uvec dim
+       ) {
+  const auto& p = as_Mat(rho1);
 
-    bool checkV = true;
-    if(p.n_cols == 1)
-      checkV = false;
+  bool checkV = true;
+  if ( p.n_cols == 1 )
+    checkV = false;
 
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(p.n_elem == 0)
-      throw Exception("qic::neg",Exception::type::ZERO_SIZE);
-    
-    if(checkV)
-      if(p.n_rows!=p.n_cols)
-	throw Exception("qic::neg",
-			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-      
-    if( dim.n_elem == 0 || arma::any(dim == 0))
-      throw Exception("qic::neg",Exception::type::INVALID_DIMS);
-      
-    if( arma::prod(dim)!= p.n_rows)
-      throw Exception("qic::neg",Exception::type::DIMS_MISMATCH_MATRIX);
+  if ( p.n_elem == 0 )
+    throw Exception("qic::neg", Exception::type::ZERO_SIZE);
 
-    if(dim.n_elem < sys.n_elem || arma::any(sys == 0) 
-       || arma::any(sys > dim.n_elem)  
-       || sys.n_elem != arma::find_unique(sys,false).eval().n_elem)
-      throw Exception("qic::neg",Exception::type::INVALID_SUBSYS);
+  if ( checkV )
+    if ( p.n_rows != p.n_cols )
+      throw Exception("qic::neg",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if ( dim.n_elem == 0 || arma::any(dim == 0) )
+    throw Exception("qic::neg", Exception::type::INVALID_DIMS);
+
+  if ( arma::prod(dim)!= p.n_rows )
+    throw Exception("qic::neg", Exception::type::DIMS_MISMATCH_MATRIX);
+
+  if ( dim.n_elem < sys.n_elem || arma::any(sys == 0)
+       || arma::any(sys > dim.n_elem)
+       || sys.n_elem != arma::find_unique(sys, false).eval().n_elem )
+    throw Exception("qic::neg", Exception::type::INVALID_SUBSYS);
 
 #endif
 
-    auto rho_T = Tx(p,std::move(sys),std::move(dim));
-    auto eigval = arma::eig_sym(rho_T);
-    pT<T1> Neg = 0.0;
-    
-    for(const auto& i : eigval )
-      Neg += (std::abs(i) >= _precision::eps< pT<T1> >::value ) ?  
-	0.5*( std::abs(i)-i) : 0 ;
-    return Neg;
-  }
-    
+  auto rho_T = Tx(p, std::move(sys), std::move(dim));
+  auto eigval = arma::eig_sym(rho_T);
+  pT<T1> Neg = 0.0;
 
-
-
-
-  
-  template<typename T1, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    pT<T1> 
-				    >::type >
-  inline 
-  TR log_neg(const T1& rho1, 
-	     arma::uvec sys, 
-	     arma::uvec dim)
-  {
-    return std::log2(2.0*neg(rho1,std::move(sys),std::move(dim))+1.0);
-  }
-  
+  for ( const auto& i : eigval )
+    Neg += (std::abs(i) >= _precision::eps< pT<T1> >::value) ?
+        0.5 * (std::abs(i)-i) : 0;
+  return Neg;
+}
 
 
 
 
 
+template< typename T1, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   pT<T1>
+                                   >::type >
+inline
+TR log_neg(const T1& rho1,
+           arma::uvec sys,
+           arma::uvec dim
+           ) {
+  return std::log2(2.0 * neg(rho1, std::move(sys), std::move(dim)) + 1.0);
+}
 
 
-  template<typename T1, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    pT<T1> 
-				    >::type >
-  inline 
-  TR neg(const T1& rho1,
-	 arma::uvec sys,
-	 arma::uword dim = 2)
-  {
-      
-    const auto& p = as_Mat(rho1); 
-    
-    bool checkV = true;
-    if(p.n_cols == 1)
-      checkV = false;
+
+
+template< typename T1, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   pT<T1>
+                                   >::type >
+inline
+TR neg(const T1& rho1,
+       arma::uvec sys,
+       arma::uword dim = 2
+       ) {
+  const auto& p = as_Mat(rho1);
+
+  bool checkV = true;
+  if ( p.n_cols == 1 )
+    checkV = false;
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(p.n_elem == 0)
-      throw Exception("qic::neg",Exception::type::ZERO_SIZE);
+  if ( p.n_elem == 0 )
+    throw Exception("qic::neg", Exception::type::ZERO_SIZE);
 
-    if(checkV)
-      if(p.n_rows!=p.n_cols)
-	throw Exception("qic::neg",
-			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    
-    if(dim == 0)
-      throw Exception("qic::neg",Exception::type::INVALID_DIMS);
+  if ( checkV )
+    if ( p.n_rows != p.n_cols )
+      throw Exception("qic::neg",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if ( dim == 0 )
+    throw Exception("qic::neg", Exception::type::INVALID_DIMS);
 #endif
 
-  
-    arma::uword n = static_cast<arma::uword>
+
+  arma::uword n = static_cast<arma::uword>
       (std::llround(std::log(p.n_rows) / std::log(dim)));
 
-    arma::uvec dim2 = dim * arma::ones<arma::uvec>(n);
-    return neg(rho1,std::move(sys),std::move(dim2));
-
-  }
-
-
-
-
-
-
-  template<typename T1, typename TR =  
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    pT<T1> 
-				    >::type >
-  inline 
-  TR log_neg(const T1& rho1, 
-	     arma::uvec sys, 
-	     arma::uword dim = 2)
-  {
-    return std::log2(2.0*neg(rho1,std::move(sys),dim)+1.0);
-  }
-  
-
+  arma::uvec dim2 = dim * arma::ones<arma::uvec>(n);
+  return neg(rho1, std::move(sys), std::move(dim2));
 }
+
+
+
+
+template< typename T1, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   pT<T1>
+                                   >::type >
+inline
+TR log_neg(const T1& rho1,
+           arma::uvec sys,
+           arma::uword dim = 2
+           ) {
+  return std::log2(2.0 * neg(rho1, std::move(sys), dim) + 1.0);
+}
+
+}  // namespace qic
 
 

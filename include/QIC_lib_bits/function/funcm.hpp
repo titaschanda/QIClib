@@ -21,104 +21,135 @@
 
 
 
-namespace qic
-{
+namespace qic {
 
-  template<typename T1, typename functor, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    arma::Mat< std::complex< pT<T1> > >
-				    >::type >
-  inline 
-  TR funcm_sym(const T1& rho1, 
-	       functor P)
-  {
-    const auto& rho = as_Mat(rho1);
+template< typename T1, typename functor, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   arma::Mat< std::complex< pT<T1> > >
+                                   >::type >
+inline
+TR funcm_sym(const T1& rho1,
+             functor P
+             ) {
+  const auto& rho = as_Mat(rho1);
 
-#ifndef QIC_LIB_NO_DEBUG    
-    if(rho.n_elem == 0)
-      throw Exception("qic::funcm_sym",Exception::type::ZERO_SIZE);
-    
-    if(rho.n_rows!=rho.n_cols)
-      throw Exception("qic::funcm_sym",Exception::type::MATRIX_NOT_SQUARE);
+#ifndef QIC_LIB_NO_DEBUG
+  if ( rho.n_elem == 0 )
+    throw Exception("qic::funcm_sym", Exception::type::ZERO_SIZE);
+
+  if ( rho.n_rows != rho.n_cols )
+    throw Exception("qic::funcm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-       
-    arma::Col< pT<T1> > eigval;
-    arma::Mat< eT<T1> > eigvec;
-    
-    if(rho.n_rows > 20)
-      arma::eig_sym(eigval,eigvec,rho,"dc");
-    else
-      arma::eig_sym(eigval,eigvec,rho,"std");
-    
 
-    return 
+  arma::Col< pT<T1> > eigval;
+  arma::Mat< eT<T1> > eigvec;
+
+  if ( rho.n_rows > 20 )
+    arma::eig_sym(eigval, eigvec, rho, "dc");
+  else
+    arma::eig_sym(eigval, eigvec, rho, "std");
+
+  return
       eigvec
-      * arma::diagmat(arma::conv_to< 
-		      arma::Col < 
-		      std::complex< pT<T1> > 
-		      > >::from(eigval).transform(P))
+      * arma::diagmat(arma::conv_to<
+                      arma::Col<
+                      std::complex< pT<T1> >
+                      > >::from(eigval).transform(P))
       * eigvec.t();
-  }
- 
+}
 
 
-  template<typename T1, typename functor, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    arma::Mat<std::complex< pT<T1> > > 
-				    >::type >
-  inline 
-  TR funcm_gen(const T1& rho1, 
-	       functor P)
-  {
-    const auto& rho = as_Mat(rho1);
 
-#ifndef QIC_LIB_NO_DEBUG    
-    if(rho.n_elem == 0)
-      throw Exception("qic::funcm_gen",Exception::type::ZERO_SIZE);
-    
-    if(rho.n_rows!=rho.n_cols)
-      throw Exception("qic::funcm_gen",Exception::type::MATRIX_NOT_SQUARE);
+template< typename T1, typename functor, typename TR =
+          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                   arma::Mat<std::complex< pT<T1> > >
+                                   >::type >
+inline
+TR funcm_gen(const T1& rho1,
+             functor P
+             ) {
+  const auto& rho = as_Mat(rho1);
+
+#ifndef QIC_LIB_NO_DEBUG
+  if ( rho.n_elem == 0 )
+    throw Exception("qic::funcm_gen", Exception::type::ZERO_SIZE);
+
+  if ( rho.n_rows != rho.n_cols )
+    throw Exception("qic::funcm_gen", Exception::type::MATRIX_NOT_SQUARE);
 #endif
-   
-    arma::Col< std::complex< pT<T1> > > eigval;
-    arma::Mat< std::complex< pT<T1> > > eigvec;
-    arma::eig_gen(eigval,eigvec,rho);
-    
-    return eigvec * arma::diagmat(eigval.transform(P)) * eigvec.t();
-  }
- 
 
-  template<typename pT>
-  struct Func
-  {
-    static constexpr inline std::complex<pT> sin(const std::complex<pT>& a) noexcept {return std::sin(a);}
-    static constexpr inline std::complex<pT> cos(const std::complex<pT>& a) noexcept {return std::cos(a);}
-    static constexpr inline std::complex<pT> tan(const std::complex<pT>& a) noexcept {return std::tan(a);}
-    
-    static constexpr inline std::complex<pT> asin(const std::complex<pT>& a) noexcept {return std::asin(a);}
-    static constexpr inline std::complex<pT> acos(const std::complex<pT>& a) noexcept {return std::acos(a);}
-    static constexpr inline std::complex<pT> atan(const std::complex<pT>& a) noexcept {return std::atan(a);}
-    
-    static constexpr inline std::complex<pT> sinh(const std::complex<pT>& a) noexcept {return std::sinh(a);}
-    static constexpr inline std::complex<pT> cosh(const std::complex<pT>& a) noexcept {return std::cosh(a);}
-    static constexpr inline std::complex<pT> tanh(const std::complex<pT>& a) noexcept {return std::tanh(a);}
-    
-    static constexpr inline std::complex<pT> asinh(const std::complex<pT>& a) noexcept {return std::asinh(a);}
-    static constexpr inline std::complex<pT> acosh(const std::complex<pT>& a) noexcept {return std::acosh(a);}
-    static constexpr inline std::complex<pT> atanh(const std::complex<pT>& a) noexcept {return std::atanh(a);}
-    
-    static constexpr inline std::complex<pT> sqrt(const std::complex<pT>& a) noexcept {return std::sqrt(a);}
-    static constexpr inline std::complex<pT> log(const std::complex<pT>& a) noexcept {return std::log(a);}
-    static constexpr inline std::complex<pT> log2(const std::complex<pT>& a) noexcept {return std::log2(a);}
-    
-    static constexpr inline std::complex<pT> norm(const std::complex<pT>& a) noexcept {return std::norm(a);}
-    static constexpr inline std::complex<pT> real(const std::complex<pT>& a) noexcept {return std::real(a);}
-    static constexpr inline std::complex<pT> imag(const std::complex<pT>& a) noexcept {return std::imag(a);}
-    
-   
-  };
+  arma::Col< std::complex< pT<T1> > > eigval;
+  arma::Mat< std::complex< pT<T1> > > eigvec;
+  arma::eig_gen(eigval, eigvec, rho);
 
-  using func = Func<double>; 
-  using funcf = Func<float>;
-} 
+  return eigvec * arma::diagmat(eigval.transform(P)) * eigvec.t();
+}
+
+
+template<typename pT>
+struct Func {
+  static constexpr inline std::complex<pT>
+  sin(const std::complex<pT>& a) noexcept {return std::sin(a);}
+
+  static constexpr inline std::complex<pT>
+  cos(const std::complex<pT>& a) noexcept {return std::cos(a);}
+
+  static constexpr inline std::complex<pT>
+  tan(const std::complex<pT>& a) noexcept {return std::tan(a);}
+
+
+  static constexpr inline std::complex<pT>
+  asin(const std::complex<pT>& a) noexcept {return std::asin(a);}
+
+  static constexpr inline std::complex<pT>
+  acos(const std::complex<pT>& a) noexcept {return std::acos(a);}
+
+  static constexpr inline std::complex<pT>
+  atan(const std::complex<pT>& a) noexcept {return std::atan(a);}
+
+
+  static constexpr inline std::complex<pT>
+  sinh(const std::complex<pT>& a) noexcept {return std::sinh(a);}
+
+  static constexpr inline std::complex<pT>
+  cosh(const std::complex<pT>& a) noexcept {return std::cosh(a);}
+
+  static constexpr inline std::complex<pT>
+  tanh(const std::complex<pT>& a) noexcept {return std::tanh(a);}
+
+
+  static constexpr inline std::complex<pT>
+  asinh(const std::complex<pT>& a) noexcept {return std::asinh(a);}
+
+  static constexpr inline std::complex<pT>
+  acosh(const std::complex<pT>& a) noexcept {return std::acosh(a);}
+
+  static constexpr inline std::complex<pT>
+  atanh(const std::complex<pT>& a) noexcept {return std::atanh(a);}
+
+
+  static constexpr inline std::complex<pT>
+  sqrt(const std::complex<pT>& a) noexcept {return std::sqrt(a);}
+
+  static constexpr inline std::complex<pT>
+  log(const std::complex<pT>& a) noexcept {return std::log(a);}
+
+  static constexpr inline std::complex<pT>
+  log2(const std::complex<pT>& a) noexcept {return std::log2(a);}
+
+  static constexpr inline std::complex<pT>
+  norm(const std::complex<pT>& a) noexcept {return std::norm(a);}
+
+  static constexpr inline std::complex<pT>
+  real(const std::complex<pT>& a) noexcept {return std::real(a);}
+
+  static constexpr inline std::complex<pT>
+  imag(const std::complex<pT>& a) noexcept {return std::imag(a);}
+};
+
+using func = Func<double>;
+using funcf = Func<float>;
+
+
+}  // namespace qic

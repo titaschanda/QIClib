@@ -24,8 +24,8 @@ namespace qic {
 
 template< typename T1, typename TR =
           typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-                                  pT<T1>
-                                  >::type >
+                                   pT<T1>
+                                   >::type >
 inline
 TR schatten(const T1& rho1, pT<T1> p
             ) {
