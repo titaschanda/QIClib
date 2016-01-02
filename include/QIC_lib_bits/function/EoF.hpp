@@ -21,52 +21,49 @@
 
 
 
-namespace qic 
-{
+namespace qic {
 
-  template<typename T1, typename TR = 
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    pT<T1> 
-				    >::type >
-  inline 
-  TR EoF(const T1& rho1)
-  {
-    const auto& p = as_Mat(rho1); 
+template<typename T1, typename TR =
+         typename std::enable_if< is_floating_point_var< pT<T1> >::value,
+                                  pT<T1>
+                                  >::type >
+inline
+TR EoF(const T1& rho1
+       ) {
+  const auto& p = as_Mat(rho1);
 
-    bool checkV = true;
-    if(p.n_cols == 1)
-      checkV = false;
+  bool checkV = true;
+
+  if ( p.n_cols == 1 )
+    checkV = false;
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(p.n_elem == 0)
-      throw Exception("qic::EoF",Exception::type::ZERO_SIZE);
+  if ( p.n_elem == 0 )
+    throw Exception("qic::EoF", Exception::type::ZERO_SIZE);
 
-    if(checkV)
-      if(p.n_rows!=p.n_cols)
-	throw Exception("qic::EoF",
-			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    
-    if (p.n_rows != 4)
-      throw Exception("qic::EoF",Exception::type::NOT_QUBIT_SUBSYS);
+  if ( checkV )
+    if ( p.n_rows != p.n_cols )
+      throw Exception("qic::EoF",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if ( p.n_rows != 4 )
+    throw Exception("qic::EoF", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-    if(!checkV)
-      return entanglement(p,{2,2});
+  if ( !checkV ) {
+    return entanglement(p, {2, 2});
 
-    else
-      {
-	pT<T1> ret = 0.5*(1.0 + std::sqrt(1.0 - std::pow(concurrence(p),2.0))) ;
-	pT<T1> ret2(0.0);
-	if(ret > _precision::eps< pT<T1> >::value )
-	  ret2 -= ret*std::log2(ret);
-	if(1.0-ret > _precision::eps< pT<T1> >::value )
-	  ret2 -= (1.0-ret)*std::log2(1.0-ret);
-	return ret2;
-      }
+  } else {
+    pT<T1> ret = 0.5 * (1.0 + std::sqrt(1.0 - std::pow(concurrence(p), 2.0)));
+    pT<T1> ret2(0.0);
+    if ( ret > _precision::eps< pT<T1> >::value )
+      ret2 -= ret*std::log2(ret);
+    if ( 1.0-ret > _precision::eps< pT<T1> >::value )
+      ret2 -= (1.0-ret)*std::log2(1.0-ret);
+    return ret2;
   }
-    
-  
- 
 }
+
+}   // namespace qic
 
 
