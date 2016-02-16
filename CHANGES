@@ -23,6 +23,8 @@ Version 0.0.4 - Development Branch
 
     - in is_H, default atol = 1e-2 * _precision::eps< POD_TYPE >::value 
     and rtol = 10 * _precision::eps< POD_TYPE >::value
+    
     - in is_equal, default atol = 1e-2 * _precision::eps< POD_TYPE >::value 
     and rtol = 10 * _precision::eps< POD_TYPE >::value
+    
     - added purify
