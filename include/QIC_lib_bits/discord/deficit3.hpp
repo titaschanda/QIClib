@@ -198,7 +198,7 @@ namespace qic
 
 
 #ifndef QIC_LIB_NO_DEBUG
-      if(rho.n_elems == 0)
+      if(rho.n_elem == 0)
 	throw Exception("qic::deficit3", Exception::type::ZERO_SIZE);
 
       if(rho.n_rows!=rho.n_cols)
