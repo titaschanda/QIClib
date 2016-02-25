@@ -43,6 +43,7 @@
 
 
 #if (__GNUC__ && !__clang__)
+
 #define _QIC_UNUSED_  __attribute__ ((unused))
 #else
 #define _QIC_UNUSED_
