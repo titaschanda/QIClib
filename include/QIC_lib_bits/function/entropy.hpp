@@ -290,9 +290,8 @@ TR tsallis(const T1& rho1,
   if ( !checkV ) {
     return 0;
 
-  } else {
-    if ( std::abs(alpha - 1) < _precision::eps< pT<T1> >::value )
-      return std::log(2.0)*entropy(std::forward<T1>(rho));
+  } else if ( std::abs(alpha - 1) < _precision::eps< pT<T1> >::value ) {
+    return std::log(2.0)*entropy(std::forward<T1>(rho));
 
   } else {
     auto eig = arma::eig_sym(rho);
@@ -367,8 +366,8 @@ template< typename T1, typename T2, typename TR =
 
 template< typename T1, typename T2, typename TR =
           typename std::enable_if < std::is_arithmetic<T1>::value
-                                   && std::is_arithmetic<T2>::value,
-                                   T1 >::type >
+                                    && std::is_arithmetic<T2>::value,
+                                    T1 >::type >
     inline
     TR tsallis_prob(const std::initializer_list<T1>& prob1,
                     const T2& alpha

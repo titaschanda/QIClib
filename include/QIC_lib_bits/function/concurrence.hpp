@@ -46,7 +46,7 @@ TR concurrence(const T1& rho1
                     Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-  auto& S2 = STATES< pT<T1> >::get_instance().S.at(2);
+  auto& S2 = SPM< pT<T1> >::get_instance().S.at(2);
 
   typename arma::Mat< std::complex< pT<T1> > >::template fixed<4, 4> pbar =
       p * arma::kron(S2, S2) * arma::conj(p) * arma::kron(S2, S2);

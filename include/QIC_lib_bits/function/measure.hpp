@@ -90,10 +90,6 @@ template< typename T1, typename T2, typename TR =
   arma::Col< pT<T1> > prob(Ks.size());
   arma::field< mattype > outstates(Ks.size());
 
-  if ( checkV )
-    outstates.fill(arma::zeros<mattype>(rho.n_rows, rho.n_cols));
-  else
-    outstates.fill(arma::zeros<mattype>(1, rho.n_cols));
 
   if ( checkV ) {
     for ( arma::uword i = 0 ; i < Ks.size() ; ++i ) {
@@ -223,11 +219,6 @@ template< typename T1, typename T2, typename TR =
   arma::Col< pT<T1> > prob(Ks.n_elem);
   arma::field< mattype > outstates(Ks.n_elem);
 
-  if ( checkV )
-    outstates.fill(arma::zeros<mattype>(rho.n_rows, rho.n_cols));
-  else
-    outstates.fill(arma::zeros<mattype>(1, rho.n_cols));
-
 
   if ( checkV ) {
     for ( arma::uword i = 0 ; i < Ks.n_elem ; ++i ) {
@@ -315,14 +306,8 @@ template< typename T1, typename T2, typename TR =
 
   using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
 
-  arma::Col< pT<T1> > prob(U.n_cols);
+  arma::Col< pT<T1> > prob = arma::zeros< arma::Col< pT<T1> > >(U.n_cols);
   arma::field< mattype > outstates(U.n_cols);
-
-  if ( checkV )
-    outstates.fill(arma::zeros<mattype>(rho.n_rows, rho.n_cols));
-  else
-    outstates.fill(arma::zeros<mattype>(1, rho.n_cols));
-
 
   if ( checkV ) {
     for ( arma::uword i = 0 ; i < U.n_cols ; ++i ) {
@@ -385,7 +370,7 @@ template< typename T1, typename T2, typename TR =
 
   arma::uword D = arma::prod(dim);
   arma::uword Dsys = arma::prod(dim(sys-1));
-  arma::uword Dsysbar = D/Dsys;
+  arma::uword Dsysbar = D / Dsys;
 
 
 #ifndef QIC_LIB_NO_DEBUG
@@ -435,19 +420,19 @@ template< typename T1, typename T2, typename TR =
   arma::Col< pT<T1> > prob(Ks.size());
   arma::field< mattype > outstates(Ks.size());
 
-  outstates.fill(arma::zeros<mattype>(Dsysbar, Dsysbar));
-
   for ( arma::uword i = 0 ; i < Ks.size() ; ++i ) {
-    mattype tmp;
-    if ( checkK )
-      tmp = apply(rho, (Ks[i].eval()*Ks[i].eval().t()).eval(), sys, dim);
-    else
-      tmp = apply(rho, Ks[i].eval(), sys, dim);
-    tmp = TrX(tmp, sys, dim);
-    prob.at(i) = std::abs(arma::trace(tmp));
-    if (prob.at(i) > _precision::eps< pT<T1> >::value)
-      outstates.at(i) = tmp / prob.at(i);
+    mattype tmp = checkK ?
+        apply(rho, (Ks[i].eval()*Ks[i].eval().t()).eval(), sys, dim)
+        : apply(rho, Ks[i].eval(), sys, dim);
+
+    prob.at(i) = checkV ? std::abs(arma::trace(tmp))
+        : std::pow(arma::norm(as_Col(tmp)), 2);
+
+    if ( prob.at(i) > _precision::eps< pT<T1> >::value )
+      outstates.at(i) = checkV ? tmp / prob.at(i)
+          : tmp / std::sqrt(prob.at(i));
   }
+
 
   std::discrete_distribution<arma::uword> dd(prob.begin(),
                                              prob.end());
@@ -569,20 +554,23 @@ template< typename T1, typename T2, typename TR =
   arma::Col< pT<T1> > prob(Ks.n_elem);
   arma::field< mattype > outstates(Ks.n_elem);
 
-  outstates.fill(arma::zeros<mattype>(Dsysbar, Dsysbar));
 
   for ( arma::uword i = 0 ; i < Ks.n_elem ; ++i ) {
-    mattype tmp;
-    if ( checkK )
-      tmp = apply(rho, (Ks.at(i).eval()*Ks.at(i).eval().t()).eval(), sys, dim);
-    else
-      tmp = apply(rho, Ks.at(i).eval(), sys, dim);
-    tmp = TrX(tmp, sys, dim);
-    prob.at(i) = std::abs(arma::trace(tmp));
+    mattype tmp = checkK ?
+        apply(rho, (Ks.at(i).eval()*Ks.at(i).eval().t()).eval(),
+              sys, dim)
+        : tmp = apply(rho, Ks.at(i).eval(), sys, dim);
 
-    if (prob.at(i) > _precision::eps< pT<T1> >::value)
-      outstates.at(i) = tmp / prob.at(i);
+    prob.at(i) = checkV ? std::abs(arma::trace(tmp))
+        : std::pow(arma::norm(as_Col(tmp)), 2);
+
+    if ( prob.at(i) > _precision::eps< pT<T1> >::value )
+      outstates.at(i) = checkV ? tmp / prob.at(i)
+          : tmp / std::sqrt(prob.at(i));
   }
+
+
+
 
   std::discrete_distribution<arma::uword> dd(prob.begin(),
                                              prob.end());
@@ -795,17 +783,18 @@ template< typename T1, typename T2, typename TR =
   arma::Col< pT<T1> > prob(U.n_cols);
   arma::field< mattype > outstates(U.n_cols);
 
-  outstates.fill(arma::zeros<mattype>(Dsysbar, Dsysbar));
-
 
   for ( arma::uword i = 0 ; i < U.n_cols ; ++i ) {
     mattype tmp = apply(rho, (U.col(i)*U.col(i).t()).eval(), sys, dim);
-    tmp = TrX(tmp, sys, dim);
-    prob.at(i) = std::abs(arma::trace(tmp));
+
+    prob.at(i) =  checkV ? std::abs(arma::trace(tmp))
+      : std::pow(arma::norm(as_Col(tmp)), 2);
 
     if (prob.at(i) > _precision::eps< pT<T1> >::value)
-      outstates.at(i) = tmp / prob.at(i);
+      outstates.at(i) = checkV ? tmp / prob.at(i)
+          : tmp / sqrt(prob.at(i));
   }
+
 
   std::discrete_distribution<arma::uword> dd(prob.begin(),
                                              prob.end());
@@ -866,6 +855,56 @@ template< typename T1, typename T2, typename TR =
 
   return measure(rho, U, std::move(sys), std::move(dim2));
 }
+
+
+//****************************************************************************
+
+
+template< typename T1, typename TR =
+          typename std::enable_if< std::is_floating_point<
+                                     pT<T1> >::value,
+                                  std::tuple< arma::uword,
+                                              arma::Col< pT<T1> >
+                                              >
+                                   >::type >
+    inline
+    TR measure_comp(const T1& rho1
+                    ) {
+  const auto& rho = as_Mat(rho1);
+
+  bool checkV = true;
+  if ( rho.n_cols == 1 )
+    checkV = false;
+
+
+#ifndef QIC_LIB_NO_DEBUG
+  if ( rho.n_elem == 0 )
+    throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);
+
+  if ( checkV )
+    if ( rho.n_rows != rho.n_cols )
+      throw Exception("qic::measure_comp",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+#endif
+
+  arma::Col< pT<T1> > prob = arma::zeros< arma::Col< pT<T1> > >(rho.n_rows);
+
+
+  for ( arma::uword i = 0 ; i < rho.n_rows ; ++i ) {
+    prob.at(i) = checkV ? std::abs(rho.at(i, i))
+        : std::abs(std::pow(rho.at(i), 1));
+  }
+
+  std::discrete_distribution<arma::uword> dd(prob.begin(),
+                                             prob.end());
+  arma::uword result = dd(rdevs.rng);
+
+  return std::make_tuple(result, prob);
+}
+
+
+//****************************************************************************
+
 
 
 }  // namespace qic

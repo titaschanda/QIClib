@@ -193,6 +193,7 @@ namespace qic
 	       typename std::enable_if< is_floating_point_var< pT<T1> >::value,
 					arma::Mat<std::complex< pT<T1> > > 
 					>::type>
+      inline
       TR powm_sym_implement(const T1& rho1 ,const T2& P,nonint_tag<T1>)
   
       {
@@ -331,8 +332,8 @@ namespace qic
 	  }
  
 	arma::uword a(1),b(0);
-	arma::uword count1(sys.n_elem);
-	std::vector<arma::uword> dim2;
+	arma::uword index(0);
+        arma::uvec dim2(dim.n_elem);
 	arma::uvec sys2(sys);
   
 	for(arma::uword i = 0 ; i != dim.n_elem ; ++i)
@@ -345,15 +346,23 @@ namespace qic
 	      }
 	    else
 	      {
-		--count1;
-		if(a == 1)
-		  dim2.push_back(dim.at(i));
-	  
+		if ( a == 1 ) {
+		  dim2.at(index) = dim.at(i);
+                  ++index;
+                }
+
 		else 
 		  {
-		    dim2.push_back(a);
-		    dim2.push_back(dim.at(i));
-		    sys2.tail(count1+1) = sys2.tail(count1+1) - b + 1 ;
+		    dim2.at(index) = a;
+                    ++index;
+		    dim2.at(index) = dim.at(i);
+                    ++index;
+                    
+                    if ( b > 1 ) {
+                      arma::uvec index2 = arma::find( sys > i );
+                      sys2(index2) += - b + 1;
+                    }
+
 		    a = 1;
 		    b = 0;
 		  }
@@ -361,12 +370,15 @@ namespace qic
       
 	    if( i == dim.n_elem-1 && a != 1)
 	      {
-		dim2.push_back(a);
+		dim2.at(index) = a;
+                ++index;
 	      }
 
 	  }
+        if(index < dim.n_elem)
+          dim2.shed_rows(index, dim.n_elem-1);
 	sys = std::move(sys2);
-	dim = dim2;
+	dim = std::move(dim2);
       }
 
 
@@ -411,8 +423,8 @@ namespace qic
 	  }
  
 	arma::uword a(1),b(0);
-	arma::uword count1(sys.n_elem), count2(ctrl.n_elem);
-	std::vector<arma::uword> dim2;
+        arma::uword index(0);
+        arma::uvec dim2(dim.n_elem);
 	arma::uvec sys2(sys);
 	arma::uvec ctrl2(ctrl);
     
@@ -425,36 +437,29 @@ namespace qic
 		a *= dim.at(i);
 		++b;
 	      }
-	    else if(arma::all(ctrl !=  i+1))
-	      {
-		--count1;
-		if(a == 1)
-		  dim2.push_back(dim.at(i));
-	  
-		else 
-		  {
-		    dim2.push_back(a);
-		    dim2.push_back(dim.at(i));
-		    ctrl2.tail(count2) = ctrl2.tail(count2) - b + 1 ;
-		    sys2.tail(count1+1) = sys2.tail(count1+1) - b + 1 ;
-		    a = 1;
-		    b = 0;
-		  }
-	      }
-
+	    
 	    else 
 	      {
-		--count2;
-		if(a == 1)
-		  dim2.push_back(dim(i));
-	  
+		if ( a == 1 ) {
+		  dim2.at(index) = dim(i);
+                  ++index;
+                }
 		else 
 		  {
-		    dim2.push_back(a);
-		    dim2.push_back(dim.at(i));
-		    ctrl2.tail(count2+1) = ctrl2.tail(count2+1) - b + 1 ;
-		    sys2.tail(count1) = sys2.tail(count1) - b + 1 ;
-		    a = 1;
+		    dim2.at(index) = a;
+                    ++index;
+		    dim2.at(index) = dim.at(i);
+                    ++index;
+		  
+                    if ( b > 1) {
+                      arma::uvec index2 = arma::find( sys > i );
+                      sys2(index2) += - b + 1 ;
+                  
+                      arma::uvec index3 = arma::find( ctrl > i );
+                      ctrl2(index3) += - b + 1 ;
+                    }
+
+                    a = 1;
 		    b = 0;
 		  }
 	      }
@@ -462,13 +467,18 @@ namespace qic
  
 	    if( i == dim.n_elem-1 && a != 1)
 	      {
-		dim2.push_back(a);
+		dim2.at(index) = a;
+                ++index;
 	      }
 
 	  }
+       
+        if(index < dim.n_elem)
+          dim2.shed_rows(index, dim.n_elem-1);
+        
 	sys = std::move(sys2);
 	ctrl = std::move(ctrl2);
-	dim = dim2;
+	dim = std::move(dim2);
       }
 
     }

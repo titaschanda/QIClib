@@ -110,9 +110,9 @@ namespace qic
         TO_PASS_def3< arma::Mat<eT> >* pB = 
 	  static_cast< TO_PASS_def3< arma::Mat<eT> >* >(my_func_data);
 
-	auto& U = STATES<pT>::get_instance().basis3.at(0,0);
-	auto& M = STATES<pT>::get_instance().basis3.at(1,0);
-	auto& D = STATES<pT>::get_instance().basis3.at(2,0);
+	auto& U = SPM<pT>::get_instance().basis3.at(0,0);
+	auto& M = SPM<pT>::get_instance().basis3.at(1,0);
+	auto& D = SPM<pT>::get_instance().basis3.at(2,0);
 
         arma::Mat< std::complex<pT> > proj1 = 
 	  std::cos(theta1)*std::cos(theta2)*U 

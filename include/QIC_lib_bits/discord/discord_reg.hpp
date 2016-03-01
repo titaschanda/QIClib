@@ -94,10 +94,10 @@ namespace qic
       {
 
 	arma::Mat< std::complex< pT<T1> > > proj1 = 
-	  STATES< pT<T1> >::get_instance().proj2.at(0,i+1);
+	  SPM< pT<T1> >::get_instance().proj2.at(0,i+1);
 	
 	arma::Mat< std::complex< pT<T1> > > proj2 = 
-	  STATES< pT<T1> >::get_instance().proj2.at(1,i+1);
+	  SPM< pT<T1> >::get_instance().proj2.at(1,i+1);
 
 
 	if(nodal ==1)

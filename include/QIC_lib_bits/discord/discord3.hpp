@@ -105,9 +105,9 @@ namespace qic
 	TO_PASS_dis3< arma::Mat<eT> >* pB = 
 	  static_cast< TO_PASS_dis3< arma::Mat<eT> >* >(my_func_data);
 
-	auto& U = STATES<pT>::get_instance().basis3.at(0,0);
-	auto& M = STATES<pT>::get_instance().basis3.at(1,0);
-	auto& D = STATES<pT>::get_instance().basis3.at(2,0);
+	auto& U = SPM<pT>::get_instance().basis3.at(0,0);
+	auto& M = SPM<pT>::get_instance().basis3.at(1,0);
+	auto& D = SPM<pT>::get_instance().basis3.at(2,0);
 	
   
 	arma::Mat< std::complex<pT> > proj1 = 
@@ -210,7 +210,7 @@ namespace qic
       arma::uword dim1 = arma::prod(dim);
 
 #ifndef QIC_LIB_NO_DEBUG   
-      if(rho.n_elems == 0)
+      if(rho.n_elem == 0)
 	throw Exception("qic::discord3", Exception::type::ZERO_SIZE);
 
       if(rho.n_rows!=rho.n_cols)

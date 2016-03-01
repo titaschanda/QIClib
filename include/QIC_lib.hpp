@@ -40,7 +40,9 @@
 // NLopt dependent features
 
 
-
+#ifdef QIC_LIB_DONT_USE_NLOPT
+#undef QIC_LIB_NLOPT
+#endif
 
 #if (__GNUC__ && !__clang__)
 
@@ -48,6 +50,8 @@
 #else
 #define _QIC_UNUSED_
 #endif
+
+#include "QIC_lib_bits/basic/openmp.hpp"
 
 #include "QIC_lib_bits/internal/first.hpp"
 #include "QIC_lib_bits/internal/singleton.hpp"
@@ -68,6 +72,7 @@
 #include "QIC_lib_bits/basic/is_valid_state.hpp"
 #include "QIC_lib_bits/basic/range.hpp"
 #include "QIC_lib_bits/basic/random.hpp"
+#include "QIC_lib_bits/basic/num.hpp"
 
 #include "QIC_lib_bits/internal/second.hpp"
 
@@ -107,7 +112,7 @@
 
 // NLopt dependent features
 
-#include<nlopt.hpp>
+#include <nlopt.hpp>
 #include "QIC_lib_bits/discord/default_config.hpp"
 #include "QIC_lib_bits/discord/discord_reg.hpp"
 #include "QIC_lib_bits/discord/discord3_reg.hpp"

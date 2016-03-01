@@ -104,8 +104,8 @@ namespace qic
 	  TO_PASS_def< arma::Mat<eT> >* 
 	  >(my_func_data);
     
-	auto& u = STATES<pT>::get_instance().basis2.at(0,0);
-	auto& d = STATES<pT>::get_instance().basis2.at(1,0);
+	auto& u = SPM<pT>::get_instance().basis2.at(0,0);
+	auto& d = SPM<pT>::get_instance().basis2.at(1,0);
 
 	arma::Mat< std::complex<pT> > proj1 = 
 	  std::cos(static_cast<pT>(0.5)*theta)*u 

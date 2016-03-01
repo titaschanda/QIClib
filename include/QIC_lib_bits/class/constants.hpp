@@ -51,10 +51,10 @@ namespace qic
 
 
   template<typename T1>
-  class STATES final : 
-    public _internal::protect_subs::Singleton< const STATES<T1> >
+  class SPM final : 
+    public _internal::protect_subs::Singleton< const SPM<T1> >
   {
-    friend class _internal::protect_subs::Singleton< const STATES<T1> >;
+    friend class _internal::protect_subs::Singleton< const SPM<T1> >;
   public:
     arma::field< typename arma::Mat< std::complex<T1> >::template fixed<2,2> > 
       S;
@@ -68,13 +68,14 @@ namespace qic
       proj3;
 
   private:
-    STATES()
+    SPM()
     {
       S.set_size(4);
       S.at(0) = { { {1.0,0.0} , {0.0,0.0} } , { {0.0,0.0} , {1.0,0.0} } } ;
       S.at(1) = { { {0.0,0.0} , {1.0,0.0} } , { {1.0,0.0} , {0.0,0.0} } } ;
       S.at(2) = { { {0.0,0.0} , {0.0,-1.0} } , { {0.0,1.0} , {0.0,0.0} } } ;
       S.at(3) = { { {1.0,0.0} , {0.0,0.0} } , { {0.0,0.0} , {-1.0,0.0} } } ;
+
 
       basis2.set_size(2,4);
       basis2.at(0,0) = { {1.0,0.0}, {0.0,0.0} };
@@ -90,6 +91,7 @@ namespace qic
       basis2.at(0,3) = basis2.at(0,0);
       basis2.at(1,3) = basis2.at(1,0);
 
+
       basis3.set_size(3,4);
       basis3.at(0,0) = {1.0 , 0.0 , 0.0} ; 
       basis3.at(1,0) = {0.0 , 1.0 , 0.0} ;
@@ -104,6 +106,7 @@ namespace qic
       basis3.at(1,3) = basis3.at(1,0);
       basis3.at(2,3) = basis3.at(2,0);
 
+
       proj2.set_size(2,4);
       proj2.at(0,0) = basis2.at(0,0)*basis2.at(0,0).t();
       proj2.at(1,0) = basis2.at(1,0)*basis2.at(1,0).t();
@@ -113,6 +116,7 @@ namespace qic
       proj2.at(1,2) = basis2.at(1,2)*basis2.at(1,2).t();
       proj2.at(0,3) = proj2.at(0,0);
       proj2.at(1,3) = proj2.at(1,0);
+
 
       proj3.set_size(3,4);
       proj3.at(0,0) = basis3.at(0,0)*basis3.at(0,0).t();
@@ -129,15 +133,15 @@ namespace qic
       proj3.at(2,3) = proj3.at(2,0);
 
     }
-    ~STATES() = default;
+    ~SPM() = default;
   };
 
  
-  static const STATES<double>& states _QIC_UNUSED_ = 
-				STATES<double>::get_instance();
+  static const SPM<double>& spm _QIC_UNUSED_ = 
+				SPM<double>::get_instance();
  
-  static const STATES<float>& fstates _QIC_UNUSED_ = 
-				STATES<float>::get_instance();
+  static const SPM<float>& fspm _QIC_UNUSED_ = 
+				SPM<float>::get_instance();
 
 }
 

@@ -40,7 +40,7 @@ namespace qic
     arma::uword dim1 = arma::prod(dim);
 
 #ifndef QIC_LIB_NO_DEBUG   
-    if(rho.n_elems == 0)
+    if(rho.n_elem == 0)
       throw Exception("qic::deficit_reg", Exception::type::ZERO_SIZE);
 
     if(rho.n_rows!=rho.n_cols)
@@ -82,8 +82,8 @@ namespace qic
     for(arma::uword i=0 ; i<3 ; ++i)
       {
 
-	arma::Mat< std::complex<pT> > proj1 = STATES<pT>::get_instance().proj2.at(0,i+1);
-	arma::Mat< std::complex<pT> > proj2 = STATES<pT>::get_instance().proj2.at(1,i+1);
+	arma::Mat< std::complex<pT> > proj1 = SPM<pT>::get_instance().proj2.at(0,i+1);
+	arma::Mat< std::complex<pT> > proj2 = SPM<pT>::get_instance().proj2.at(1,i+1);
   
 	if(nodal==1)
 	  {

@@ -37,7 +37,7 @@ namespace qic
     arma::uword dim1 = arma::prod(dim);
 
 #ifndef QIC_LIB_NO_DEBUG   
-    if(rho.n_elems == 0)
+    if(rho.n_elem == 0)
       throw Exception("qic::discord3_reg", Exception::type::ZERO_SIZE);
 
     if(rho.n_rows!=rho.n_cols)
@@ -95,13 +95,13 @@ namespace qic
       {
       
 	arma::Mat< std::complex< pT<T1> > > proj1 = 
-	  STATES< pT<T1> >::get_instance().proj3.at(0,i+1);
+	  SPM< pT<T1> >::get_instance().proj3.at(0,i+1);
 	
 	arma::Mat< std::complex< pT<T1> > > proj2 = 
-	  STATES< pT<T1> >::get_instance().proj3.at(1,i+1);
+	  SPM< pT<T1> >::get_instance().proj3.at(1,i+1);
 	
 	arma::Mat< std::complex< pT<T1> > > proj3 = 
-	  STATES< pT<T1> >::get_instance().proj3.at(2,i+1);
+	  SPM< pT<T1> >::get_instance().proj3.at(2,i+1);
   
 	if(nodal==1)
 	  {

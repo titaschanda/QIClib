@@ -51,7 +51,7 @@ TR conv_to_pure(const T1& rho1
   arma::Col< pT<T1> > eig_val;
 
   if ( rho.n_rows > 20 )
-    arma::eig_sym(eigval, eigvec, rho, "dc");
+    arma::eig_sym(eig_val, eig_vec, rho, "dc");
   else
     arma::eig_sym(eig_val, eig_vec, rho, "std");
 

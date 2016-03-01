@@ -60,21 +60,20 @@ TR TrX(const T1& rho1,
     throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
 #endif
 
-  sys = arma::sort(sys);
+
   _internal::protect_subs::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
 
 
-  arma::uvec keep(n);
-  for ( arma::uword run = 0 ; run < n ; ++run )
-    keep.at(run) = run + 1;
-  for ( arma::uword run = 0 ; run < m ; ++run )
-    keep.shed_row(sys.at(run)-1-run);
-
-  arma::uvec dimr(n-m);
-  for ( arma::uword run = 0 ; run < (n-m) ; ++run )
-    dimr.at(run) = dim(keep.at(run)-1);
+  arma::uvec keep(n-m);
+  arma::uword keep_count(0);
+  for ( arma::uword run = 0 ; run < n ; ++run ) {
+    if ( !arma::any(sys == run + 1) ) {
+      keep.at(keep_count) = run + 1;
+      ++keep_count;
+    }
+  }
 
   arma::uword dimtrace = prod(dim(sys-1));
   arma::uword dimkeep = p.n_rows/dimtrace;
@@ -86,7 +85,7 @@ TR TrX(const T1& rho1,
 
   arma::uvec productr = arma::ones<arma::uvec>(n-m);
   for ( arma::sword i = n-m-2 ; i >- 1 ; --i )
-    productr.at(i) = productr.at(i+1) * dimr.at(i+1);
+    productr.at(i) = productr.at(i+1) * dim.at(keep.at(i+1)-1);
 
   arma::Mat< eT<T1> > tr_p = arma::zeros< arma::Mat< eT<T1> >
                                           >(dimkeep, dimkeep);

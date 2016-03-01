@@ -59,7 +59,6 @@ TR Tx(const T1& rho1,
     throw Exception("qic::Tx", Exception::type::INVALID_SUBSYS);
 #endif
 
-  sys = arma::sort(sys);
   _internal::protect_subs::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
 
@@ -67,7 +66,7 @@ TR Tx(const T1& rho1,
     p *= p.t();
 
   arma::uvec product = arma::ones<arma::uvec>(n);
-  for ( arma::sword i = n-2; i >= 0; --i )
+  for ( arma::sword i = n-2 ; i >= 0 ; --i )
     product.at(i) = product.at(i+1) * dim.at(i+1);
 
   const arma::uword loop_no = 2 * n;

@@ -44,7 +44,7 @@ TR conv_to_HS(const T1& rho1
     throw Exception("qic::conv_to_HS", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-  auto& S = STATES< pT<T1> >::get_instance().S;
+  auto& S = SPM< pT<T1> >::get_instance().S;
 
   arma::Mat< pT<T1> > ret = arma::zeros< arma::Mat< pT<T1> > >(4, 4);
 
@@ -83,7 +83,7 @@ TR conv_to_std(const T1& rho1
 #endif
 
 
-  auto& S = STATES< pT<T1> >::get_instance().S;
+  auto& S = SPM< pT<T1> >::get_instance().S;
 
   arma::Mat< std::complex < pT<T1> > > ret =
       arma::zeros< arma::Mat< std::complex< pT<T1> > > >(4, 4);
