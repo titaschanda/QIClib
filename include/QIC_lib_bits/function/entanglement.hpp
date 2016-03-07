@@ -52,19 +52,17 @@ TR entanglement(const T1& rho1,
   if ( arma::prod(dim) != p.n_rows )
     throw Exception("qic::entanglement",
                     Exception::type::DIMS_MISMATCH_MATRIX);
-      
-  if((dim.n_elem) != 2 )
-    throw Exception("qic::entanglement", 
+
+  if ( (dim.n_elem) != 2 )
+    throw Exception("qic::entanglement",
                     Exception::type::NOT_BIPARTITE);
 #endif
 
-  return entropy(TrX(p,{1},std::move(dim)));
-
-
-
+  return entropy(TrX(p, {1}, std::move(dim)));
 }
-}
-  
+
+
+}  // namespace qic
 
 
 

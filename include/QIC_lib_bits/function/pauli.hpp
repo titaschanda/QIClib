@@ -28,20 +28,20 @@ template< typename T1, typename TR =
                                    arma::Mat< pT<T1> >
                                    >::type >
 inline
-TR conv_to_HS(const T1& rho1
+TR std_to_HS(const T1& rho1
               ) {
   const auto& p = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
   if ( p.n_elem == 0 )
-    throw Exception("qic::conv_to_HS", Exception::type::ZERO_SIZE);
+    throw Exception("qic::std_to_HS", Exception::type::ZERO_SIZE);
 
   if ( p.n_rows != p.n_cols )
-    throw Exception("qic::conv_to_HS",
+    throw Exception("qic::std_to_HS",
                     Exception::type::MATRIX_NOT_SQUARE);
 
   if ( p.n_rows != 4 )
-    throw Exception("qic::conv_to_HS", Exception::type::NOT_QUBIT_SUBSYS);
+    throw Exception("qic::std_to_HS", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
   auto& S = SPM< pT<T1> >::get_instance().S;
@@ -62,24 +62,24 @@ template< typename T1, typename TR =
                                    arma::Mat< std::complex < pT<T1> > >
                                    >::type>
 inline
-TR conv_to_std(const T1& rho1
+TR HS_to_std(const T1& rho1
                ) {
   const auto& p = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
   if ( p.n_elem == 0 )
-    throw Exception("qic::conv_to_std", Exception::type::ZERO_SIZE);
+    throw Exception("qic::HS_to_std", Exception::type::ZERO_SIZE);
 
   if ( !std::is_same< eT<T1>, pT<T1> >::value )
-    throw Exception("qic::conv_to_std", "Matrix is not real");
+    throw Exception("qic::HS_to_std", "Matrix is not real");
 
 
   if ( p.n_rows != p.n_cols )
-    throw Exception("qic::conv_to_std",
+    throw Exception("qic::HS_to_std",
                     Exception::type::MATRIX_NOT_SQUARE);
 
   if ( p.n_rows != 4 )
-    throw Exception("qic::conv_to_std", Exception::type::NOT_QUBIT_SUBSYS);
+    throw Exception("qic::HS_to_std", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
 

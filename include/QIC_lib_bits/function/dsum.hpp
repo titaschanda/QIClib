@@ -25,8 +25,10 @@ namespace qic {
 
 template< typename T1, typename T2, typename TR =
           typename std::enable_if< is_arma_type_var<T1, T2>::value
-                                   && std::is_same< eT<T1>, eT<T2> >::value,
-                                   arma::Mat< eT<T1> >
+                                   && is_same_pT<T1, T2>::value,
+                                   arma::Mat<
+                                     typename eT_promoter_var<T1, T2>::type
+                                     >
                                    >::type>
     inline
     TR dsum(const T1& rho11,
@@ -34,6 +36,8 @@ template< typename T1, typename T2, typename TR =
             ) {
   const auto& rho1 = as_Mat(rho11);
   const auto& rho2 = as_Mat(rho12);
+
+  using mattype = arma::Mat< typename eT_promoter_var<T1, T2>::type >;
 
 #ifndef QIC_LIB_NO_DEBUG
   if ( rho1.n_elem == 0 || rho2.n_elem == 0 )
@@ -46,8 +50,7 @@ template< typename T1, typename T2, typename TR =
   const arma::uword m1 = rho1.n_cols;
   const arma::uword m2 = rho2.n_cols;
 
-  arma::Mat< eT<T1> > ret = arma::zeros< arma::Mat< eT<T1> >
-                                         >(n1+n2, m1+m2);
+  mattype ret = arma::zeros< mattype >(n1+n2, m1+m2);
 
   ret.submat(0, 0, n1-1, m1-1) = rho1;
   ret.submat(n1, m1, n1+n2-1, m1+m2-1) = rho2;
@@ -60,9 +63,11 @@ template< typename T1, typename T2, typename TR =
 template< typename T1, typename T2, typename... T3,
           typename TR =
           typename std::enable_if< is_arma_type_var<T1, T2, T3...>::value
-                                   && is_all_same<
-                                     eT<T1>, eT<T2>, eT<T3>...>::value,
-                                   arma::Mat< eT<T1> >
+                                   && is_same_pT<T1, T2, T3...>::value,
+                                   arma::Mat<
+                                     typename eT_promoter_var<
+                                       T1, T2, T3...>::type
+                                     >
                                    >::type>
     inline
     TR dsum(const T1& rho1,
