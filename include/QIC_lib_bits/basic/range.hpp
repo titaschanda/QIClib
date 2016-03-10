@@ -39,6 +39,7 @@ template< typename T1, typename T2, typename T3, typename TR =
              ) {
   using pTr = typename is_promotable_var<T1, T2, T3>::type;
 
+#ifndef QIC_LIB_NO_DEBUG
   if ( static_cast<pTr>(step) == static_cast<pTr>(0) )
     throw Exception("qic::range", "Step must be non-zero");
 
@@ -48,7 +49,8 @@ template< typename T1, typename T2, typename T3, typename TR =
 
   if ( !check )
     throw Exception("qic::range", "Invalid start, stop, step");
-
+#endif
+  
   std::vector<pTr> result;
   pTr i = static_cast<pTr>(start);
   while ((static_cast<pTr>(step) > static_cast<pTr>(0)) ?

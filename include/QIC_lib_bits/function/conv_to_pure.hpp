@@ -32,7 +32,7 @@ TR conv_to_pure(const T1& rho1
                 ) {
   const auto& rho = as_Mat(rho1);
 
-#ifndef QIC_LIB_DEBUG
+#ifndef QIC_LIB_NO_DEBUG
   if ( rho.n_elem == 0 )
     throw Exception("qic::conv_to_pure", Exception::type::ZERO_SIZE);
 #endif

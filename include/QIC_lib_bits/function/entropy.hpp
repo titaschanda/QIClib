@@ -75,7 +75,7 @@ TR shannon(const T1& prob1
            ) {
   const auto& prob = as_Mat(prob1);
 
-#ifndef QIC_NO_DEBUG
+#ifndef QIC_LIB_NO_DEBUG
   if ( prob.n_elem == 0 )
     throw Exception("qic::shannon", Exception::type::ZERO_SIZE);
 
