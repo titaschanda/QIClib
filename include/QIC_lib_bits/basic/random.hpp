@@ -310,15 +310,9 @@ arma::Mat< std::complex<T1> > randUnitary(const arma::uword& m
   arma::qr(Q, R, A);
 
   arma::Col< std::complex<T1> > P =
-      arma::conv_to< arma::Col< std::complex<T1> >
-                     >::from(randU< arma::Col<T1> >(m));
+      R.diag() / arma::abs(R.diag());
 
-  std::complex<T1> I = {0.0, 1.0};
-  auto& PI = arma::Datum<T1>::pi;
-  for (auto& i : P)
-    i = std::exp(static_cast<T1>(2.) * PI * I * i);
-
-  return arma::diagmat(P) * Q;
+  return Q * arma::diagmat(P);
 }
 
 
