@@ -19,21 +19,20 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 namespace qic {
 
 //***************************************************************************
 
 template <typename T1>
-inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& m) noexcept
-{return static_cast< const arma::Col<T1>& >(m);}
-
+inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& m) noexcept {
+  return static_cast<const arma::Col<T1>&>(m);
+}
 
 //***************************************************************************
 
-
 template <typename T1>
-inline const arma::Col<T1>& as_Col(const arma::Col<T1>& m) noexcept
-{return m;}
+inline const arma::Col<T1>& as_Col(const arma::Col<T1>& m) noexcept {
+  return m;
+}
 
 }  // namespace qic

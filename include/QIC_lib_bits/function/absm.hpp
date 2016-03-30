@@ -19,28 +19,27 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace qic {
 
-namespace qic
-{
+//******************************************************************************
 
-  template<typename T1, typename TR =
-	   typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-				    arma::Mat< eT<T1> > 
-				    >::type >
-  inline 
-  TR absm(const T1& rho1)
-  {
-    const auto& rho  = as_Mat(rho1);
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+inline TR absm(const T1& rho1) {
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(rho.n_elem == 0)
-      throw Exception("qic::absm", Exception::type::ZERO_SIZE);
+  if (rho.n_elem == 0)
+    throw Exception("qic::absm", Exception::type::ZERO_SIZE);
 
-    if(rho.n_rows != rho.n_cols)
-      throw Exception("qic::absm", Exception::type::MATRIX_NOT_SQUARE);
+  if (rho.n_rows != rho.n_cols)
+    throw Exception("qic::absm", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-    return sqrtm_sym((rho.t()*rho).eval());
-  }
-
+  return sqrtm_sym((rho.t() * rho).eval());
 }
+
+//******************************************************************************
+
+}  // namespace qic

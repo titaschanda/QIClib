@@ -19,7 +19,6 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifdef QIC_LIB_PARALLEL
 
 #define QIC_LIB_OPENMP_FOR _Pragma("omp parallel for")
@@ -31,4 +30,3 @@
 #define QIC_LIB_OPENMP_CRITICAL
 
 #endif
-

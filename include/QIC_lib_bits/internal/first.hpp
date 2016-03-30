@@ -19,39 +19,25 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace qic {
 
+namespace _internal {
 
-namespace qic
-{
+namespace protect_subs {
 
-  namespace _internal
-  {
+template <typename T> struct cond_I { static constexpr T value = 0; };
 
-    namespace protect_subs
-    {
-     
-      template<typename T>
-      struct cond_I
-      {
-	static constexpr T value = 0;
-      }; 
+template <typename T> struct cond_I<std::complex<T> > {
+  static constexpr std::complex<T> value = {0, 1};
+};
 
-      template<typename T>
-      struct cond_I< std::complex<T> >
-      {
-	static constexpr std::complex<T> value = {0,1};
-      }; 
+template <typename T1> constexpr T1 cond_I<T1>::value;
 
-      template<typename T1> constexpr T1 cond_I<T1>::value;
-      
-      template<typename T1> 
-      constexpr std::complex<T1> cond_I< std::complex<T1> >::value;
-      
+template <typename T1>
+constexpr std::complex<T1> cond_I<std::complex<T1> >::value;
 
-    }
+}  // namespace protect_subs
 
-  }
+}  // namespace _internal
 
-}
-
-
+}  // namespace qic

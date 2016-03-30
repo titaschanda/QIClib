@@ -19,26 +19,23 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef _QIC_LIB_HPP
 #define _QIC_LIB_HPP
 
-
-#include<armadillo>
-#include<iostream>
-#include<iomanip>
-#include<cmath>
-#include<complex>
-#include<stdexcept>
-#include<type_traits>
-#include<tuple>
-#include<random>
-#include<limits>
+#include <armadillo>
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <complex>
+#include <stdexcept>
+#include <type_traits>
+#include <tuple>
+#include <random>
+#include <limits>
 
 #define QIC_LIB_NLOPT
 // Comment out the previous line, if you don't want to use
 // NLopt dependent features
-
 
 #ifdef QIC_LIB_DONT_USE_NLOPT
 #undef QIC_LIB_NLOPT
@@ -46,7 +43,7 @@
 
 #if (__GNUC__ && !__clang__)
 
-#define _QIC_UNUSED_  __attribute__ ((unused))
+#define _QIC_UNUSED_ __attribute__((unused))
 #else
 #define _QIC_UNUSED_
 #endif
@@ -60,7 +57,6 @@
 #include "QIC_lib_bits/class/constants.hpp"
 #include "QIC_lib_bits/class/init.hpp"
 #include "QIC_lib_bits/class/random_devices.hpp"
-
 
 #include "QIC_lib_bits/basic/type_traits.hpp"
 #include "QIC_lib_bits/basic/as_Mat.hpp"
@@ -91,7 +87,6 @@
 #include "QIC_lib_bits/function/purify.hpp"
 #include "QIC_lib_bits/function/generator.hpp"
 
-
 #include "QIC_lib_bits/function/apply_ctrl.hpp"
 #include "QIC_lib_bits/function/apply.hpp"
 #include "QIC_lib_bits/function/measure.hpp"
@@ -106,7 +101,6 @@
 #include "QIC_lib_bits/function/channel.hpp"
 #include "QIC_lib_bits/function/schmidt.hpp"
 #include "QIC_lib_bits/function/schatten.hpp"
-
 
 #ifdef QIC_LIB_NLOPT
 

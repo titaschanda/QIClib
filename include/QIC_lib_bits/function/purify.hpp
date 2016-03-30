@@ -19,44 +19,39 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 namespace qic {
 
-// ***************************************************************************
+//******************************************************************************
 
-template< typename T1, typename TR =
-          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-                                   arma::Col< eT<T1> >
-                                   >::type >
-inline
-TR purify(const T1& rho1,
-          const pT<T1>& tol = _precision::eps< pT<T1> >::value
-          ) {
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<pT<T1> >::value, arma::Col<eT<T1> > >::type>
+inline TR purify(const T1& rho1,
+                 const pT<T1>& tol = _precision::eps<pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
-  if ( rho.n_cols == 1 )
+  if (rho.n_cols == 1)
     checkV = false;
 
 #ifndef QIC_LIB_NO_DEBUG
-  if ( rho.n_elem == 0 )
+  if (rho.n_elem == 0)
     throw Exception("qic::purify", Exception::type::ZERO_SIZE);
 
-  if ( checkV )
-    if ( rho.n_rows != rho.n_cols )
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::purify",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 #endif
 
-  if ( !checkV ) {
+  if (!checkV) {
     return rho;
 
   } else {
-    arma::Col< pT<T1> > eigval;
-    arma::Mat< eT<T1> > eigvec;
+    arma::Col<pT<T1> > eigval;
+    arma::Mat<eT<T1> > eigvec;
 
-    if ( rho.n_rows > 20 )
+    if (rho.n_rows > 20)
       arma::eig_sym(eigval, eigvec, rho, "dc");
     else
       arma::eig_sym(eigval, eigvec, rho, "std");
@@ -64,16 +59,17 @@ TR purify(const T1& rho1,
     arma::uword dim = rho.n_rows;
     arma::uword dimE = arma::sum(eigval > tol);
 
-    arma::Col< eT<T1> > ret = arma::zeros< arma::Col< eT<T1> > >(dim*dimE);
+    arma::Col<eT<T1> > ret(dim * dimE, arma::fill::zeros);
 
-    for ( arma::uword i = 0 ; i < dimE ; ++i )
-      for ( arma::uword j = 0 ; j < dim ; ++j )
-        ret(i + dimE*j) = std::sqrt(eigval.at(dim-i-1))
-            * eigvec.at(j, dim-i-1);
+    for (arma::uword i = 0; i < dimE; ++i)
+      for (arma::uword j = 0; j < dim; ++j)
+        ret(i + dimE * j) =
+          std::sqrt(eigval.at(dim - i - 1)) * eigvec.at(j, dim - i - 1);
 
     return ret;
   }
 }
 
+//******************************************************************************
 
 }  // namespace qic

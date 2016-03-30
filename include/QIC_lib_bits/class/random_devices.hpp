@@ -1,6 +1,6 @@
 /*
  * This file contains modified version of random_devices class
- * released as a part of Quantum++-v0.8.6 by Vlad Gheorghiu 
+ * released as a part of Quantum++-v0.8.6 by Vlad Gheorghiu
  * (vgheorgh@gmail.com) under GPLv3, see <https://github.com/vsoftco/qpp>.
  *
  * QIC_lib (Quantum information and computation library)
@@ -23,50 +23,44 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace qic
-{
+namespace qic {
 
-  class RandomDevices final 
-    : public _internal::protect_subs::Singleton<RandomDevices> 
-  {
-    friend class _internal::protect_subs::Singleton<RandomDevices>;
+//******************************************************************************
 
-    std::random_device rd;
-  public:
+class RandomDevices final
+  : public _internal::protect_subs::Singleton<RandomDevices> {
+  friend class _internal::protect_subs::Singleton<RandomDevices>;
 
+  std::random_device rd;
+
+ public:
 #ifdef ARMA_64BIT_WORD
-    std::mt19937_64 rng;
-    using seed_type = std::mt19937_64::result_type;
+  std::mt19937_64 rng;
+  using seed_type = std::mt19937_64::result_type;
 #else
-    std::mt19937 rng;
-    using seed_type = std::mt19937::result_type;
+  std::mt19937 rng;
+  using seed_type = std::mt19937::result_type;
 #endif
 
-    inline void set_seed(seed_type a)
-    {
-      rng.seed(a);
-    }
+  inline void set_seed(seed_type a) { rng.seed(a); }
 
-    inline void set_seed_random()
-    {
-      rng.seed(rd());
-    }
+  inline void set_seed_random() { rng.seed(rd()); }
 
+ private:
+  RandomDevices() : rd{}, rng{rd()} {}
 
-  private:
-    RandomDevices() : rd{}, rng{rd()}
-    {}
+  ~RandomDevices() = default;
+};
 
-    ~RandomDevices() = default;
-  };
+//******************************************************************************
 
 #ifdef _NO_THREAD_LOCAL
-  static RandomDevices& rdevs _QIC_UNUSED_= RandomDevices::get_instance();
+static RandomDevices& rdevs _QIC_UNUSED_ = RandomDevices::get_instance();
 #else
-  thread_local static RandomDevices& rdevs _QIC_UNUSED_ =
-    RandomDevices::get_thread_local_instance();
+thread_local static RandomDevices& rdevs _QIC_UNUSED_ =
+  RandomDevices::get_thread_local_instance();
 #endif
 
-} 
+//******************************************************************************
 
-
+}  // namespace qic

@@ -19,43 +19,35 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 namespace qic {
 
 //***************************************************************************
 
-
-template< typename T1, typename T2, typename T3, typename TR =
-          typename std::enable_if< std::is_arithmetic<T1>::value
-                                   && std::is_arithmetic<T2>::value
-                                   && std::is_arithmetic<T3>::value,
-                                   std::vector<
-                                     typename
-                                     is_promotable_var<T1, T2, T3>::type >
-                                   >::type >
-    inline
-    TR range(T1 start, T2 stop, T3 step
-             ) {
-  using pTr = typename is_promotable_var<T1, T2, T3>::type;
+template <typename T1, typename T2, typename T3,
+          typename TR = typename std::enable_if<
+            std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value &&
+              std::is_arithmetic<T3>::value,
+            std::vector<typename promote_var<T1, T2, T3>::type> >::type>
+inline TR range(T1 start, T2 stop, T3 step) {
+  using pTr = typename promote_var<T1, T2, T3>::type;
 
 #ifndef QIC_LIB_NO_DEBUG
-  if ( static_cast<pTr>(step) == static_cast<pTr>(0) )
+  if (static_cast<pTr>(step) == static_cast<pTr>(0))
     throw Exception("qic::range", "Step must be non-zero");
 
-  bool check = (static_cast<pTr>(step) > static_cast<pTr>(0)) ?
-      (static_cast<pTr>(start) < static_cast<pTr>(stop)) :
-      (static_cast<pTr>(start) > static_cast<pTr>(stop));
+  bool check = (static_cast<pTr>(step) > static_cast<pTr>(0))
+                 ? (static_cast<pTr>(start) < static_cast<pTr>(stop))
+                 : (static_cast<pTr>(start) > static_cast<pTr>(stop));
 
-  if ( !check )
+  if (!check)
     throw Exception("qic::range", "Invalid start, stop, step");
 #endif
-  
+
   std::vector<pTr> result;
   pTr i = static_cast<pTr>(start);
-  while ((static_cast<pTr>(step) > static_cast<pTr>(0)) ?
-         (i < static_cast<pTr>(stop)) : (i > static_cast<pTr>(stop))
-         ) {
+  while ((static_cast<pTr>(step) > static_cast<pTr>(0))
+           ? (i < static_cast<pTr>(stop))
+           : (i > static_cast<pTr>(stop))) {
     result.push_back(i);
     i += static_cast<pTr>(step);
   }
@@ -63,39 +55,26 @@ template< typename T1, typename T2, typename T3, typename TR =
   return result;
 }
 
-
 //****************************************************************************
 
-
-template< typename T1, typename T2, typename TR =
-          typename std::enable_if< std::is_arithmetic<T1>::value
-                                   && std::is_arithmetic<T2>::value,
-                                   std::vector<
-                                     typename
-                                     is_promotable_var<T1, T2>::type >
-                                   >::type >
-    inline
-    TR range(T1 start, T2 stop
-             ) {
-  using pTr = typename  is_promotable_var<T1, T2>::type;
-  return range(static_cast<pTr>(start),
-               static_cast<pTr>(stop),
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value,
+            std::vector<typename promote_var<T1, T2>::type> >::type>
+inline TR range(T1 start, T2 stop) {
+  using pTr = typename promote_var<T1, T2>::type;
+  return range(static_cast<pTr>(start), static_cast<pTr>(stop),
                static_cast<pTr>(1));
 }
 
-
 //****************************************************************************
 
-
-template< typename T1, typename TR =
-          typename std::enable_if< std::is_arithmetic<T1>::value,
-                                   std::vector<T1>
-                                   >::type>
-inline
-TR range(T1 stop
-         ) {
+template <typename T1, typename TR = typename std::enable_if<
+                         std::is_arithmetic<T1>::value, std::vector<T1> >::type>
+inline TR range(T1 stop) {
   return range(static_cast<T1>(0), stop, static_cast<T1>(1));
 }
 
+//*****************************************************************************
 
 }  // namespace qic

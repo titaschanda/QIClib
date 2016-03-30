@@ -19,68 +19,61 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 namespace qic {
 
-template< typename T1, typename TR =
-          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-                                   arma::Mat<std::complex< pT<T1> > >
-                                   >::type >
-inline
-TR sqrtm_sym(const T1& rho1
-             ) {
+//******************************************************************************
+
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<pT<T1> >::value,
+                         arma::Mat<std::complex<pT<T1> > > >::type>
+inline TR sqrtm_sym(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
-  if ( rho.n_elem == 0 )
+  if (rho.n_elem == 0)
     throw Exception("qic::sqrtm_sym", Exception::type::ZERO_SIZE);
 
-  if ( rho.n_rows != rho.n_cols )
+  if (rho.n_rows != rho.n_cols)
     throw Exception("qic::sqrtm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col< pT<T1> > eigval;
-  arma::Mat< eT<T1> > eigvec;
+  arma::Col<pT<T1> > eigval;
+  arma::Mat<eT<T1> > eigvec;
 
-  if ( rho.n_rows > 20 )
+  if (rho.n_rows > 20)
     arma::eig_sym(eigval, eigvec, rho, "dc");
   else
     arma::eig_sym(eigval, eigvec, rho, "std");
 
-  return eigvec
-      * arma::diagmat(arma::sqrt(arma::conv_to<
-                                 arma::Col<
-                                 std::complex< pT<T1> >
-                                 > >::from(eigval)))
-      * eigvec.t();
+  return eigvec *
+         arma::diagmat(arma::sqrt(
+           arma::conv_to<arma::Col<std::complex<pT<T1> > > >::from(eigval))) *
+         eigvec.t();
 }
 
+//******************************************************************************
 
-
-template< typename T1, typename TR =
-          typename std::enable_if< is_floating_point_var< pT<T1> >::value,
-                                   arma::Mat<std::complex< pT<T1> > >
-                                   >::type >
-inline
-TR sqrtm_gen(const T1& rho1
-             ) {
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<pT<T1> >::value,
+                         arma::Mat<std::complex<pT<T1> > > >::type>
+inline TR sqrtm_gen(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
-  if ( rho.n_elem == 0 )
+  if (rho.n_elem == 0)
     throw Exception("qic::sqrtm_gen", Exception::type::ZERO_SIZE);
 
-  if ( rho.n_rows != rho.n_cols )
+  if (rho.n_rows != rho.n_cols)
     throw Exception("qic::sqrtm_gen", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<std::complex< pT<T1> > > eigval;
-  arma::Mat<std::complex< pT<T1> > > eigvec;
+  arma::Col<std::complex<pT<T1> > > eigval;
+  arma::Mat<std::complex<pT<T1> > > eigvec;
   arma::eig_gen(eigval, eigvec, rho);
 
   return eigvec * arma::diagmat(arma::sqrt(eigval)) * eigvec.t();
 }
 
-}   // namespace qic
+//******************************************************************************
 
+}  // namespace qic

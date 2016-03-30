@@ -19,111 +19,92 @@
  * along with QIC_lib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace qic {
 
+//******************************************************************************
 
-namespace qic 
-{
-
-  template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_floating_point_var< 
-				      pT<T1>,pT<T2> 
-				      >::value
-				    && is_same_pT<T1,T2>::value,
-				    arma::Mat< 
-				      typename eT_promoter_var<T1,T2>::type >  
-				    >::type >
-    inline 
-    TR apply(const T1& rho1, 
-	     const T2& A, 
-	     arma::uvec sys, 
-	     arma::uvec dim)
-  {
-
-    const auto& p = as_Mat(rho1); 
-    const auto& A1 = as_Mat(A);
-    
-    bool checkV = true;
-    if(p.n_cols == 1)
-      checkV = false;
-
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+              is_same_pT_var<T1, T2>::value,
+            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+inline TR apply(const T1& rho1, const T2& A, arma::uvec sys, arma::uvec dim) {
+  const auto& p = as_Mat(rho1);
+  const auto& A1 = as_Mat(A);
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(p.n_elem == 0)
-      throw Exception("qic::apply",Exception::type::ZERO_SIZE);
+  bool checkV = true;
+  if (p.n_cols == 1)
+    checkV = false;
 
-    if(A1.n_elem == 0)
-      throw Exception("qic::apply",Exception::type::ZERO_SIZE);
+  if (p.n_elem == 0)
+    throw Exception("qic::apply", Exception::type::ZERO_SIZE);
 
-    if(checkV)
-      if(p.n_rows!=p.n_cols)
-	throw Exception("qic::apply",
-			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    
-    if(A1.n_rows!=A1.n_cols)
-      throw Exception("qic::apply",Exception::type::MATRIX_NOT_SQUARE);
-    
-    if( dim.n_elem == 0 || arma::any(dim == 0))
-      throw Exception("qic::apply",Exception::type::INVALID_DIMS);
+  if (A1.n_elem == 0)
+    throw Exception("qic::apply", Exception::type::ZERO_SIZE);
 
-    if( arma::prod(dim)!= p.n_rows)
-      throw Exception("qic::apply",Exception::type::DIMS_MISMATCH_MATRIX);
-
-    if( arma::prod(dim(sys-1)) != A1.n_rows )
+  if (checkV)
+    if (p.n_rows != p.n_cols)
       throw Exception("qic::apply",
-		      Exception::type::DIMS_MISMATCH_MATRIX);
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
-    if(sys.n_elem > dim.n_elem 
-       || arma::find_unique(sys).eval().n_elem != sys.n_elem 
-       || arma::any(sys > dim.n_elem) || arma::any(sys == 0) )
-      throw Exception("qic::apply",Exception::type::INVALID_SUBSYS);      
+  if (A1.n_rows != A1.n_cols)
+    throw Exception("qic::apply", Exception::type::MATRIX_NOT_SQUARE);
+
+  if (dim.n_elem == 0 || arma::any(dim == 0))
+    throw Exception("qic::apply", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(dim) != p.n_rows)
+    throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
+
+  if (arma::prod(dim(sys - 1)) != A1.n_rows)
+    throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
+
+  if (sys.n_elem > dim.n_elem ||
+      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::any(sys > dim.n_elem) || arma::any(sys == 0))
+    throw Exception("qic::apply", Exception::type::INVALID_SUBSYS);
 #endif
-   
-    return apply_ctrl(p,A1,{},std::move(sys),std::move(dim));
-    
 
-  }
+  return apply_ctrl(p, A1, {}, std::move(sys), std::move(dim));
+}
 
+//******************************************************************************
 
-  template<typename T1, typename T2, typename TR = 
-	   typename std::enable_if< is_floating_point_var< 
-				      pT<T1>,pT<T2> 
-				      >::value
-				    && is_same_pT<T1,T2>::value,
-				    arma::Mat< 
-				      typename eT_promoter_var<T1,T2>::type >   
-				    >::type >
-    inline  
-    TR apply(const T1& rho1, 
-	     const T2& A, 
-	     arma::uvec sys, 
-	     arma::uword dim = 2)
-  {
-    const auto& rho = as_Mat(rho1); 
-    
-    bool checkV = true;
-    if(rho.n_cols == 1)
-      checkV = false;
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+              is_same_pT_var<T1, T2>::value,
+            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+inline TR apply(const T1& rho1, const T2& A, arma::uvec sys,
+                arma::uword dim = 2) {
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
-    if(rho.n_elem == 0)
-      throw Exception("qic::apply",Exception::type::ZERO_SIZE);
+  bool checkV = true;
+  if (rho.n_cols == 1)
+    checkV = false;
 
-    if(checkV)
-      if(rho.n_rows != rho.n_cols)
-	throw Exception("qic::apply",
-			Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-    
-    if(dim == 0)
-      throw Exception("qic::apply",Exception::type::INVALID_DIMS);
+  if (rho.n_elem == 0)
+    throw Exception("qic::apply", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::apply",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim == 0)
+    throw Exception("qic::apply", Exception::type::INVALID_DIMS);
 #endif
-  
-    arma::uword n = static_cast<arma::uword>
-      (std::llround(std::log(rho.n_rows) / std::log(dim)));
 
-    arma::uvec dim2 = dim * arma::ones<arma::uvec>(n);
-    return apply(rho,A,std::move(sys),std::move(dim2));
+  arma::uword n = static_cast<arma::uword>(
+    std::llround(std::log(rho.n_rows) / std::log(dim)));
 
-  }
-
-
+  arma::uvec dim2(n);
+  dim2.fill(dim);
+  return apply(rho, A, std::move(sys), std::move(dim2));
 }
+
+//******************************************************************************
+
+}  // namespace qic
