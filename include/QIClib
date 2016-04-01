@@ -1,0 +1,122 @@
+/*
+ * QIClib (Quantum information and computation library)
+ *
+ * Copyright (c) 2015 - 2016  Titas Chanda (titas.chanda@gmail.com)
+ *
+ * This file is part of QIClib.
+ *
+ * QIClib is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QIClib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef _QICLIB_HPP
+#define _QICLIB_HPP
+
+#include <armadillo>
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <complex>
+#include <stdexcept>
+#include <type_traits>
+#include <tuple>
+#include <random>
+#include <limits>
+
+#define QICLIB_NLOPT
+// Comment out the previous line, if you don't want to use
+// NLopt dependent features
+
+#ifdef QICLIB_DONT_USE_NLOPT
+#undef QICLIB_NLOPT
+#endif
+
+#if (__GNUC__ && !__clang__)
+
+#define _QICLIB_UNUSED_ __attribute__((unused))
+#else
+#define _QICLIB_UNUSED_
+#endif
+
+#include "QIClib_bits/basic/openmp.hpp"
+
+#include "QIClib_bits/internal/first.hpp"
+#include "QIClib_bits/internal/singleton.hpp"
+
+#include "QIClib_bits/class/exception.hpp"
+#include "QIClib_bits/class/constants.hpp"
+#include "QIClib_bits/class/init.hpp"
+#include "QIClib_bits/class/random_devices.hpp"
+
+#include "QIClib_bits/basic/type_traits.hpp"
+#include "QIClib_bits/basic/as_Mat.hpp"
+#include "QIClib_bits/basic/as_Col.hpp"
+#include "QIClib_bits/basic/is_equal.hpp"
+#include "QIClib_bits/basic/is_H.hpp"
+#include "QIClib_bits/basic/is_U.hpp"
+#include "QIClib_bits/basic/is_pure.hpp"
+#include "QIClib_bits/basic/is_valid_state.hpp"
+#include "QIClib_bits/basic/range.hpp"
+#include "QIClib_bits/basic/random.hpp"
+#include "QIClib_bits/basic/num.hpp"
+
+#include "QIClib_bits/internal/second.hpp"
+
+#include "QIClib_bits/function/Tx.hpp"
+#include "QIClib_bits/function/TrX.hpp"
+#include "QIClib_bits/function/sysperm.hpp"
+#include "QIClib_bits/function/powm.hpp"
+#include "QIClib_bits/function/expm.hpp"
+#include "QIClib_bits/function/sqrtm.hpp"
+#include "QIClib_bits/function/funcm.hpp"
+#include "QIClib_bits/function/tensor.hpp"
+#include "QIClib_bits/function/dsum.hpp"
+#include "QIClib_bits/function/absm.hpp"
+#include "QIClib_bits/function/conv_to_pure.hpp"
+#include "QIClib_bits/function/pauli.hpp"
+#include "QIClib_bits/function/purify.hpp"
+#include "QIClib_bits/function/generator.hpp"
+
+#include "QIClib_bits/function/apply_ctrl.hpp"
+#include "QIClib_bits/function/apply.hpp"
+#include "QIClib_bits/function/measure.hpp"
+#include "QIClib_bits/function/entropy.hpp"
+#include "QIClib_bits/function/entanglement.hpp"
+#include "QIClib_bits/function/neg.hpp"
+#include "QIClib_bits/function/mutual_info.hpp"
+#include "QIClib_bits/function/ent_check_CMC.hpp"
+#include "QIClib_bits/function/concurrence.hpp"
+#include "QIClib_bits/function/EoF.hpp"
+#include "QIClib_bits/function/distance.hpp"
+#include "QIClib_bits/function/channel.hpp"
+#include "QIClib_bits/function/schmidt.hpp"
+#include "QIClib_bits/function/schatten.hpp"
+
+#ifdef QICLIB_NLOPT
+
+// NLopt dependent features
+
+#include <nlopt.hpp>
+#include "QIClib_bits/discord/default_config.hpp"
+#include "QIClib_bits/discord/discord_reg.hpp"
+#include "QIClib_bits/discord/discord3_reg.hpp"
+#include "QIClib_bits/discord/deficit_reg.hpp"
+#include "QIClib_bits/discord/deficit3_reg.hpp"
+#include "QIClib_bits/discord/discord.hpp"
+#include "QIClib_bits/discord/discord3.hpp"
+#include "QIClib_bits/discord/deficit.hpp"
+#include "QIClib_bits/discord/deficit3.hpp"
+
+#endif
+
+#endif
