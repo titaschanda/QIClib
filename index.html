@@ -4,11 +4,11 @@
     <meta name="robots" content="index">
     <meta name="googlebot" content="index">
     <meta charset="UTF-8">
-    <title>QIC_lib</title>
+    <title>QIClib</title>
     <link rel="icon" href="qic.png" type="image/png">
     <meta name="author" content="Titas Chanda"/>
     <meta name="description" content=">A C++11 library for quantum information and computation based on Armadillo">
-    <meta name="keywords" content="quantum,information,computation,library,qic,lib,qic_lib,QIC_lib,c++11,c++,armadillo">
+    <meta name="keywords" content="quantum,information,computation,library,qic,lib,QIC_lib,QIClib,c++11,c++,armadillo">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
@@ -28,16 +28,16 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Quantum Information and Computation library <br> (QIC_lib)</h1>
+      <h1 class="project-name">Quantum Information and Computation library <br> (QIClib)</h1>
       <h2 class="project-tagline">A C++11 library for quantum information and computation based on Armadillo</h2>
 
       <a href="index.html" class="btn">Home</a>
       <a href="documentation.html" class="btn">API Documentation</a>
       <a href="sample.html" class="btn">Sample Codes</a>
       <br>
-      <a href="https://github.com/titaschanda/QIC_lib" class="btn">View on GitHub</a>
-      <a href="https://github.com/titaschanda/QIC_lib/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/titaschanda/QIC_lib/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://github.com/titaschanda/QIClib" class="btn">View on GitHub</a>
+      <a href="https://github.com/titaschanda/QIClib/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/titaschanda/QIClib/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
@@ -45,74 +45,79 @@
 	<a id="version" class="anchor" href="#version" aria-hidden="true"><span class="octicon octicon-link"></span></a>
 	Version 0.0.4 - Development Branch </h1>
 
-      <p>QIC_lib is a mordern C++11 library for general purpose quantum computing, supporting Linux, Windows and Mac OS X. 
+      <p align="justify">
+	QIClib is a mordern C++11 library for general purpose quantum computing, supporting Linux, Windows and Mac OS X. 
 	It is a header only template library, using <a href="http://arma.sourceforge.net/">Armadillo</a> (developed by Conrad Sanderson et al., Data61, Australia) for highly efficient linear algebra calculations, and if available, the <a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> nonlinear optimization library for certain features.</p>
 
       <h2>
 	<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
-      QIC_lib is a header only library, so there is no need to compile the source.<br><br>
+      
+      <p align="justify">
+      QIClib is a header only library, so there is no need to compile the source.<br><br>
 
-      Download QIC_lib either from the above download link or using <code>git clone</code> with the command <br>
+      Download QIClib either from the above download link or using <code>git clone</code> with the command <br>
       <code>   
-	git clone https://github.com/titaschanda/QIC_lib.
-      </code><br><br>
+	git clone https://github.com/titaschanda/QIClib</code>. <br><br>
 
-      Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (version 4.2 or later) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), comment out the following line in <code>include/QIC_lib.hpp</code>:<br>
-      <code>
-	#define QIC_LIB_NLOPT
+      Include the header <code>QIClib</code> in your source code (make sure that your compiler can find the path of the header file) and QIClib is ready to fly. 
+      <br><br>
+
+      Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (version 4.2 or later) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), just add the following line before including <code>QIClib</code> header:
+      <code><br>
+	#define QIClib_DONT_USE_NLOPT
       </code><br><br>
       Also make sure that you have a C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8 or later, or <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended.<br><br>
 
-      Include the header <code>QIC_lib.hpp</code> in your source code (make sure that your compiler can find the path of the header file) and QIC_lib is ready to fly. 
-
-      <br><br>
 
       For example codes, see <a href ="sample.html">here</a>. You will also find detailed API information <a href = "documentation.html">here</a>.<br><br>
 
 
 
-      <b>Note:</b> Instead of using standard <a href = "http://www.netlib.org/blas">BLAS</a>, link <a href = "http://www.openblas.net/">OpenBLAS</a>,  <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a> with latest version of <a href="http://arma.sourceforge.net/">Armadillo</a> for better performance. For more see, <a href = "http://arma.sourceforge.net/faq.html#dependencies">this</a> and <a href = "https://gist.github.com/bdsatish/5646151">this</a>. Also turn on compiler optimizations, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-O3 -march=native</code> flag during compilation. 
+      <b>Note:</b> Instead of using standard <a href = "http://www.netlib.org/blas">BLAS</a>, link <a href = "http://www.openblas.net/">OpenBLAS</a>,  <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a> 
+(or <a href = "https://developer.apple.com/library/tvos/documentation/Accelerate/Reference/AccelerateFWRef/index.html"> Accelerate Framework Reference </a> in MAC OSX) with latest version of <a href="http://arma.sourceforge.net/">Armadillo</a> for better performance. For more see, <a href = "http://arma.sourceforge.net/faq.html#dependencies">this</a> and <a href = "https://gist.github.com/bdsatish/5646151">this</a>. Also turn on compiler optimizations, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-O3</code> flag during compilation. You can also add <code>-march=native</code> flag to enable <a href = "https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</a> instructions.</p>
 
       <h2>
 	<a id="got-a-problem-or-question" class="anchor" href="#got-a-problem-or-question" aria-hidden="true"><span class="octicon octicon-link"></span></a>Got a Problem or Question?</h2>
-      If you have a question about how to use QIC_lib, create a new issue at <a href = "https://github.com/titaschanda/QIC_lib/issues">issue tracker</a> labelled <code>discussion</code>.
+      <p align="justify">
+      If you have a question about how to use QIClib, create a new issue at <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a> labelled <code>discussion</code>.</p>
 
       <h2>
 	<a id="found-an-issue-or-bug" class="anchor" href="#found-an-issue-or-bug" aria-hidden="true"><span class="octicon octicon-link"></span></a>Found an Issue or Bug?</h2>
-      If you found a bug in the source code or a mistake in any kind of documentation, please let us know by adding an issue to the  <a href = "https://github.com/titaschanda/QIC_lib/issues">issue tracker</a>. <br><br>
+      <p align="justify">
+      If you found a bug in the source code or a mistake in any kind of documentation, please let us know by adding an issue to the  <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a>. <br><br>
 
 
-      You are welcomed to submit a pull request with your fix afterwards, if at hand.
+      You are welcomed to submit a pull request with your fix afterwards, if at hand. </p>
 
 
       <h2>
 	<a id="requesting-a-feature" class="anchor" href="#requesting-a-feature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requesting a Feature?</h2>
+      <p align="justify">
+      If you are missing some features within QIClib, feel free to ask us about it by adding a new request to the <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a> labelled <code>feature request</code>.<br><br>
 
-      If you are missing some features within QIC_lib, feel free to ask us about it by adding a new request to the <a href = "https://github.com/titaschanda/QIC_lib/issues">issue tracker</a> labelled <code>feature request</code>.<br><br>
-
-      Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.
+      Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.</p>
 
 
       <h2>
 	<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
-      <p>Copyright (c) 2015 - 2016  Titas Chanda, titas DOT chanda AT gmail DOT com</p>
+      <p align="justify">Copyright (c) 2015 - 2016  Titas Chanda, titas DOT chanda AT gmail DOT com</p>
 
-      <p>QIC_lib is free software: you can redistribute it and/or modify
+      <p align="justify">QIClib is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.</p>
 
-      <p>QIC_lib is distributed in the hope that it will be useful,
+      <p align="justify">QIClib is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.</p>
 
-      <p>You should have received a copy of the GNU General Public License
-	along with QIC_lib.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+      <p align="justify">You should have received a copy of the GNU General Public License
+	along with QIClib.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIC_lib">Quantum Information and Computation library (QIC_lib)</a> is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIClib">Quantum Information and Computation library (QIClib)</a> is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>

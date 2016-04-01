@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Documentation - QIC_lib</title>
+    <title>Documentation - QIClib</title>
     <link rel="icon" href="qic.png" type="image/png">
     <meta name="author" content="Titas Chanda"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,22 +15,22 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Quantum Information and Computation library <br> (QIC_lib)</h1>
+      <h1 class="project-name">Quantum Information and Computation library <br> (QIClib)</h1>
       <h2 class="project-tagline">A C++11 library for quantum information and computation based on Armadillo</h2>
       <a href="index.html" class="btn">Home</a>
       <a href="documentation.html" class="btn">API Documentation</a>
       <a href="sample.html" class="btn">Sample Codes</a>
       <br>
-      <a href="https://github.com/titaschanda/QIC_lib" class="btn">View on GitHub</a>
-      <a href="https://github.com/titaschanda/QIC_lib/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/titaschanda/QIC_lib/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://github.com/titaschanda/QIClib" class="btn">View on GitHub</a>
+      <a href="https://github.com/titaschanda/QIClib/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/titaschanda/QIClib/tarball/master" class="btn">Download .tar.gz</a>
 
     </section>
 
     <section class="main-content">
     
       <a name=top></a>  
-      <center><h2> API Reference for QIC_lib 0.0.4	
+      <center><h2> API Reference for QIClib 0.0.4	
       </h2></center>
 
       <b>Preamble</b>
@@ -41,7 +41,7 @@
 	  <ul>
 	    <br>
 	    <li>
-	      Every functions, classes, or constants in QIC_lib belongs to the <code> namespace qic</code>.
+	      Every functions, classes, or constants in QIClib belongs to the <code> namespace qic</code>.
 	    </li>
 	    <br>
 	    <li>
@@ -82,7 +82,7 @@
 	      <tbody>
 		<tr><td><a href="#eps"> _precision::eps     </td><td>  </td><td> Precision for floating point arithmetic</td></tr>
 		<tr><td><a href="#init"> Init     </td><td>  </td><td> Class for library initialization</td></tr>
-		<tr><td><a href="#states"> STATES&lttype&gt, states, fstates  </td><td>  </td><td> Several predefined basis states, projectors and operators</td></tr>
+		<tr><td><a href="#spm"> SPM&lt;type&gt;, spm, fspm  </td><td>  </td><td> Several predefined constant special matrices like basis states, projectors and operators</td></tr>
 		<tr><td><a href="#func"> Func&lttype&gt, func, funcf  </td><td>  </td><td> Several predefined functions to be used with <a href = #funcm_sym><code>funcm_sym</code></a> or <a href = #funcm_gen><code>funcm_gen</code></a>
 		</td></tr>
 		
@@ -213,10 +213,10 @@
 	  <a name=eps></a>
 	  <b>_precision::eps</b><br><br>
 	  <ul>
-	    <li> Precision for floating point arithmetic. </li><br> 
-	    <li>Every <code>double</code> <i>less than</i> <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
-	    <li>Every <code>float</code> <i>less than</i> <code>_precision::eps&lt;float&gt;::value</code> will be treated as zero.</li><br>
-	    <li> Default value for <code>_precision::eps&lt;double&gt;::value</code> is <code>1e-12</code>, and <code>_precision::eps&lt;float&gt;::value</code> is <code>1e-6</code>. It can be changed by editing <code>include/QIC_lib_bits/class/constants.hpp</code> file.</li>
+	    <li>Precision for floating point arithmetic. </li><br> 
+	    <li>Every <code>float</code>/<code>double</code>/<code>long double</code> <i>less than</i> <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
+	    
+	    <li> Default value for <code>_precision::eps&lt;float&gt;::value</code> is <code>10*std::numeric_limits&lt;float&gt;::epsilon()</code>, and <code>_precision::eps&lt;double&gt;::value</code> is <code>100*std::numeric_limits&lt;float&gt;::epsilon()</code>. Same for <code>long double</code>. It can be changed by editing <code>include/QIClib_bits/class/constants.hpp</code> file.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -228,8 +228,7 @@
 	  <a name=init></a>
 	  <b>Init</b><br><br>
 	  <ul>
-	    <li>  Class for library initialization.</li><br>
-	    <li> Used by <code>static const Init& init = Init::get_instance();</code>. <br> See <code>include/QIC_lib_bits/class/init.hpp</code> file for details. </li>
+	    <li>Class for library initialization. Automatically loaded if you use this library.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -238,32 +237,51 @@
 	  <hr><br>
 
 
-	  <a name=states></a>
-	  <b>STATES&lttype&gt<br> states <br> fstates</b><br><br>
+	  <a name=spm></a>
+	  <b>SPM&lt;type&gt;<br> spm <br> fspm</b><br><br>
 	  <ul>
-	    <li> Several predefined <i> complex </i> basis states, projectors and operators. <code>type</code> can be either <code>double</code> or <code>float</code>.</li><br>
-	    <li> Used by <code>static const STATES&ltdouble&gt& states  = STATES&ltdouble&gt::get_instance();</code> and <br> 
-	      <code>static const STATES&ltfloat&gt& fstates  = STATES&ltfloat&gt::get_instance();</code>. <br>
-	      See <code>include/QIC_lib_bits/class/init.hpp</code> file for details. </li><br>
+	    <li> Several predefined <i> complex </i> special matrices and vectors  like basis states, projectors and operators. 
+	      <code>type</code> can be either <code>double</code> or <code>float</code>.</li><br>
 
-	    <li> <code>states.S</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of Pauli matrices (<code>const cx_mat</code>). <code>states.S(0)</code>, <code>states.S(1)</code>, <code>states.S(2)</code>, and <code>states.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, and <i> &sigma;<sub>z</sub></i>.</li><br>
-	    <li> <code>states.basis2</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 2-dimensional basis vectors (<code>const cx_vec</code>). <code>states.basis(0,i)</code> and <code>states.basis(1,i)</code> are respectively |0&gt and |1&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>states.proj2</code>
-	      returns corresponding projectors (<code>const cx_mat</code>).</li><br>
-	    <li> <code>states.basis3</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 3-dimensional basis vectors (<code>const cx_vec</code>). <code>states.basis(0,i)</code>, <code>states.basis(1,i)</code> and <code>states.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>states.proj3</code> returns corresponding projectors (<code>const cx_mat</code>).</li><br>
-	    <li> <b>Note:</b> You cannot take a copy of the whole <code>STATES&lttype&gt</code> class, but you can take reference to <code>const</code>. For this use <code>const STATES&ltdouble&gt& SOMENAME  = STATES&ltdouble&gt::get_instance();</code>. <br>
-	      For each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference to <code>const</code> (See the following example).</li><br> 
+	    <li> Used by <code>static const SPM&lt;double&gt;& spm  = SPM&lt;double&gt;::get_instance();</code> or 
+	      <code>static const SPM&lt;float&gt;& spmf  = SPM&lt;float&gt;::get_instance();</code>. You don't need to do this as
+	   it is already defined. Just use <code>spm</code> or <code>spmf</code>. </li><br>
+
+	    <li> <code>spm.S</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> 
+	      of Pauli matrices (<code>const cx_mat</code>). <code>spm.S(0)</code>, <code>spm.S(1)</code>, <code>spm.S(2)</code>, 
+	      and <code>spm.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, 
+	      and <i> &sigma;<sub>z</sub></i>.</li><br>
+
+	    <li> <code>spm.basis2</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 
+	      2-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0,i)</code> and <code>spm.basis(1,i)</code> are respectively 
+	      |0&gt and |1&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>spm.proj2</code> returns corresponding projectors 
+	      (<code>const cx_mat</code>).</li><br>
+
+	    <li> <code>spm.basis3</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 
+	      3-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0,i)</code>, <code>spm.basis(1,i)</code> and 
+	      <code>spm.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). 
+	      <code>spm.proj3</code> returns corresponding projectors (<code>const cx_mat</code>).</li><br>
+
+	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;type&gt;</code> class, but you can take reference to <code>const</code>. 
+	      For this use <code>const SPM&lt;double&gt;& SOMENAME  = SPM&lt;double&gt;::get_instance();</code>. <br>
+	      For each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference to <code>const</code> 
+	      (See the following example).</li><br> 
 
 	    <li> Example:
 	      <pre>
-		const cx_mat& S1 = states.S(1); // \sigma_x matrix, take reference
-		cx_mat S2 = states.S(2); // \sigma_y matrix, take a copy
+		const cx_mat& S1 = states.S(1);   // \sigma_x matrix, take reference
+		cx_mat S2 = states.S(2);          // \sigma_y matrix, take a copy
 
-		const cx_vec& plus = states.basis2(0,1); // |+&gt state
+		const cx_vec& plus = states.basis2(0,1);     // |+&gt state
 		const cx_mat& proj_plus = states.proj2(0,1); // |+&gt&lt+| projector
 
 		const cx_vec& U = states.basis3(0,3); // 1st eigenvector of 
                 //Spin S_z operator in 3-dim
+
 		const cx_mat& M = states.basis3(1,3); // 2nd eigenvector of 
+                //Spin S_z operator in 3-dim
+
+		const cx_mat& M = states.basis3(2,3); // 3rd eigenvector of 
                 //Spin S_z operator in 3-dim
 	      </pre>
 	    </li>
@@ -1931,7 +1949,7 @@
 	  <ul>
 	 
 
-	    <li> <b> What are the basic dependencies of QIC_lib?</b><br>
+	    <li> <b> What are the basic dependencies of QIClib?</b><br>
 	      <ul>
 		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> C++ linear algebra library (version 4.2 or later), with  <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
 		  <a href = "http://www.netlib.org/blas">BLAS</a> implementations.</li>
@@ -1943,7 +1961,7 @@
 	    <br>
 
 	    
-	    <li><b>How do I use QIC_lib?</b><br>
+	    <li><b>How do I use QIClib?</b><br>
 	      See <a href ="index.html#getting-started"> getting started</a> section.
 	    </li>
 	    
@@ -1975,7 +1993,7 @@
 	 
 	    
 
-	    <li> <b> Instead of using other popular C++ linear algebra libraries, why did QIC_lib choose <a href="http://arma.sourceforge.net/">Armadillo</a>?</b>
+	    <li> <b> Instead of using other popular C++ linear algebra libraries, why did QIClib choose <a href="http://arma.sourceforge.net/">Armadillo</a>?</b>
 	      <ul>
 		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> is fast, efficient and reliable.</li>
 		<li> It has nice API, which is deliberately similar to Matlab.</li>
@@ -1991,8 +2009,8 @@
 	    <br>
     
 
-	    <li><b>I know C++98, but do not know much about C++11. Can I use QIC_lib?</b><br>
-	      Yes. Though QIC_lib is written in C++11 standard, you can still do C++98 style coding with QIC_lib functions. You just need a C++11 compliant compiler and make sure that you add necessary compiler flag to enable C++11 features, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-std=c++11</code> flag during compilation.
+	    <li><b>I know C++98, but do not know much about C++11. Can I use QIClib?</b><br>
+	      Yes. Though QIClib is written in C++11 standard, you can still do C++98 style coding with QIClib functions. You just need a C++11 compliant compiler and make sure that you add necessary compiler flag to enable C++11 features, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-std=c++11</code> flag during compilation.
 	    </li>
 	
 
@@ -2001,16 +2019,16 @@
 	    <br>
 
 	    
-	    <li><b>Can I use C++11 <code>auto</code> with QIC_lib functions?</b><br>
-	      Though use of C++11 <code>auto</code> is not recommended with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions, due to the extensive use of template meta-programming, every QIC_lib functions return by value, so use of <code>auto</code> is safe there. In fact, use of <code>auto</code> is recommended with QIC_lib functions and objects, as it will always guarantee <i>move</i> operations. But again, care should be taken when <code>auto</code> is used with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions. See the following example:<br>
+	    <li><b>Can I use C++11 <code>auto</code> with QIClib functions?</b><br>
+	      Though use of C++11 <code>auto</code> is not recommended with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions, due to the extensive use of template meta-programming, every QIClib functions return by value, so use of <code>auto</code> is safe there. In fact, use of <code>auto</code> is recommended with QIClib functions and objects, as it will always guarantee <i>move</i> operations. But again, care should be taken when <code>auto</code> is used with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions. See the following example:<br>
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8);
 		A *= A.t();
 		A /= trace(A);
 
 		auto B = A; // OK, no temporary expression
-		auto C = TrX(A,{1},{2,2,2}); // OK, QIC_lib function
-		auto D = powm_sym(A,3); // OK, QIC_lib function
+		auto C = TrX(A,{1},{2,2,2}); // OK, QIClib function
+		auto D = powm_sym(A,3); // OK, QIClib function
 
 		auto E = A * A; // NOT OK!! temporary expression
 		auto F = A + B + D ; // NOT OK!! temporary expression
@@ -2036,7 +2054,7 @@
 
 
   
-	    <li><b>Do QIC_lib uses C++14 features?</b><br>
+	    <li><b>Do QIClib uses C++14 features?</b><br>
 	      No, only C++11 features have been used, since many compilers do not support C++14 fully. C++14 features like <i>auto return type deductions for functions</i> have been avoided by using template meta-programming.
 	    </li>
 	    
@@ -2073,7 +2091,7 @@
 	  <a href="#top">Go to top</a>
 
 	  <footer class="site-footer">
-	    <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIC_lib">Quantum Information and Computation library (QIC_lib)</a> is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
+	    <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIClib">Quantum Information and Computation library (QIClib)</a> is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
 
 	    <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
 	  </footer>
