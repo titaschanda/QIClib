@@ -214,9 +214,12 @@
 	  <b>_precision::eps</b><br><br>
 	  <ul>
 	    <li>Precision for floating point arithmetic. </li><br> 
-	    <li>Every <code>float</code>/<code>double</code>/<code>long double</code> <i>less than</i> <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
+	    <li>Every <code>float</code>/<code>double</code>/<code>long double</code> <i>less than</i> 
+	      <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
 	    
-	    <li> Default value for <code>_precision::eps&lt;float&gt;::value</code> is <code>10*std::numeric_limits&lt;float&gt;::epsilon()</code>, and <code>_precision::eps&lt;double&gt;::value</code> is <code>100*std::numeric_limits&lt;float&gt;::epsilon()</code>. Same for <code>long double</code>. It can be changed by editing <code>include/QIClib_bits/class/constants.hpp</code> file.</li>
+	    <li> Default value for <code>_precision::eps&lt;float&gt;::value</code> is <code>10*std::numeric_limits&lt;float&gt;::epsilon()</code>, 
+	      and <code>_precision::eps&lt;double&gt;::value</code> is <code>100*std::numeric_limits&lt;float&gt;::epsilon()</code>. 
+	      Same for <code>long double</code>. It can be changed by editing <code>include/QIClib_bits/class/constants.hpp</code> file.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -253,13 +256,13 @@
 	      and <i> &sigma;<sub>z</sub></i>.</li><br>
 
 	    <li> <code>spm.basis2</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 
-	      2-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0,i)</code> and <code>spm.basis(1,i)</code> are respectively 
+	      2-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0, i)</code> and <code>spm.basis(1, i)</code> are respectively 
 	      |0&gt and |1&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>spm.proj2</code> returns corresponding projectors 
 	      (<code>const cx_mat</code>).</li><br>
 
 	    <li> <code>spm.basis3</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 
-	      3-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0,i)</code>, <code>spm.basis(1,i)</code> and 
-	      <code>spm.basis(2,i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). 
+	      3-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0, i)</code>, <code>spm.basis(1, i)</code> and 
+	      <code>spm.basis(2, i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). 
 	      <code>spm.proj3</code> returns corresponding projectors (<code>const cx_mat</code>).</li><br>
 
 	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;type&gt;</code> class, but you can take reference to <code>const</code>. 
@@ -272,16 +275,16 @@
 		const cx_mat& S1 = states.S(1);   // \sigma_x matrix, take reference
 		cx_mat S2 = states.S(2);          // \sigma_y matrix, take a copy
 
-		const cx_vec& plus = states.basis2(0,1);     // |+&gt state
-		const cx_mat& proj_plus = states.proj2(0,1); // |+&gt&lt+| projector
+		const cx_vec& plus = states.basis2(0, 1);     // |+&gt state
+		const cx_mat& proj_plus = states.proj2(0, 1); // |+&gt&lt+| projector
 
-		const cx_vec& U = states.basis3(0,3); // 1st eigenvector of 
+		const cx_vec& U = states.basis3(0, 3); // 1st eigenvector of 
                 //Spin S_z operator in 3-dim
 
-		const cx_mat& M = states.basis3(1,3); // 2nd eigenvector of 
+		const cx_mat& M = states.basis3(1, 3); // 2nd eigenvector of 
                 //Spin S_z operator in 3-dim
 
-		const cx_mat& M = states.basis3(2,3); // 3rd eigenvector of 
+		const cx_mat& M = states.basis3(2, 3); // 3rd eigenvector of 
                 //Spin S_z operator in 3-dim
 	      </pre>
 	    </li>
@@ -297,9 +300,14 @@
 	  <a name=func></a>
 	  <b>Func&lttype&gt<br> func <br> funcf</b><br><br>
 	  <ul>
-	    <li> Class with several predefined static member functions to be used with <a href = "#funcm_sym"><code>funcm_sym</code></a> or <a href = "#funcm_gen"><code>funcm_gen</code></a>.</li><br>
-	    <li> <code>func</code> is an alias for <code>Func&lt;double&gt;</code> and <code>funcf</code> is an alias for <code>Func&lt;float&gt;</code>.</li><br>
+	    <li> Class with several predefined static member functions to be used with <a href = "#funcm_sym"><code>funcm_sym</code></a> or 
+	      <a href = "#funcm_gen"><code>funcm_gen</code></a>.</li><br>
+	    
+	    <li> <code>func</code> is an alias for <code>Func&lt;double&gt;</code> and <code>funcf</code> is an alias for 
+	      <code>Func&lt;float&gt;</code>.</li><br>
+	    
 	    <li> Every member function takes one <i>complex</i> type and returns one <i>complex</i> type.</li><br>
+	    
 	    <li> List of member functions:
 	      <ul>
 		<li> func::sin</li>
@@ -339,10 +347,13 @@
 
 	  
 	  <a name=is_H></a>
-	  <b>is_H(A)<br>is_H(A,atol,rtol)</b><br><br>
+	  <b>is_H(A)<br>is_H(A, atol, rtol)</b><br><br>
 	  <ul>
 	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric or Hermitian, else <code>false</code>.</li><br>
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-2 * _precision::eps&lt;POD_TYPE&gt;::value</code> and <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>
+
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol =  _precision::eps&lt;POD_TYPE&gt;::value</code> and 
+	      <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> can be either <code>double</code> or 
+	      <code>float</code> depending on the element type of <code>A</code>.</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -354,10 +365,13 @@
 
 
 	  <a name=is_U></a>
-	  <b>is_U(A)<br>is_U(A,atol,rtol)</b><br><br>
+	  <b>is_U(A)<br>is_U(A, atol, rtol)</b><br><br>
 	  <ul>
 	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal or unitary, else <code>false</code>.</li><br>
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-2 * _precision::eps&lt;POD_TYPE&gt;::value</code> and <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>	    
+	    
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = _precision::eps&lt;POD_TYPE&gt;::value</code> and 
+	      <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>
+	      depending on the element type of <code>A</code>.</li>	    
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -368,10 +382,13 @@
 
 
 	  <a name=is_pure></a>
-	  <b>is_pure(A)<br>is_pure(A,check_norm=true)<br>is_pure(A,check_norm=ture,tol)</b><br><br>
+	  <b>is_pure(A)<br>is_pure(A, check_norm=true)<br>is_pure(A, check_norm, tol)</b><br><br>
 	  <ul>
 	    <li> Check purity of a density matrix. Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li><br>
-	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and normalisation of the state will not be checked and <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>
+	    
+	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and normalisation of the state will 
+	      not be checked and <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or 
+	      <code>float</code> depending on the element type of <code>A</code>.</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -382,11 +399,15 @@
 
 
 	  <a name=is_valid_state></a>
-	  <b>is_valid_state(A)<br>is_valid_state(A,tol)</b><br><br>
+	  <b>is_valid_state(A)<br>is_valid_state(A, tol)</b><br><br>
 	  <ul>
-	    <li> Check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a valid quantum state, else <code>false</code>.</li><br>
-	    <li> <code>tol</code> is optional, by default <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li><br>
-	    <li> Note: Normalisation will always be checked.</li>
+	    <li> Check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a 
+	      valid quantum state, else <code>false</code>.</li><br>
+	    
+	    <li> <code>tol</code> is optional, by default <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is 
+	      either <code>double</code> or <code>float</code> depending on the element type of <code>A</code>.</li><br>
+
+	    <li> <b>Note:</b> Normalisation will always be checked.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  
@@ -396,11 +417,17 @@
 
 
 	  <a name=is_equal></a>
-	  <b>is_equal(A,B)<br>is_equal(A,B,typecheck=false)<br>is_equal(A,B,typecheck=false,atol,rtol)</b><br><br>
+	  <b>is_equal(A, B)<br>is_equal(A, B, typecheck=false)<br>is_equal(A, B, typecheck, atol, rtol)</b><br><br>
 	  <ul>
-	    <li> Check whether two matrices are equal. Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise equal, else <code>false</code>.</li><br>
-	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types of <code>A</code> and <code>B</code> will not be checked.
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = 1e-2 * _precision::eps&lt;POD_TYPE&gt;::value</code> and <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>.</li>	 
+	    <li> Check whether two matrices are equal. Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise equal, 
+	      else <code>false</code>.</li><br>
+	    
+	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types (<i>complex</i> or <i>real</i>) of 
+	      <code>A</code> and <code>B</code> will not be checked.
+
+	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = _precision::eps&lt;POD_TYPE&gt;::value</code> and 
+	      <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>
+	      depending on the element type of <code>A</code> or <code>B</code>.</li>	 
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -410,10 +437,14 @@
 
 
 	  <a name=range></a>
-	  <b>range(stop)<br>range(start,stop)<br>range(start,stop,step)</b><br><br>
+	  <b>range(stop)<br>range(start, stop)<br>range(start, stop, step)</b><br><br>
 	  <ul>
-	    <li> Similar to Python's <code>range()</code> function. Useful in range-based <code>for</code> loops. Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) <code>start</code> to (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li><br>
+	    <li> Similar to Python's <code>range()</code> function. Useful in range-based <code>for</code> loops. 
+	      Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) <code>start</code> to 
+	      (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li><br>
+	    
 	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li><br>
+
 	    <li> Example:
 	      <pre>
 		for(auto&& i : range(10))
@@ -422,8 +453,8 @@
 		//do something
 		}
 		
-		std::vector&lt;int&gt; R1 = range(2,10,2); 
-		std::vector&lt;double&gt; R2 = range(10,-1.5,-0.5);
+		std::vector&lt;int&gt; R1 = range(2, 10, 2); 
+		std::vector&lt;double&gt; R2 = range(10, -1.5, -0.5);
 	      </pre>
 	    </li>
 
@@ -437,27 +468,35 @@
 
 
 	  <a name=TrX></a>
-	  <b>TrX(A,subsys) <br> TrX(A,subsys,dim) </b><br><br>
+	  <b>TrX(A, subsys) <br> TrX(A, subsys, dim) </b><br><br>
 	  <ul>
-	    <li> Partial trace of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of traced out subsystems.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Partial trace of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of to be traced out subsystems.</li><br>
+	    
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and 
+	      so on.</li><br>  
+	    
 	    <li> Example:
 	      <pre>
-		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		cx_mat A = randn&lt;cx_mat&gt;(8, 8); // 8x8 matrix
 		A *= A.t(); // make hermitian
 		A /= trace(A); //normalise
 
-		cx_mat B = randn&lt;cx_mat&gt;(12,12); // 12x12 matrix
+		cx_mat B = randn&lt;cx_mat&gt;(12, 12); // 12x12 matrix
 		B *= B.t(); // make hermitian
 		B /= trace(B); //normalise
 
                 // trace out 2nd and 3rd party
-                cx_mat A1 = TrX(A,{2,3}); // all dim are 2, total 3 parties
+                cx_mat A1 = TrX(A, {2, 3}); // all dim are 2, total 3 parties
 
                 // trace out 2nd and 3rd party
-                cx_mat B1 = TrX(B,{2,3},{2,3,2}); // explicitly writen dimensions
+                cx_mat B1 = TrX(B, {2, 3}, {2, 3, 2}); // explicitly writen dimensions
 	      </pre>
 	    </li>
 	  </ul>
@@ -469,27 +508,36 @@
 
 
 	  <a name=Tx></a>
-	  <b>Tx(A,subsys) <br> Tx(A,subsys,dim) </b><br><br>
+	  <b>Tx(A, subsys) <br> Tx(A, subsys, dim) </b><br><br>
 	  <ul>
-	    <li> Partial transpose of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of transposed subsystems.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Partial transpose of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of to 
+	      be transposed subsystems.</li><br>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type or <code>uvec</code> containing dimensions of every subystem.
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> 
+	      and so on.</li><br>
+  
 	    <li> Example:
 	      <pre>
-		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		cx_mat A = randn&lt;cx_mat&gt;(8, 8); // 8x8 matrix
 		A *= A.t(); // make hermitian
 		A /= trace(A); //normalise
 
-		cx_mat B = randn&lt;cx_mat&gt;(12,12); // 12x12 matrix
+		cx_mat B = randn&lt;cx_mat&gt;(12, 12); // 12x12 matrix
 		B *= B.t(); // make hermitian
 		B /= trace(B); //normalise
 
                 // transpose 2nd and 3rd party
-                cx_mat A1 = Tx(A,{2,3}); // all dim are 2, total 3 parties
+                cx_mat A1 = Tx(A, {2, 3}); // all dim are 2, total 3 parties
 
                 // transpose 2nd and 3rd party
-                cx_mat B1 = Tx(B,{2,3},{2,3,2}); // explicitly writen dimensions
+                cx_mat B1 = Tx(B, {2, 3}, {2, 3, 2}); // explicitly writen dimensions
 	      </pre>
 	    </li>
 	  </ul>
@@ -502,29 +550,38 @@
 
 
 	  <a name=sysperm></a>
-	  <b>sysperm(A,subsys) <br> sysperm(A,subsys,dim) </b><br><br>
+	  <b>sysperm(A, subsys) <br> sysperm(A, subsys, dim) </b><br><br>
 	  <ul>
-	    <li> Permute subsystems of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of permuted subsystems.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Permute subsystems of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the permutation of subsystem indices.</li><br>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and 
+	      so on.</li><br>
+  
 	    <li> Example:
 
 	      <pre>
-		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
+		cx_mat A = randn&lt;cx_mat&gt;(8, 8); // 8x8 matrix
 		A *= A.t(); // make hermitian
 		A /= trace(A); //normalise
 
-		cx_mat B = randn&lt;cx_mat&gt;(12,12); // 12x12 matrix
+		cx_mat B = randn&lt;cx_mat&gt;(12, 12); // 12x12 matrix
 		B *= B.t(); // make hermitian
 		B /= trace(B); //normalise
 
                 // permute 2nd and 3rd party
-                cx_mat A1 = sysperm(A,{1,3,2}); // all dim are 2, total 3 parties
+                cx_mat A1 = sysperm(A, {1, 3, 2}); // all dim are 2, total 3 parties
 
                 // permute 2nd and 3rd party
-                cx_mat B1 = sysperm(B,{1,3,2},{2,3,2}); // explicitly writen dimensions
-                // for B1, dim = {2,2,3} 
+                cx_mat B1 = sysperm(B, {1, 3, 2}, {2, 3, 2}); // explicitly writen 
+		// dimensions
+                // for B1, dim = {2, 2, 3} 
 	      </pre>
 	    </li>
 	  </ul>
