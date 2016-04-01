@@ -21,10 +21,12 @@
 
 namespace qic {
 
-template <typename T1, typename = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, void>::type>
-inline bool is_pure(const T1& rho1, bool check_norm = true,
-                    const pT<T1>& tol = _precision::eps<pT<T1> >::value) {
+template <typename T1,
+          typename = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, void>::type>
+inline bool
+is_pure(const T1& rho1, bool check_norm = true,
+        const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
   if ((rho.n_rows == 1) || (rho.n_cols == 1)) {

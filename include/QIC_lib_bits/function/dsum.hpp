@@ -66,8 +66,8 @@ inline TR dsum(const T1& rho1, const T2& rho2, const T3&... rho3) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR dsum(const arma::field<T1>& rho) {
 #ifndef QIC_LIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -84,7 +84,7 @@ inline TR dsum(const arma::field<T1>& rho) {
     M += rho.at(i).eval().n_cols;
   }
 
-  arma::Mat<eT<T1> > ret(N, M, arma::fill::zeros);
+  arma::Mat<trait::eT<T1> > ret(N, M, arma::fill::zeros);
   arma::uword n(0), m(0);
   for (arma::uword i = 0; i < rho.n_elem; ++i) {
     ret.submat(n, m, n + rho.at(i).eval().n_rows - 1,
@@ -99,8 +99,8 @@ inline TR dsum(const arma::field<T1>& rho) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR dsum(const std::vector<T1>& rho) {
 #ifndef QIC_LIB_NO_DEBUG
   if (rho.size() == 0)
@@ -117,7 +117,7 @@ inline TR dsum(const std::vector<T1>& rho) {
     M += rho[i].eval().n_cols;
   }
 
-  arma::Mat<eT<T1> > ret(N, M, arma::fill::zeros);
+  arma::Mat<trait::eT<T1> > ret(N, M, arma::fill::zeros);
   arma::uword n(0), m(0);
   for (arma::uword i = 0; i < rho.size(); ++i) {
     ret.submat(n, m, n + rho[i].eval().n_rows - 1,
@@ -137,8 +137,8 @@ inline arma::Mat<T1> dsum(const std::initializer_list<arma::Mat<T1> >& rho) {
 }
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR dsum_pow(const T1& rho1, arma::uword n) {
   const auto& rho = as_Mat(rho1);
 
@@ -150,7 +150,7 @@ inline TR dsum_pow(const T1& rho1, arma::uword n) {
     throw Exception("qic::dsum_pow", Exception::type::OUT_OF_RANGE);
 #endif
 
-  std::vector<arma::Mat<eT<T1> > > ret(n, rho);
+  std::vector<arma::Mat<trait::eT<T1> > > ret(n, rho);
   return dsum(ret);
 }
 

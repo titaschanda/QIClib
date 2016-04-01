@@ -23,9 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<pT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::pT<T1> > >::type>
 inline TR std_to_HS(const T1& rho1) {
   const auto& p = as_Mat(rho1);
 
@@ -40,9 +40,9 @@ inline TR std_to_HS(const T1& rho1) {
     throw Exception("qic::std_to_HS", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-  auto& S = SPM<pT<T1> >::get_instance().S;
+  auto& S = SPM<trait::pT<T1> >::get_instance().S;
 
-  arma::Mat<pT<T1> > ret(4, 4, arma::fill::zeros);
+  arma::Mat<trait::pT<T1> > ret(4, 4, arma::fill::zeros);
 
   for (arma::uword j = 0; j < 4; ++j) {
     for (arma::uword i = 0; i < 4; ++i)
@@ -54,8 +54,8 @@ inline TR std_to_HS(const T1& rho1) {
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         arma::Mat<std::complex<pT<T1> > > >::type>
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR HS_to_std(const T1& rho1) {
   const auto& p = as_Mat(rho1);
 
@@ -63,7 +63,7 @@ inline TR HS_to_std(const T1& rho1) {
   if (p.n_elem == 0)
     throw Exception("qic::HS_to_std", Exception::type::ZERO_SIZE);
 
-  if (!std::is_same<eT<T1>, pT<T1> >::value)
+  if (!std::is_same<trait::eT<T1>, trait::pT<T1> >::value)
     throw Exception("qic::HS_to_std", "Matrix is not real");
 
   if (p.n_rows != p.n_cols)
@@ -73,9 +73,9 @@ inline TR HS_to_std(const T1& rho1) {
     throw Exception("qic::HS_to_std", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-  auto& S = SPM<pT<T1> >::get_instance().S;
+  auto& S = SPM<trait::pT<T1> >::get_instance().S;
 
-  arma::Mat<std::complex<pT<T1> > > ret(4, 4, arma::fill::zeros);
+  arma::Mat<std::complex<trait::pT<T1> > > ret(4, 4, arma::fill::zeros);
 
   for (arma::uword j = 0; j < 4; ++j) {
     for (arma::uword i = 0; i < 4; ++i)

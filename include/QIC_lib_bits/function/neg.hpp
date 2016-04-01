@@ -23,8 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   const auto& p = as_Mat(rho1);
 
@@ -56,10 +57,10 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   auto rho_T = Tx(p, std::move(sys), std::move(dim));
   auto eigval = arma::eig_sym(rho_T);
-  pT<T1> Neg = 0.0;
+  trait::pT<T1> Neg = 0.0;
 
   for (const auto& i : eigval)
-    Neg += (std::abs(i) >= _precision::eps<pT<T1> >::value)
+    Neg += (std::abs(i) >= _precision::eps<trait::pT<T1> >::value)
              ? 0.5 * (std::abs(i) - i)
              : 0;
   return Neg;
@@ -67,16 +68,18 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR log_neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   return std::log2(2.0 * neg(rho1, std::move(sys), std::move(dim)) + 1.0);
 }
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   const auto& p = as_Mat(rho1);
 
@@ -107,8 +110,9 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR log_neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   return std::log2(2.0 * neg(rho1, std::move(sys), dim) + 1.0);
 }

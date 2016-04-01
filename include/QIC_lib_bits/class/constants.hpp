@@ -32,7 +32,9 @@ template <typename T, typename Enable = typename std::enable_if<
 struct eps;
 
 template <typename T> struct eps<T> {
-  static constexpr T value = 10 * std::numeric_limits<T>::epsilon();
+  static constexpr T value = std::is_same<T,float>::value ?
+      10 * std::numeric_limits<T>::epsilon()
+      : 100 * std::numeric_limits<T>::epsilon();
 };
 
 template <typename T> constexpr T eps<T>::value;

@@ -30,13 +30,13 @@ namespace protect_subs {
 // More efficient than iterative counterpart, as iterative one needs
 // extra copy constructor
 template <typename T1, typename T2,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value &&
-                                                  std::is_integral<T2>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value && std::is_integral<T2>::value,
+            arma::Mat<trait::eT<T1> > >::type>
 inline TR POWM_GEN_INT(const T1& rho, const T2& P) {
   if (P == 0) {
     arma::uword n = rho.eval().n_rows;
-    return arma::eye<arma::Mat<eT<T1> > >(n, n);
+    return arma::eye<arma::Mat<trait::eT<T1> > >(n, n);
 
   } else if (P == 1) {
     return rho;
@@ -56,17 +56,17 @@ inline TR POWM_GEN_INT(const T1& rho, const T2& P) {
 
 template <typename T1> struct int_tag {
   typedef int_tag type;
-  typedef arma::Mat<eT<T1> > ret_type;
+  typedef arma::Mat<trait::eT<T1> > ret_type;
 };
 
 template <typename T1> struct uint_tag {
   typedef uint_tag type;
-  typedef arma::Mat<eT<T1> > ret_type;
+  typedef arma::Mat<trait::eT<T1> > ret_type;
 };
 
 template <typename T1> struct nonint_tag {
   typedef nonint_tag type;
-  typedef arma::Mat<std::complex<pT<T1> > > ret_type;
+  typedef arma::Mat<std::complex<trait::pT<T1> > > ret_type;
 };
 
 template <typename T1, typename T2>
@@ -78,9 +78,10 @@ struct powm_tag : std::conditional<
 
 //************************************************************************
 
-template <typename T1, typename T2, typename TR = typename std::enable_if<
-                                      is_floating_point_var<pT<T1> >::value,
-                                      arma::Mat<std::complex<pT<T1> > > >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR powm_gen_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
@@ -92,8 +93,8 @@ inline TR powm_gen_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
     throw Exception("qic::powm_gen", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<std::complex<pT<T1> > > eigval;
-  arma::Mat<std::complex<pT<T1> > > eigvec;
+  arma::Col<std::complex<trait::pT<T1> > > eigval;
+  arma::Mat<std::complex<trait::pT<T1> > > eigvec;
   arma::eig_gen(eigval, eigvec, rho);
 
   return eigvec * diagmat(arma::pow(eigval, P)) * eigvec.i();
@@ -103,7 +104,8 @@ inline TR powm_gen_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_gen_implement(const T1& rho1, const T2& P, int_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
@@ -124,8 +126,8 @@ inline TR powm_gen_implement(const T1& rho1, const T2& P, int_tag<T1>) {
 //************************************************************************
 
 template <typename T1, typename T2,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_gen_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
@@ -142,9 +144,10 @@ inline TR powm_gen_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
 
 //************************************************************************
 
-template <typename T1, typename T2, typename TR = typename std::enable_if<
-                                      is_floating_point_var<pT<T1> >::value,
-                                      arma::Mat<std::complex<pT<T1> > > >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
@@ -156,8 +159,8 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
     throw Exception("qic::powm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<pT<T1> > eigval;
-  arma::Mat<eT<T1> > eigvec;
+  arma::Col<trait::pT<T1> > eigval;
+  arma::Mat<trait::eT<T1> > eigvec;
 
   if (rho.n_rows > 20)
     arma::eig_sym(eigval, eigvec, rho, "dc");
@@ -166,7 +169,8 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
 
   return eigvec *
          arma::diagmat(arma::pow(
-           arma::conv_to<arma::Col<std::complex<pT<T1> > > >::from(eigval),
+           arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
+             eigval),
            P)) *
          eigvec.t();
 }
@@ -175,7 +179,8 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_sym_implement(const T1& rho1, const T2& P, int_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
@@ -195,8 +200,8 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, int_tag<T1>) {
 //************************************************************************
 
 template <typename T1, typename T2,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_sym_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
@@ -214,8 +219,8 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
 //************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TENSOR_POW(const T1& rho, arma::uword n) {
   if (n == 1) {
     return rho;

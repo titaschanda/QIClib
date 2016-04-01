@@ -26,7 +26,7 @@ namespace qic {
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1, T2>::value && is_same_pT_var<T1, T2>::value,
-            pT<T1> >::type>
+            trait::pT<T1> >::type>
 inline TR HS_dist(const T1& rho11, const T2& rho12) {
   const auto& rho1 = as_Mat(rho11);
   const auto& rho2 = as_Mat(rho12);
@@ -50,9 +50,9 @@ inline TR HS_dist(const T1& rho11, const T2& rho12) {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
-            pT<T1> >::type>
+            trait::pT<T1> >::type>
 inline TR tr_dist(const T1& rho11, const T2& rho12) {
   const auto& rho1 = as_Mat(rho11);
   const auto& rho2 = as_Mat(rho12);
@@ -77,9 +77,9 @@ inline TR tr_dist(const T1& rho11, const T2& rho12) {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
-            pT<T1> >::type>
+            trait::pT<T1> >::type>
 inline TR fidelity(const T1& rho11, const T2& rho12) {
   const auto& rho1 = as_Mat(rho11);
   const auto& rho2 = as_Mat(rho12);
@@ -103,9 +103,9 @@ inline TR fidelity(const T1& rho11, const T2& rho12) {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
-            pT<T1> >::type>
+            trait::pT<T1> >::type>
 inline TR bures_dist(const T1& rho11, const T2& rho12) {
   const auto& rho1 = as_Mat(rho11);
   const auto& rho2 = as_Mat(rho12);

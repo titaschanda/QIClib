@@ -23,8 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR entanglement(const T1& rho1, arma::uvec dim) {
   const auto& p = as_Mat(rho1);
 

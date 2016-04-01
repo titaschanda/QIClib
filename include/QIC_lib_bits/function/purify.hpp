@@ -23,11 +23,12 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Col<eT<T1> > >::type>
-inline TR purify(const T1& rho1,
-                 const pT<T1>& tol = _precision::eps<pT<T1> >::value) {
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Col<trait::eT<T1> > >::type>
+inline TR
+purify(const T1& rho1,
+       const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
@@ -48,8 +49,8 @@ inline TR purify(const T1& rho1,
     return rho;
 
   } else {
-    arma::Col<pT<T1> > eigval;
-    arma::Mat<eT<T1> > eigvec;
+    arma::Col<trait::pT<T1> > eigval;
+    arma::Mat<trait::eT<T1> > eigvec;
 
     if (rho.n_rows > 20)
       arma::eig_sym(eigval, eigvec, rho, "dc");
@@ -59,7 +60,7 @@ inline TR purify(const T1& rho1,
     arma::uword dim = rho.n_rows;
     arma::uword dimE = arma::sum(eigval > tol);
 
-    arma::Col<eT<T1> > ret(dim * dimE, arma::fill::zeros);
+    arma::Col<trait::eT<T1> > ret(dim * dimE, arma::fill::zeros);
 
     for (arma::uword i = 0; i < dimE; ++i)
       for (arma::uword j = 0; j < dim; ++j)

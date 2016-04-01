@@ -23,8 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, void>::type>
+template <typename T1,
+          typename = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -40,10 +41,10 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  std::complex<pT<T1> > I(0.0, 1.0);
-  arma::Mat<std::complex<pT<T1> > > Eye(dim, dim, arma::fill::eye);
+  std::complex<trait::pT<T1> > I(0.0, 1.0);
+  arma::Mat<std::complex<trait::pT<T1> > > Eye(dim, dim, arma::fill::eye);
 
-  arma::Cube<std::complex<pT<T1> > > M(dim, dim, dim * dim);
+  arma::Cube<std::complex<trait::pT<T1> > > M(dim, dim, dim * dim);
 
   for (arma::uword i = 0; i < dim; ++i)
     M.slice(i) = Eye.col(i) * (Eye.col(i)).t();
@@ -55,7 +56,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
         ++count_1;
         M.slice(dim - 1 + count_1) =
           (Eye.col(i) * Eye.col(j).t() + Eye.col(j) * Eye.col(i).t()) *
-          static_cast<pT<T1> >(std::sqrt(0.5));
+          static_cast<trait::pT<T1> >(std::sqrt(0.5));
       }
     }
   }
@@ -66,13 +67,13 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
       if (i < j) {
         ++count_2;
         M.slice(((dim - 1) * (dim + 2)) / 2 + count_2) =
-          static_cast<pT<T1> >(std::sqrt(0.5)) * I *
+          static_cast<trait::pT<T1> >(std::sqrt(0.5)) * I *
           (Eye.col(i) * Eye.col(j).t() - Eye.col(j) * Eye.col(i).t());
       }
     }
   }
 
-  arma::Mat<std::complex<pT<T1> > > C(dim * dim, dim * dim);
+  arma::Mat<std::complex<trait::pT<T1> > > C(dim * dim, dim * dim);
 
   for (arma::uword j = 0; j < dim * dim; ++j) {
     for (arma::uword i = 0; i < dim * dim; ++i) {
@@ -98,8 +99,9 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
 
 //******************************************************************************
 
-template <typename T1, typename = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, void>::type>
+template <typename T1,
+          typename = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
   const auto& rho = as_Mat(rho1);
 
@@ -115,12 +117,12 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  std::complex<pT<T1> > I(0.0, 1.0);
-  arma::Mat<std::complex<pT<T1> > > Eye1(dim1, dim1, arma::fill::eye);
-  arma::Mat<std::complex<pT<T1> > > Eye2(dim2, dim2, arma::fill::eye);
+  std::complex<trait::pT<T1> > I(0.0, 1.0);
+  arma::Mat<std::complex<trait::pT<T1> > > Eye1(dim1, dim1, arma::fill::eye);
+  arma::Mat<std::complex<trait::pT<T1> > > Eye2(dim2, dim2, arma::fill::eye);
 
-  arma::Cube<std::complex<pT<T1> > > M1(dim1, dim1, dim1 * dim1);
-  arma::Cube<std::complex<pT<T1> > > M2(dim2, dim2, dim2 * dim2);
+  arma::Cube<std::complex<trait::pT<T1> > > M1(dim1, dim1, dim1 * dim1);
+  arma::Cube<std::complex<trait::pT<T1> > > M2(dim2, dim2, dim2 * dim2);
 
   for (arma::uword i = 0; i < dim1; ++i)
     M1.slice(i) = Eye1.col(i) * (Eye1.col(i)).t();
@@ -132,7 +134,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
         ++count_1;
         M1.slice(dim1 - 1 + count_1) =
           (Eye1.col(i) * Eye1.col(j).t() + Eye1.col(j) * Eye1.col(i).t()) *
-          static_cast<pT<T1> >(std::sqrt(0.5));
+          static_cast<trait::pT<T1> >(std::sqrt(0.5));
       }
     }
   }
@@ -143,7 +145,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
       if (i < j) {
         ++count_2;
         M1.slice(((dim1 - 1) * (dim1 + 2)) / 2 + count_2) =
-          static_cast<pT<T1> >(std::sqrt(0.5)) * I *
+          static_cast<trait::pT<T1> >(std::sqrt(0.5)) * I *
           (Eye1.col(i) * Eye1.col(j).t() - Eye1.col(j) * Eye1.col(i).t());
       }
     }
@@ -159,7 +161,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
         ++count_3;
         M2.slice(dim2 - 1 + count_3) =
           (Eye2.col(i) * Eye2.col(j).t() + Eye2.col(j) * Eye2.col(i).t()) *
-          static_cast<pT<T1> >(std::sqrt(0.5));
+          static_cast<trait::pT<T1> >(std::sqrt(0.5));
       }
     }
   }
@@ -170,13 +172,13 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
       if (i < j) {
         ++count_4;
         M2.slice(((dim2 - 1) * (dim2 + 2)) / 2 + count_4) =
-          static_cast<pT<T1> >(std::sqrt(0.5)) * I *
+          static_cast<trait::pT<T1> >(std::sqrt(0.5)) * I *
           (Eye2.col(i) * Eye2.col(j).t() - Eye2.col(j) * Eye2.col(i).t());
       }
     }
   }
 
-  arma::Mat<std::complex<pT<T1> > > C(dim1 * dim1, dim2 * dim2);
+  arma::Mat<std::complex<trait::pT<T1> > > C(dim1 * dim1, dim2 * dim2);
 
   for (arma::uword j = 0; j < dim2 * dim2; ++j) {
     for (arma::uword i = 0; i < dim1 * dim1; ++i) {

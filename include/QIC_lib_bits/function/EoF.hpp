@@ -23,8 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR EoF(const T1& rho1) {
   const auto& p = as_Mat(rho1);
 
@@ -50,11 +51,12 @@ inline TR EoF(const T1& rho1) {
     return entanglement(p, {2, 2});
 
   } else {
-    pT<T1> ret = 0.5 * (1.0 + std::sqrt(1.0 - std::pow(concurrence(p), 2.0)));
-    pT<T1> ret2(0.0);
-    if (ret > _precision::eps<pT<T1> >::value)
+    trait::pT<T1> ret =
+      0.5 * (1.0 + std::sqrt(1.0 - std::pow(concurrence(p), 2.0)));
+    trait::pT<T1> ret2(0.0);
+    if (ret > _precision::eps<trait::pT<T1> >::value)
       ret2 -= ret * std::log2(ret);
-    if (1.0 - ret > _precision::eps<pT<T1> >::value)
+    if (1.0 - ret > _precision::eps<trait::pT<T1> >::value)
       ret2 -= (1.0 - ret) * std::log2(1.0 - ret);
     return ret2;
   }

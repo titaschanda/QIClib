@@ -23,9 +23,10 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         typename arma::Col<pT<T1> >::template fixed<3> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            typename arma::Col<trait::pT<T1> >::template fixed<3> >::type>
 TR deficit_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   const auto& rho = as_Mat(rho1);
   arma::uword party_no = dim.n_elem;
@@ -59,18 +60,21 @@ TR deficit_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   arma::uword dim3(1);
   for (arma::uword i = nodal; i < party_no; ++i) dim3 *= dim.at(i);
 
-  arma::Mat<pT<T1> > eye2 = arma::eye<arma::Mat<pT<T1> > >(dim1, dim1);
-  arma::Mat<pT<T1> > eye3 = arma::eye<arma::Mat<pT<T1> > >(dim2, dim2);
-  arma::Mat<pT<T1> > eye4 = arma::eye<arma::Mat<pT<T1> > >(dim3, dim3);
+  arma::Mat<trait::pT<T1> > eye2 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
+  arma::Mat<trait::pT<T1> > eye3 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
+  arma::Mat<trait::pT<T1> > eye4 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
 
-  typename arma::Col<pT<T1> >::template fixed<3> ret;
+  typename arma::Col<trait::pT<T1> >::template fixed<3> ret;
 
   for (arma::uword i = 0; i < 3; ++i) {
-    arma::Mat<std::complex<pT<T1> > > proj1 =
-      SPM<pT<T1> >::get_instance().proj2.at(0, i + 1);
+    arma::Mat<std::complex<trait::pT<T1> > > proj1 =
+      SPM<trait::pT<T1> >::get_instance().proj2.at(0, i + 1);
 
-    arma::Mat<std::complex<pT<T1> > > proj2 =
-      SPM<pT<T1> >::get_instance().proj2.at(1, i + 1);
+    arma::Mat<std::complex<trait::pT<T1> > > proj2 =
+      SPM<trait::pT<T1> >::get_instance().proj2.at(1, i + 1);
 
     if (nodal == 1) {
       proj1 = kron(proj1, eye2);
@@ -83,11 +87,11 @@ TR deficit_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
       proj2 = kron(kron(eye3, proj2), eye4);
     }
 
-    arma::Mat<std::complex<pT<T1> > > rho_1 = (proj1 * rho * proj1);
-    arma::Mat<std::complex<pT<T1> > > rho_2 = (proj2 * rho * proj2);
+    arma::Mat<std::complex<trait::pT<T1> > > rho_1 = (proj1 * rho * proj1);
+    arma::Mat<std::complex<trait::pT<T1> > > rho_2 = (proj2 * rho * proj2);
 
     rho_1 += rho_2;
-    pT<T1> S_max = entropy(rho_1);
+    trait::pT<T1> S_max = entropy(rho_1);
     ret.at(i) = -S_A_B + S_max;
   }
   return ret;

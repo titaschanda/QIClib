@@ -23,9 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Col<pT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Col<trait::pT<T1> > >::type>
 inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -48,7 +48,7 @@ inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::schmidt", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if ((dim.n_elem) != 2)
+  if (dim.n_elem != 2)
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
@@ -61,11 +61,12 @@ inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, void>::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool schmidt(const T1& rho1, const arma::uvec& dim,
-                    arma::Col<pT<T1> >& S, arma::Mat<eT<T1> >& U,
-                    arma::Mat<eT<T1> >& V) {
+                    arma::Col<trait::pT<T1> >& S, arma::Mat<trait::eT<T1> >& U,
+                    arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
@@ -111,9 +112,9 @@ inline bool schmidt(const T1& rho1, const arma::uvec& dim,
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -140,8 +141,8 @@ inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
-  arma::Mat<eT<T1> > U, V;
-  arma::Col<pT<T1> > S;
+  arma::Mat<trait::eT<T1> > U, V;
+  arma::Col<trait::pT<T1> > S;
 
   if (checkV) {
     arma::svd_econ(U, S, V,
@@ -159,9 +160,9 @@ inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -188,8 +189,8 @@ inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
-  arma::Mat<eT<T1> > U, V;
-  arma::Col<pT<T1> > S;
+  arma::Mat<trait::eT<T1> > U, V;
+  arma::Col<trait::pT<T1> > S;
 
   if (checkV) {
     arma::svd_econ(U, S, V,
@@ -208,8 +209,8 @@ inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         arma::field<arma::Mat<eT<T1> > > >::type>
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::field<arma::Mat<trait::eT<T1> > > >::type>
 inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -236,9 +237,9 @@ inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
-  arma::Mat<eT<T1> > U, V;
-  arma::Col<pT<T1> > S;
-  arma::field<arma::Mat<eT<T1> > > ret(2);
+  arma::Mat<trait::eT<T1> > U, V;
+  arma::Col<trait::pT<T1> > S;
+  arma::field<arma::Mat<trait::eT<T1> > > ret(2);
 
   if (checkV) {
     arma::svd_econ(U, S, V,
@@ -259,9 +260,9 @@ inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -288,8 +289,8 @@ inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
-  arma::Mat<eT<T1> > U, V;
-  arma::Col<pT<T1> > S;
+  arma::Mat<trait::eT<T1> > U, V;
+  arma::Col<trait::pT<T1> > S;
 
   if (checkV) {
     arma::svd(U, S, V,
@@ -306,9 +307,9 @@ inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -335,8 +336,8 @@ inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
-  arma::Mat<eT<T1> > U, V;
-  arma::Col<pT<T1> > S;
+  arma::Mat<trait::eT<T1> > U, V;
+  arma::Col<trait::pT<T1> > S;
 
   if (checkV) {
     arma::svd(U, S, V,
@@ -354,8 +355,8 @@ inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         arma::field<arma::Mat<eT<T1> > > >::type>
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::field<arma::Mat<trait::eT<T1> > > >::type>
 inline TR schmidtAB_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -382,9 +383,9 @@ inline TR schmidtAB_full(const T1& rho1, const arma::uvec& dim) {
     throw Exception("qic::schmidt", Exception::type::NOT_BIPARTITE);
 #endif
 
-  arma::Mat<eT<T1> > U, V;
-  arma::Col<pT<T1> > S;
-  arma::field<arma::Mat<eT<T1> > > ret(2);
+  arma::Mat<trait::eT<T1> > U, V;
+  arma::Col<trait::pT<T1> > S;
+  arma::field<arma::Mat<trait::eT<T1> > > ret(2);
 
   if (checkV) {
     arma::svd(U, S, V,

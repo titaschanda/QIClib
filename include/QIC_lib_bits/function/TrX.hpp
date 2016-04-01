@@ -24,8 +24,8 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   const auto& p = as_Mat(rho1);
 
@@ -54,6 +54,9 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
 #endif
 
+  if (sys.n_elem == dim.n_elem)
+    return {arma::trace(p)};
+  
   _internal::protect_subs::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
@@ -78,7 +81,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   for (arma::sword i = n - m - 2; i > -1; --i)
     productr.at(i) = productr.at(i + 1) * dim.at(keep.at(i + 1) - 1);
 
-  arma::Mat<eT<T1> > tr_p(dimkeep, dimkeep, arma::fill::zeros);
+  arma::Mat<trait::eT<T1> > tr_p(dimkeep, dimkeep, arma::fill::zeros);
 
   const arma::uword loop_no = 2 * n;
   arma::uword* loop_counter = new arma::uword[loop_no + 1];
@@ -99,6 +102,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   while (loop_counter[loop_no] == 0) {
     arma::uword I(0), J(0), K(0), L(0), n_to_k(0);
+
     for (arma::uword i = 0; i < n; ++i) {
       if (arma::any(sys == i + 1)) {
         I += product.at(i) * loop_counter[i];
@@ -134,8 +138,8 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   const auto& p = as_Mat(rho1);
 

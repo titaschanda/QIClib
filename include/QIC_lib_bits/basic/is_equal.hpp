@@ -25,10 +25,11 @@ template <typename T1, typename T2,
           typename = typename std::enable_if<is_arma_type_var<T1, T2>::value &&
                                                is_same_pT_var<T1, T2>::value,
                                              void>::type>
-inline bool is_equal(const T1& rho11, const T2& rho12, bool typecheck = false,
-                     const pT<T1>& atol = _precision::eps<pT<T1> >::value,
-                     const pT<T1>& rtol = 10 *
-                                          _precision::eps<pT<T1> >::value) {
+inline bool
+is_equal(const T1& rho11, const T2& rho12, bool typecheck = false,
+         const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
+         const trait::pT<T1>& rtol = 10 *
+                                     _precision::eps<trait::pT<T1> >::value) {
   const auto& rho1 = as_Mat(rho11);
   const auto& rho2 = as_Mat(rho12);
 
@@ -38,11 +39,11 @@ inline bool is_equal(const T1& rho11, const T2& rho12, bool typecheck = false,
   const arma::uword m2 = rho2.n_cols;
 
   if (n1 != n2 || m1 != m2 ||
-      (typecheck && !std::is_same<eT<T1>, eT<T2> >::value)) {
+      (typecheck && !std::is_same<trait::eT<T1>, trait::eT<T2> >::value)) {
     return false;
   } else {
     return arma::all(
-      arma::vectorise((atol * arma::ones<arma::Mat<pT<T1> > >(n1, m1) +
+      arma::vectorise((atol * arma::ones<arma::Mat<trait::pT<T1> > >(n1, m1) +
                        rtol * arma::abs(rho1)) -
                       arma::abs(rho1 - rho2)) > 0.0);
   }

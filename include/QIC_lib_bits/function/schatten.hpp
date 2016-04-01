@@ -23,9 +23,10 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
-inline TR schatten(const T1& rho1, pT<T1> p) {
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+inline TR schatten(const T1& rho1, trait::pT<T1> p) {
   const auto& rho = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
@@ -39,7 +40,7 @@ inline TR schatten(const T1& rho1, pT<T1> p) {
   if (p == 0)
     return arma::rank(rho);
 
-  if (p == arma::Datum<pT<T1> >::inf)
+  if (p == arma::Datum<trait::pT<T1> >::inf)
     return arma::svd(rho).at(0);
 
   else

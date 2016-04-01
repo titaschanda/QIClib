@@ -25,6 +25,8 @@ namespace _internal {
 
 namespace protect_subs {
 
+//******************************************************************************
+
 template <typename T> struct cond_I { static constexpr T value = 0; };
 
 template <typename T> struct cond_I<std::complex<T> > {
@@ -35,6 +37,16 @@ template <typename T1> constexpr T1 cond_I<T1>::value;
 
 template <typename T1>
 constexpr std::complex<T1> cond_I<std::complex<T1> >::value;
+
+//******************************************************************************
+
+#ifndef QIC_LIB_MAXQDIT_COUNT
+constexpr arma::uword MAXQDIT = 24;
+#else
+constexpr arma::uword MAXQDIT = QIC_LIB_MAXQDIT_COUNT;
+#endif
+
+//******************************************************************************
 
 }  // namespace protect_subs
 

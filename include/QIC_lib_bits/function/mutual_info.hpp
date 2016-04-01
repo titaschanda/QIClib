@@ -23,8 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR mutual_info(const T1& rho1, arma::uvec dim) {
   const auto& rho = as_Mat(rho1);
 
@@ -63,8 +64,9 @@ inline TR mutual_info(const T1& rho1, arma::uvec dim) {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
                       arma::uvec dim) {
   const auto& rho = as_Mat(rho1);
@@ -139,8 +141,9 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
                       arma::uword dim = 2) {
   const auto& rho = as_Mat(rho1);

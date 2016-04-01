@@ -23,9 +23,9 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Col<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Col<trait::eT<T1> > >::type>
 inline TR conv_to_pure(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
@@ -43,8 +43,8 @@ inline TR conv_to_pure(const T1& rho1) {
                     Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 #endif
 
-  arma::Mat<eT<T1> > eig_vec;
-  arma::Col<pT<T1> > eig_val;
+  arma::Mat<trait::eT<T1> > eig_vec;
+  arma::Col<trait::pT<T1> > eig_val;
 
   if (rho.n_rows > 20)
     arma::eig_sym(eig_val, eig_vec, rho, "dc");

@@ -23,9 +23,10 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename T2, typename TR = typename std::enable_if<
-                                      is_floating_point_var<pT<T1> >::value,
-                                      arma::Mat<std::complex<pT<T1> > > >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR expm_sym(const T1& rho1, const std::complex<T2>& a) {
   const auto& H = as_Mat(rho1);
 
@@ -37,8 +38,8 @@ inline TR expm_sym(const T1& rho1, const std::complex<T2>& a) {
     throw Exception("qic::expm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<pT<T1> > eigval;
-  arma::Mat<eT<T1> > eigvec;
+  arma::Col<trait::pT<T1> > eigval;
+  arma::Mat<trait::eT<T1> > eigvec;
 
   if (H.n_rows > 20)
     arma::eig_sym(eigval, eigvec, H, "dc");
@@ -50,10 +51,11 @@ inline TR expm_sym(const T1& rho1, const std::complex<T2>& a) {
 
 //******************************************************************************
 
-template <typename T1, typename T2, typename TR = typename std::enable_if<
-                                      is_floating_point_var<pT<T1> >::value &&
-                                        std::is_arithmetic<T2>::value,
-                                      arma::Mat<eT<T1> > >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value &&
+              std::is_arithmetic<T2>::value,
+            arma::Mat<trait::eT<T1> > >::type>
 inline TR expm_sym(const T1& rho1, const T2& a) {
   const auto& H = as_Mat(rho1);
 
@@ -65,24 +67,25 @@ inline TR expm_sym(const T1& rho1, const T2& a) {
     throw Exception("qic::expm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<pT<T1> > eigval;
-  arma::Mat<eT<T1> > eigvec;
+  arma::Col<trait::pT<T1> > eigval;
+  arma::Mat<trait::eT<T1> > eigvec;
 
   if (H.n_rows > 20)
     arma::eig_sym(eigval, eigvec, H, "dc");
   else
     arma::eig_sym(eigval, eigvec, H, "std");
 
-  return eigvec * arma::diagmat(arma::exp(
-                    a * arma::conv_to<arma::Col<eT<T1> > >::from(eigval))) *
+  return eigvec *
+         arma::diagmat(arma::exp(
+           a * arma::conv_to<arma::Col<trait::eT<T1> > >::from(eigval))) *
          eigvec.t();
 }
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::eT<T1> > >::type>
 inline TR expm_sym(const T1& rho1) {
   const auto& H = as_Mat(rho1);
 
@@ -94,8 +97,8 @@ inline TR expm_sym(const T1& rho1) {
     throw Exception("qic::expm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<pT<T1> > eigval;
-  arma::Mat<eT<T1> > eigvec;
+  arma::Col<trait::pT<T1> > eigval;
+  arma::Mat<trait::eT<T1> > eigvec;
 
   if (H.n_rows > 20)
     arma::eig_sym(eigval, eigvec, H, "dc");
@@ -103,15 +106,15 @@ inline TR expm_sym(const T1& rho1) {
     arma::eig_sym(eigval, eigvec, H, "std");
 
   return eigvec * arma::diagmat(arma::exp(
-                    arma::conv_to<arma::Col<eT<T1> > >::from(eigval))) *
+                    arma::conv_to<arma::Col<trait::eT<T1> > >::from(eigval))) *
          eigvec.t();
 }
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1> >::value, arma::Mat<eT<T1> > >::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<trait::eT<T1> > >::type>
 inline TR expm_gen(const T1& rho1) {
   auto A = as_Mat(rho1);
 
@@ -123,8 +126,8 @@ inline TR expm_gen(const T1& rho1) {
     throw Exception("qic::expm_gen", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  const pT<T1> norm_val = arma::norm(A, "inf");
-  const double log2_val = (norm_val > static_cast<pT<T1> >(0))
+  const trait::pT<T1> norm_val = arma::norm(A, "inf");
+  const double log2_val = (norm_val > static_cast<trait::pT<T1> >(0))
                             ? static_cast<double>(std::log2(norm_val))
                             : static_cast<double>(0);
 
@@ -133,22 +136,22 @@ inline TR expm_gen(const T1& rho1) {
   const arma::uword s = static_cast<arma::uword>(
     std::max(static_cast<int>(0), exponent + static_cast<int>(1)));
 
-  A /= (std::pow(2.0, static_cast<pT<T1> >(s)));
+  A /= (std::pow(2.0, static_cast<trait::pT<T1> >(s)));
 
-  pT<T1> c(0.5);
+  trait::pT<T1> c(0.5);
 
-  arma::Mat<eT<T1> > E(A.n_rows, A.n_cols, arma::fill::eye);
+  arma::Mat<trait::eT<T1> > E(A.n_rows, A.n_cols, arma::fill::eye);
   E += c * A;
-  arma::Mat<eT<T1> > D(A.n_rows, A.n_cols, arma::fill::eye);
+  arma::Mat<trait::eT<T1> > D(A.n_rows, A.n_cols, arma::fill::eye);
   D -= c * A;
 
   const arma::uword q(6);
   bool p(true);
-  arma::Mat<eT<T1> > X(A);
+  arma::Mat<trait::eT<T1> > X(A);
 
   for (arma::uword k = 2; k <= q; ++k) {
-    c *= static_cast<pT<T1> >(q - k + 1) /
-         static_cast<pT<T1> >(k * (2 * q - k + 1));
+    c *= static_cast<trait::pT<T1> >(q - k + 1) /
+         static_cast<trait::pT<T1> >(k * (2 * q - k + 1));
     X = A * X;
     E += c * X;
 

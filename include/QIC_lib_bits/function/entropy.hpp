@@ -23,8 +23,9 @@ namespace qic {
 
 // ***************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR entropy(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
@@ -47,17 +48,18 @@ inline TR entropy(const T1& rho1) {
 
   } else {
     auto eig = arma::eig_sym(rho);
-    pT<T1> S = 0.0;
+    trait::pT<T1> S = 0.0;
     for (const auto& i : eig)
-      S -= i > _precision::eps<pT<T1> >::value ? i * std::log2(i) : 0;
+      S -= i > _precision::eps<trait::pT<T1> >::value ? i * std::log2(i) : 0;
     return S;
   }
 }
 
 //****************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<eT<T1> >::value, eT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 inline TR shannon(const T1& prob1) {
   const auto& prob = as_Mat(prob1);
 
@@ -68,14 +70,14 @@ inline TR shannon(const T1& prob1) {
   if (prob.n_cols != 1)
     throw Exception("qic::shannon", Exception::type::MATRIX_NOT_CVECTOR);
 
-  if (arma::any(as_Col(prob) < -_precision::eps<pT<T1> >::value))
+  if (arma::any(as_Col(prob) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::shannon", "Invalid probaility distribution");
 #endif
 
-  eT<T1> S = 0.0;
+  trait::eT<T1> S = 0.0;
 
   for (const auto& i : prob)
-    S -= i > _precision::eps<pT<T1> >::value ? i * std::log2(i) : 0;
+    S -= i > _precision::eps<trait::pT<T1> >::value ? i * std::log2(i) : 0;
   return S;
 }
 
@@ -97,9 +99,10 @@ inline TR shannon(const std::initializer_list<T1>& prob1) {
 
 //****************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
-inline TR renyi(const T1& rho1, const pT<T1>& alpha) {
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+inline TR renyi(const T1& rho1, const trait::pT<T1>& alpha) {
   const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
@@ -115,28 +118,29 @@ inline TR renyi(const T1& rho1, const pT<T1>& alpha) {
       throw Exception("qic::renyi",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
-  if (alpha < -_precision::eps<pT<T1> >::value)
+  if (alpha < -_precision::eps<trait::pT<T1> >::value)
     throw Exception("qic::renyi", Exception::type::OUT_OF_RANGE);
 #endif
 
-  if (alpha < _precision::eps<pT<T1> >::value) {
-    return std::log2(static_cast<pT<T1> >(rho.n_rows));
+  if (alpha < _precision::eps<trait::pT<T1> >::value) {
+    return std::log2(static_cast<trait::pT<T1> >(rho.n_rows));
 
   } else if (!checkV) {
     return 0;
 
   } else {
-    if (std::abs(alpha - 1) < _precision::eps<pT<T1> >::value) {
+    if (std::abs(alpha - 1) < _precision::eps<trait::pT<T1> >::value) {
       return entropy(rho);
 
-    } else if (alpha == arma::Datum<pT<T1> >::inf) {
+    } else if (alpha == arma::Datum<trait::pT<T1> >::inf) {
       return -std::log2(arma::max(arma::eig_sym(rho)));
 
     } else {
       auto eig = arma::eig_sym(rho);
-      pT<T1> ret(0.0);
+      trait::pT<T1> ret(0.0);
       for (const auto& x : eig)
-        ret += x > _precision::eps<pT<T1> >::value ? std::pow(x, alpha) : 0;
+        ret +=
+          x > _precision::eps<trait::pT<T1> >::value ? std::pow(x, alpha) : 0;
       return std::log2(ret) / (1.0 - alpha);
     }
   }
@@ -144,9 +148,10 @@ inline TR renyi(const T1& rho1, const pT<T1>& alpha) {
 
 //****************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<eT<T1> >::value, eT<T1> >::type>
-inline TR renyi_prob(const T1& prob1, const eT<T1>& alpha) {
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
+inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   const auto& prob2 = as_Mat(prob1);
 
 #ifndef QIC_LIB_NO_DEBUG
@@ -156,28 +161,29 @@ inline TR renyi_prob(const T1& prob1, const eT<T1>& alpha) {
   if (prob2.n_cols != 1)
     throw Exception("qic::renyi_prob", Exception::type::MATRIX_NOT_CVECTOR);
 
-  if (alpha < -_precision::eps<pT<T1> >::value)
+  if (alpha < -_precision::eps<trait::pT<T1> >::value)
     throw Exception("qic::renyi_prob", Exception::type::OUT_OF_RANGE);
 
-  if (arma::any(as_Col(prob2) < -_precision::eps<pT<T1> >::value))
+  if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::renyi", "Invalid probaility distribution");
 #endif
 
   const auto& prob = as_Col(prob2);
 
-  if (alpha < _precision::eps<pT<T1> >::value) {
-    return std::log2(static_cast<eT<T1> >(prob.n_elem));
+  if (alpha < _precision::eps<trait::pT<T1> >::value) {
+    return std::log2(static_cast<trait::eT<T1> >(prob.n_elem));
 
-  } else if (std::abs(alpha - 1) < _precision::eps<pT<T1> >::value) {
+  } else if (std::abs(alpha - 1) < _precision::eps<trait::pT<T1> >::value) {
     return shannon(prob);
 
-  } else if (alpha == arma::Datum<eT<T1> >::inf) {
+  } else if (alpha == arma::Datum<trait::eT<T1> >::inf) {
     return -std::log2(arma::max(prob));
 
   } else {
-    eT<T1> ret(0.0);
+    trait::eT<T1> ret(0.0);
     for (const auto& x : prob)
-      ret += x > _precision::eps<pT<T1> >::value ? std::pow(x, alpha) : 0;
+      ret +=
+        x > _precision::eps<trait::pT<T1> >::value ? std::pow(x, alpha) : 0;
     return std::log2(ret) / (1.0 - alpha);
   }
 }
@@ -206,8 +212,9 @@ inline TR renyi_prob(const std::initializer_list<T1>& prob1, const T2& alpha) {
 // ***************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::value>
-inline TR tsallis(const T1& rho1, const pT<T1>& alpha) {
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         trait::pT<T1> >::value>
+inline TR tsallis(const T1& rho1, const trait::pT<T1>& alpha) {
   const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
@@ -223,30 +230,32 @@ inline TR tsallis(const T1& rho1, const pT<T1>& alpha) {
       throw Exception("qic::tsallis",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
-  if (alpha < -_precision::eps<pT<T1> >::value)
+  if (alpha < -_precision::eps<trait::pT<T1> >::value)
     throw Exception("qic::tsallis", Exception::type::OUT_OF_RANGE);
 #endif
 
   if (!checkV) {
     return 0;
 
-  } else if (std::abs(alpha - 1) < _precision::eps<pT<T1> >::value) {
+  } else if (std::abs(alpha - 1) < _precision::eps<trait::pT<T1> >::value) {
     return std::log(2.0) * entropy(std::forward<T1>(rho));
 
   } else {
     auto eig = arma::eig_sym(rho);
-    pT<T1> ret(0.0);
+    trait::pT<T1> ret(0.0);
     for (const auto& x : eig)
-      ret += x > _precision::eps<pT<T1> >::value ? std::pow(x, alpha) : 0;
+      ret +=
+        x > _precision::eps<trait::pT<T1> >::value ? std::pow(x, alpha) : 0;
     return (ret - 1.0) / (1.0 - alpha);
   }
 }
 
 //****************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<eT<T1> >::value, eT<T1> >::type>
-inline TR tsallis_prob(const T1& prob1, const eT<T1>& alpha) {
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
+inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   const auto& prob2 = as_Mat(prob1);
 
 #ifndef QIC_LIB_NO_DEBUG
@@ -258,19 +267,20 @@ inline TR tsallis_prob(const T1& prob1, const eT<T1>& alpha) {
   if (alpha < 0)
     throw Exception("qic::tsallis_prob", Exception::type::OUT_OF_RANGE);
 
-  if (arma::any(as_Col(prob2) < -_precision::eps<pT<T1> >::value))
+  if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::tsallis", "Invalid probaility distribution");
 #endif
 
   const auto& prob = as_Col(prob2);
 
-  if (std::abs(alpha - 1) < _precision::eps<pT<T1> >::value) {
+  if (std::abs(alpha - 1) < _precision::eps<trait::pT<T1> >::value) {
     return std::log(2.0) * shannon(prob);
 
   } else {
-    eT<T1> ret(0.0);
+    trait::eT<T1> ret(0.0);
     for (const auto& x : prob)
-      ret += x > _precision::eps<pT<T1> >::value ? std::pow(x, alpha) : 0;
+      ret +=
+        x > _precision::eps<trait::pT<T1> >::value ? std::pow(x, alpha) : 0;
     return (ret - 1.0) / (1.0 - alpha);
   }
 }

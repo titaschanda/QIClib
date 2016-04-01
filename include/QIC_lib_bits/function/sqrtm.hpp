@@ -24,8 +24,8 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         arma::Mat<std::complex<pT<T1> > > >::type>
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR sqrtm_sym(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
@@ -37,8 +37,8 @@ inline TR sqrtm_sym(const T1& rho1) {
     throw Exception("qic::sqrtm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<pT<T1> > eigval;
-  arma::Mat<eT<T1> > eigvec;
+  arma::Col<trait::pT<T1> > eigval;
+  arma::Mat<trait::eT<T1> > eigvec;
 
   if (rho.n_rows > 20)
     arma::eig_sym(eigval, eigvec, rho, "dc");
@@ -47,15 +47,16 @@ inline TR sqrtm_sym(const T1& rho1) {
 
   return eigvec *
          arma::diagmat(arma::sqrt(
-           arma::conv_to<arma::Col<std::complex<pT<T1> > > >::from(eigval))) *
+           arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
+             eigval))) *
          eigvec.t();
 }
 
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         arma::Mat<std::complex<pT<T1> > > >::type>
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR sqrtm_gen(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
@@ -67,8 +68,8 @@ inline TR sqrtm_gen(const T1& rho1) {
     throw Exception("qic::sqrtm_gen", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<std::complex<pT<T1> > > eigval;
-  arma::Mat<std::complex<pT<T1> > > eigvec;
+  arma::Col<std::complex<trait::pT<T1> > > eigval;
+  arma::Mat<std::complex<trait::pT<T1> > > eigvec;
   arma::eig_gen(eigval, eigvec, rho);
 
   return eigvec * arma::diagmat(arma::sqrt(eigval)) * eigvec.t();

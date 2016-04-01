@@ -24,9 +24,9 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1, typename functor,
-          typename TR =
-            typename std::enable_if<is_floating_point_var<pT<T1> >::value,
-                                    arma::Mat<std::complex<pT<T1> > > >::type>
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR funcm_sym(const T1& rho1, functor P) {
   const auto& rho = as_Mat(rho1);
 
@@ -38,8 +38,8 @@ inline TR funcm_sym(const T1& rho1, functor P) {
     throw Exception("qic::funcm_sym", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<pT<T1> > eigval;
-  arma::Mat<eT<T1> > eigvec;
+  arma::Col<trait::pT<T1> > eigval;
+  arma::Mat<trait::eT<T1> > eigvec;
 
   if (rho.n_rows > 20)
     arma::eig_sym(eigval, eigvec, rho, "dc");
@@ -47,17 +47,18 @@ inline TR funcm_sym(const T1& rho1, functor P) {
     arma::eig_sym(eigval, eigvec, rho, "std");
 
   return eigvec *
-         arma::diagmat(arma::conv_to<arma::Col<std::complex<pT<T1> > > >::from(
-                         eigval).transform(P)) *
+         arma::diagmat(
+           arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
+             eigval).transform(P)) *
          eigvec.t();
 }
 
 //******************************************************************************
 
 template <typename T1, typename functor,
-          typename TR =
-            typename std::enable_if<is_floating_point_var<pT<T1> >::value,
-                                    arma::Mat<std::complex<pT<T1> > > >::type>
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR funcm_gen(const T1& rho1, functor P) {
   const auto& rho = as_Mat(rho1);
 
@@ -69,8 +70,8 @@ inline TR funcm_gen(const T1& rho1, functor P) {
     throw Exception("qic::funcm_gen", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  arma::Col<std::complex<pT<T1> > > eigval;
-  arma::Mat<std::complex<pT<T1> > > eigvec;
+  arma::Col<std::complex<trait::pT<T1> > > eigval;
+  arma::Mat<std::complex<trait::pT<T1> > > eigvec;
   arma::eig_gen(eigval, eigvec, rho);
 
   return eigvec * arma::diagmat(eigval.transform(P)) * eigvec.t();

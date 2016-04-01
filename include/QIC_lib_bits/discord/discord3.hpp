@@ -72,15 +72,15 @@ inline void set_discord3_angle_initial(arma::vec a) noexcept {
 namespace protect {
 template <typename T1> struct TO_PASS_dis3 {
   const T1& rho;
-  const arma::Mat<pT<T1> >& eye2;
-  const arma::Mat<pT<T1> >& eye3;
-  const arma::Mat<pT<T1> >& eye4;
+  const arma::Mat<trait::pT<T1> >& eye2;
+  const arma::Mat<trait::pT<T1> >& eye3;
+  const arma::Mat<trait::pT<T1> >& eye4;
   arma::uword nodal;
   arma::uword party_no;
 
-  TO_PASS_dis3(const T1& a, const arma::Mat<pT<T1> >& c,
-               const arma::Mat<pT<T1> >& d, const arma::Mat<pT<T1> >& e,
-               arma::uword f, arma::uword g)
+  TO_PASS_dis3(const T1& a, const arma::Mat<trait::pT<T1> >& c,
+               const arma::Mat<trait::pT<T1> >& d,
+               const arma::Mat<trait::pT<T1> >& e, arma::uword f, arma::uword g)
       : rho(a), eye2(c), eye3(d), eye4(e), nodal(f), party_no(g) {}
   ~TO_PASS_dis3() {}
 };
@@ -90,23 +90,24 @@ template <typename T1> struct TO_PASS_dis3 {
 template <typename T1>
 double disc_dis3(const std::vector<double>& x, std::vector<double>& grad,
                  void* my_func_data) {
-  std::complex<pT<T1> > I(0.0, 1.0);
+  (void)grad;
+  std::complex<trait::pT<T1> > I(0.0, 1.0);
 
-  pT<T1> theta1 = static_cast<pT<T1> >(0.5 * x[0]);
-  pT<T1> theta2 = static_cast<pT<T1> >(0.5 * x[1]);
-  pT<T1> theta3 = static_cast<pT<T1> >(0.5 * x[2]);
-  pT<T1> phi1 = static_cast<pT<T1> >(x[3]);
-  pT<T1> phi2 = static_cast<pT<T1> >(-x[3]);
-  pT<T1> del = static_cast<pT<T1> >(x[4]);
+  trait::pT<T1> theta1 = static_cast<trait::pT<T1> >(0.5 * x[0]);
+  trait::pT<T1> theta2 = static_cast<trait::pT<T1> >(0.5 * x[1]);
+  trait::pT<T1> theta3 = static_cast<trait::pT<T1> >(0.5 * x[2]);
+  trait::pT<T1> phi1 = static_cast<trait::pT<T1> >(x[3]);
+  trait::pT<T1> phi2 = static_cast<trait::pT<T1> >(-x[3]);
+  trait::pT<T1> del = static_cast<trait::pT<T1> >(x[4]);
 
-  TO_PASS_dis3<arma::Mat<eT<T1> > >* pB =
-    static_cast<TO_PASS_dis3<arma::Mat<eT<T1> > >*>(my_func_data);
+  TO_PASS_dis3<arma::Mat<trait::eT<T1> > >* pB =
+    static_cast<TO_PASS_dis3<arma::Mat<trait::eT<T1> > >*>(my_func_data);
 
-  auto& U = SPM<eT<T1> >::get_instance().basis3.at(0, 0);
-  auto& M = SPM<eT<T1> >::get_instance().basis3.at(1, 0);
-  auto& D = SPM<eT<T1> >::get_instance().basis3.at(2, 0);
+  auto& U = SPM<trait::eT<T1> >::get_instance().basis3.at(0, 0);
+  auto& M = SPM<trait::eT<T1> >::get_instance().basis3.at(1, 0);
+  auto& D = SPM<trait::eT<T1> >::get_instance().basis3.at(2, 0);
 
-  arma::Mat<std::complex<pT<T1> > > proj1 =
+  arma::Mat<std::complex<trait::pT<T1> > > proj1 =
     std::cos(theta1) * std::cos(theta2) * U -
     std::exp(I * phi1) * (std::exp(I * del) * std::sin(theta1) *
                             std::cos(theta2) * std::cos(theta3) +
@@ -117,12 +118,12 @@ double disc_dis3(const std::vector<double>& x, std::vector<double>& grad,
                           std::sin(theta2) * std::cos(theta3)) *
       D;
 
-  arma::Mat<std::complex<pT<T1> > > proj2 =
+  arma::Mat<std::complex<trait::pT<T1> > > proj2 =
     std::exp(-I * del) * std::sin(theta1) * U +
     std::exp(I * phi1) * std::cos(theta1) * std::cos(theta3) * M +
     std::exp(I * phi2) * std::cos(theta1) * std::sin(theta3) * D;
 
-  arma::Mat<std::complex<pT<T1> > > proj3 =
+  arma::Mat<std::complex<trait::pT<T1> > > proj3 =
     std::cos(theta1) * std::sin(theta2) * U +
     std::exp(I * phi1) * (-std::exp(I * del) * std::sin(theta1) *
                             std::sin(theta2) * std::cos(theta3) +
@@ -151,24 +152,27 @@ double disc_dis3(const std::vector<double>& x, std::vector<double>& grad,
     proj3 = kron(kron((*pB).eye3, proj3), (*pB).eye4);
   }
 
-  arma::Mat<std::complex<pT<T1> > > rho_1 = (proj1 * ((*pB).rho) * proj1);
-  arma::Mat<std::complex<pT<T1> > > rho_2 = (proj2 * ((*pB).rho) * proj2);
-  arma::Mat<std::complex<pT<T1> > > rho_3 = (proj3 * ((*pB).rho) * proj3);
+  arma::Mat<std::complex<trait::pT<T1> > > rho_1 =
+    (proj1 * ((*pB).rho) * proj1);
+  arma::Mat<std::complex<trait::pT<T1> > > rho_2 =
+    (proj2 * ((*pB).rho) * proj2);
+  arma::Mat<std::complex<trait::pT<T1> > > rho_3 =
+    (proj3 * ((*pB).rho) * proj3);
 
-  pT<T1> p1 = std::real(arma::trace(rho_1));
-  pT<T1> p2 = std::real(arma::trace(rho_2));
-  pT<T1> p3 = std::real(arma::trace(rho_3));
+  trait::pT<T1> p1 = std::real(arma::trace(rho_1));
+  trait::pT<T1> p2 = std::real(arma::trace(rho_2));
+  trait::pT<T1> p3 = std::real(arma::trace(rho_3));
 
-  pT<T1> S_max = 0.0;
-  if (p1 > static_cast<pT<T1> >(protect::_discord3_prob_tol)) {
+  trait::pT<T1> S_max = 0.0;
+  if (p1 > static_cast<trait::pT<T1> >(protect::_discord3_prob_tol)) {
     rho_1 /= p1;
     S_max += p1 * entropy(rho_1);
   }
-  if (p2 > static_cast<pT<T1> >(protect::_discord3_prob_tol)) {
+  if (p2 > static_cast<trait::pT<T1> >(protect::_discord3_prob_tol)) {
     rho_2 /= p2;
     S_max += p2 * entropy(rho_2);
   }
-  if (p3 > static_cast<pT<T1> >(protect::_discord3_prob_tol)) {
+  if (p3 > static_cast<trait::pT<T1> >(protect::_discord3_prob_tol)) {
     rho_3 /= p3;
     S_max += p3 * entropy(rho_3);
   }
@@ -182,8 +186,9 @@ double disc_dis3(const std::vector<double>& x, std::vector<double>& grad,
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, pT<T1> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 TR discord3(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   const auto& rho = as_Mat(rho1);
   arma::uword party_no = dim.n_elem;
@@ -229,12 +234,15 @@ TR discord3(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   arma::uword dim3(1);
   for (arma::uword i = nodal; i < party_no; ++i) dim3 *= dim.at(i);
 
-  arma::Mat<pT<T1> > eye2 = arma::eye<arma::Mat<pT<T1> > >(dim1, dim1);
-  arma::Mat<pT<T1> > eye3 = arma::eye<arma::Mat<pT<T1> > >(dim2, dim2);
-  arma::Mat<pT<T1> > eye4 = arma::eye<arma::Mat<pT<T1> > >(dim3, dim3);
+  arma::Mat<trait::pT<T1> > eye2 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
+  arma::Mat<trait::pT<T1> > eye3 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
+  arma::Mat<trait::pT<T1> > eye4 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
 
-  protect::TO_PASS_dis3<arma::Mat<eT<T1> > > pass(rho, eye2, eye3, eye4, nodal,
-                                                  party_no);
+  protect::TO_PASS_dis3<arma::Mat<trait::eT<T1> > > pass(rho, eye2, eye3, eye4,
+                                                         nodal, party_no);
 
   std::vector<double> lb(5);
   std::vector<double> ub(5);
@@ -269,7 +277,7 @@ TR discord3(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   opt.set_ftol_rel(protect::_discord3_local_ftol);
   opt.optimize(x, minf);
 
-  return I1 - (S_B - static_cast<pT<T1> >(minf));
+  return I1 - (S_B - static_cast<trait::pT<T1> >(minf));
 }
 
 //******************************************************************************

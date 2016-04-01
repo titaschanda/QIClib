@@ -77,15 +77,15 @@ namespace protect {
 
 template <typename T1> struct TO_PASS_dis {
   const T1& rho;
-  const arma::Mat<pT<T1> >& eye2;
-  const arma::Mat<pT<T1> >& eye3;
-  const arma::Mat<pT<T1> >& eye4;
+  const arma::Mat<trait::pT<T1> >& eye2;
+  const arma::Mat<trait::pT<T1> >& eye3;
+  const arma::Mat<trait::pT<T1> >& eye4;
   arma::uword nodal;
   arma::uword party_no;
 
-  TO_PASS_dis(const T1& a, const arma::Mat<pT<T1> >& c,
-              const arma::Mat<pT<T1> >& d, const arma::Mat<pT<T1> >& e,
-              arma::uword f, arma::uword g)
+  TO_PASS_dis(const T1& a, const arma::Mat<trait::pT<T1> >& c,
+              const arma::Mat<trait::pT<T1> >& d,
+              const arma::Mat<trait::pT<T1> >& e, arma::uword f, arma::uword g)
       : rho(a), eye2(c), eye3(d), eye4(e), nodal(f), party_no(g) {}
   ~TO_PASS_dis() {}
 };
@@ -95,23 +95,24 @@ template <typename T1> struct TO_PASS_dis {
 template <typename T1>
 double disc_dis(const std::vector<double>& x, std::vector<double>& grad,
                 void* my_func_data) {
-  std::complex<pT<T1> > I(0.0, 1.0);
-  pT<T1> theta = static_cast<pT<T1> >(x[0]);
-  pT<T1> phi = static_cast<pT<T1> >(x[1]);
+  (void)grad;
+  std::complex<trait::pT<T1> > I(0.0, 1.0);
+  trait::pT<T1> theta = static_cast<trait::pT<T1> >(x[0]);
+  trait::pT<T1> phi = static_cast<trait::pT<T1> >(x[1]);
 
-  TO_PASS_dis<arma::Mat<eT<T1> > >* pB =
-    static_cast<TO_PASS_dis<arma::Mat<eT<T1> > >*>(my_func_data);
+  TO_PASS_dis<arma::Mat<trait::eT<T1> > >* pB =
+    static_cast<TO_PASS_dis<arma::Mat<trait::eT<T1> > >*>(my_func_data);
 
-  auto& u = SPM<pT<T1> >::get_instance().basis2.at(0, 0);
-  auto& d = SPM<pT<T1> >::get_instance().basis2.at(1, 0);
+  auto& u = SPM<trait::pT<T1> >::get_instance().basis2.at(0, 0);
+  auto& d = SPM<trait::pT<T1> >::get_instance().basis2.at(1, 0);
 
-  arma::Mat<std::complex<pT<T1> > > proj1 =
-    std::cos(static_cast<pT<T1> >(0.5) * theta) * u +
-    std::exp(I * phi) * std::sin(static_cast<pT<T1> >(0.5) * theta) * d;
+  arma::Mat<std::complex<trait::pT<T1> > > proj1 =
+    std::cos(static_cast<trait::pT<T1> >(0.5) * theta) * u +
+    std::exp(I * phi) * std::sin(static_cast<trait::pT<T1> >(0.5) * theta) * d;
 
-  arma::Mat<std::complex<pT<T1> > > proj2 =
-    std::sin(static_cast<pT<T1> >(0.5) * theta) * u -
-    std::exp(I * phi) * std::cos(static_cast<pT<T1> >(0.5) * theta) * d;
+  arma::Mat<std::complex<trait::pT<T1> > > proj2 =
+    std::sin(static_cast<trait::pT<T1> >(0.5) * theta) * u -
+    std::exp(I * phi) * std::cos(static_cast<trait::pT<T1> >(0.5) * theta) * d;
 
   proj1 *= proj1.t();
   proj2 *= proj2.t();
@@ -127,19 +128,21 @@ double disc_dis(const std::vector<double>& x, std::vector<double>& grad,
     proj2 = kron(kron((*pB).eye3, proj2), (*pB).eye4);
   }
 
-  arma::Mat<std::complex<pT<T1> > > rho_1 = (proj1 * ((*pB).rho) * proj1);
-  arma::Mat<std::complex<pT<T1> > > rho_2 = (proj2 * ((*pB).rho) * proj2);
+  arma::Mat<std::complex<trait::pT<T1> > > rho_1 =
+    (proj1 * ((*pB).rho) * proj1);
+  arma::Mat<std::complex<trait::pT<T1> > > rho_2 =
+    (proj2 * ((*pB).rho) * proj2);
 
-  pT<T1> p1 = std::real(arma::trace(rho_1));
-  pT<T1> p2 = std::real(arma::trace(rho_2));
+  trait::pT<T1> p1 = std::real(arma::trace(rho_1));
+  trait::pT<T1> p2 = std::real(arma::trace(rho_2));
 
-  pT<T1> S_max = 0.0;
-  if (p1 > static_cast<pT<T1> >(protect::_discord_prob_tol)) {
+  trait::pT<T1> S_max = 0.0;
+  if (p1 > static_cast<trait::pT<T1> >(protect::_discord_prob_tol)) {
     rho_1 /= p1;
     S_max += p1 * entropy(rho_1);
   }
 
-  if (p2 > static_cast<pT<T1> >(protect::_discord_prob_tol)) {
+  if (p2 > static_cast<trait::pT<T1> >(protect::_discord_prob_tol)) {
     rho_2 /= p2;
     S_max += p2 * entropy(rho_2);
   }
@@ -152,9 +155,10 @@ double disc_dis(const std::vector<double>& x, std::vector<double>& grad,
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value,
-                         typename arma::Col<pT<T1> >::template fixed<3> >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            typename arma::Col<trait::pT<T1> >::template fixed<3> >::type>
 TR discord(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   const auto& rho = as_Mat(rho1);
   arma::uword party_no = dim.n_elem;
@@ -200,12 +204,15 @@ TR discord(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   arma::uword dim3(1);
   for (arma::uword i = nodal; i < party_no; ++i) dim3 *= dim.at(i);
 
-  arma::Mat<pT<T1> > eye2 = arma::eye<arma::Mat<pT<T1> > >(dim1, dim1);
-  arma::Mat<pT<T1> > eye3 = arma::eye<arma::Mat<pT<T1> > >(dim2, dim2);
-  arma::Mat<pT<T1> > eye4 = arma::eye<arma::Mat<pT<T1> > >(dim3, dim3);
+  arma::Mat<trait::pT<T1> > eye2 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
+  arma::Mat<trait::pT<T1> > eye3 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
+  arma::Mat<trait::pT<T1> > eye4 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
 
-  protect::TO_PASS_dis<arma::Mat<eT<T1> > > pass(rho, eye2, eye3, eye4, nodal,
-                                                 party_no);
+  protect::TO_PASS_dis<arma::Mat<trait::eT<T1> > > pass(rho, eye2, eye3, eye4,
+                                                        nodal, party_no);
 
   std::vector<double> lb(2);
   std::vector<double> ub(2);
@@ -240,10 +247,10 @@ TR discord(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   opt.set_ftol_rel(protect::_discord_local_ftol);
   opt.optimize(x, minf);
 
-  pT<T1> D = I1 - (S_B - static_cast<pT<T1> >(minf));
+  trait::pT<T1> D = I1 - (S_B - static_cast<trait::pT<T1> >(minf));
 
-  typename arma::Col<pT<T1> >::template fixed<3> ret{D, static_cast<pT<T1> >(x[0]),
-                                                static_cast<pT<T1> >(x[1])};
+  typename arma::Col<trait::pT<T1> >::template fixed<3> ret{
+    D, static_cast<trait::pT<T1> >(x[0]), static_cast<trait::pT<T1> >(x[1])};
   return ret;
 }
 

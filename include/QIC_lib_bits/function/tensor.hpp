@@ -53,8 +53,8 @@ inline TR tensor(const T1& rho1, const T2& rho2, const T3&... rho3) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR tensor(const arma::field<T1>& rho) {
 #ifndef QIC_LIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -75,8 +75,8 @@ inline TR tensor(const arma::field<T1>& rho) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR tensor(const std::vector<T1>& rho) {
 #ifndef QIC_LIB_NO_DEBUG
   if (rho.size() == 0)
@@ -105,8 +105,8 @@ tensor(const std::initializer_list<arma::Mat<T1> >& rho) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR tensor_pow(const T1& rho1, arma::uword n) {
   const auto& rho = as_Mat(rho1);
 

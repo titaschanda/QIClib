@@ -24,8 +24,8 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys,
                   const arma::uvec& dim) {
   const auto& p = as_Mat(rho1);
@@ -64,7 +64,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     productr.at(i) = productr.at(i + 1) * dim.at(sys.at(i + 1) - 1);
 
   if (checkV) {
-    arma::Mat<eT<T1> > p_r(p.n_rows, p.n_cols, arma::fill::zeros);
+    arma::Mat<trait::eT<T1> > p_r(p.n_rows, p.n_cols, arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
     arma::uword* loop_counter = new arma::uword[loop_no + 1];
@@ -104,7 +104,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     return p_r;
 
   } else {
-    arma::Col<eT<T1> > p_r(p.n_rows, arma::fill::zeros);
+    arma::Col<trait::eT<T1> > p_r(p.n_rows, arma::fill::zeros);
 
     const arma::uword loop_no = n;
     arma::uword* loop_counter = new arma::uword[loop_no + 1];
@@ -143,8 +143,8 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<is_arma_type_var<T1>::value,
-                                                arma::Mat<eT<T1> > >::type>
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
   const auto& p = as_Mat(rho1);
 

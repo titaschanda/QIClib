@@ -21,11 +21,13 @@
 
 namespace qic {
 
-template <typename T1, typename = typename std::enable_if<
-                         is_floating_point_var<pT<T1> >::value, void>::type>
-inline bool is_U(const T1& rho1,
-                 const pT<T1>& atol = _precision::eps<pT<T1> >::value,
-                 const pT<T1>& rtol = 10 * _precision::eps<pT<T1> >::value) {
+template <typename T1,
+          typename = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, void>::type>
+inline bool
+is_U(const T1& rho1,
+     const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
+     const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;
@@ -35,20 +37,20 @@ inline bool is_U(const T1& rho1,
     return false;
 
   } else {
-    arma::Mat<eT<T1> > eye1 = rho * rho.t();
-    arma::Mat<eT<T1> > eye2 = rho.t() * rho;
+    arma::Mat<trait::eT<T1> > eye1 = rho * rho.t();
+    arma::Mat<trait::eT<T1> > eye2 = rho.t() * rho;
 
     bool ret1 = arma::all(
-      arma::vectorise((atol * arma::ones<arma::Mat<pT<T1> > >(n, m) +
-                       rtol * arma::abs(eye1)) -
-                      arma::abs(eye1 - arma::eye<arma::Mat<pT<T1> > >(n, m))) >
-      0.0);
+      arma::vectorise(
+        (atol * arma::ones<arma::Mat<trait::pT<T1> > >(n, m) +
+         rtol * arma::abs(eye1)) -
+        arma::abs(eye1 - arma::eye<arma::Mat<trait::pT<T1> > >(n, m))) > 0.0);
 
     bool ret2 = arma::all(
-      arma::vectorise((atol * arma::ones<arma::Mat<pT<T1> > >(n, m) +
-                       rtol * arma::abs(eye2)) -
-                      arma::abs(eye2 - arma::eye<arma::Mat<pT<T1> > >(n, m))) >
-      0.0);
+      arma::vectorise(
+        (atol * arma::ones<arma::Mat<trait::pT<T1> > >(n, m) +
+         rtol * arma::abs(eye2)) -
+        arma::abs(eye2 - arma::eye<arma::Mat<trait::pT<T1> > >(n, m))) > 0.0);
     return (ret1 && ret2);
   }
 }

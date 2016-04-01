@@ -25,7 +25,7 @@ namespace qic {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
@@ -102,7 +102,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
-  arma::field<arma::Mat<eT<T2> > > Ap(p_num + 1);
+  arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
   for (arma::uword i = 0; i <= p_num; ++i) Ap.at(i) = powm_gen(A1, i);
 
   if (!checkV) {
@@ -191,7 +191,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     return rho;
 
   } else {
-    arma::Mat<eT<T2> > U(p.n_rows, p.n_rows, arma::fill::zeros);
+    arma::Mat<trait::eT<T2> > U(p.n_rows, p.n_rows, arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
     arma::uword* loop_counter = new arma::uword[loop_no + 1];
@@ -221,7 +221,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
         arma::uword I(0);
         for (arma::uword i = 0; i < n; ++i)
           I += product.at(i) * loop_counter[i];
-        U.at(I, I) = static_cast<eT<T2> >(1.0);
+        U.at(I, I) = static_cast<trait::eT<T2> >(1.0);
 
       } else if (count1 == o) {
         arma::uword I(0), J(0), K(0), L(0);
@@ -280,7 +280,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<pT<T1>, pT<T2> >::value &&
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,

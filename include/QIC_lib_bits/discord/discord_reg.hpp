@@ -26,7 +26,7 @@ namespace qic {
 template <
   typename T1,
   typename TR = typename std::enable_if<
-    is_floating_point_var<pT<T1> >::value,
+    is_floating_point_var<trait::pT<T1> >::value,
     typename arma::Col<typename T1::pod_type>::template fixed<3> >::type>
 TR discord_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   const auto& rho = as_Mat(rho1);
@@ -67,7 +67,7 @@ TR discord_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   auto S_A_B = entropy(rho);
   auto I1 = S_A + S_B - S_A_B;
 
-  typename arma::Col<pT<T1> >::template fixed<3> ret;
+  typename arma::Col<trait::pT<T1> >::template fixed<3> ret;
 
   dim1 /= 2;
   arma::uword dim2(1);
@@ -75,16 +75,19 @@ TR discord_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
   arma::uword dim3(1);
   for (arma::uword i = nodal; i < party_no; ++i) dim3 *= dim.at(i);
 
-  arma::Mat<pT<T1> > eye2 = arma::eye<arma::Mat<pT<T1> > >(dim1, dim1);
-  arma::Mat<pT<T1> > eye3 = arma::eye<arma::Mat<pT<T1> > >(dim2, dim2);
-  arma::Mat<pT<T1> > eye4 = arma::eye<arma::Mat<pT<T1> > >(dim3, dim3);
+  arma::Mat<trait::pT<T1> > eye2 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
+  arma::Mat<trait::pT<T1> > eye3 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
+  arma::Mat<trait::pT<T1> > eye4 =
+    arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
 
   for (arma::uword i = 0; i < 3; ++i) {
-    arma::Mat<std::complex<pT<T1> > > proj1 =
-      SPM<pT<T1> >::get_instance().proj2.at(0, i + 1);
+    arma::Mat<std::complex<trait::pT<T1> > > proj1 =
+      SPM<trait::pT<T1> >::get_instance().proj2.at(0, i + 1);
 
-    arma::Mat<std::complex<pT<T1> > > proj2 =
-      SPM<pT<T1> >::get_instance().proj2.at(1, i + 1);
+    arma::Mat<std::complex<trait::pT<T1> > > proj2 =
+      SPM<trait::pT<T1> >::get_instance().proj2.at(1, i + 1);
 
     if (nodal == 1) {
       proj1 = kron(proj1, eye2);
@@ -97,18 +100,18 @@ TR discord_reg(const T1& rho1, arma::uword nodal, arma::uvec dim) {
       proj2 = kron(kron(eye3, proj2), eye4);
     }
 
-    arma::Mat<std::complex<pT<T1> > > rho_1 = (proj1 * rho * proj1);
-    arma::Mat<std::complex<pT<T1> > > rho_2 = (proj2 * rho * proj2);
+    arma::Mat<std::complex<trait::pT<T1> > > rho_1 = (proj1 * rho * proj1);
+    arma::Mat<std::complex<trait::pT<T1> > > rho_2 = (proj2 * rho * proj2);
 
-    pT<T1> p1 = std::real(arma::trace(rho_1));
-    pT<T1> p2 = std::real(arma::trace(rho_2));
+    trait::pT<T1> p1 = std::real(arma::trace(rho_1));
+    trait::pT<T1> p2 = std::real(arma::trace(rho_2));
 
-    pT<T1> S_max = 0.0;
-    if (p1 > _precision::eps<pT<T1> >::value) {
+    trait::pT<T1> S_max = 0.0;
+    if (p1 > _precision::eps<trait::pT<T1> >::value) {
       rho_1 /= p1;
       S_max += p1 * entropy(rho_1);
     }
-    if (p2 > _precision::eps<pT<T1> >::value) {
+    if (p2 > _precision::eps<trait::pT<T1> >::value) {
       rho_2 /= p2;
       S_max += p2 * entropy(rho_2);
     }

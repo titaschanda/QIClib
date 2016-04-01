@@ -26,7 +26,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+inline TR Tx2(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   auto p = as_Mat(rho1);
 
   bool checkV = true;
@@ -59,16 +59,21 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (sys.n_elem == dim.n_elem)
     return p.st();
 
+  if (sys.n_elem == 0)
+    return p;
+  
   _internal::protect_subs::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
 
-  arma::uvec product(n, arma::fill::ones);
+  arma::uword product[internal::_protect_subs::MAXQDIT];
+  product[n-1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
-    product.at(i) = product.at(i + 1) * dim.at(i + 1);
+    product[i] = product[i + 1] * dim.at(i + 1);
 
   const arma::uword loop_no = 2 * n;
-  arma::uword* loop_counter = new arma::uword[loop_no + 1];
-  arma::uword* MAX = new arma::uword[loop_no + 1];
+  constexpr auto loop_no_buffer = 2 * internal::_protect_subs::MAXQDIT + 1;
+  arma::uword loop_counter[loop_no_buffer] = {0};
+  arma::uword MAX[loop_no_buffer];
 
   for (arma::uword i = 0; i < n; ++i) {
     MAX[i] = dim.at(i);
@@ -76,23 +81,21 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   }
   MAX[loop_no] = 2;
 
-  for (arma::uword i = 0; i < loop_no + 1; ++i) loop_counter[i] = 0;
-
   arma::uword p1 = 0;
 
   while (loop_counter[loop_no] == 0) {
     arma::uword I(0), J(0), K(0), L(0);
 
     for (arma::uword i = 0; i < n; ++i) {
-      I += product.at(i) * loop_counter[i];
-      J += product.at(i) * loop_counter[i + n];
+      I += product[i] * loop_counter[i];
+      J += product[i] * loop_counter[i + n];
 
       if (arma::any(sys == i + 1)) {
-        K += product.at(i) * loop_counter[i + n];
-        L += product.at(i) * loop_counter[i];
+        K += product[i] * loop_counter[i + n];
+        L += product[i] * loop_counter[i];
       } else {
-        K += product.at(i) * loop_counter[i];
-        L += product.at(i) * loop_counter[i + n];
+        K += product[i] * loop_counter[i];
+        L += product[i] * loop_counter[i + n];
       }
     }
 
@@ -107,8 +110,6 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
         p1 = 0;
     }
   }
-  delete[] loop_counter;
-  delete[] MAX;
   return p;
 }
 
@@ -117,7 +118,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
+inline TR Tx2(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   const auto& p = as_Mat(rho1);
 
 #ifndef QIC_LIB_NO_DEBUG
