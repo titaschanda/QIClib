@@ -18,15 +18,25 @@ Version 0.0.4 - Development Branch
       where _precision::eps<double>::value = 1e-12 
       and _precision::eps<float>::value = 1e-6
  
-    - in is_U, default atol = 1e-2 * _precision::eps< POD_TYPE >::value 
+    - in is_U, default atol = _precision::eps< POD_TYPE >::value 
     and rtol = 10 * _precision::eps< POD_TYPE >::value
 
-    - in is_H, default atol = 1e-2 * _precision::eps< POD_TYPE >::value 
+    - in is_H, default atol = _precision::eps< POD_TYPE >::value 
     and rtol = 10 * _precision::eps< POD_TYPE >::value
     
-    - in is_equal, default atol = 1e-2 * _precision::eps< POD_TYPE >::value 
+    - in is_equal, default atol = _precision::eps< POD_TYPE >::value 
     and rtol = 10 * _precision::eps< POD_TYPE >::value
     
     - added purify
 
     - added random
+
+    - added measure
+    
+    - is_pure, is_valid_state
+
+    - bug-fix in discord type functions
+
+    - parallel support for measure
+
+    - added number theoretic functions

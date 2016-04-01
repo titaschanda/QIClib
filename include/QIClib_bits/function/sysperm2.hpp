@@ -60,7 +60,7 @@ inline TR sysperm2(const T1& rho1, const arma::uvec& sys,
   for (arma::sword i = n - 2; i >= 0; --i)
     product[i] = product[i + 1] * dim.at(i + 1);
 
-  arma::uvec productr[_internal::MAXQDIT];
+  arma::uword productr[_internal::MAXQDIT];
   productr[n-1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
     productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);

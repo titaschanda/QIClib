@@ -136,6 +136,8 @@ inline arma::Mat<T1> dsum(const std::initializer_list<arma::Mat<T1> >& rho) {
   return dsum(static_cast<std::vector<arma::Mat<T1> > >(rho));
 }
 
+//******************************************************************************
+
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>

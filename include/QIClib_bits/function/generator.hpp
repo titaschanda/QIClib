@@ -44,7 +44,7 @@ inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
 #endif
 
   arma::uword product[_internal::MAXQDIT];
-  product[m - 1] = 1
+  product[m - 1] = 1;
   arma::uword index = 0;
   
   for (arma::sword i = m - 2; i >= 0; --i) {
@@ -104,7 +104,7 @@ inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
 #endif
 
   arma::uword product[_internal::MAXQDIT];
-  product[m - 1] = 1
+  product[m - 1] = 1;
   arma::uword index = 0;
   
   for (arma::sword i = m - 2; i >= 0; --i) {

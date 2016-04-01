@@ -22,11 +22,13 @@
 #ifdef QICLIB_PARALLEL
 
 #define QICLIB_OPENMP_FOR _Pragma("omp parallel for")
+#define QICLIB_OPENMP_FOR_COLLAPSE_2 _Pragma("omp parallel for collapse(2)")
 #define QICLIB_OPENMP_CRITICAL _Pragma("omp critical")
 
 #else
 
 #define QICLIB_OPENMP_FOR
+#define QICLIB_OPENMP_FOR_COLLAPSE_2
 #define QICLIB_OPENMP_CRITICAL
 
 #endif
