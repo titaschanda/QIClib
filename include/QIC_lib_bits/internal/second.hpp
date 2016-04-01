@@ -23,8 +23,6 @@ namespace qic {
 
 namespace _internal {
 
-namespace protect_subs {
-
 //************************************************************************
 
 // More efficient than iterative counterpart, as iterative one needs
@@ -378,6 +376,6 @@ inline void dim_collapse_sys_ctrl(arma::uvec& dim, arma::uvec& sys,
   dim = std::move(dim2);
 }
 
-}  // namespace protect_subs
 }  // namespace _internal
+
 }  // namespace qic

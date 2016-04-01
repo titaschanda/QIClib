@@ -27,8 +27,8 @@ namespace qic {
 
 //******************************************************************************
 
-class Init final : public _internal::protect_subs::Singleton<const Init> {
-  friend class _internal::protect_subs::Singleton<const Init>;
+class Init final : public _internal::Singleton<const Init> {
+  friend class _internal::Singleton<const Init>;
 
  private:
   std::time_t date1, date2, date3;

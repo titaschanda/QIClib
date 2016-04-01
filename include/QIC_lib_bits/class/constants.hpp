@@ -46,8 +46,8 @@ template <typename T> constexpr T eps<T>::value;
 //******************************************************************************
 
 template <typename T1>
-class SPM final : public _internal::protect_subs::Singleton<const SPM<T1> > {
-  friend class _internal::protect_subs::Singleton<const SPM<T1> >;
+class SPM final : public _internal::Singleton<const SPM<T1> > {
+  friend class _internal::Singleton<const SPM<T1> >;
 
  public:
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> > S;

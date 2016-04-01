@@ -68,7 +68,7 @@ inline TR TrX2(const T1& rho1, arma::uvec sys, arma::uvec dim) {
       return p * p.t();
   }
     
-  _internal::protect_subs::dim_collapse_sys(dim, sys);
+  _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
 
@@ -84,12 +84,12 @@ inline TR TrX2(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   arma::uword dimtrace = arma::prod(dim(sys - 1));
   arma::uword dimkeep = p.n_rows / dimtrace;
 
-  arma::uword product[_internal::protect_subs::MAXQDIT];
+  arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
   for (arma::sword i = n - 2; i > -1; --i)
     product[i] = product[i + 1] * dim.at(i + 1);
 
-  arma::uword productr[_internal::protect_subs::MAXQDIT];
+  arma::uword productr[_internal::MAXQDIT];
   productr[n - m - 1] = 1;
   for (arma::sword i = n - m - 2; i > -1; --i)
     productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
@@ -97,7 +97,7 @@ inline TR TrX2(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   arma::Mat<trait::eT<T1> > tr_p(dimkeep, dimkeep, arma::fill::zeros);
 
   const arma::uword loop_no = 2 * n;
-  constexpr auto loop_no_buffer = 2 * _internal::protect_subs::MAXQDIT + 1;
+  constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
   arma::uword loop_counter[loop_no_buffer] = {0};
   arma::uword MAX[loop_no_buffer];
 

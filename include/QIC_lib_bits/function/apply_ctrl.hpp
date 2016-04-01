@@ -77,7 +77,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
 #endif
 
-  _internal::protect_subs::dim_collapse_sys_ctrl(dim, sys, ctrl);
+  _internal::dim_collapse_sys_ctrl(dim, sys, ctrl);
 
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;

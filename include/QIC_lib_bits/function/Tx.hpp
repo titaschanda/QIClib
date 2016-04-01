@@ -59,7 +59,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (sys.n_elem == dim.n_elem)
     return p.st();
 
-  _internal::protect_subs::dim_collapse_sys(dim, sys);
+  _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
 
   arma::uvec product(n, arma::fill::ones);

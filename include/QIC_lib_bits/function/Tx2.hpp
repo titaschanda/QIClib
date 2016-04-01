@@ -62,16 +62,16 @@ inline TR Tx2(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (sys.n_elem == 0)
     return p;
   
-  _internal::protect_subs::dim_collapse_sys(dim, sys);
+  _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
 
-  arma::uword product[internal::_protect_subs::MAXQDIT];
+  arma::uword product[_internal::MAXQDIT];
   product[n-1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
     product[i] = product[i + 1] * dim.at(i + 1);
 
   const arma::uword loop_no = 2 * n;
-  constexpr auto loop_no_buffer = 2 * internal::_protect_subs::MAXQDIT + 1;
+  constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
   arma::uword loop_counter[loop_no_buffer] = {0};
   arma::uword MAX[loop_no_buffer];
 

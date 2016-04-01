@@ -23,8 +23,6 @@ namespace qic {
 
 namespace _internal {
 
-namespace protect_subs {
-
 //******************************************************************************
 
 template <typename T> struct cond_I { static constexpr T value = 0; };
@@ -47,8 +45,6 @@ constexpr arma::uword MAXQDIT = QIC_LIB_MAXQDIT_COUNT;
 #endif
 
 //******************************************************************************
-
-}  // namespace protect_subs
 
 }  // namespace _internal
 

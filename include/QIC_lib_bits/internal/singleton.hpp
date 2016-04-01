@@ -27,8 +27,6 @@ namespace qic {
 
 namespace _internal {
 
-namespace protect_subs {
-
 template <typename T> class Singleton {
  protected:
   Singleton() noexcept = default;
@@ -53,6 +51,6 @@ template <typename T> class Singleton {
 #endif
 };
 
-}  // namespace protect_subs
 }  // namespace _internal
+
 }  // namespace qic

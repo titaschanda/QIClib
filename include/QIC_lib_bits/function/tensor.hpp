@@ -118,7 +118,7 @@ inline TR tensor_pow(const T1& rho1, arma::uword n) {
     throw Exception("qic::tensor_pow", Exception::type::OUT_OF_RANGE);
 #endif
 
-  return _internal::protect_subs::TENSOR_POW(rho, n);
+  return _internal::TENSOR_POW(rho, n);
 }
 
 //******************************************************************************

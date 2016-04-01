@@ -28,8 +28,8 @@ namespace qic {
 //******************************************************************************
 
 class RandomDevices final
-  : public _internal::protect_subs::Singleton<RandomDevices> {
-  friend class _internal::protect_subs::Singleton<RandomDevices>;
+  : public _internal::Singleton<RandomDevices> {
+  friend class _internal::Singleton<RandomDevices>;
 
   std::random_device rd;
 
