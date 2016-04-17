@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys,
-                  const arma::uvec& dim) {
+                   const arma::uvec& dim) {
   const auto& p = as_Mat(rho1);
   const arma::uword n = dim.n_elem;
 
@@ -55,20 +55,23 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     throw Exception("qic::sysperm", Exception::type::PERM_INVALID);
 #endif
 
-  arma::uvec product(n, arma::fill::ones);
+  arma::uword product[_internal::MAXQDIT];
+  product[n-1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
-    product.at(i) = product.at(i + 1) * dim.at(i + 1);
+    product[i] = product[i + 1] * dim.at(i + 1);
 
-  arma::uvec productr(n, arma::fill::ones);
+  arma::uword productr[_internal::MAXQDIT];
+  productr[n-1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
-    productr.at(i) = productr.at(i + 1) * dim.at(sys.at(i + 1) - 1);
+    productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);
 
   if (checkV) {
     arma::Mat<trait::eT<T1> > p_r(p.n_rows, p.n_cols, arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
-    arma::uword* loop_counter = new arma::uword[loop_no + 1];
-    arma::uword* MAX = new arma::uword[loop_no + 1];
+    constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
+    arma::uword loop_counter[loop_no_buffer] = {0};
+    arma::uword MAX[loop_no_buffer];
 
     for (arma::uword i = 0; i < n; ++i) {
       MAX[i] = dim.at(i);
@@ -76,17 +79,15 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     }
     MAX[loop_no] = 2;
 
-    for (arma::uword i = 0; i < loop_no + 1; ++i) loop_counter[i] = 0;
-
     arma::uword p1 = 0;
 
     while (loop_counter[loop_no] == 0) {
       arma::uword I(0), J(0), K(0), L(0);
       for (arma::uword i = 0; i < n; ++i) {
-        I += product.at(i) * loop_counter[i];
-        J += product.at(i) * loop_counter[i + n];
-        K += productr.at(i) * loop_counter[sys.at(i) - 1];
-        L += productr.at(i) * loop_counter[sys.at(i) + n - 1];
+        I += product[i] * loop_counter[i];
+        J += product[i] * loop_counter[i + n];
+        K += productr[i] * loop_counter[sys.at(i) - 1];
+        L += productr[i] * loop_counter[sys.at(i) + n - 1];
       }
 
       p_r.at(K, L) = p.at(I, J);
@@ -99,16 +100,15 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
           p1 = 0;
       }
     }
-    delete[] loop_counter;
-    delete[] MAX;
     return p_r;
 
   } else {
     arma::Col<trait::eT<T1> > p_r(p.n_rows, arma::fill::zeros);
 
     const arma::uword loop_no = n;
-    arma::uword* loop_counter = new arma::uword[loop_no + 1];
-    arma::uword* MAX = new arma::uword[loop_no + 1];
+    constexpr auto loop_no_buffer = _internal::MAXQDIT + 1;
+    arma::uword loop_counter[loop_no_buffer] = {0};
+    arma::uword MAX[loop_no_buffer];
 
     for (arma::uword i = 0; i < n; ++i) MAX[i] = dim.at(i);
     MAX[loop_no] = 2;
@@ -120,8 +120,8 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     while (loop_counter[loop_no] == 0) {
       arma::uword I(0), K(0);
       for (arma::uword i = 0; i < n; ++i) {
-        I += product.at(i) * loop_counter[i];
-        K += productr.at(i) * loop_counter[sys.at(i) - 1];
+        I += product[i] * loop_counter[i];
+        K += productr[i] * loop_counter[sys.at(i) - 1];
       }
 
       p_r.at(K) = p.at(I);
@@ -134,8 +134,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
           p1 = 0;
       }
     }
-    delete[] loop_counter;
-    delete[] MAX;
+
     return p_r;
   }
 }

@@ -35,10 +35,7 @@ is_H(const T1& rho1,
   if (n != m) {
     return false;
   } else {
-    return arma::all(
-      arma::vectorise((atol * arma::ones<arma::Mat<trait::pT<T1> > >(n, m) +
-                       rtol * arma::abs(rho)) -
-                      arma::abs(rho - rho.t())) > 0.0);
+    return is_equal(rho, rho.t(), false, atol, rtol);
   }
 }
 

@@ -63,8 +63,15 @@ template <typename T1, typename T2,
             std::vector<typename promote_var<T1, T2>::type> >::type>
 inline TR range(T1 start, T2 stop) {
   using pTr = typename promote_var<T1, T2>::type;
-  return range(static_cast<pTr>(start), static_cast<pTr>(stop),
-               static_cast<pTr>(1));
+
+  if (static_cast<pTr>(start) < static_cast<pTr>(stop))
+    return range(static_cast<pTr>(start), static_cast<pTr>(stop),
+                 static_cast<pTr>(1));
+
+  else
+    return range(static_cast<pTr>(start), static_cast<pTr>(stop),
+                 static_cast<pTr>(-1));
+    
 }
 
 //****************************************************************************

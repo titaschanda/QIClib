@@ -28,7 +28,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
+inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
                      arma::uvec sys, arma::uvec dim) {
   using eTR = typename eT_promoter_var<T1, T2>::type;
 
@@ -92,15 +92,13 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
     }
   }
 
-  arma::uword product[_internal::MAXQDIT];
-  product[n - 1] = 1;
+  arma::uvec product(n, arma::fill::ones);
   for (arma::sword i = n - 2; i >= 0; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
+    product.at(i) = product.at(i + 1) * dim.at(i + 1);
 
-  arma::uword productr(_internal::MAXQDIT];
-  productr[m - 1] = 1;
+  arma::uvec productr(m, arma::fill::ones);
   for (arma::sword i = m - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(sys(i) - 1);
+    productr.at(i) = productr.at(i + 1) * dim.at(sys(i) - 1);
 
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
@@ -111,9 +109,8 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
     arma::Col<eTR> rho(p.n_rows, arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
-    constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
-    arma::uword loop_counter[loop_no_buffer] = {0};
-    arma::uword MAX[loop_no_buffer];
+    arma::uword* loop_counter = new arma::uword[loop_no + 1];
+    arma::uword* MAX = new arma::uword[loop_no + 1];
 
     for (arma::uword i = 0; i < n; ++i) {
       MAX[i] = dim.at(i);
@@ -123,6 +120,8 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
         MAX[i + n] = dim.at(i);
     }
     MAX[loop_no] = 2;
+
+    for (arma::uword i = 0; i < loop_no + 1; ++i) loop_counter[i] = 0;
 
     arma::uword p1 = 0;
 
@@ -137,7 +136,7 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
       if ((count1 != o) && (count2 == n)) {
         arma::uword I(0);
         for (arma::uword i = 0; i < n; ++i)
-          I += product[i] * loop_counter[i];
+          I += product.at(i) * loop_counter[i];
         rho.at(I) = static_cast<eTR>(p.at(I));
 
       } else if (count1 == o) {
@@ -146,12 +145,12 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
 
         for (arma::uword i = 0; i < n; ++i) {
           if (arma::any(keep == i + 1)) {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i];
+            I += product.at(i) * loop_counter[i];
+            J += product.at(i) * loop_counter[i];
 
           } else {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i + n];
+            I += product.at(i) * loop_counter[i];
+            J += product.at(i) * loop_counter[i + n];
           }
 
           if (o != 0) {
@@ -170,8 +169,8 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
             if (sys.at(counter) != i + 1) {
               ++counter;
             } else {
-              K += productr[counter] * loop_counter[i];
-              L += productr[counter] * loop_counter[i + n];
+              K += productr.at(counter) * loop_counter[i];
+              L += productr.at(counter) * loop_counter[i + n];
               break;
             }
           }
@@ -187,15 +186,16 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
           p1 = 0;
       }
     }
+    delete[] loop_counter;
+    delete[] MAX;
     return rho;
 
   } else {
     arma::Mat<trait::eT<T2> > U(p.n_rows, p.n_rows, arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
-    constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
-    arma::uword loop_counter[loop_no_buffer] = {0};
-    arma::uword MAX[loop_no_buffer];
+    arma::uword* loop_counter = new arma::uword[loop_no + 1];
+    arma::uword* MAX = new arma::uword[loop_no + 1];
 
     for (arma::uword i = 0; i < n; ++i) {
       MAX[i] = dim.at(i);
@@ -205,6 +205,8 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
         MAX[i + n] = dim.at(i);
     }
     MAX[loop_no] = 2;
+
+    for (arma::uword i = 0; i < loop_no + 1; ++i) loop_counter[i] = 0;
 
     arma::uword p1 = 0;
 
@@ -218,7 +220,7 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
       if ((count1 != o) && (count2 == n)) {
         arma::uword I(0);
         for (arma::uword i = 0; i < n; ++i)
-          I += product[i] * loop_counter[i];
+          I += product.at(i) * loop_counter[i];
         U.at(I, I) = static_cast<trait::eT<T2> >(1.0);
 
       } else if (count1 == o) {
@@ -227,12 +229,12 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
 
         for (arma::uword i = 0; i < n; ++i) {
           if (arma::any(keep == i + 1)) {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i];
+            I += product.at(i) * loop_counter[i];
+            J += product.at(i) * loop_counter[i];
 
           } else {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i + n];
+            I += product.at(i) * loop_counter[i];
+            J += product.at(i) * loop_counter[i + n];
           }
 
           if (o != 0) {
@@ -251,8 +253,8 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
             if (sys.at(counter) != i + 1) {
               ++counter;
             } else {
-              K += productr[counter] * loop_counter[i];
-              L += productr[counter] * loop_counter[i + n];
+              K += productr.at(counter) * loop_counter[i];
+              L += productr.at(counter) * loop_counter[i + n];
               break;
             }
           }
@@ -268,6 +270,8 @@ inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
           p1 = 0;
       }
     }
+    delete[] loop_counter;
+    delete[] MAX;
     return U * p * U.t();
   }
 }
@@ -279,7 +283,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply_ctrl2(const T1& rho1, const T2& A, arma::uvec ctrl,
+inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
                      arma::uvec sys, arma::uword dim = 2) {
   const auto& rho = as_Mat(rho1);
 

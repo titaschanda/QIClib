@@ -54,9 +54,20 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
 #endif
 
-  if (sys.n_elem == dim.n_elem)
-    return {arma::trace(p)};
-  
+  if (sys.n_elem == dim.n_elem) {
+    if (checkV)
+      return {arma::trace(p)};
+    else
+      return {p.t() * p};
+  }
+
+  if (sys.n_elem == 0) {
+    if (checkV)
+      return p;
+    else
+      return p * p.t();
+  }
+    
   _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
@@ -73,19 +84,22 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   arma::uword dimtrace = arma::prod(dim(sys - 1));
   arma::uword dimkeep = p.n_rows / dimtrace;
 
-  arma::uvec product(n, arma::fill::ones);
+  arma::uword product[_internal::MAXQDIT];
+  product[n - 1] = 1;
   for (arma::sword i = n - 2; i > -1; --i)
-    product.at(i) = product.at(i + 1) * dim.at(i + 1);
+    product[i] = product[i + 1] * dim.at(i + 1);
 
-  arma::uvec productr(n - m, arma::fill::ones);
+  arma::uword productr[_internal::MAXQDIT];
+  productr[n - m - 1] = 1;
   for (arma::sword i = n - m - 2; i > -1; --i)
-    productr.at(i) = productr.at(i + 1) * dim.at(keep.at(i + 1) - 1);
+    productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
 
   arma::Mat<trait::eT<T1> > tr_p(dimkeep, dimkeep, arma::fill::zeros);
 
   const arma::uword loop_no = 2 * n;
-  arma::uword* loop_counter = new arma::uword[loop_no + 1];
-  arma::uword* MAX = new arma::uword[loop_no + 1];
+  constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
+  arma::uword loop_counter[loop_no_buffer] = {0};
+  arma::uword MAX[loop_no_buffer];
 
   for (arma::uword i = 0; i < n; ++i) {
     MAX[i] = dim.at(i);
@@ -96,8 +110,6 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   }
   MAX[loop_no] = 2;
 
-  for (arma::uword i = 0; i < loop_no + 1; ++i) loop_counter[i] = 0;
-
   arma::uword p1 = 0;
 
   while (loop_counter[loop_no] == 0) {
@@ -105,17 +117,17 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
     for (arma::uword i = 0; i < n; ++i) {
       if (arma::any(sys == i + 1)) {
-        I += product.at(i) * loop_counter[i];
-        J += product.at(i) * loop_counter[i];
+        I += product[i] * loop_counter[i];
+        J += product[i] * loop_counter[i];
 
       } else {
-        I += product.at(i) * loop_counter[i];
-        J += product.at(i) * loop_counter[i + n];
+        I += product[i] * loop_counter[i];
+        J += product[i] * loop_counter[i + n];
       }
 
       if (arma::any(keep == i + 1)) {
-        K += productr.at(n_to_k) * loop_counter[i];
-        L += productr.at(n_to_k) * loop_counter[i + n];
+        K += productr[n_to_k] * loop_counter[i];
+        L += productr[n_to_k] * loop_counter[i + n];
         ++n_to_k;
       }
     }
@@ -130,8 +142,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
         p1 = 0;
     }
   }
-  delete[] loop_counter;
-  delete[] MAX;
+
   return tr_p;
 }
 

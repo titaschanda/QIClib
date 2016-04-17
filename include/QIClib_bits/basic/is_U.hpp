@@ -39,20 +39,13 @@ is_U(const T1& rho1,
   } else {
     arma::Mat<trait::eT<T1> > eye1 = rho * rho.t();
     arma::Mat<trait::eT<T1> > eye2 = rho.t() * rho;
+    arma::Mat<trait::eT<T1> > eye3 =
+      arma::eye<arma::Mat<trait::eT<T1> > >(n, m);
 
-    bool ret1 = arma::all(
-      arma::vectorise(
-        (atol * arma::ones<arma::Mat<trait::pT<T1> > >(n, m) +
-         rtol * arma::abs(eye1)) -
-        arma::abs(eye1 - arma::eye<arma::Mat<trait::pT<T1> > >(n, m))) > 0.0);
-
-    bool ret2 = arma::all(
-      arma::vectorise(
-        (atol * arma::ones<arma::Mat<trait::pT<T1> > >(n, m) +
-         rtol * arma::abs(eye2)) -
-        arma::abs(eye2 - arma::eye<arma::Mat<trait::pT<T1> > >(n, m))) > 0.0);
-    return (ret1 && ret2);
+    return is_equal(eye1, eye3, false, atol, rtol) &&
+           is_equal(eye2, eye3, false, atol, rtol);
   }
 }
+
 
 }  // namespace qic

@@ -42,10 +42,25 @@ is_equal(const T1& rho11, const T2& rho12, bool typecheck = false,
       (typecheck && !std::is_same<trait::eT<T1>, trait::eT<T2> >::value)) {
     return false;
   } else {
-    return arma::all(
-      arma::vectorise((atol * arma::ones<arma::Mat<trait::pT<T1> > >(n1, m1) +
-                       rtol * arma::abs(rho1)) -
-                      arma::abs(rho1 - rho2)) > 0.0);
+    const arma::uword N = rho1.n_elem;  
+    arma::uword ii, jj;
+
+    for (ii = 0, jj = 1; jj < N; ii += 2, jj += 2) {
+      if (std::abs(rho1[ii] - rho2[ii]) >
+          atol + rtol * std::max(std::abs(rho1[ii]), std::abs(rho2[ii])))
+        return false;
+      
+      if (std::abs(rho1[jj] - rho2[jj]) >
+          atol + rtol * std::max(std::abs(rho1[jj]), std::abs(rho2[jj])))
+        return false;
+    }
+    if (ii < N) {
+      if (std::abs(rho1[ii] - rho2[ii]) >
+          atol + rtol * std::max(std::abs(rho1[ii]), std::abs(rho2[ii])))
+        return false;
+    }
+
+    return true;
   }
 }
 
