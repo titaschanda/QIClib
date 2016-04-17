@@ -23,10 +23,10 @@ namespace qic {
 
 template <typename T1, typename = typename std::enable_if<
                          is_arma_type_var<T1>::value, void>::type>
-inline bool
-is_H(const T1& rho1,
-     const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
-     const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
+inline bool is_Hermitian(
+  const T1& rho1,
+  const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
+  const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;

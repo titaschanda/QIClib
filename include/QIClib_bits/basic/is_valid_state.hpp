@@ -25,11 +25,11 @@ template <typename T1,
           typename = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool is_valid_state(
-  const T1& rho1,
-  const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
+    const T1& rho1,
+    const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
-  if (!is_H(rho)) {
+  if (!is_Hermitian(rho)) {
     return false;
 
   } else if (is_pure(rho, true, tol)) {

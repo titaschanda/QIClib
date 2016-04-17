@@ -25,9 +25,9 @@ template <typename T1,
           typename = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool
-is_U(const T1& rho1,
-     const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
-     const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
+is_Unitary(const T1& rho1,
+           const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
+           const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;
@@ -40,10 +40,10 @@ is_U(const T1& rho1,
     arma::Mat<trait::eT<T1> > eye1 = rho * rho.t();
     arma::Mat<trait::eT<T1> > eye2 = rho.t() * rho;
     arma::Mat<trait::eT<T1> > eye3 =
-      arma::eye<arma::Mat<trait::eT<T1> > >(n, m);
+        arma::eye<arma::Mat<trait::eT<T1> > >(n, m);
 
     return is_equal(eye1, eye3, false, atol, rtol) &&
-           is_equal(eye2, eye3, false, atol, rtol);
+        is_equal(eye2, eye3, false, atol, rtol);
   }
 }
 

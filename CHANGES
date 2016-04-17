@@ -11,29 +11,25 @@ Version 0.0.3 - November 21, 2015
 
 Version 0.0.4 - Development Branch
     - added conv_to_HS
+
     - added conv_to_std
+
     - added measure
+
     - stricter SFINAE, better error message due to SFINAE
     - _precision::eps is now a class, 
-      where _precision::eps<double>::value = 1e-12 
-      and _precision::eps<float>::value = 1e-6
- 
-    - in is_U, default atol = _precision::eps< POD_TYPE >::value 
-    and rtol = 10 * _precision::eps< POD_TYPE >::value
+      where _precision::eps<double>::value = ? 
+      and _precision::eps<float>::value = ?
 
-    - in is_H, default atol = _precision::eps< POD_TYPE >::value 
-    and rtol = 10 * _precision::eps< POD_TYPE >::value
-    
-    - in is_equal, default atol = _precision::eps< POD_TYPE >::value 
-    and rtol = 10 * _precision::eps< POD_TYPE >::value
-    
+    - is_H is now is_Hermitian, is_U is now is_Unitary
+
+    - faster is_equal, is_Hermitian, is_Unitary, is_pure, is_valid_state
+
     - added purify
 
     - added random
 
     - added measure
-    
-    - is_pure, is_valid_state
 
     - bug-fix in discord type functions
 
