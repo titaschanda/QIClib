@@ -29,8 +29,6 @@ Version 0.0.4 - Development Branch
 
     - added random
 
-    - added measure
-
     - bug-fix in discord type functions
 
     - parallel support for measure

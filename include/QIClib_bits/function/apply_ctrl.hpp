@@ -97,7 +97,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   for (arma::sword i = n - 2; i >= 0; --i)
     product[i] = product[i + 1] * dim.at(i + 1);
 
-  arma::uword productr(_internal::MAXQDIT];
+  arma::uword productr[_internal::MAXQDIT];
   productr[m - 1] = 1;
   for (arma::sword i = m - 2; i >= 0; --i)
     productr[i] = productr[i + 1] * dim.at(sys(i) - 1);
