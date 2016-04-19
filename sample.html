@@ -46,11 +46,13 @@ Basic matrix operartions</h3>
 #include &lt;armadillo&gt; 
 #include &lt;QIClib&gt; //make sure that your compiler can  find the header<br>
 
-using namespace std; 
-using namespace arma;
-using namespace qic;
 
 int main(int argc, char** argv) {
+  using namespace std; 
+  using namespace arma;
+  using namespace qic;
+
+
   mat A = randu&lt;mat&gt;(5,5); // 5x5 real matrix
   cx_mat B = randu&lt;cx_mat&gt;(4,4); // 4x4 complex matrix
   
