@@ -31,7 +31,7 @@
     <section class="main-content">
     
       <a name=top></a>  
-      <center><h2> API Reference for QIClib 0.0.4	
+      <center><h2> API Reference for QIClib 0.0.4
       </h2></center>
 
       <b>Preamble</b>
@@ -83,9 +83,15 @@
 	      <tbody>
 		<tr><td><a href="#eps"> _precision::eps     </td><td>  </td><td> Precision for floating point arithmetic</td></tr>
 		<tr><td><a href="#init"> Init     </td><td>  </td><td> Class for library initialization</td></tr>
-		<tr><td><a href="#spm"> SPM&lt;type&gt;, spm, fspm  </td><td>  </td><td> Several predefined constant special matrices like basis states, projectors and operators</td></tr>
-		<tr><td><a href="#func"> Func&lttype&gt, func, funcf  </td><td>  </td><td> Several predefined functions to be used with <a href = #funcm_sym><code>funcm_sym</code></a> or <a href = #funcm_gen><code>funcm_gen</code></a>
+		<tr><td><a href="#spm"> SPM&lt;type&gt;, spm, fspm  </td><td>  </td><td> Several predefined constant special matrices 
+		    like basis states, projectors and operators</td></tr>
+		<tr><td><a href="#func"> Func&lt;type&gt;, func, funcf  </td><td>  </td><td> Several predefined functions to be 
+		    used with <code><a href = #funcm_sym>funcm_sym</a></code> or <code><a href = #funcm_gen>funcm_gen</a></code>
 		</td></tr>
+		<tr><td><a href="#RandomDevices"> RandomDevices, rdevs</td><td>  </td><td> Predefined random number engines/generators, to be used 
+		    with functions like <a href="#randU">randU</a> etc.
+		</td></tr>
+
 		
 	      </tbody>
 	    </table>
@@ -99,8 +105,8 @@
 	  <ul>
 	    <table>
 	      <tbody>
-		<tr><td><a href="#is_H"> is_H  </td><td>  </td><td> Hermiticity check</td></tr>
-		<tr><td><a href="#is_U"> is_U  </td><td>  </td><td> Unitarity check</td></tr>
+		<tr><td><a href="#is_Hermitian"> is_Hermitian  </td><td>  </td><td> Hermiticity check</td></tr>
+		<tr><td><a href="#is_Unitary"> is_Unitary  </td><td>  </td><td> Unitarity check</td></tr>
 		<tr><td><a href="#is_pure"> is_pure  </td><td>  </td><td>Check purity of a density matrix</td></tr>
 		<tr><td><a href="#is_valid_state"> is_valid_state  </td><td>  </td><td> Check whether the matrix represents a valid quantum state</td></tr>
 		<tr><td><a href="#is_equal"> is_equal  </td><td>  </td><td>Check whether two matrices are equal</td></tr>
@@ -124,14 +130,30 @@
 		<tr><td><a href="#dsum_pow"> dsum_pow  </td><td>  </td><td>Direct sum power</td></tr>		
 		<tr><td><a href="#absm"> absm  </td><td>  </td><td>Matrix absolute value of a square matrix</td></tr>
 		<tr><td><a href="#schatten"> schatten  </td><td>  </td><td>Schatten p-norm of a matrix</td></tr>
+		<tr><td><a href="#purify"> purify  </td><td>  </td><td>Minimal purification of a density matrix</td></tr>
 		<tr><td><a href="#conv_to_pure"> conv_to_pure  </td><td>  </td><td>Convert density matrix of a pure state to a column vector</td></tr>
-		<tr><td><a href="#conv_to_HS"> conv_to_HS  </td><td>  </td><td>Convert 2-qubit density matrix from the standard basis to the Hilbert-Schmidt basis </td></tr>
-		<tr><td><a href="#conv_to_std"> conv_to_std  </td><td>  </td><td>Convert 2-qubit density matrix from the Hilbert-Schmidt basis back to the standard basis</td></tr>
-
+		<tr><td><a href="#conv_to_HS"> conv_to_HS  </td><td>  </td><td>Convert 2-qubit density matrix from the standard basis to 
+		    the Hilbert-Schmidt basis </td></tr>
+		<tr><td><a href="#conv_to_std"> conv_to_std  </td><td>  </td><td>Convert 2-qubit density matrix from the Hilbert-Schmidt 
+		    basis back to the standard basis</td></tr>
 		<tr><td><a href="#mket"> mket  </td><td>  </td><td> Multipartite qudit pure state </td></tr>
 		<tr><td><a href="#mproj"> mproj  </td><td>  </td><td> Multipartite qudit projector </td></tr>
+
 		<tr><td>  </td><td>  </td><td> </td></tr>
 		<tr><td>  </td><td>  </td><td> </td></tr>
+
+		<tr><td><a href="#randU"> randU  </td><td>  </td><td> Generate object with random values (uniform distribution)</td></tr>
+		<tr><td><a href="#randN"> randN  </td><td>  </td><td> Generate object with random values (normal distribution)</td></tr>
+		<tr><td><a href="#randI"> randI  </td><td>  </td><td> Generate object with random integers</td></tr>
+		<tr><td><a href="#randHermitian"> randHermitian  </td><td>  </td><td> Generate random Hermitian matrix</td></tr>
+		<tr><td><a href="#randUnitary"> randUnitary  </td><td>  </td><td> Generate random unitary matrix</td></tr>
+		<tr><td><a href="#randPsi"> randPsi  </td><td>  </td><td> Generate random pure states</td></tr>
+		<tr><td><a href="#randRho"> randRho  </td><td>  </td><td> Generate random mixed states</td></tr>
+
+
+		<tr><td>  </td><td>  </td><td> </td></tr>
+		<tr><td>  </td><td>  </td><td> </td></tr>
+
 		<tr><td><a href="#entropy"> entropy  </td><td>  </td><td>von Neumann entropy of a quantum state</td></tr>
 		<tr><td><a href="#shannon"> shannon  </td><td>  </td><td>Shannon entropy of a probability distribution</td></tr>
 		<tr><td><a href="#renyi"> renyi  </td><td>  </td><td>Renyi entropy of a quantum state</td></tr>
@@ -161,6 +183,8 @@
 		<tr><td>  </td><td>  </td><td> </td></tr>
 		<tr><td><a href="#apply"> apply  </td><td>  </td><td>Apply a gate to a quantum state</td></tr>	      
 		<tr><td><a href="#apply_ctrl"> apply_ctrl  </td><td>  </td><td>Apply a controlled-gate to a quantum state</td></tr>
+		<tr><td><a href="#measure"> measure  </td><td>  </td><td>Measure a state using a set of Kraus or projection operators</td></tr>
+		<tr><td><a href="#measure_comp"> measure_comp  </td><td>  </td><td>Measure a state in the computational basis</td></tr>
 
 
 
@@ -178,15 +202,23 @@
 	    <li> <b>Note:</b> These functions depend on <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>. </li> <br>
 	    <table>
 	      <tbody>
-		<tr><td><a href="#discord"> discord  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="#discord3"> discord3  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
-		<tr><td><a href="#discord_reg"> discord_reg  </td><td>  </td><td>Constrained regular quantum discord of a  density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="#discord3_reg"> discord3_reg  </td><td>  </td><td> Constrained regular quantum discord of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="#discord"> discord  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done 
+		    over a qubit system</td></tr>
+		<tr><td><a href="#discord3"> discord3  </td><td>  </td><td> Quantum discord of a  density matrix where measurement is done 
+		    over a qutrit system</td></tr>
+		<tr><td><a href="#discord_reg"> discord_reg  </td><td>  </td><td>Constrained regular quantum discord of a  density matrix 
+		    where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="#discord3_reg"> discord3_reg  </td><td>  </td><td> Constrained regular quantum discord of a  density matrix 
+		    where measurement is done over a qutrit system</td></tr>
 
-		<tr><td><a href="#deficit"> deficit  </td><td>  </td><td> Quantum work deficit of a density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="#deficit3"> deficit3  </td><td>  </td><td> Quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
-		<tr><td><a href="#deficit_reg"> deficit_reg  </td><td>  </td><td>Constrained regular quantum work deficit of a  density matrix where measurement is done over a qubit system</td></tr>
-		<tr><td><a href="#deficit3_reg"> deficit3_reg  </td><td>  </td><td> Constrained regular quantum work deficit of a  density matrix where measurement is done over a qutrit system</td></tr>
+		<tr><td><a href="#deficit"> deficit  </td><td>  </td><td> Quantum work deficit of a density matrix where measurement is done 
+		    over a qubit system</td></tr>
+		<tr><td><a href="#deficit3"> deficit3  </td><td>  </td><td> Quantum work deficit of a  density matrix where measurement is done 
+		    over a qutrit system</td></tr>
+		<tr><td><a href="#deficit_reg"> deficit_reg  </td><td>  </td><td>Constrained regular quantum work deficit of a  density matrix 
+		    where measurement is done over a qubit system</td></tr>
+		<tr><td><a href="#deficit3_reg"> deficit3_reg  </td><td>  </td><td> Constrained regular quantum work deficit of a  density matrix 
+		    where measurement is done over a qutrit system</td></tr>
 
 
 
@@ -215,12 +247,12 @@
 	  <b>_precision::eps</b><br><br>
 	  <ul>
 	    <li>Precision for floating point arithmetic. </li><br> 
-	    <li>Every <code>float</code>/<code>double</code>/<code>long double</code> <i>less than</i> 
-	      <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
+	    <li>For floating point arithmetics, every <code>float</code> or <code>double</code> <i>less than</i> 
+	      <code>_precision::eps&lt;float&gt;::value</code> or <code>_precision::eps&lt;double&gt;::value</code> will be treated as zero.</li><br>
 	    
 	    <li> Default value for <code>_precision::eps&lt;float&gt;::value</code> is <code>10*std::numeric_limits&lt;float&gt;::epsilon()</code>, 
 	      and <code>_precision::eps&lt;double&gt;::value</code> is <code>100*std::numeric_limits&lt;float&gt;::epsilon()</code>. 
-	      Same for <code>long double</code>. It can be changed by editing <code>include/QIClib_bits/class/constants.hpp</code> file.</li>
+	      It can be changed by editing <code>include/QIClib_bits/class/constants.hpp</code> file.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -247,45 +279,46 @@
 	    <li> Several predefined <i> complex </i> special matrices and vectors  like basis states, projectors and operators. 
 	      <code>type</code> can be either <code>double</code> or <code>float</code>.</li><br>
 
-	    <li> Used by <code>static const SPM&lt;double&gt;& spm  = SPM&lt;double&gt;::get_instance();</code> or 
+	    <li> This is a singleton class, which is constructed only once.
+	      Instantiated by <code>static const SPM&lt;double&gt;& spm  = SPM&lt;double&gt;::get_instance();</code> or 
 	      <code>static const SPM&lt;float&gt;& spmf  = SPM&lt;float&gt;::get_instance();</code>. You don't need to do this as
-	   it is already defined. Just use <code>spm</code> or <code>spmf</code>. </li><br>
+	      it is automatically instantiated if you use this library. Just use <code>spm</code> or <code>spmf</code> (see below). </li><br>
 
-	    <li> <code>spm.S</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> 
+	    <li> <code>spm.S</code> returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> 
 	      of Pauli matrices (<code>const cx_mat</code>). <code>spm.S(0)</code>, <code>spm.S(1)</code>, <code>spm.S(2)</code>, 
 	      and <code>spm.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, 
 	      and <i> &sigma;<sub>z</sub></i>.</li><br>
 
-	    <li> <code>spm.basis2</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 
+	    <li> <code>spm.basis2</code> returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      2-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0, i)</code> and <code>spm.basis(1, i)</code> are respectively 
 	      |0&gt and |1&gt in <i>i</i> direction ( <i>i = 0, 1, 2, 3 </i>). <code>spm.proj2</code> returns corresponding projectors 
 	      (<code>const cx_mat</code>).</li><br>
 
-	    <li> <code>spm.basis3</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of 
+	    <li> <code>spm.basis3</code> returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      3-dimensional basis vectors (<code>const cx_vec</code>). <code>spm.basis(0, i)</code>, <code>spm.basis(1, i)</code> and 
 	      <code>spm.basis(2, i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction (<i>i = 0, 1, 2, 3</i>). 
 	      <code>spm.proj3</code> returns corresponding projectors (<code>const cx_mat</code>).</li><br>
 
 	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;type&gt;</code> class, but you can take reference to <code>const</code>. 
-	      For this use <code>const SPM&lt;double&gt;& SOMENAME  = SPM&lt;double&gt;::get_instance();</code>. <br>
-	      For each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference to <code>const</code> 
+	      For this use <code>const SPM&lt;double&gt;& SOMENAME  = SPM&lt;double&gt;::get_instance();</code>. However,
+	      for each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference to <code>const</code> 
 	      (See the following example).</li><br> 
 
 	    <li> Example:
 	      <pre>
-		const cx_mat& S1 = states.S(1);   // \sigma_x matrix, take reference
-		cx_mat S2 = states.S(2);          // \sigma_y matrix, take a copy
+		const cx_mat& S1 = spm.S(1);   // \sigma_x matrix, take reference
+		cx_mat S2 = spm.S(2);          // \sigma_y matrix, take a copy
 
-		const cx_vec& plus = states.basis2(0, 1);     // |+&gt state
-		const cx_mat& proj_plus = states.proj2(0, 1); // |+&gt&lt+| projector
+		const cx_vec& plus = spm.basis2(0, 1);     // |+&gt state
+		const cx_mat& proj_plus = spm.proj2(0, 1); // |+&gt&lt+| projector
 
-		const cx_vec& U = states.basis3(0, 3); // 1st eigenvector of 
+		const cx_vec& U = spm.basis3(0, 3); // 1st eigenvector of 
                 //Spin S_z operator in 3-dim
 
-		const cx_mat& M = states.basis3(1, 3); // 2nd eigenvector of 
+		const cx_mat& M = spm.basis3(1, 3); // 2nd eigenvector of 
                 //Spin S_z operator in 3-dim
 
-		const cx_mat& M = states.basis3(2, 3); // 3rd eigenvector of 
+		const cx_mat& M = spm.basis3(2, 3); // 3rd eigenvector of 
                 //Spin S_z operator in 3-dim
 	      </pre>
 	    </li>
@@ -301,8 +334,8 @@
 	  <a name=func></a>
 	  <b>Func&lttype&gt<br> func <br> funcf</b><br><br>
 	  <ul>
-	    <li> Class with several predefined static member functions to be used with <a href = "#funcm_sym"><code>funcm_sym</code></a> or 
-	      <a href = "#funcm_gen"><code>funcm_gen</code></a>.</li><br>
+	    <li> Class with several predefined static member functions to be used with <code><a href = "#funcm_sym">funcm_sym</a></code> or 
+	      <code><a href = "#funcm_gen">funcm_gen</a></code>.</li><br>
 	    
 	    <li> <code>func</code> is an alias for <code>Func&lt;double&gt;</code> and <code>funcf</code> is an alias for 
 	      <code>Func&lt;float&gt;</code>.</li><br>
@@ -339,6 +372,58 @@
 
 
 
+	  <hr><br>
+
+
+	  <a name="RandomDevices"></a>
+	  <b>RandomDevices<br>rdevs</b><br><br>
+	  <ul>
+	    <li> Predefined random number engines/generators, to be used with functions like <a href="#randU">randU</a> etc. This class is thread safe.</li><br>
+
+	    <li> This is a singleton class, which is constructed only once.
+	      Instantiated by <code>static RandomDevices& rdevs  = RandomDevices::get_instance();</code> You don't need to do this as
+	      it is automatically instantiated if you use this library. Just use <code>rdevs</code> (see below). </li><br>
+
+	    <li> There are two member variables, <code>rd</code> and <code>rng</code>. <code>rd</code> is a instance of <code>std::random_device</code>, and 
+		<code>rng</code> is a instance of Mersenne twister engine, <code>std::mt19937_64</code> or <code>std::mt19937</code> depending on the
+		architecture of the machine.</li><br>
+
+	    <li> By default <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> with user defined
+	    value, use <code>rdevs.set_seed(YOUR_SEED)</code>. To seed <code>rng</code> with the random return value of <code>rd</code> again, use
+	    <code>rdevs.set_seed_random()</code>.</li><br>
+
+	    <li> Example:
+	      <pre>
+		std::cauchy_distribution&lt;double&gt; dis(0,1);
+		// Cauchy distribution with parameters 0 and 1
+
+		double a[10], b[10], c[10];
+
+		// seed is random, by default
+		for(int i = 0; i < 10; ++i) {
+		  a[i] = dis(rdevs.rng); // generate 10 random number
+		  // according to Cauchy distribution with parameters 0 and 1	   
+		}
+		
+		rdevs.set_seed(10); // set seed to 10
+		for(int i = 0; i < 10; ++i) {
+		  b[i] = dis(redvs.rng); // generate 10 random number
+		  // according to Cauchy distribution with parameters 0 and 1	   
+		}
+		
+		rdevs.set_seed_random(); // again seed is random
+		for(int i = 0; i < 10; ++i) {
+		  c[i] = dis(rdevs.rng); // generate 10 random number
+		  // according to Cauchy distribution with parameters 0 and 1	   
+		}
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
 
 	  <hr><hr>
 	  
@@ -347,8 +432,8 @@
 
 
 	  
-	  <a name=is_H></a>
-	  <b>is_H(A)<br>is_H(A, atol, rtol)</b><br><br>
+	  <a name=is_Hermitian></a>
+	  <b>is_Hermitian(A)<br>is_Hermitian(A, atol, rtol)</b><br><br>
 	  <ul>
 	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric or Hermitian, else <code>false</code>.</li><br>
 
@@ -365,8 +450,8 @@
 
 
 
-	  <a name=is_U></a>
-	  <b>is_U(A)<br>is_U(A, atol, rtol)</b><br><br>
+	  <a name=is_Unitary></a>
+	  <b>is_Unitary(A)<br>is_Unitary(A, atol, rtol)</b><br><br>
 	  <ul>
 	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal or unitary, else <code>false</code>.</li><br>
 	    
@@ -495,6 +580,7 @@
 
                 // trace out 2nd and 3rd party
                 cx_mat A1 = TrX(A, {2, 3}); // all dim are 2, total 3 parties
+		cx_mat A2 = TrX(A, {2, 3}, 2); // same as before
 
                 // trace out 2nd and 3rd party
                 cx_mat B1 = TrX(B, {2, 3}, {2, 3, 2}); // explicitly writen dimensions
@@ -536,6 +622,7 @@
 
                 // transpose 2nd and 3rd party
                 cx_mat A1 = Tx(A, {2, 3}); // all dim are 2, total 3 parties
+		cx_mat A2 = Tx(A, {2, 3}, 2); // same as before
 
                 // transpose 2nd and 3rd party
                 cx_mat B1 = Tx(B, {2, 3}, {2, 3, 2}); // explicitly writen dimensions
@@ -578,10 +665,10 @@
 
                 // permute 2nd and 3rd party
                 cx_mat A1 = sysperm(A, {1, 3, 2}); // all dim are 2, total 3 parties
+		cx_mat A2 = sysperm(A, {1, 3, 2}, 2); // same as before
 
                 // permute 2nd and 3rd party
-                cx_mat B1 = sysperm(B, {1, 3, 2}, {2, 3, 2}); // explicitly writen 
-		// dimensions
+                cx_mat B1 = sysperm(B, {1, 3, 2}, {2, 3, 2}); // explicitly writen dimensions
                 // for B1, dim = {2, 2, 3} 
 	      </pre>
 	    </li>
@@ -601,7 +688,8 @@
 	    <li>Principal square root of matrix for real symmetric or Hermitian matrices.</li><br>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li><br>
-	    <li> Note: <code>sqrtm_sym</code> is faster than <a href = "#sqrtm_gen"><code>sqrtm_gen</code></a>. For real symmetric or Hermitian matrices always use
+	    <li> <b>Note:</b> <code>sqrtm_sym</code> is faster than <code><a href = "#sqrtm_gen">sqrtm_gen</a></code>. For real symmetric or 
+	      Hermitian matrices always use
 	      <code>sqrtm_sym</code>.</li><br>
 	    <li> Example:
 
@@ -632,8 +720,9 @@
 	    <li>Principal square root of matrix for general square matrices.</li><br>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li><br>
-	    <li> Note: <a href = "#sqrtm_sym"><code>sqrtm_sym</code></a> is faster than <code>sqrtm_gen</code>. For real symmetric or Hermitian matrices always use
-	      <a href = "#sqrtm_sym"><code>sqrtm_sym</code></a>.</li><br>
+	    <li> <b>Note:</b> <code><a href = "#sqrtm_sym">sqrtm_sym</a></code> is faster than <code>sqrtm_gen</code>. For real symmetric or 
+	      Hermitian matrices always use
+	      <code><a href = "#sqrtm_sym">sqrtm_sym</a></code>.</li><br>
 	    <li> Example:
 
 	      <pre>
@@ -660,10 +749,12 @@
 	  <b>powm_sym(A,n)</b><br><br>
 	  <ul>
 	    <li>Matrix power for real symmetric or Hermitian matrices.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, 
+	      like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
 	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not <i>integer type</i>), even for <i>positive real</i> matrices.
 	      If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li><br>
-	    <li> Note: <code>powm_sym</code> is faster than <a href = "#powm_gen"><code>powm_gen</code></a>. For real symmetric or Hermitian matrices always use
+	    <li> <b>Note:</b> <code>powm_sym</code> is faster than <code><a href = "#powm_gen">powm_gen</a></code>. For real symmetric or 
+	      Hermitian matrices always use
 	      <code>powm_sym</code>.</li><br>
 	    <li> Example:
 
@@ -688,11 +779,13 @@
 	  <b>powm_gen(A,n)</b><br><br>
 	  <ul>
 	    <li>Matrix power for general square matrices.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, 
+	      like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
 	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not <i>integer type</i>), even for <i>positive real</i> matrices.
 	      If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li><br>
-	    <li> Note: <a href = "#powm_sym"><code>powm_sym</code></a> is faster than <code>powm_gen</code>. For real symmetric or Hermitian matrices always use
-	      <a href = "#powm_sym"><code>powm_sym</code></a>.</li><br>
+	    <li> <b>Note:</b> <code><a href = "#powm_sym">powm_sym</a></code> is faster than <code>powm_gen</code>. 
+	      For real symmetric or Hermitian matrices always use
+	      <code><a href = "#powm_sym">powm_sym</a></code>.</li><br>
 	    <li> Example:
 
 	      <pre>
@@ -718,8 +811,14 @@
 	  <b>expm_sym(A)<br>expm_sym(A,n)</b><br><br>
 	  <ul>
 	    <li>Matrix exponential for real symmetric or Hermitian matrices.<code>expm_sym(A,n)</code> calculates <i>exp(n*A)</i>.</li><br>
-	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
-	    <li> Note: <code>expm_sym</code> is slower but more accurate than <a href = "#expm_gen"><code>expm_gen</code></a> or <a href="http://arma.sourceforge.net">Armadillo's</a> <a href = "http://arma.sourceforge.net/docs.html#expmat"><code>expmat</code></a>. </li><br>
+	    
+	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). 
+	      <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	    
+	    <li> <b>Note:</b> <code>expm_sym</code> is often slower but more accurate than <code><a href = "#expm_gen">expm_gen</a></code> 
+	      or <a href="http://arma.sourceforge.net">Armadillo's</a> <code><a href = "http://arma.sourceforge.net/docs.html#expmat">expmat</a></code>. 
+	      But for very large matrices it can be faster than the alternatives.</li><br>
+	    
 	    <li> Example:
 	      <pre>
 		mat A = randn&lt;mat&gt;(5,5);
@@ -744,12 +843,17 @@
 
 
 
-	  <a name=expm_gen></a>
+	  <a name="expm_gen"></a>
 	  <b>expm_gen(A)</b><br><br>
 	  <ul>
 	    <li>Matrix exponential for general square matrices.    </li><br>
+	  
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). </li><br>
-	    <li> Note: <code>expm_gen</code> is basically same as <a href="http://arma.sourceforge.net">Armadillo's</a> <a href = "http://arma.sourceforge.net/docs.html#expmat"><code>expmat</code></a>, and only to be used with older versions of <a href="http://arma.sourceforge.net">Armadillo</a>. </li><br>
+	    
+	    <li> <b>Note:</b> <code>expm_gen</code> is basically same as <a href="http://arma.sourceforge.net">Armadillo's</a> 
+	      <code><a href = "http://arma.sourceforge.net/docs.html#expmat">expmat</a></code>, and only to be used with older 
+	      versions of <a href="http://arma.sourceforge.net">Armadillo</a>. </li><br>
+	    
 	    <li> Example:
 
 	      <pre>
@@ -775,12 +879,21 @@
 	  <a name=funcm_sym></a>
 	  <b>funcm_sym(A,function pointer)<br>funcm_sym(A,functor)<br>funcm_sym(A,lambda function)</b><br><br>
 	  <ul>
+	    
 	    <li><a href = "https://en.wikipedia.org/wiki/Matrix_function">Matrix function</a> for real symmetric or Hermitian matrices.   </li><br>
-	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
-	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <a href="#func"><code>Func&lt;type&gt;</code></a> class.</li><br>
-	    <li> Note: <code>funcm_sym</code> is faster than <a href = "#funcm_gen"><code>funcm_gen</code></a>. For real symmetric or Hermitian matrices always use
-	      <code>funcm_sym</code>. </li><br>
-	    <li> Note: If you want to transform the matrix element-wise, use <a href="http://arma.sourceforge.net/docs.html#transform"><code>.transform</code></a> instead.</li><br>
+	   
+	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). 
+	      <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
+	    
+	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <code><a href="#func">Func&lt;type&gt;</a></code> 
+	      class.</li><br>
+	    
+	    <li> <b>Note:</b> <code>funcm_sym</code> is faster than <code><a href = "#funcm_gen">funcm_gen</a></code>. For real symmetric or 
+	      Hermitian matrices always use <code>funcm_sym</code>. </li><br>
+	    
+	    <li> <b>Note:</b> If you want to transform the matrix element-wise, use 
+	      <code><a href="http://arma.sourceforge.net/docs.html#transform">.transform</a></code> instead.</li><br>
+	    
 	    <li> Example:
 
 	      <pre>
@@ -811,12 +924,21 @@
 	  <a name=funcm_gen></a>
 	  <b>funcm_gen(A,function pointer)<br>funcm_gen(A,functor)<br>funcm_gen(A,lambda function)</b><br><br>
 	  <ul>
+	  
 	    <li><a href = "https://en.wikipedia.org/wiki/Matrix_function">Matrix function</a> for general square matrices.   </li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
-	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <a href="#func"><code>Func&lt;type&gt;</code></a> class.</li><br>
-	    <li> Note: <a href = "#funcm_sym"><code>funcm_sym</code></a> is faster than <code>funcm_gen</code>. For real symmetric or Hermitian matrices always use
-	      <a href = "#funcm_sym"><code>funcm_sym</code></a>.</li><br>
-	    <li> Note: If you want to transform the matrix element-wise, use <a href="http://arma.sourceforge.net/docs.html#transform"><code>.transform</code></a> instead.</li><br>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <i>function pointer</i>, 
+	      <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
+	    
+	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <a href="#func"><code>Func&lt;type&gt;</code></a> 
+	      class.</li><br>
+	    
+	    <li> <b>Note:</b> <code><a href = "#funcm_sym">funcm_sym</a></code> is faster than <code>funcm_gen</code>. For real symmetric or Hermitian 
+	      matrices always use <code><a href = "#funcm_sym">funcm_sym</a></code>.</li><br>
+	    
+	    <li> <b>Note:</b> If you want to transform the matrix element-wise, use 
+	      <code><a href="http://arma.sourceforge.net/docs.html#transform">.transform</a></code> instead.</li><br>
+	    
 	    <li> Example:
 
 	      <pre>
@@ -845,7 +967,7 @@
 	  <b>tensor(A,B,...)</b><br><br>
 	  <ul>
 	    <li>Tensor product of arbitrary no. of matrices <code>A,B,...</code>.   </li><br>
-	    <li> Can also take <code>std::vector</code> and <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of matrices.</li><br>
+	    <li> Can also take <code>std::vector</code> and <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices.</li><br>
 	    
 	    <li> Example:
 
@@ -895,7 +1017,7 @@
 	  <b>dsum(A,B,...)</b><br><br>
 	  <ul>
 	    <li>Direct sum of arbitrary no. of matrices <code>A,B,...</code>.   </li><br>
-	    <li> Can also take <code>std::vector</code> and <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of matrices.</li><br>
+	    <li> Can also take <code>std::vector</code> and <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices.</li><br>
 	    
 	    <li> Example:
 
@@ -964,7 +1086,7 @@
 
 
 	  <a name=schatten></a>
-	  <b>schatten(A)</b><br><br>
+	  <b>schatten(A,p)</b><br><br>
 	  <ul>
 	    <li>Schatten p-norm of a matrix.</li><br>
 	    <li> <code>p</code> has to be greater than equal to <i>0</i>.</li><br>
@@ -973,16 +1095,34 @@
 
 
 
+
+
 	  <hr><br>
 
 
-	  <a name=conv_to_pure></a>
+	  <a name="purify"></a>
+	  <b>purify(rho)<br>purify(rho,tol)</b><br><br>
+	  <ul>
+	    <li>Returns (<code>vec</code> or <code>cx_vec</code>) a minimal purification of a density matrix.</li><br>
+	    <li> <code>tol</code> is optional. By default, it defined by <code><a href="#eps">_precision::eps</a></code>. Eigenvalues less than <code>tol</code> 
+	    are taken to be zero.</li><br>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+	  <hr><br>
+
+
+	  <a name="conv_to_pure"></a>
 	  <b>conv_to_pure(A)</b><br><br>
 	  <ul>
 	    <li>Convert density matrix of a pure state to a column vector.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
 	    <li> If <code>A</code> is a column vector, then it is returned back. </li><br>
-	    <li> If <code>A</code> is not a pure state, then eigenvector corresponding to highest eigenvalue is returned. To make sure use <a href="#is_pure"><code>is_pure</code></a> function.</li><br>
+	    <li> If <code>A</code> is not a pure state, then eigenvector corresponding to highest eigenvalue is returned. 
+	      To make sure use <code><a href="#is_pure">is_pure</a></code> function first.</li><br>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -1023,13 +1163,17 @@
 
 	  <a name=mket></a>
 	  <b>mket(mask) <br>
-	    mket&lt;element type&gt;(mask) <br> 
+	    mket&lt;ELEMENT_TYPE&gt;(mask) <br> 
 	    mket(mask,dim) <br>
-	    mket&lt;element type&gt;(mask,dim)<br> </b><br><br>
+	    mket&lt;ELEMENT_TYPE&gt;(mask,dim)</b><br><br>
 	  <ul>
-	    <li>Create multipartite qubit pure state according to <i>mask</i> <code>uvec</code> (See following example).</li><br>
-	    <li> <code>element type</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of returned column vector.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li>Create multipartite qudit pure state according to <i>mask</i> <code>uvec</code> (See following example).</li><br>
+	    <li> <code>ELEMENT_TYPE</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of 
+	      returned column vector.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of 
+	      every subystem.</li><br>
 	    <li>Example:
 	      <pre>
 		cx_vec A = mket({0,0,1}); // |001&gt; state
@@ -1054,22 +1198,22 @@
 
 
 
-
-
-
-
 	  <hr><br>
 
 
 	  <a name=mproj></a>
 	  <b>mproj(mask) <br>
-	    mproj&lt;element type&gt;(mask) <br> 
+	    mproj&lt;ELEMENT_TYPE&gt;(mask) <br> 
 	    mproj(mask,dim) <br>
-	    mproj&lt;element type&gt;(mask,dim)<br> </b><br><br>
+	    mproj&lt;ELEMENT_TYPE&gt;(mask,dim)</b><br><br>
 	  <ul>
-	    <li>Create multipartite qubit projectors according to <i>mask</i> <code>uvec</code> (See following example).</li><br>
-	    <li> <code>element type</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of returned column vector.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
+	    <li>Create multipartite qudit projectors to <i>mask</i> <code>uvec</code> (See following example).</li><br>
+	    <li> <code>ELEMENT_TYPE</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of 
+	      returned matrix.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of 
+	      every subystem.</li><br>
 	    <li>Example:
 	      <pre>
 		cx_mat A = mproj({0,0,1}); // |001&gt;&lt;001| projector
@@ -1100,11 +1244,285 @@
 	  <hr><br>
 
 
+	  <a name=randU></a>
+	  <b>randU&lt;TYPE = double&gt;(range = {0,1}) <br>
+	    randU&lt;VEC_TYPE = vec&gt;(n_elem, range = {0,1}) <br>
+	    randU&lt;MAT_TYPE = mat&gt;(n_rows,n_cols, range = {0,1})
+	  </b><br><br>
+	  <ul>
+	    <li>Generate object with uniform random values in the range specified by the <i>column vector</i> <code>range</code>. By default the range is 
+	      in between <code>0</code> to <code>1</code>.</li><br>
+
+	    <li> The first function generate only one random element of type (<i>real</i> or <i>complex</i>) specified by <code>TYPE</code>. By 
+	    default <code>TYPE</code> is <code>double</code>.</li><br>
+
+	    <li> The second function generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default <code>VEC_TYPE</code> is <code>vec</code>.</li><br>
+
+
+	    <li> The third function generate a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>MAT_TYPE</code>, with <code>n_rows</code> number of rows, <code>n_cols</code> number of columns. 
+	      By default <code>MAT_TYPE</code> is <code>mat</code>.</li><br>
+
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+
+
+	    <li>Example:
+	      <pre>
+		double a = randU(); // random number between 0 and 1
+		
+		complex&lt;double&gt; b = randU&lt;complex&lt;double&gt; &gt;(); 
+		// complex random number between (0,0) and (1,1)
+		
+		double c = randU({-5,5}); // random number between -5 and 5
+		
+		cx_vec V = randU&lt;cx_vec&gt;(10); // cx_vec with 10 elements 
+
+		cx_rowvec R = randU&lt;cx_rowvec&gt;(10,{-5,5}); // cx_rowvec with 10 elements
+
+		mat M1 = randU(10,10); // 10x10 mat
+
+		mat M2 = randU(10,10,{-5,5}); // 10x10 mat  
+
+		cx_mat M3 = randU&lt;cx_mat&gt;(10,10,{-5,5}); // 10x10 cx_mat  
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=randN></a>
+	  <b>randN&lt;TYPE = double&gt;(meansd = {0,1}) <br>
+	    randN&lt;VEC_TYPE = vec&gt;(n_elem, meansd = {0,1}) <br>
+	    randN&lt;MAT_TYPE = mat&gt;(n_rows,n_cols, meansd = {0,1})
+	  </b><br><br>
+	  <ul>
+	    <li>Generate object with random values from normal distribution with mean and standard deviation specified by the 
+	      <i>column vector</i> <code>range</code>. By default the mean and standard deviation are <code>0</code> and <code>1</code> respectively.</li><br>
+
+	    <li> The first function generate only one random element of type (<i>real</i> or <i>complex</i>) specified by <code>TYPE</code>. By 
+	    default <code>TYPE</code> is <code>double</code>.</li><br>
+
+	    <li> The second function generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default <code>VEC_TYPE</code> is <code>vec</code>.</li><br>
+
+
+	    <li> The third function generate a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>MAT_TYPE</code>, with <code>n_rows</code> number of rows, <code>n_cols</code> number of columns. 
+	      By default <code>MAT_TYPE</code> is <code>mat</code>.</li><br>
+
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+
+
+	    <li>Example:
+	      <pre>
+		double a = randN(); 
+		// random number from a normal distribution with mean 0 and sd 1
+		
+		complex&lt;double&gt; b = randN&lt;complex&lt;double&gt; &gt;(); 
+		// complex random number from a normal distribution with mean 0 and sd 1
+		
+		double c = randN({-5,5}); 
+		// random number from a normal distribution with mean -5 and sd 5
+		
+		cx_vec V = randN&lt;cx_vec&gt;(10); // cx_vec with 10 elements 
+
+		cx_rowvec R = randN&lt;cx_rowvec&gt;(10,{-5,5}); // cx_rowvec with 10 elements
+
+		mat M1 = randN(10,10); // 10x10 mat
+
+		mat M2 = randN(10,10,{-5,5}); // 10x10 mat  
+
+		cx_mat M3 = randN&lt;cx_mat&gt;(10,10, {-5,5}); // 10x10 cx_mat  
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=randI></a>
+	  <b>randI&lt;TYPE = int&gt;(range = {0,1000}) <br>
+	    randI&lt;VEC_TYPE = ivec&gt;(n_elem, range = {0,1000}) <br>
+	    randI&lt;MAT_TYPE = imat&gt;(n_rows,n_cols, range = {0,1000})
+	  </b><br><br>
+	  <ul>
+	    <li>Generate object with uniform random integers in the range specified by the <i>column vector</i> <code>range</code>. By default the range is 
+	      in between <code>0</code> to <code>1</code>.</li><br>
+
+	    <li> The first function generate only one random integer of type (<i>real</i> or <i>complex</i>) specified by <code>TYPE</code>. By 
+	    default <code>TYPE</code> is <code>int</code>.</li><br>
+
+	    <li> The second function generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default <code>VEC_TYPE</code> is <code>ivec</code>.</li><br>
+
+
+	    <li> The third function generate a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>MAT_TYPE</code>, with <code>n_rows</code> number of rows, <code>n_cols</code> number of columns. 
+	      By default <code>MAT_TYPE</code> is <code>imat</code>.</li><br>
+
+	     <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+
+
+	    <li>Example:
+	      <pre>
+		int a = randI(); // random integer between 0 and 10000
+		
+		complex&lt;double&gt; b = randI&lt;complex&lt;double&gt; &gt;(); 
+		// complex random integer (typecasted to double) between (0,0) and (1000,1000)
+		
+		int c = randI({-100,100}); // random integer between -100 and 100
+		
+		ivec V = randI(10); // ivec with 10 elements 
+
+		irowvec R = randI&lt;irowvec&gt;(10,{-100,100}); // irowvec with 10 elements
+
+		imat M1 = randI(10,10); // 10x10 imat
+
+		mat M2 = randI&lt;mat&gt;(10,10,{-100,100}); // 10x10 mat  
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=randHermitian></a>
+	  <b>randHermitian&lt;ELEM_TYPE = complex&lt;double&gt; &gt;(dim)
+	  </b><br><br>
+	  <ul>
+	    <li>Generate random Hermitian matrix <code>cx_mat</code>. 
+	      <code>dim</code> is an <i>unsigned integer</i> type specifying the dimension of the matrix.</li><br>
+
+	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex floating point</i> type). By default it is 
+	      <code>complex&lt;double&gt</code>.</li><br>
+
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+
+
+	    <li>Example:
+	      <pre>
+		cx_mat H1 = randHermitian(10); // 10x10 Hermitian cx_mat
+
+		cx_fmat H2 = randHermitian&lt;complex&lt;float&gt; &gt;(10); // 10x10 Hermitian cx_fmat
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+	  <hr><br>
+
+
+	  <a name=randUnitary></a>
+	  <b>randUnitary&lt;ELEM_TYPE = complex&lt;double&gt; &gt;(dim)
+	  </b><br><br>
+	  <ul>
+	    <li>Generate random Unitary matrix <code>cx_mat</code>, uniformly distributed according to the Haar measure.
+	      <code>dim</code> is an <i>unsigned integer</i> type specifying the dimension of the matrix.</li><br>
+
+	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex floating point</i> type). By default it is 
+	      <code>complex&lt;double&gt</code>.</li><br>
+
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+
+
+	    <li>Example:
+	      <pre>
+		cx_mat U1 = randUnitary(10); // 10x10 Unitary cx_mat
+
+		cx_fmat U2 = randUnitary&lt;complex&lt;float&gt; &gt;(10); // 10x10 Unitary cx_fmat
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+	  <hr><br>
+
+
+
+	  <a name=randPsi></a>
+	  <b>randPsi&lt;ELEM_TYPE = complex&lt;double&gt; &gt;(dim)
+	  </b><br><br>
+	  <ul>
+	    <li>Generate random pure states <code>cx_vec</code>, uniformly distributed according to the Haar measure.
+	      <code>dim</code> is an <i>unsigned integer</i> type specifying the dimension of the state.</li><br>
+
+	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex floating point</i> type). By default it is 
+	      <code>complex&lt;double&gt</code>.</li><br>
+
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+
+
+	    <li>Example:
+	      <pre>
+		cx_vec psi1 = randPsi(10); // pure state (cx_vec) of dimension 10
+
+		cx_fvec psi2 = randPsi&lt;complex&lt;float&gt; &gt;(10); // pure state (cx_fvec) of dimension 10
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+
+
+
+
+
+
+
+	  <hr><br>
+
+
 	  <a name=entropy></a>
 	  <b>entropy(A)</b><br><br>
 	  <ul>
 	    <li>von Neumann entropy of a quantum state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
 	    <li> If <code>A</code> is a column vector, then always zero is returned. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -1140,7 +1558,8 @@
 	  <b>renyi(A,a)</b><br><br>
 	  <ul>
 	    <li>Renyi entropy of a quantum state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li><br>
 	    <li> If <code>A</code> is a column vector, then always zero is returned. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -1156,7 +1575,8 @@
 	  <b>renyi_prob(V,a)</b><br><br>
 	  <ul>
 	    <li>Renyi entropy of a probability distribution.</li><br>
-	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive real numbers, and <code>a</code> has to to greater than or equal to zero.</li>
+	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive 
+	      real numbers, and <code>a</code> has to to greater than or equal to zero.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -1173,7 +1593,8 @@
 	  <b>tsallis(A,a)</b><br><br>
 	  <ul>
 	    <li>Tsallis entropy of a quantum state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li><br>
 	    <li> If <code>A</code> is a column vector, then always zero is returned. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -1189,7 +1610,8 @@
 	  <b>tsallis_prob(V,a)</b><br><br>
 	  <ul>
 	    <li>Tsallis entropy of a probability distribution.</li><br>
-	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive real numbers, and <code>a</code> has to to greater than or equal to zero.</li>
+	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive 
+	      real numbers, and <code>a</code> has to to greater than or equal to zero.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -1209,15 +1631,20 @@
 	  <ul>
 	    <li> Quantum mutual information between 2 subsystems of a quantum state.</li><br>
 	    
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
 
 	    <li> In the first case, <code>dim</code> has to be a <code>uvec</code> of two elements, containing the dimensions of two subsystems.</li><br>
 
-	    <li> In the second case, <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.
+	    <li> In the second case, <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> 
+	      containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions 
+	      (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> 
+	      as a <code>uvec</code> containing dimensions of every subystem.
 	      <code>subsys1</code> and <code>subsys1</code> are  <code>uvec</code> containing the indices of 1st party and 2nd party respectively.
 
 	    </li><br>
-	    <li> Indices in <code>subsys1</code> and <code>subsys2</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Indices in <code>subsys1</code> and <code>subsys2</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		
@@ -1264,8 +1691,11 @@
 	  <b>entanglement(A,dim)</b><br><br>
 	  <ul>
 	    <li>Entanglement entropy of a pure quantum state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>), and <code>dim</code> has to be a <code>uvec</code> of two elements, containing the dimensions of two subsystems..</li><br>
-	    <li> If <code>A</code> is a square matrix and not a density matrix of a pure state, then von Neumann entropy of traced out 2nd party density matrix is returned. To make sure use <a href="#is_pure"><code>is_pure</code></a> function. </li>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>), and <code>dim</code> has to be a <code>uvec</code> of two elements, 
+	      containing the dimensions of two subsystems..</li><br>
+	    <li> If <code>A</code> is a square matrix and not a density matrix of a pure state, then von Neumann entropy of traced out 
+	      2nd party density matrix is returned. To make sure use <code><a href="#is_pure">is_pure</a></code> function first. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -1281,9 +1711,14 @@
 	  <b>neg(A,subsys) <br> neg(A,subsys,dim) </b><br><br>
 	  <ul>
 	    <li> Negativity of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of transposed subsystems.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). 
+	      By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subystem.</li><br>
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
+	      index <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
@@ -1317,10 +1752,16 @@
 	  <a name=log_neg></a>
 	  <b>log_neg(A,subsys) <br> log_neg(A,subsys,dim) </b><br><br>
 	  <ul>
-	    <li> Logarithmic negativity of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of transposed subsystems.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Logarithmic negativity of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices 
+	      of transposed subsystems.</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions 
+	      of every subystem.</li><br>
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
+	      <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
@@ -1367,7 +1808,8 @@
 	  <b>EoF(A) </b><br><br>
 	  <ul>
 	    <li> Entanglement of formation of a two-qubit quantum state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector  (<code>vec</code> or <code>cx_vec</code>) of dimension 4.</li>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector  
+	      (<code>vec</code> or <code>cx_vec</code>) of dimension 4.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -1383,8 +1825,10 @@
 	    <li> Check if a bipartite state is entangled or not (based on covariant matrix formulation).</li><br>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Returns <code>true</code> if <code>A</code> is entangled, else <code>false</code>. It also can detect large part of bound entangled states.</li><br>
-	    <li> The first case assumes both the subsystems have same dimension. <code>dim</code> is an unsigned integer type stating the dimensions of both the subsystems.</li><br>
-	    <li> The second case applies if the subsystems have different  dimensions. <code>dim1</code> and <code>dim2</code> are unsigned integer types stating the dimensions of 1st and 2nd parties respectively.</li>
+	    <li> The first case assumes both the subsystems have same dimension. <code>dim</code> is an unsigned integer type stating the 
+	      dimensions of both the subsystems.</li><br>
+	    <li> The second case applies if the subsystems have different  dimensions. <code>dim1</code> and <code>dim2</code> are unsigned 
+	      integer types stating the dimensions of 1st and 2nd parties respectively.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -1399,11 +1843,15 @@
 	  <b>vec S = schmidt(A,dim) <br > schmidt(A,dim,S,U,V) </b><br><br>
 	  <ul>
 	    <li> Schmidt decomposition of a bipartite pure state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
 	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li><br>
-	    <li> <code>S</code> is a real vector containing Schmidt coefficients. <code>U</code> and <code>V</code> are matrices that store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron( U.col(i) , V.col(i) )</code>.</li><br>
-	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using <a href=#conv_to_pure><code>conv_to_pure</code></a>.</li><br>
-	    <li> If decomposition fails then <code>vec S = schmidt(A,dim)</code> throws <code>std::runtime_error exception</code>, and <code>schmidt(A,dim,S,U,V)</code> returns <code>false</code> and resets <code>S</code>, <code>U</code>, and <code>V</code>.</li><br>
+	    <li> <code>S</code> is a real vector containing Schmidt coefficients. <code>U</code> and <code>V</code> are matrices that 
+	      store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron( U.col(i) , V.col(i) )</code>.</li><br>
+	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using 
+	      <code><a href=#conv_to_pure>conv_to_pure</a></code>.</li><br>
+	    <li> If decomposition fails then <code>vec S = schmidt(A,dim)</code> throws <code>std::runtime_error</code> exception, 
+	      and <code>schmidt(A,dim,S,U,V)</code> returns <code>false</code> and resets <code>S</code>, <code>U</code>, and <code>V</code>.</li><br>
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
@@ -1431,13 +1879,19 @@
 	    schmidtAB(A,dim) <br > schmidtAB_full(A,dim)</b><br><br>
 	  <ul>
 	    <li> Schmidt vectors of a bipartite pure state.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector 
+	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
 	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li><br>
-	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using <a href=#conv_to_pure><code>conv_to_pure</code></a>.</li><br>
+	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using <code><a href=#conv_to_pure>conv_to_pure</a></code>.</li><br>
 	    
-	    <li> <code>schmidtA(A,dim)</code> returns truncated Schmidt basis on Alice's side in a column-wise manner, while <code>schmidtA_full(A,dim)</code> returns full Schmidt basis on Alice's side.</li><br>
-	    <li> <code>schmidtB(A,dim)</code> returns truncated Schmidt basis on Bob's side in a column-wise manner, while <code>schmidtB_full(A,dim)</code> returns full Schmidt basis on Bob's side.</li><br>
-	    <li> <code>schmidtAB(A,dim)</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of matrices containing truncated Schmidt basis on both sides in a column-wise manner, while <code>schmidtAB_full(A,dim)</code> returns <a href = "http://arma.sourceforge.net/docs.html#field"><code>field</code></a> of matrices containing full Schmidt basis on both side.</li><br>
+	    <li> <code>schmidtA(A,dim)</code> returns truncated Schmidt basis on Alice's side in a column-wise manner, while 
+	      <code>schmidtA_full(A,dim)</code> returns full Schmidt basis on Alice's side.</li><br>
+	    <li> <code>schmidtB(A,dim)</code> returns truncated Schmidt basis on Bob's side in a column-wise manner, 
+	      while <code>schmidtB_full(A,dim)</code> returns full Schmidt basis on Bob's side.</li><br>
+	    <li> <code>schmidtAB(A,dim)</code> returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
+	      matrices containing truncated Schmidt basis on both sides in a column-wise manner, while <code>schmidtAB_full(A,dim)</code> 
+	      returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices containing full Schmidt basis on both side.</li><br>
+	    <li> If decomposition fails then these functions throw <code>std::runtime_error</code> exception.</li><br>
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
@@ -1522,20 +1976,28 @@
 	  <a name=apply></a>
 	  <b>apply(A,U,subsys) <br> apply(A,U,subsys,dim) </b><br><br>
 	  <ul>
-	    <li>Apply a gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> containing the indices of applicable subsystems.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> Dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li>Apply a gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> 
+	      containing the indices of applicable subsystems.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    <li> The dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). 
+	      By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subystem.</li><br>
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
+	      <i>2</i> and so on.</li><br>  
+	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>. For simplicity use
+	      <code>auto</code> for return type.</li><br>
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
 		A *= A.t(); // make hermitian
 		A /= trace(A); //normalise
 
-		const cx_mat& U1 = states.S(1); // \sigma_x gate
+		const cx_mat& U1 = spm.S(1); // \sigma_x gate
 		
-		cx_mat U2 = kron(states.S(1),states.S(1)); 
+		cx_mat U2 = kron(spm.S(1),spm.S(1)); 
 		// kron(\sigma_x,\sigma_x) gate 
 
 		cx_mat A1 = apply(A,U1,{2}); // all dim are 2, total 3 parties
@@ -1553,24 +2015,32 @@
 
 
 
-	  <a name=apply_ctrl></a>
+	  <a name="apply_ctrl"></a>
 	  <b>apply_ctrl(A,U,ctrl,subsys) <br> apply_ctrl(A,U,ctrl,subsys,dim) </b><br><br>
 	  <ul>
-	    <li>Apply a controlled-gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> containing the indices of applicable subsystems, and <code>ctrl</code> is a <code>uvec</code> containing the indices of control subsystems.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> Dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
+	    <li>Apply a controlled-gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> 
+	      containing the indices of applicable subsystems, and <code>ctrl</code> is a <code>uvec</code> containing the indices of control subsystems.</li><br>
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+	    <li> The dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
 	    <li> All control subsystems must have same dimensions.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
+	      dimensions of every subystem.</li><br>
+	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>. For simplicity use
+	      <code>auto</code> for return type.</li><br>
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
 		A *= A.t(); // make hermitian
 		A /= trace(A); //normalise
 
-		const cx_mat& U1 = states.S(1); // \sigma_x gate
+		const cx_mat& U1 = spm.S(1); // \sigma_x gate
 		
-		cx_mat U2 = kron(states.S(1),states.S(1)); 
+		cx_mat U2 = kron(spm.S(1),spm.S(1)); 
 		// kron(\sigma_x,\sigma_x) gate 
 
 		cx_mat A1 = apply_ctrl(A,U1,{1},{2}); // all dim are 2, total 3 parties
@@ -1581,6 +2051,129 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+
+
+	  <hr><hr>
+
+
+
+
+	  <a name="measure"></a>
+	  <b>std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(cx_mat rho, Ks) <br> 
+	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(mat rho, Ks) <br>
+	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(cx_mat rho, Ks, subsys, dim)<br> 
+	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(mat rho, Ks, subsys, dim)
+	  </b>
+	  
+	  <br><br>
+	  <ul>
+	    <li>Measure a state <code>rho</code> using a set of Kraus or projection operators <code>Ks</code>. Returns <code>std::tuple</code> 
+	      of: 1. result of the measurement (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), 
+	      2. vector of outcome probabilities (<code>vec</code>), 
+	      and 3. <code><a href = "http://arma.sourceforge.net/docs.html#field">
+		  field</a></code> of post-measurement normalized states (<code>field&lt;cx_mat&gt;</code> or <code>field&lt;mat&gt;</code>).</li><br>
+
+	    <li> <code>rho</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+
+	    <li> <code>Ks</code> can be a <code>std::vector</code>, <code>std::initializer_list</code> or a 
+	      <code><a href = "http://arma.sourceforge.net/docs.html#field">
+		  field</a></code> of Kraus or projection operators (either <code>cx_mat</code>, <code>mat</code>, <code>cx_vec</code> or 
+	      <code>vec</code>). It can also be a <code>cx_mat</code> or <code>mat</code>, where each column is treated as projection operators.</li><br>
+
+	    <li> First two functions measure the whole quantum state <code>rho</code>, and the dimension of the operators in <code>Ks</code> 
+	      must match the dimension of <code>rho</code>.</li><br>
+
+	    <li> Last two functions partially measure the subsystems of the state <code>rho</code>, where the subsystems are specified in <code>subsys</code>.
+	      The dimension of the operators in <code>Ks</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
+
+	    <li> All Kraus or projection operators must have same dimensions.</li><br>
+
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
+	      dimensions of every subystem.</li><br>
+
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li><br>  
+
+	    <li> This function will run faster on multi-core machines when OpenMP is enabled in your compiler (eg. <code>-fopenmp</code> in GCC) and
+	      <code>QICLIB_PARALLEL</code> macro is defined before including <code>QIClib</code> header.</li><br>
+
+	    <li> <b>Note:</b> <code>MATRIX_TYPE</code> is deduced from the element types of <code>rho</code> and <code>Ks</code>. For simplicity use
+	      <code>auto</code> for return type.</li><br>
+	    <li> Example:
+	      <pre>
+		cx_mat rho1 = randRho(2,2); // 2x2 random density matrix
+
+		std::vector<cx_mat> Ks = {spm.basis2(1,0), spm.basis2(1,1)};
+		// std::vector of projection operators in \sigma_x direction
+
+		auto A = measure(rho1, Ks); // measurement
+		std::get<0>(A); // measurement result
+		std::get<1>(A); //  outcome probabilities
+		std::get<2>(A); //  post measurement normalised states
+		
+		cx_mat rho2 = randRho(8,8); //8x8 random density matrix
+
+		auto B = measure(rho2, Ks, {2}, {2,2,2}); measure the 2nd party
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
+
+	  <hr><hr>
+
+
+
+
+	  <a name="measure_comp"></a>
+	  <b>std::tuple&lt;uword, vec&gt; A = measure_comp(rho, Ks) <br> 
+	    std::tuple&lt;uword, vec&gt; A = measure_comp(rho, subsys, dim) 
+	  </b>
+	  
+	  <br><br>
+	  <ul>
+	    <li>Measure a state <code>rho</code> in the computational basis. Returns <code>std::tuple</code> 
+	      of: 1. result of the measurement (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>) 
+	      and 2. vector of outcome probabilities (<code>vec</code>).</li><br>
+
+	    <li> <code>rho</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	      <code>cx_vec</code>).</li><br>
+
+	    <li> The first function measures the whole quantum state, where as the last function partially measures the subsystems of the state 
+	      <code>rho</code>, where the subsystems are specified in <code>subsys</code>.</li><br>
+
+	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
+	      dimensions of every subystem.</li><br>
+
+	    <li> This function will run faster on multi-core machines when OpenMP is enabled in your compiler (eg. <code>-fopenmp</code> in GCC) and
+	      <code>QICLIB_PARALLEL</code> macro is defined before including <code>QIClib</code> header.</li><br>
+
+	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li><br>  
+
+	    <li> Example:
+	      <pre>
+		cx_mat rho1 = randRho(2,2); // 2x2 random density matrix
+
+		auto A = measure_comp(rho1); // measurement
+		std::get<0>(A); // measurement result
+		std::get<1>(A); //  outcome probabilities
+		    
+		cx_mat rho2 = randRho(8,8); //8x8 random density matrix
+
+		auto B = measure_comp(rho2, {2}, {2,2,2}); measure the 2nd party
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+
 
 
 
@@ -1595,16 +2188,20 @@
 	  <a name="discord"></a>
 	  <b>discord(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type 
+	      containing the index of measured subsystem.</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qubit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>discord</code> returns a <code>vec</code>, where the first term is the value of quantum discord and 2nd and 3rd are optimized values of &theta; and &phi; respectively;</li><br>
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>
+	    <li> <code>discord</code> returns a <code>vec</code>, where the first term is the value of quantum discord and 2nd and 
+	      3rd are optimized values of &theta; and &phi; respectively;</li><br>
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has 
+	      the index <i>2</i> and so on.</li><br>
 	    <li> <b>Helper functions:</b><br>
-	      <code>discord</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <code>discord</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
 	      <ul>
-		<li> <code>void set_discord_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_discord_global(bool a = true)</code> : Set whether global optimization will be performed 
+		  (<code>true</code>) or not (<code>false</code>).</li><br>
 		<li> <code>void set_discord_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
 		<li> <code>void set_discord_global_xtol(double a = 4e-2)</code> : Set global optimization <i>xtol</i>.</li><br>
 		<li> <code>void set_discord_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
@@ -1655,15 +2252,18 @@
 	  <a name="discord3"></a>
 	  <b>discord3(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the 
+	      index of measured subsystem.</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qutrit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party 
+	      has the index <i>2</i> and so on.</li><br>  
 	    <li> <b>Helper functions:</b><br>
-	      <code>discord3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <code>discord3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
 	      <ul>
-		<li> <code>void set_discord3_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_discord3_global(bool a = true)</code> : Set whether global optimization will be performed 
+		  (<code>true</code>) or not (<code>false</code>).</li><br>
 		<li> <code>void set_discord3_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
 		<li> <code>void set_discord3_global_xtol(double a = 0.25)</code> : Set global optimization <i>xtol</i>.</li><br>
 		<li> <code>void set_discord3_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
@@ -1711,12 +2311,16 @@
 	  <a name=discord_reg></a>
 	  <b>discord_reg(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer 
+	      type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qubit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>discord_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum discord.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <code>discord_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
+	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
+	      is the actual constrained regular quantum discord.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
+	      index <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
@@ -1748,12 +2352,16 @@
 	  <a name="discord3_reg"></a>
 	  <b>discord3_reg(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
+	      integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qutrit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>discord3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum discord.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <code>discord3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
+	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
+	      is the actual constrained regular quantum discord.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has 
+	      the index <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(18,18); // 18x18 matrix
@@ -1809,17 +2417,21 @@
 	  <a name=deficit></a>
 	  <b>deficit(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the 
+	      index of measured subsystem.</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qubit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>deficit</code> returns a <code>vec</code>, where the first term is the value of quantum work deficit and 2nd and 3rd are optimized values of &theta; and &phi; respectively;</li><br>
+	    <li> <code>deficit</code> returns a <code>vec</code>, where the first term is the value of quantum work deficit and 2nd 
+	      and 3rd are optimized values of &theta; and &phi; respectively;</li><br>
 		    
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has 
+	      the index <i>2</i> and so on.</li><br>  
 	    <li> <b>Helper functions:</b><br>
-	      <code>deficit</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <code>deficit</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
 	      <ul>
-		<li> <code>void set_deficit_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_deficit_global(bool a = true)</code> : Set whether global optimization will be 
+		  performed (<code>true</code>) or not (<code>false</code>).</li><br>
 		<li> <code>void set_deficit_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
 		<li> <code>void set_deficit_global_xtol(double a = 4e-2)</code> : Set global optimization <i>xtol</i>.</li><br>
 		<li> <code>void set_deficit_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
@@ -1870,15 +2482,18 @@
 	  <a name=deficit3></a>
 	  <b>deficit3(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem.</li><br>
+	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
+	      integer type containing the index of measured subsystem.</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qutrit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li><br>  
 	    <li> <b>Helper functions:</b><br>
-	      <code>deficit3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.
+	      <code>deficit3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
 	      <ul>
-		<li> <code>void set_deficit3_global(bool a = true)</code> : Set whether global optimization will be performed (<code>true</code>) or not (<code>false</code>).</li><br>
+		<li> <code>void set_deficit3_global(bool a = true)</code> : Set whether global optimization will be 
+		  performed (<code>true</code>) or not (<code>false</code>).</li><br>
 		<li> <code>void set_deficit3_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
 		<li> <code>void set_deficit3_global_xtol(double a = 0.25)</code> : Set global optimization <i>xtol</i>.</li><br>
 		<li> <code>void set_deficit3_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
@@ -1929,12 +2544,16 @@
 	  <a name=deficit_reg></a>
 	  <b>deficit_reg(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
+	      integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qubit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>deficit_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum work deficit.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <code>deficit_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
+	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
+	      is the actual constrained regular quantum work deficit.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party 
+	      has the index <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8); // 8x8 matrix
@@ -1967,12 +2586,16 @@
 	  <a name=deficit3_reg></a>
 	  <b>deficit3_reg(A,subsys,dim)</b><br><br>
 	  <ul>
-	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
+	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
+	      integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
 	    <li> Measured subsystem has to be a qutrit system.</li><br>
 	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>deficit3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> is the actual constrained regular quantum work deficit.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index <i>2</i> and so on.</li><br>  
+	    <li> <code>deficit3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
+	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
+	      is the actual constrained regular quantum work deficit.</li><br> 
+	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
+	      index <i>2</i> and so on.</li><br>  
 	    <li> Example:
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(18,18); // 18x18 matrix
@@ -2009,10 +2632,13 @@
 
 	    <li> <b> What are the basic dependencies of QIClib?</b><br>
 	      <ul>
-		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> C++ linear algebra library (version 4.2 or later), with  <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
+		<li> <a href="http://arma.sourceforge.net/">Armadillo</a> C++ linear algebra library (version 4.2 or later), with  
+		  <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
 		  <a href = "http://www.netlib.org/blas">BLAS</a> implementations.</li>
-		<li> A C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8 or later, or <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended. </li>
-		<li>  <a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> nonlinear optimization library for certain features. See <a href ="index.html#getting-started"> getting started</a> section.
+		<li> A C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8 or later, or 
+		  <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended. </li>
+		<li>  <a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> nonlinear optimization library for 
+		  certain features. See <a href ="index.html#getting-started"> getting started</a> section.
 	      </ul>
 	    </li>
 
@@ -2058,7 +2684,9 @@
 		<li> It supports modern C++11 features, like move semantics or initialiser list initialization, which indeed increase efficiency and usability.</li>
 		<li> It has rapid developement process.</li>
 		<li> It can make use of high performance  multi-threaded <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
-		  <a href = "http://www.netlib.org/blas">BLAS</a> replacements like <a href = "http://www.openblas.net/">OpenBLAS</a>, <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a>.</li>
+		  <a href = "http://www.netlib.org/blas">BLAS</a> replacements like <a href = "http://www.openblas.net/">OpenBLAS</a>, 
+		  <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or 
+		  <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a>.</li>
 	      </ul>
 	    </li>
 
@@ -2068,7 +2696,9 @@
     
 
 	    <li><b>I know C++98, but do not know much about C++11. Can I use QIClib?</b><br>
-	      Yes. Though QIClib is written in C++11 standard, you can still do C++98 style coding with QIClib functions. You just need a C++11 compliant compiler and make sure that you add necessary compiler flag to enable C++11 features, e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-std=c++11</code> flag during compilation.
+	      Yes. Though QIClib is written in C++11 standard, you can still do C++98 style coding with QIClib functions. 
+	      You just need a C++11 compliant compiler and make sure that you add necessary compiler flag to enable C++11 features, 
+	      e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-std=c++11</code> flag during compilation.
 	    </li>
 	
 
@@ -2078,7 +2708,11 @@
 
 	    
 	    <li><b>Can I use C++11 <code>auto</code> with QIClib functions?</b><br>
-	      Though use of C++11 <code>auto</code> is not recommended with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions, due to the extensive use of template meta-programming, every QIClib functions return by value, so use of <code>auto</code> is safe there. In fact, use of <code>auto</code> is recommended with QIClib functions and objects, as it will always guarantee <i>move</i> operations. But again, care should be taken when <code>auto</code> is used with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions. See the following example:<br>
+	      Though use of C++11 <code>auto</code> is not recommended with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions, 
+	      due to the extensive use of template meta-programming, every QIClib functions return by value, so use of <code>auto</code> is safe there. 
+	      In fact, use of <code>auto</code> is recommended with QIClib functions and objects, as it will always guarantee <i>move</i> operations. 
+	      But again, care should be taken when <code>auto</code> is used with <a href="http://arma.sourceforge.net/">Armadillo</a> expressions. 
+	      See the following example:<br>
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(8,8);
 		A *= A.t();
@@ -2104,8 +2738,8 @@
 		// do something
 		}
 
-		auto& S1 = states.S(1); // OK and recommended
-		const cx_mat& S2 = states.S(2); // also OK  
+		auto& S1 = spm.S(1); // OK and recommended
+		const cx_mat& S2 = spm.S(2); // also OK  
 		
 	      </pre>
 	    </li>
@@ -2113,7 +2747,8 @@
 
   
 	    <li><b>Do QIClib uses C++14 features?</b><br>
-	      No, only C++11 features have been used, since many compilers do not support C++14 fully. C++14 features like <i>auto return type deductions for functions</i> have been avoided by using template meta-programming.
+	      No, only C++11 features have been used, since many compilers do not support C++14 fully. C++14 features like <i>auto return 
+		type deductions for functions</i> have been avoided by using template meta-programming.
 	    </li>
 	    
 	    <br>
@@ -2131,11 +2766,25 @@
 	  <h3>API Additions</h3>
 	  <hr> <br>
 
+	  <b>Version 0.0.4</b><br><br>
+	  <ul>
+	    <li> Added <code><a href="#purify">purify</a></code>,  
+	      <code><a href="#conv_to_HS">conv_to_HS</a></code>, and <code><a href="#conv_to_std">conv_to_std</a></code>.</li>
+	    <li> Added <code><a href="#measure">measure</a></code> and <code><a href="#measure_comp">measure_comp</a></code>.</li>
+	    <li> Added random number/matrix generators.</li>
+	    <li> Faster <code><a href="#is_equal">is_equal</a></code>, <code><a href="#is_Hermitian">is_Hermitian</a></code>, 
+	      <code><a href="#is_Unitary">is_Unitary</a></code>, 
+	      <code><a href="#is_pure">is_pure</a></code>, <code><a href="#is_valid_state">is_valid_state</a></code>.
+	    <li> Fixed a bug in <a href="#discord_func">discord like functions</a>.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+
+	  <hr><br>
 
 	  <b>Version 0.0.3</b><br><br>
 	  <ul>
-	    <li> <a href=#dsum><code>dsum</code></a> and <a href=#dsum_pow><code>dsum_pow</code></a> added.</li>
-	    <li> Fixed a bug in <a href=#tensor><code>tensor</code></a>.</li>
+	    <li> <code><a href="#dsum">dsum</code></a></code> and <code><a href="#dsum_pow">dsum_pow</a></code> added.</li>
+	    <li> Fixed a bug in <code><a href="#tensor">tensor</a></code>.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
@@ -2143,15 +2792,17 @@
 
 	  <b>Version 0.0.2</b><br><br>
 	  <ul>
-	    <li> <a href=#absm><code>absm</code></a> added.</li>
-	    <li> <a href=#schatten><code>schatten</code></a> added.</li>
+	    <li> <code><a href=#absm>absm</a></code> added.</li>
+	    <li> <code><a href=#schatten>schatten</a></code> added.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 
 	  <footer class="site-footer">
-	    <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIClib">Quantum Information and Computation library (QIClib)</a> is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
+	    <span class="site-footer-owner"><a href="https://github.com/titaschanda/QIClib">Quantum Information and Computation library (QIClib)</a> 
+	      is maintained by <a href="https://github.com/titaschanda">titaschanda</a>.</span>
 
-	    <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+	    <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the 
+	      <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
 	  </footer>
 
     </section>

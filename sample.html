@@ -44,7 +44,7 @@ Basic matrix operartions</h3>
 <pre>
 #include &lt;iostream&gt; 
 #include &lt;armadillo&gt; 
-#include &lt;QIClib.hpp&gt; \\make sure that your compiler can  find the header<br>
+#include &lt;QIClib&gt; //make sure that your compiler can  find the header<br>
 
 using namespace std; 
 using namespace arma;
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
   cx_mat B = randu&lt;cx_mat&gt;(4,4); // 4x4 complex matrix
   
   // Hermiticity check
-  cout << is_H(A) << endl << is_H( B*B.t() ) << endl; 
+  cout << is_Hermitian(A) << endl << is_Hermitian( B*B.t() ) << endl; 
 
   cx_mat C = B;
 
