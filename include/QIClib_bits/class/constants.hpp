@@ -45,7 +45,8 @@ template <typename T> constexpr T eps<T>::value;
 
 //******************************************************************************
 
-template <typename T1>
+template <typename T1, typename Enable = typename std::enable_if<
+                         std::is_floating_point<T1>::value, void>::type>
 class SPM final : public _internal::Singleton<const SPM<T1> > {
   friend class _internal::Singleton<const SPM<T1> >;
 
@@ -124,7 +125,7 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 //******************************************************************************
 
 static const SPM<double>& spm _QICLIB_UNUSED_ = SPM<double>::get_instance();
-static const SPM<float>& fspm _QICLIB_UNUSED_ = SPM<float>::get_instance();
+static const SPM<float>& spmf _QICLIB_UNUSED_ = SPM<float>::get_instance();
 
 //******************************************************************************
 

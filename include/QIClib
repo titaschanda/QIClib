@@ -66,6 +66,7 @@
 #include "QIClib_bits/basic/is_Unitary.hpp"
 #include "QIClib_bits/basic/is_pure.hpp"
 #include "QIClib_bits/basic/is_valid_state.hpp"
+#include "QIClib_bits/basic/is_diagonalizable.hpp"
 #include "QIClib_bits/basic/range.hpp"
 #include "QIClib_bits/basic/random.hpp"
 #include "QIClib_bits/basic/num.hpp"

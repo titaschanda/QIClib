@@ -33,3 +33,5 @@ Version 0.0.4 - Development Branch
     - parallel support for measure
 
     - added number theoretic functions
+    
+    - added is_diagonalizable

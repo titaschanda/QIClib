@@ -103,9 +103,9 @@ double disc_dis3(const std::vector<double>& x, std::vector<double>& grad,
   TO_PASS_dis3<arma::Mat<trait::eT<T1> > >* pB =
     static_cast<TO_PASS_dis3<arma::Mat<trait::eT<T1> > >*>(my_func_data);
 
-  auto& U = SPM<trait::eT<T1> >::get_instance().basis3.at(0, 0);
-  auto& M = SPM<trait::eT<T1> >::get_instance().basis3.at(1, 0);
-  auto& D = SPM<trait::eT<T1> >::get_instance().basis3.at(2, 0);
+  auto& U = SPM<trait::pT<T1> >::get_instance().basis3.at(0, 0);
+  auto& M = SPM<trait::pT<T1> >::get_instance().basis3.at(1, 0);
+  auto& D = SPM<trait::pT<T1> >::get_instance().basis3.at(2, 0);
 
   arma::Mat<std::complex<trait::pT<T1> > > proj1 =
     std::cos(theta1) * std::cos(theta2) * U -

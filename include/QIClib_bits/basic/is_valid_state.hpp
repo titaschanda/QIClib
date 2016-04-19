@@ -29,7 +29,7 @@ inline bool is_valid_state(
     const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
 
-  if (!is_Hermitian(rho)) {
+  if (!is_Hermitian(rho, tol, 10 * tol)) {
     return false;
 
   } else if (is_pure(rho, true, tol)) {

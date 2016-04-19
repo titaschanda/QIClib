@@ -25,25 +25,23 @@ template <typename T1,
           typename = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool
-is_pure(const T1& rho1, bool check_norm = true,
-        const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
+is_diagonalizable(const T1& rho1) {
   const auto& rho = as_Mat(rho1);
 
-  if ((rho.n_rows == 1) || (rho.n_cols == 1)) {
-    if (std::abs(arma::norm(rho) - 1) < tol || !check_norm)
-      return true;
-    else
-      return false;
-  } else if (!is_Hermitian(rho, tol, 10 * tol)) {
+  const arma::uword n = rho.n_rows;
+  const arma::uword m = rho.n_cols;
+
+  if (n != m) {
     return false;
-  } else if (arma::rank(rho) != 1) {
-    return false;
+
   } else {
-    if (std::abs(std::abs(arma::trace(rho)) - 1.0) < tol || !check_norm)
-      return true;
-    else
-      return false;
+    arma::Mat<std::complex<trait::pT<T1> > > eigval;
+    arma::Col<std::complex<trait::pT<T1> > > eigvec;
+    bool check = arma::eig_gen(eigvec, eigval, rho);
+    bool ret = (n == arma::rank(eigval));
+    return (check && ret);
   }
 }
+
 
 }  // namespace qic

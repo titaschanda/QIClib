@@ -759,7 +759,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     }
   }
 
-  return measure_comp(TrX(rho1, std::move(keep), std::move(dim)));
+  return measure_comp(TrX(rho, std::move(keep), std::move(dim)));
 }
 
 //******************************************************************************
@@ -771,11 +771,11 @@ template <typename T1,
 inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   const auto& rho = as_Mat(rho1);
 
+#ifndef QICLIB_NO_DEBUG
   bool checkV = true;
   if (rho.n_cols == 1)
     checkV = false;
 
-#ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);
 
@@ -791,7 +791,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   arma::uvec dim2(n);
   dim2.fill(dim);
 
-  return measure_comp(rho1, std::move(sys), std::move(dim2));
+  return measure_comp(rho, std::move(sys), std::move(dim2));
 }
 
 //******************************************************************************

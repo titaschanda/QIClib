@@ -19,31 +19,32 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace qic {
+#include <QIClib>
 
-template <typename T1,
-          typename = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1> >::value, void>::type>
-inline bool
-is_pure(const T1& rho1, bool check_norm = true,
-        const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
-  const auto& rho = as_Mat(rho1);
+int main(int argc, char** argv) {
+  using namespace std;
+  using namespace arma;
+  using namespace qic;
 
-  if ((rho.n_rows == 1) || (rho.n_cols == 1)) {
-    if (std::abs(arma::norm(rho) - 1) < tol || !check_norm)
-      return true;
-    else
-      return false;
-  } else if (!is_Hermitian(rho, tol, 10 * tol)) {
-    return false;
-  } else if (arma::rank(rho) != 1) {
-    return false;
-  } else {
-    if (std::abs(std::abs(arma::trace(rho)) - 1.0) < tol || !check_norm)
-      return true;
-    else
-      return false;
-  }
+  mat A = randU<mat>(5, 5);        // 5x5 real matrix
+  cx_mat B = randU<cx_mat>(4, 4);  // 4x4 complex matrix
+
+  // Hermiticity check
+  cout << is_Hermitian(A) << endl << is_Hermitian(B * B.t()) << endl;
+  
+  cx_mat C = B;
+
+  // check for equality
+  cout << is_equal(A, B) << endl << is_equal(B, C) << endl;
+
+  B *= B.t();     // B is now Hermitian
+  B /= trace(B);  // normalise B
+
+  // check if the matrix is a valid state
+  cout << is_valid_state(A) << endl << is_valid_state(B) << endl;
+
+  // trace out first party
+  cx_mat B2 = TrX(B, {1});  // B2 is 2x2 matrix
+
+  return 0;
 }
-
-}  // namespace qic
