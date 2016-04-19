@@ -127,7 +127,6 @@ inline TR randN(
   }
 }
 
-
 //****************************************************************************
 
 template <typename T1 = arma::vec,
@@ -186,13 +185,10 @@ inline TR randN(const arma::uword& m, const arma::uword& n,
 
 //****************************************************************************
 
-template <
-  typename T1 = int,
-  typename TR = typename std::enable_if<
-    std::is_arithmetic<T1>::value || is_complex<T1>::value, T1>::type>
-inline TR randI(
-    const arma::Col<arma::sword>& range = {
-      0, std::numeric_limits<int>::max()}) {
+template <typename T1 = int,
+          typename TR = typename std::enable_if<
+            std::is_arithmetic<T1>::value || is_complex<T1>::value, T1>::type>
+inline TR randI(const arma::Col<arma::sword>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
     throw Exception("qic::randI", "Not proper range");
@@ -202,16 +198,17 @@ inline TR randI(
     throw Exception("qic::randI", "Negative range for unsigned type");
 #endif
 
-  std::uniform_int_distribution<arma::sword> dis(
-    range.at(0), range.at(1));
+  std::uniform_int_distribution<arma::sword> dis(range.at(0), range.at(1));
 
   if (is_floating_point_var<T1>::value) {
     return static_cast<typename arma::get_pod_type<T1>::result>(dis(rdevs.rng));
 
   } else {
     auto& I = _internal::cond_I<T1>::value;
-    return static_cast<typename arma::get_pod_type<T1>::result>(dis(rdevs.rng))
-        + I * static_cast<typename arma::get_pod_type<T1>::result>(dis(rdevs.rng));
+    return static_cast<typename arma::get_pod_type<T1>::result>(
+             dis(rdevs.rng)) +
+           I * static_cast<typename arma::get_pod_type<T1>::result>(
+                 dis(rdevs.rng));
   }
 }
 
@@ -222,8 +219,8 @@ template <typename T1 = arma::ivec,
                                                   (arma::is_Col<T1>::value ||
                                                    arma::is_Row<T1>::value),
                                                 T1>::type>
-inline TR randI(const arma::uword& N, const arma::Col<arma::sword>& range = {
-                                        0, std::numeric_limits<int>::max()}) {
+inline TR randI(const arma::uword& N,
+                const arma::Col<arma::sword>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
     throw Exception("qic::randI", "Not proper range");
@@ -255,8 +252,7 @@ template <typename T1 = arma::imat,
             is_arma_type_var<T1>::value && arma::is_Mat_only<T1>::value,
             arma::Mat<trait::eT<T1> > >::type>
 inline TR randI(const arma::uword& m, const arma::uword& n,
-                const arma::Col<arma::sword>& range = {
-                  0, std::numeric_limits<int>::max()}) {
+                const arma::Col<arma::sword>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
     throw Exception("qic::randI", "Not proper range");

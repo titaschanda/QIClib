@@ -89,7 +89,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
     }
 
   } else {
-      QICLIB_OPENMP_FOR
+    QICLIB_OPENMP_FOR
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
       if (checkK)
@@ -709,6 +709,89 @@ inline TR measure_comp(const T1& rho1) {
   arma::uword result = dd(rdevs.rng);
 
   return std::make_tuple(result, prob);
+}
+
+//******************************************************************************
+
+template <typename T1,
+          typename TR = typename std::enable_if<
+            std::is_floating_point<trait::pT<T1> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
+inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+  const auto& rho = as_Mat(rho1);
+
+#ifndef QICLIB_NO_DEBUG
+  bool checkV = true;
+  if (rho.n_cols == 1)
+    checkV = false;
+
+  arma::uword D = arma::prod(dim);
+
+  if (rho.n_elem == 0)
+    throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::measure_comp",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim.n_elem == 0 || arma::any(dim == 0))
+    throw Exception("qic::measure_comp", Exception::type::INVALID_DIMS);
+
+  if (D != rho.n_rows)
+    throw Exception("qic::measure_comp", Exception::type::DIMS_MISMATCH_MATRIX);
+
+  if (sys.n_elem > dim.n_elem ||
+      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::any(sys > dim.n_elem) || arma::any(sys == 0))
+    throw Exception("qic::measure_comp", Exception::type::INVALID_SUBSYS);
+#endif
+
+  const arma::uword n = dim.n_elem;
+  const arma::uword m = sys.n_elem;
+
+  arma::uvec keep(n - m);
+  arma::uword keep_count(0);
+  for (arma::uword run = 0; run < n; ++run) {
+    if (!arma::any(sys == run + 1)) {
+      keep.at(keep_count) = run + 1;
+      ++keep_count;
+    }
+  }
+
+  return measure_comp(TrX(rho1, std::move(keep), std::move(dim)));
+}
+
+//******************************************************************************
+
+template <typename T1,
+          typename TR = typename std::enable_if<
+            std::is_floating_point<trait::pT<T1> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
+inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
+  const auto& rho = as_Mat(rho1);
+
+  bool checkV = true;
+  if (rho.n_cols == 1)
+    checkV = false;
+
+#ifndef QICLIB_NO_DEBUG
+  if (rho.n_elem == 0)
+    throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::measure_comp",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+#endif
+
+  arma::uword n = static_cast<arma::uword>(
+    std::llround(std::log(rho.n_rows) / std::log(dim)));
+
+  arma::uvec dim2(n);
+  dim2.fill(dim);
+
+  return measure_comp(rho1, std::move(sys), std::move(dim2));
 }
 
 //******************************************************************************

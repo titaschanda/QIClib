@@ -16,7 +16,6 @@ Version 0.0.4 - Development Branch
 
     - added measure
 
-    - stricter SFINAE, better error message due to SFINAE
     - _precision::eps is now a class, 
       where _precision::eps<double>::value = ? 
       and _precision::eps<float>::value = ?
