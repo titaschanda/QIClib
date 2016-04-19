@@ -13,22 +13,18 @@ Download [QIClib](http://qiclib.in) either from official [website](http://qiclib
    
      git clone https://github.com/titaschanda/QIClib.
 
+Include the header `QIClib` in your source code (make sure that your compiler can find the path of the header file) and [QIClib](http://qiclib.in) is ready to fly. 
 
-Make sure that you have [Armadillo](http://arma.sourceforge.net/) (version 5.2 or later) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), comment out the following line in `include/QIClib.hpp`:
+Make sure that you have [Armadillo](http://arma.sourceforge.net/) (version 4.2 or later) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), just add the following line before including `QIClib` header:
 
-    #define QIClib_NLOPT
-
+    #define QIClib_DONT_USE_NLOPT
 
 Also make sure that you have an C++11 compliant compiler. [gcc](https://gcc.gnu.org/) version 4.8 or later, or [clang](http://clang.llvm.org/) version 3.3 or later is recomended.
-
- 
-Include the header `QIClib.hpp` in your source code (make sure that your compiler can find the path of the header file) and [QIClib](http://qiclib.in) is ready to fly. 
-
 
 For example codes, see [here](http://qiclib.in/sample.html). You will also find detailed API information [here](http://qiclib.in/documentation.html).
 
 
-**Note:** Link [OpenBLAS](http://www.openblas.net/) or [Intel MKL](https://software.intel.com/en-us/intel-mkl) with latest version of [Armadillo](http://arma.sourceforge.net/) for better performance. For more see, [this](http://arma.sourceforge.net/faq.html#dependencies) and [this](https://gist.github.com/bdsatish/5646151). Also turn on compiler optimizations, e.g., in [gcc](https://gcc.gnu.org/) or [clang](http://clang.llvm.org/) add `-O3 -march=native` flag during compilation.
+**Note:** Instead of using standard [BLAS](http://www.netlib.org/blas/), link [OpenBLAS](http://www.openblas.net/), [Intel MKL](https://software.intel.com/en-us/intel-mkl) or [AMD ACML](http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/) (or [Accelerate Framework](https://developer.apple.com/library/tvos/documentation/Accelerate/Reference/AccelerateFWRef/index.html) in MAC OSX) with latest version of [Armadillo](http://arma.sourceforge.net/) for better performance. For more see, [this](http://arma.sourceforge.net/faq.html#dependencies) and [this](https://gist.github.com/bdsatish/5646151). Also turn on compiler optimizations, e.g., in [gcc](https://gcc.gnu.org/) or [clang](http://clang.llvm.org/) add `-O3` flag during compilation. You can also add `-march=native` flag to enable [SSE3](https://en.wikipedia.org/wiki/SSE3), [SSE4](https://en.wikipedia.org/wiki/SSE4), and [AVX](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions) instructions for further speed ups.
 
 Got a Problem or Question?
 --------------------------
