@@ -59,8 +59,8 @@
        <p align="justify">Include the header <code>QIClib</code> in your source code (make sure that your compiler can find the path of the header file, i.e., 
 	 the <i>include</i> directory in the library) and QIClib is ready to fly.</p>
 
-       <p align="justify">Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (version 4.2 or later) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), just add the following line before including <code>QIClib</code> header: </p>
-      <code>#define QIClib_DONT_USE_NLOPT</code><br><br>
+       <p align="justify">Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (version 4.2 or later) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), just add the following line <i>before</i> including <code>QIClib</code> header: </p>
+      <code>#define QICLIB_DONT_USE_NLOPT</code><br><br>
 
        <p align="justify">Also make sure that you have a C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8 or later, or <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended.<br></p>
 
