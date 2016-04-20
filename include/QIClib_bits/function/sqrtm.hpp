@@ -71,7 +71,7 @@ inline TR sqrtm_gen(const T1& rho1) {
   arma::Col<std::complex<trait::pT<T1> > > eigval;
   arma::Mat<std::complex<trait::pT<T1> > > eigvec;
   arma::eig_gen(eigval, eigvec, rho);
-
+  
   return eigvec * arma::diagmat(arma::sqrt(eigval)) * eigvec.t();
 }
 
