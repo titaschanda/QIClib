@@ -133,9 +133,9 @@
 		<tr><td><a href="#schatten"> schatten  </td><td>  </td><td>Schatten p-norm of a matrix</td></tr>
 		<tr><td><a href="#purify"> purify  </td><td>  </td><td>Minimal purification of a density matrix</td></tr>
 		<tr><td><a href="#conv_to_pure"> conv_to_pure  </td><td>  </td><td>Convert density matrix of a pure state to a column vector</td></tr>
-		<tr><td><a href="#conv_to_HS"> conv_to_HS  </td><td>  </td><td>Convert 2-qubit density matrix from the standard basis to 
+		<tr><td><a href="#std_to_HS"> std_to_HS  </td><td>  </td><td>Convert 2-qubit density matrix from the standard basis to 
 		    the Hilbert-Schmidt basis </td></tr>
-		<tr><td><a href="#conv_to_std"> conv_to_std  </td><td>  </td><td>Convert 2-qubit density matrix from the Hilbert-Schmidt 
+		<tr><td><a href="#HS_to_std"> HS_to_std  </td><td>  </td><td>Convert 2-qubit density matrix from the Hilbert-Schmidt 
 		    basis back to the standard basis</td></tr>
 		<tr><td><a href="#mket"> mket  </td><td>  </td><td> Multipartite qudit pure state </td></tr>
 		<tr><td><a href="#mproj"> mproj  </td><td>  </td><td> Multipartite qudit projector </td></tr>
@@ -1152,8 +1152,8 @@
 	  <hr><br>
 
 
-	  <a name=conv_to_HS></a>
-	  <b>conv_to_HS(A)</b><br><br>
+	  <a name="std_to_HS"></a>
+	  <b>std_to_HS(A)</b><br><br>
 	  <ul>
 	    <li>Convert 2-qubit density matrix from the standard basis to the Hilbert-Schmidt basis.</li><br>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of 4x4.</li><br>
@@ -1165,8 +1165,8 @@
 	  <hr><br>
 
 
-	  <a name=conv_to_std></a>
-	  <b>conv_to_std(A)</b><br><br>
+	  <a name="HS_to_std"></a>
+	  <b>HS_to_std(A)</b><br><br>
 	  <ul>
 	    <li>Convert 2-qubit density matrix from the Hilbert-Schmidt basis to the standard basis.</li><br>
 	    <li> <code>A</code> has to be a real square matrix (<code>mat</code>) of 4x4.</li><br>
@@ -2759,7 +2759,7 @@
 	  <b>Version 0.0.4</b><br><br>
 	  <ul>
 	    <li> Added <code><a href="#purify">purify</a></code>,  
-	      <code><a href="#conv_to_HS">conv_to_HS</a></code>, and <code><a href="#conv_to_std">conv_to_std</a></code>.</li>
+	      <code><a href="#std_to_HS">std_to_HS</a></code>, and <code><a href="#HS_to_std">HS_to_std</a></code>.</li>
 	    <li> Added <code><a href="#measure">measure</a></code> and <code><a href="#measure_comp">measure_comp</a></code>.</li>
 	    <li> Added random number/matrix generators.</li>
 	    <li> Added <code><a herf = "#is_diagonalizable">is_diagonalizable</a></code>.
