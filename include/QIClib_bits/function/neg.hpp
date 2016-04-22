@@ -50,7 +50,7 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
       arma::any(sys > dim.n_elem) ||
-      sys.n_elem != arma::find_unique(sys, false).eval().n_elem)
+      sys.n_elem != arma::unique(sys).eval().n_elem)
     throw Exception("qic::neg", Exception::type::INVALID_SUBSYS);
 
 #endif

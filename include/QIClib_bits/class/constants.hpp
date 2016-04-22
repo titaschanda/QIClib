@@ -32,9 +32,9 @@ template <typename T, typename Enable = typename std::enable_if<
 struct eps;
 
 template <typename T> struct eps<T> {
-  static constexpr T value = std::is_same<T,float>::value ?
-      10 * std::numeric_limits<T>::epsilon()
-      : 100 * std::numeric_limits<T>::epsilon();
+  static constexpr T value = std::is_same<T, float>::value
+                               ? 10 * std::numeric_limits<T>::epsilon()
+                               : 100 * std::numeric_limits<T>::epsilon();
 };
 
 template <typename T> constexpr T eps<T>::value;
@@ -62,38 +62,53 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
  private:
   SPM() {
     S.set_size(4);
-    S.at(0) = {{{1.0, 0.0}, {0.0, 0.0}}, {{0.0, 0.0}, {1.0, 0.0}}};
-    S.at(1) = {{{0.0, 0.0}, {1.0, 0.0}}, {{1.0, 0.0}, {0.0, 0.0}}};
-    S.at(2) = {{{0.0, 0.0}, {0.0, -1.0}}, {{0.0, 1.0}, {0.0, 0.0}}};
-    S.at(3) = {{{1.0, 0.0}, {0.0, 0.0}}, {{0.0, 0.0}, {-1.0, 0.0}}};
+
+    S.at(0) << 1.0 << 0.0 << arma::endr << 0.0 << 1.0 << arma::endr;
+
+    S.at(1) << 0.0 << 1.0 << arma::endr << 1.0 << 0.0 << arma::endr;
+
+    S.at(2) << 0.0 << std::complex<T1>(0.0, -1.0) << arma::endr
+            << std::complex<T1>(0.0, 1.0) << arma::endr;
+
+    S.at(3) << 1.0 << 0.0 << arma::endr << 0.0 << -1.0 << arma::endr;
+
+    //**************************************************************************
 
     basis2.set_size(2, 4);
-    basis2.at(0, 0) = {{1.0, 0.0}, {0.0, 0.0}};
-    basis2.at(1, 0) = {{0.0, 0.0}, {1.0, 0.0}};
-    basis2.at(0, 1) = {{static_cast<T1>(std::sqrt(0.5)), 0.0},
-                       {static_cast<T1>(std::sqrt(0.5)), 0.0}};
-    basis2.at(1, 1) = {{static_cast<T1>(std::sqrt(0.5)), 0.0},
-                       {-static_cast<T1>(std::sqrt(0.5)), 0.0}};
-    basis2.at(0, 2) = {{static_cast<T1>(std::sqrt(0.5)), 0.0},
-                       {0.0, static_cast<T1>(std::sqrt(0.5))}};
-    basis2.at(1, 2) = {{static_cast<T1>(std::sqrt(0.5)), 0.0},
-                       {0.0, -static_cast<T1>(std::sqrt(0.5))}};
+
+    basis2.at(0, 0) << 1.0 << 0.0;
+    basis2.at(1, 0) << 0.0 << 1.0;
+
+    basis2.at(0, 1) << std::sqrt(0.5) << std::sqrt(0.5);
+    basis2.at(1, 1) << std::sqrt(0.5) << -std::sqrt(0.5);
+
+    basis2.at(0, 2) << std::sqrt(0.5) << std::complex<T1>(0.0, std::sqrt(0.5));
+    basis2.at(1, 2) << std::sqrt(0.5) << std::complex<T1>(0.0, -std::sqrt(0.5));
+
     basis2.at(0, 3) = basis2.at(0, 0);
     basis2.at(1, 3) = basis2.at(1, 0);
 
+    //**************************************************************************
+
     basis3.set_size(3, 4);
-    basis3.at(0, 0) = {1.0, 0.0, 0.0};
-    basis3.at(1, 0) = {0.0, 1.0, 0.0};
-    basis3.at(2, 0) = {0.0, 0.0, 1.0};
+
+    basis3.at(0, 0) << 1.0 << 0.0 << 0.0;
+    basis3.at(1, 0) << 0.0 << 1.0 << 0.0;
+    basis3.at(2, 0) << 0.0 << 0.0 << 1.0;
+
     basis3.at(0, 1) << 0.5 << std::sqrt(0.5) << 0.5;
     basis3.at(1, 1) << -std::sqrt(0.5) << 0.0 << std::sqrt(0.5);
     basis3.at(2, 1) << 0.5 << -std::sqrt(0.5) << 0.5;
+
     basis3.at(0, 2) << -0.5 << std::complex<T1>(0.0, -std::sqrt(0.5)) << 0.5;
     basis3.at(1, 2) << std::sqrt(0.5) << 0.0 << std::sqrt(0.5);
     basis3.at(2, 2) << -0.5 << std::complex<T1>(0.0, std::sqrt(0.5)) << 0.5;
+
     basis3.at(0, 3) = basis3.at(0, 0);
     basis3.at(1, 3) = basis3.at(1, 0);
     basis3.at(2, 3) = basis3.at(2, 0);
+
+    //**************************************************************************
 
     proj2.set_size(2, 4);
     proj2.at(0, 0) = basis2.at(0, 0) * basis2.at(0, 0).t();
@@ -104,6 +119,8 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
     proj2.at(1, 2) = basis2.at(1, 2) * basis2.at(1, 2).t();
     proj2.at(0, 3) = proj2.at(0, 0);
     proj2.at(1, 3) = proj2.at(1, 0);
+
+    //**************************************************************************
 
     proj3.set_size(3, 4);
     proj3.at(0, 0) = basis3.at(0, 0) * basis3.at(0, 0).t();

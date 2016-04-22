@@ -93,7 +93,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
     throw Exception("qic::mutual_info", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (sys12.n_elem > dim.n_elem ||
-      arma::find_unique(sys12).eval().n_elem != sys12.n_elem ||
+      arma::unique(sys12).eval().n_elem != sys12.n_elem ||
       arma::any(sys12 > dim.n_elem) || arma::any(sys12 == 0))
     throw Exception("qic::mutual_info", Exception::type::INVALID_SUBSYS);
 

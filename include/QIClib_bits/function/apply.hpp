@@ -61,7 +61,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec sys, arma::uvec dim) {
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (sys.n_elem > dim.n_elem ||
-      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::unique(sys).eval().n_elem != sys.n_elem ||
       arma::any(sys > dim.n_elem) || arma::any(sys == 0))
     throw Exception("qic::apply", Exception::type::INVALID_SUBSYS);
 #endif

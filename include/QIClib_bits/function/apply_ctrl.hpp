@@ -72,7 +72,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   const arma::uvec ctrlsys = arma::join_cols(sys, ctrl);
 
   if (ctrlsys.n_elem > dim.n_elem ||
-      arma::find_unique(ctrlsys, false).eval().n_elem != ctrlsys.n_elem ||
+      arma::unique(ctrlsys).eval().n_elem != ctrlsys.n_elem ||
       arma::any(ctrlsys > dim.n_elem) || arma::any(ctrlsys == 0))
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
 #endif

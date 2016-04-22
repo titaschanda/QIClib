@@ -331,7 +331,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (sys.n_elem > dim.n_elem ||
-      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::unique(sys).eval().n_elem != sys.n_elem ||
       arma::any(sys > dim.n_elem) || arma::any(sys == 0))
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
@@ -434,7 +434,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (sys.n_elem > dim.n_elem ||
-      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::unique(sys).eval().n_elem != sys.n_elem ||
       arma::any(sys > dim.n_elem) || arma::any(sys == 0))
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
@@ -607,7 +607,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (sys.n_elem > dim.n_elem ||
-      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::unique(sys).eval().n_elem != sys.n_elem ||
       arma::any(sys > dim.n_elem) || arma::any(sys == 0))
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
@@ -742,7 +742,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     throw Exception("qic::measure_comp", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (sys.n_elem > dim.n_elem ||
-      arma::find_unique(sys).eval().n_elem != sys.n_elem ||
+      arma::unique(sys).eval().n_elem != sys.n_elem ||
       arma::any(sys > dim.n_elem) || arma::any(sys == 0))
     throw Exception("qic::measure_comp", Exception::type::INVALID_SUBSYS);
 #endif

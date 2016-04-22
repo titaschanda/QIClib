@@ -51,7 +51,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     throw Exception("qic::sysperm", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (n != sys.n_elem || arma::any(sys == 0) || arma::any(sys > n) ||
-      sys.n_elem != arma::find_unique(sys, false).eval().n_elem)
+      sys.n_elem != arma::unique(sys).eval().n_elem)
     throw Exception("qic::sysperm", Exception::type::PERM_INVALID);
 #endif
 
