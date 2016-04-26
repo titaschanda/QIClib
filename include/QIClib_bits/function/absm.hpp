@@ -37,7 +37,7 @@ inline TR absm(const T1& rho1) {
     throw Exception("qic::absm", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
-  return sqrtm_sym((rho.t() * rho).eval());
+  return arma::real(sqrtm_sym((rho.t() * rho).eval()));
 }
 
 //******************************************************************************
