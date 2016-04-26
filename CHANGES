@@ -11,25 +11,14 @@ Version 0.0.3 - November 21, 2015
 
 Version 0.0.4 - April 20, 2016
     - added conv_to_HS
-
     - added conv_to_std
-
     - added measure
-
     - _precision::eps is now a class
-
     - is_H is now is_Hermitian, is_U is now is_Unitary
-
     - faster is_equal, is_Hermitian, is_Unitary, is_pure, is_valid_state
-
     - added purify
-
     - added random
-
     - bug-fix in discord type functions
-
     - parallel support for measure
-
     - added number theoretic functions
-    
     - added is_diagonalizable
