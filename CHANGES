@@ -22,3 +22,6 @@ Version 0.0.4 - April 20, 2016
     - parallel support for measure
     - added number theoretic functions
     - added is_diagonalizable
+
+Version 0.0.5 - Development version
+    - added gram-schmidt
