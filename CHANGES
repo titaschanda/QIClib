@@ -9,16 +9,14 @@ Version 0.0.3 - November 21, 2015
     - Added dsum
     - bug-fix in tensor
 
-Version 0.0.4 - Development Branch
+Version 0.0.4 - April 20, 2016
     - added conv_to_HS
 
     - added conv_to_std
 
     - added measure
 
-    - _precision::eps is now a class, 
-      where _precision::eps<double>::value = ? 
-      and _precision::eps<float>::value = ?
+    - _precision::eps is now a class
 
     - is_H is now is_Hermitian, is_U is now is_Unitary
 
