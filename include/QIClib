@@ -101,6 +101,7 @@
 #include "QIClib_bits/function/distance.hpp"
 #include "QIClib_bits/function/channel.hpp"
 #include "QIClib_bits/function/schmidt.hpp"
+#include "QIClib_bits/function/gram_schmidt.hpp"
 #include "QIClib_bits/function/schatten.hpp"
 
 #ifdef QICLIB_NLOPT
