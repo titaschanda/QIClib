@@ -40,8 +40,9 @@ template <typename T1> struct void_type {
 //****************************************************************************
 
 template <typename T1> struct conditional_arma {
-  using type = typename std::conditional<arma::is_arma_type<T1>::value, T1,
-                                         trait::void_type<T1> >::type;
+  using type = typename std::conditional<arma::is_arma_type<T1>::value ||
+                                           arma::is_arma_sparse_type<T1>::value,
+                                         T1, trait::void_type<T1> >::type;
 };
 
 //****************************************************************************
@@ -76,6 +77,21 @@ template <typename T1, typename T2, typename... T3>
 struct is_arma_type_var<T1, T2, T3...>
   : std::integral_constant<bool, is_arma_type_var<T1>::value &&
                                    is_arma_type_var<T2, T3...>::value> {};
+
+//****************************************************************************
+
+template <typename T1, typename... T2>
+struct is_arma_sparse_type_var : std::false_type {};
+
+template <typename T1>
+struct is_arma_sparse_type_var<T1> : arma::is_arma_sparse_type<trait::RR<T1> > {
+};
+
+template <typename T1, typename T2, typename... T3>
+struct is_arma_sparse_type_var<T1, T2, T3...>
+  : std::integral_constant<bool, is_arma_sparse_type_var<T1>::value &&
+                                   is_arma_sparse_type_var<T2, T3...>::value> {
+};
 
 //****************************************************************************
 

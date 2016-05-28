@@ -49,6 +49,7 @@
 #endif
 
 #include "QIClib_bits/basic/openmp.hpp"
+#include "QIClib_bits/basic/type_traits.hpp"
 
 #include "QIClib_bits/internal/first.hpp"
 #include "QIClib_bits/internal/singleton.hpp"
@@ -58,8 +59,9 @@
 #include "QIClib_bits/class/init.hpp"
 #include "QIClib_bits/class/random_devices.hpp"
 
-#include "QIClib_bits/basic/type_traits.hpp"
+
 #include "QIClib_bits/basic/as_Mat.hpp"
+#include "QIClib_bits/basic/as_SpMat.hpp"
 #include "QIClib_bits/basic/as_Col.hpp"
 #include "QIClib_bits/basic/is_equal.hpp"
 #include "QIClib_bits/basic/is_Hermitian.hpp"
@@ -70,6 +72,8 @@
 #include "QIClib_bits/basic/range.hpp"
 #include "QIClib_bits/basic/random.hpp"
 #include "QIClib_bits/basic/num.hpp"
+#include "QIClib_bits/basic/dense_to_sparse.hpp"
+#include "QIClib_bits/basic/sparse_to_dense.hpp"
 
 #include "QIClib_bits/internal/second.hpp"
 

@@ -27,14 +27,18 @@ namespace _precision {
 
 //******************************************************************************
 
-template <typename T, typename Enable = typename std::enable_if<
-                        std::is_floating_point<T>::value, void>::type>
+template <typename T,
+          typename Enable =
+            typename std::enable_if<std::is_arithmetic<T>::value, void>::type>
 struct eps;
 
 template <typename T> struct eps<T> {
-  static constexpr T value = std::is_same<T, float>::value
-                               ? 10 * std::numeric_limits<T>::epsilon()
-                               : 100 * std::numeric_limits<T>::epsilon();
+  static constexpr T value =
+    std::is_integral<T>::value
+      ? 0
+      : (std::is_same<trait::RCV<T>, float>::value
+           ? 100.0 * std::numeric_limits<T>::epsilon()
+           : 1000.0 * std::numeric_limits<T>::epsilon());
 };
 
 template <typename T> constexpr T eps<T>::value;

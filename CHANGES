@@ -25,3 +25,4 @@ Version 0.0.4 - April 20, 2016
 
 Version 0.0.5 - Development version
     - added gram-schmidt
+    - added dense_to_sparse, sparse_to_dense
