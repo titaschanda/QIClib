@@ -25,7 +25,7 @@ namespace qic {
 
 template <typename T1 = arma::cx_mat> class deficit_space {
  private:
-  arma::Mat<trait::eT<T1> > _rho;
+  const arma::Mat<trait::eT<T1> >& _rho;
   arma::uword _nodal;
   arma::uword _party_no;
   arma::uvec _dim;

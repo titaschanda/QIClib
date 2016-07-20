@@ -22,7 +22,11 @@
 namespace qic {
 
 //******************************************************************************
+
 namespace {
+
+//******************************************************************************
+
 namespace protect {
 
 //******************************************************************************
@@ -182,7 +186,11 @@ inline double disc_dis32(const std::vector<double>& x,
 //******************************************************************************
 
 }  // namespace protect
-}
+
+//******************************************************************************
+
+}  // namespace
+
 //****************************************************************************
 
 template <typename T1>
@@ -334,12 +342,12 @@ inline discord_space<T1>& discord_space<T1>::angle_range(const arma::vec& a) {
   if (_discord2 && a.n_elem != 2)
     throw Exception(
       "qic::discord_space::set_angle_range",
-      "Number of elements is not 2 when measured party is a qubit!");
+      "Number of elements has to be 2, when measured party is a qubit!");
 
   if (_discord3 && a.n_elem != 5)
     throw Exception(
       "qic::discord_space::set_angle_range",
-      "Number of elements is not 5 when measured party is a qutrit!");
+      "Number of elements has to be 5, when measured party is a qutrit!");
 #endif
 
   _discord_angle_range = a;
@@ -352,12 +360,12 @@ inline discord_space<T1>& discord_space<T1>::initial_angle(const arma::vec& a) {
   if (_discord2 && a.n_elem != 2)
     throw Exception(
       "qic::discord_space::set_angle_initial",
-      "Number of elements is not 2 when measured party is a qubit!");
+      "Number of elements has to be 2, when measured party is a qubit!");
 
   if (_discord3 && a.n_elem != 5)
     throw Exception(
       "qic::discord_space::set_angle_initial",
-      "Number of elements is not 5 when measured party is a qutrit!");
+      "Number of elements has to be 5, when measured party is a qutrit!");
 #endif
 
   _discord_angle_ini = a;
@@ -636,6 +644,7 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
   }
   return *this;
 }
+
 //****************************************************************************
 
 template <typename T1>
@@ -646,12 +655,16 @@ discord_space<T1>::opt_angles() noexcept {
   return _tp;
 }
 
+//******************************************************************************
+
 template <typename T1>
 inline const trait::pT<T1>& discord_space<T1>::result() noexcept {
   if (!_is_computed)
     compute();
   return _result;
 }
+
+//******************************************************************************
 
 template <typename T1>
 inline const trait::pT<T1>& discord_space<T1>::result_reg() noexcept {
@@ -660,6 +673,8 @@ inline const trait::pT<T1>& discord_space<T1>::result_reg() noexcept {
   return _result_reg;
 }
 
+//******************************************************************************
+
 template <typename T1>
 inline const arma::Col<trait::pT<T1> >&
 discord_space<T1>::result_reg_all() noexcept {
@@ -667,6 +682,8 @@ discord_space<T1>::result_reg_all() noexcept {
     compute_reg();
   return _result_reg_all;
 }
+
+//******************************************************************************
 
 template <typename T1>
 inline discord_space<T1>& discord_space<T1>::refresh() noexcept {
@@ -702,6 +719,8 @@ inline discord_space<T1>& discord_space<T1>::refresh() noexcept {
   return *this;
 }
 
+//******************************************************************************
+
 template <typename T1>
 inline discord_space<T1>& discord_space<T1>::reset_party(arma::uword nodal) {
   _is_computed = false;
@@ -711,7 +730,7 @@ inline discord_space<T1>& discord_space<T1>::reset_party(arma::uword nodal) {
 
 #ifndef QICLIB_NO_DEBUG
   if (_nodal <= 0 || _nodal > _party_no)
-    throw Exception("qic::discord_space::change_party",
+    throw Exception("qic::discord_space::reset_party",
                     "Invalid measured party index!");
 #endif
 
@@ -720,7 +739,7 @@ inline discord_space<T1>& discord_space<T1>::reset_party(arma::uword nodal) {
 
 #ifndef QICLIB_NO_DEBUG
   if (!_discord2 && !_discord3)
-    throw Exception("qic::discord_space::change_party",
+    throw Exception("qic::discord_space::reset_party",
                     "Measured party is not qubit or qutrit!");
 #endif
 

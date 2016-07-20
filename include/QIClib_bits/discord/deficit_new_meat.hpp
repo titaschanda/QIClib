@@ -22,7 +22,11 @@
 namespace qic {
 
 //******************************************************************************
+
 namespace {
+
+//******************************************************************************
+
 namespace protect {
 
 //******************************************************************************
@@ -313,12 +317,12 @@ deficit_space<T1>::angle_range(const arma::vec& a) {
   if (_deficit2 && a.n_elem != 2)
     throw Exception(
       "qic::deficit_space::set_angle_range",
-      "Number of elements is not 2 when measured party is a qubit!");
+      "Number of elements has to be 2, when measured party is a qubit!");
 
   if (_deficit3 && a.n_elem != 5)
     throw Exception(
       "qic::deficit_space::set_angle_range",
-      "Number of elements is not 5 when measured party is a qutrit!");
+      "Number of elements has to be 5, when measured party is a qutrit!");
 #endif
   
   _deficit_angle_range = a;
@@ -332,12 +336,12 @@ deficit_space<T1>::initial_angle(const arma::vec& a) {
   if (_deficit2 && a.n_elem != 2)
     throw Exception(
       "qic::deficit_space::set_angle_initial",
-      "Number of elements is not 2 when measured party is a qubit!");
+      "Number of elements has to be 2, when measured party is a qubit!");
 
   if (_deficit3 && a.n_elem != 5)
     throw Exception(
       "qic::deficit_space::set_angle_initial",
-      "Number of elements is not 5 when measured party is a qutrit!");
+      "Number of elements has to be 5, when measured party is a qutrit!");
 #endif
   
   _deficit_angle_ini = a;
