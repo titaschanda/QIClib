@@ -165,7 +165,7 @@ inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
     throw Exception("qic::renyi_prob", Exception::type::OUT_OF_RANGE);
 
   if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::renyi", "Invalid probaility distribution");
+    throw Exception("qic::renyi_prob", "Invalid probaility distribution");
 #endif
 
   const auto& prob = as_Col(prob2);
@@ -268,7 +268,7 @@ inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
     throw Exception("qic::tsallis_prob", Exception::type::OUT_OF_RANGE);
 
   if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::tsallis", "Invalid probaility distribution");
+    throw Exception("qic::tsallis_prob", "Invalid probaility distribution");
 #endif
 
   const auto& prob = as_Col(prob2);
@@ -304,10 +304,158 @@ template <
     std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value, T1>::type>
 inline TR tsallis_prob(const std::initializer_list<T1>& prob1,
                        const T2& alpha) {
-  return renyi_prob(static_cast<arma::Col<double> >(prob1),
-                    static_cast<double>(alpha));
+  return tsallis_prob(static_cast<arma::Col<double> >(prob1),
+                      static_cast<double>(alpha));
 }
 
 //******************************************************************************
+
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
+inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
+  const auto& prob1 = as_Mat(prob11);
+  const auto& prob2 = as_Mat(prob12);
+
+#ifndef QICLIB_NO_DEBUG
+  if (prob1.n_elem == 0 || prob2.n_elem == 0)
+    throw Exception("qic::rel_entropy_prob", Exception::type::ZERO_SIZE);
+
+  if (prob1.n_cols != 1 || prob2.n_cols !=1)
+    throw Exception("qic::rel_entropy_prob", Exception::type::MATRIX_NOT_CVECTOR);
+
+  if (prob1.n_elem != prob2.n_elem)
+    throw Exception("qic::rel_entropy_prob", Exception::type::SIZE_MISMATCH);
+
+  if (arma::any(as_Col(prob1) < -_precision::eps<trait::pT<T1> >::value) ||
+      arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+    throw Exception("qic::rel_entropy_prob", "Invalid probaility distribution");
+#endif
+
+  trait::pT<T1> ret(0.0);
+  for(arma::uword ii = 0; ii < prob1.n_elem; ++ii) {
+    ret += prob1.at(ii) > _precision::eps<trait::pT<T1> >::value
+             ? prob1.at(ii) * log2(prob1.at(ii) / prob2.at(ii))
+             : 0.0;
+  }
+
+  return ret;
+}
+
+//****************************************************************************
+
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<T1>::value, T1>::type>
+inline TR rel_entropy_prob(const std::vector<T1>& prob1,
+                           const std::vector<T1>& prob2) {
+  return rel_entropy_prob(static_cast<arma::Col<T1> >(prob1),
+                          static_cast<arma::Col<T1> >(prob2));
+}
+
+//****************************************************************************
+
+template <
+  typename T1,
+  typename TR = typename std::enable_if<
+    std::is_arithmetic<T1>::value, T1>::type>
+inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
+                           const std::initializer_list<T1>& prob2) {
+  return rel_entropy_prob(static_cast<arma::Col<double> >(prob1),
+                          static_cast<arma::Col<double> >(prob2));
+}
+
+//******************************************************************************
+
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value
+            || is_same_pT_var<T1, T2>::value, trait::pT<T1> >::type>
+inline TR rel_entropy(const T1& rho11, const T2& rho12) {
+  const auto& rho1 = as_Mat(rho11);
+  const auto& rho2 = as_Mat(rho12);
+
+  bool checkV1 = true;
+  if (rho1.n_cols == 1)
+    checkV1 = false;
+
+  bool checkV2 = true;
+  if (rho2.n_cols == 1)
+    checkV2 = false;
+
+  
+#ifndef QICLIB_NO_DEBUG
+  if (rho1.n_elem == 0 || rho2.n_elem == 0)
+    throw Exception("qic::rel_entropy", Exception::type::ZERO_SIZE);
+
+  if (checkV1)
+    if (rho1.n_rows != rho1.n_cols)
+      throw Exception("qic::rel_entropy",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (checkV2)
+    if (rho2.n_rows != rho2.n_cols)
+      throw Exception("qic::rel_entropy",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (rho1.n_rows != rho2.n_rows)
+    throw Exception("qic::rel_entropy", Exception::type::SIZE_MISMATCH);
+#endif
+
+  arma::Col<trait::pT<T1> > eigval1;
+  arma::Mat<trait::eT<T1> > eigvec1;
+
+  arma::Col<trait::pT<T2> > eigval2;
+  arma::Mat<trait::eT<T2> > eigvec2;
+  
+  
+  if(checkV1) {
+    if (rho1.n_rows > 20)
+      arma::eig_sym(eigval1, eigvec1, rho1, "dc");
+    else 
+      arma::eig_sym(eigval1, eigvec1, rho1, "std");
+
+  } else {
+    if (rho1.n_cols > 20)
+      arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "dc");
+    else 
+      arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "std");
+  }
+  
+
+  if(checkV2) {
+    if (rho2.n_rows > 20)
+      arma::eig_sym(eigval2, eigvec2, rho2, "dc");
+    else 
+      arma::eig_sym(eigval2, eigvec2, rho2, "std");
+
+  } else {
+    if (rho2.n_cols > 20)
+      arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "dc");
+    else 
+      arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "std");
+  }
+
+  trait::pT<T1> ret(0.0);
+  
+  for (arma::uword ii = 0; ii < eigval1.n_elem; ++ii) {
+    ret += eigval1(ii) > _precision::eps<trait::pT<T1> >::value
+             ? eigval1(ii) * log2(eigval1.at(ii))
+             : 0.0;
+    
+    for (arma::uword jj = 0; jj < eigval2.n_elem; ++jj) {
+      ret -= eigval1(ii) > _precision::eps<trait::pT<T1> >::value
+               ? eigval1(ii) * log2(eigval2.at(jj)) *
+                   std::real(std::pow(
+                     arma::as_scalar(eigvec1.col(ii).t() * eigvec2.col(jj)), 2))
+               : 0.0;
+    }
+  }
+  return ret;
+}
+
+//****************************************************************************
+
+
+
 
 }  // namespace qic

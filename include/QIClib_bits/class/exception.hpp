@@ -41,9 +41,9 @@ class Exception : public std::exception {
     MATRIX_NOT_SQUARE_OR_VECTOR,
     MATRIX_MISMATCH_SUBSYS,  //
     SUBSYS_MISMATCH_DIMS,
-    INVALID_SUBSYS,  //
-    INVALID_DIMS,    //
-    DIMS_NOT_EQUAL,
+    INVALID_SUBSYS,        //
+    INVALID_DIMS,          //
+    DIMS_NOT_EQUAL,        //
     DIMS_MISMATCH_MATRIX,  //
     DIMS_MISMATCH_CVECTOR,
     DIMS_MISMATCH_RVECTOR,
