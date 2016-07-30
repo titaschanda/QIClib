@@ -102,6 +102,7 @@
 #include "QIClib_bits/function/ent_check_CMC.hpp"
 #include "QIClib_bits/function/concurrence.hpp"
 #include "QIClib_bits/function/EoF.hpp"
+#include "QIClib_bits/function/coherence.hpp"
 #include "QIClib_bits/function/distance.hpp"
 #include "QIClib_bits/function/channel.hpp"
 #include "QIClib_bits/function/schmidt.hpp"

@@ -24,5 +24,9 @@ Version 0.0.4 - April 20, 2016
     - added is_diagonalizable
 
 Version 0.0.5 - Development version
+    - bug fix to tsallis_prob
     - added gram-schmidt
     - added dense_to_sparse, sparse_to_dense
+    - added space discord_space, deficit_space
+    - added is_Normal
+    - added rel_entropy, rel_entropy_prob
