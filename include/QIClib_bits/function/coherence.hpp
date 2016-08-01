@@ -80,7 +80,7 @@ inline TR l1_coh(const T1& rho1, const T2& U1) {
     checkV = false;
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0 || U.n_elem)
+  if (p.n_elem == 0 || U.n_elem == 0)
     throw Exception("qic::l1_coh", Exception::type::ZERO_SIZE);
 
   if (checkV)
@@ -99,6 +99,73 @@ inline TR l1_coh(const T1& rho1, const T2& U1) {
     return l1_coh((U * p * U.t()).eval());
   else
     return l1_coh((U * p).eval());
+}
+
+//******************************************************************************
+
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+inline TR rel_entropy_coh(const T1& rho1) {
+  const auto& p = as_Mat(rho1);
+
+  bool checkV = true;
+  if (p.n_cols == 1)
+    checkV = false;
+
+#ifndef QICLIB_NO_DEBUG
+  if (p.n_elem == 0)
+    throw Exception("qic::rel_entropy_coh", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (p.n_rows != p.n_cols)
+      throw Exception("qic::rel_entropy_coh",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+#endif
+
+  if (checkV)
+    return shannon(arma::real(arma::diagvec(p))) - entropy(p);
+
+  else
+    return shannon(arma::pow(arma::abs(p), 2.0));
+}
+
+//******************************************************************************
+
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value ||
+              is_same_pT_var<T1, T2>::value,
+            trait::pT<T1> >::type>
+inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
+  const auto& p = as_Mat(rho1);
+  const auto& U = as_Mat(U1);
+
+  bool checkV = true;
+  if (p.n_cols == 1)
+    checkV = false;
+
+#ifndef QICLIB_NO_DEBUG
+  if (p.n_elem == 0 || U.n_elem == 0)
+    throw Exception("qic::rel_entropy_coh", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (p.n_rows != p.n_cols)
+      throw Exception("qic::rel_entropy_coh",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (U.n_rows != U.n_cols)
+    throw Exception("qic::rel_entropy_coh", Exception::type::MATRIX_NOT_SQUARE);
+
+  if (p.n_rows != U.n_rows)
+    throw Exception("qic::rel_entropy_coh",
+                    Exception::type::DIMS_MISMATCH_MATRIX);
+#endif
+
+  if (checkV)
+    return rel_entropy_coh((U * p * U.t()).eval());
+  else
+    return rel_entropy_coh((U * p).eval());
 }
 
 //******************************************************************************

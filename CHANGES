@@ -27,6 +27,7 @@ Version 0.0.5 - Development version
     - bug fix to tsallis_prob
     - added gram-schmidt
     - added dense_to_sparse, sparse_to_dense
-    - added space discord_space, deficit_space
+    - added discord_space, deficit_space
     - added is_Normal
     - added rel_entropy, rel_entropy_prob
+	- added coherence measures, l1 norm coherence and relative entropy of coherence
