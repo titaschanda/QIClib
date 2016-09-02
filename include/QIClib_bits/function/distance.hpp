@@ -39,7 +39,7 @@ inline TR HS_dist(const T1& rho11, const T2& rho12) {
     throw Exception("qic::HS_dist", Exception::type::MATRIX_NOT_SQUARE);
 
   if (rho1.n_rows != rho2.n_rows)
-    throw Exception("qic::HS_dist", Exception::type::SIZE_MISMATCH);
+    throw Exception("qic::HS_dist", Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   auto rho3 = (rho1 - rho2).eval();
@@ -65,7 +65,7 @@ inline TR tr_dist(const T1& rho11, const T2& rho12) {
     throw Exception("qic::tr_dist", Exception::type::MATRIX_NOT_SQUARE);
 
   if (rho1.n_rows != rho2.n_rows)
-    throw Exception("qic::tr_dist", Exception::type::SIZE_MISMATCH);
+    throw Exception("qic::tr_dist", Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   auto rho3 = (rho1 - rho2).eval();
@@ -92,7 +92,7 @@ inline TR fidelity(const T1& rho11, const T2& rho12) {
     throw Exception("qic::fidelity", Exception::type::MATRIX_NOT_SQUARE);
 
   if (rho1.n_rows != rho2.n_rows)
-    throw Exception("qic::fidelity", Exception::type::SIZE_MISMATCH);
+    throw Exception("qic::fidelity", Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   auto rho3 = sqrtm_sym((sqrtm_sym(rho1) * rho2 * sqrtm_sym(rho1)).eval());
@@ -118,7 +118,7 @@ inline TR bures_dist(const T1& rho11, const T2& rho12) {
     throw Exception("qic::bures_dist", Exception::type::MATRIX_NOT_SQUARE);
 
   if (rho1.n_rows != rho2.n_rows)
-    throw Exception("qic::bures_dist", Exception::type::SIZE_MISMATCH);
+    throw Exception("qic::bures_dist", Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
   auto rho3 = sqrtm_sym((sqrtm_sym(rho1) * rho2 * sqrtm_sym(rho1)).eval());
   auto fid = std::real(arma::trace(rho3));

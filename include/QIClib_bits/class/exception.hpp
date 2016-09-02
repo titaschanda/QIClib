@@ -62,6 +62,7 @@ class Exception : public std::exception {
     NO_CODEWORD,
     OUT_OF_RANGE,
     TYPE_MISMATCH,  //
+    MATRIX_SIZE_MISMATCH,
     SIZE_MISMATCH,  //
     UNDEFINED_type,
     CUSTOM_EXCEPTION
@@ -219,6 +220,11 @@ class Exception : public std::exception {
       _msg += "type mismatch!";
       break;
 
+      case type::MATRIX_SIZE_MISMATCH:
+        _msg += "Matrix size mismatch!";
+        break;
+
+      
     case type::SIZE_MISMATCH:
       _msg += "Size mismatch!";
       break;

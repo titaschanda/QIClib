@@ -39,7 +39,7 @@ constexpr std::complex<T1> cond_I<std::complex<T1> >::value;
 //******************************************************************************
 
 #ifndef QICLIB_MAXQDIT_COUNT
-constexpr arma::uword MAXQDIT = 24;
+constexpr arma::uword MAXQDIT = 64;
 #else
 constexpr arma::uword MAXQDIT = QICLIB_MAXQDIT_COUNT;
 #endif

@@ -26,7 +26,7 @@ namespace qic {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR gram_schmidt(const T1& rho1, bool normalize = true) {
+inline TR gram_schmidt_old(const T1& rho1, bool normalize = true) {
   const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -37,37 +37,57 @@ inline TR gram_schmidt(const T1& rho1, bool normalize = true) {
     throw Exception("qic::gram_schmidt", "Invalid number of columns!");
 #endif
 
-  TR ret = rho;
-  TR ret2(rho.n_rows, rho.n_cols);
-  arma::uword count(0);
+  arma::Mat<trait::eT<T1> > ret(rho.n_rows, rho.n_cols);
+  arma::Mat<trait::eT<T1> > prj =
+    arma::eye<arma::Mat<trait::eT<T1> > >(rho.n_rows, rho.n_rows);
 
-  for (arma::uword i = 0; i < rho.n_cols; ++i) {
-    trait::pT<T1> norm1 = arma::norm(ret.col(i));
-
+  arma::uword pos(0);
+  for (; pos < rho.n_cols; ++pos) {
+    auto norm1 = arma::norm(rho.col(pos));
     if (norm1 > _precision::eps<trait::pT<T1> >::value) {
-      ret2.col(count) =
-        normalize ? (ret.col(i) / norm1).eval() : ret.col(i).eval();
-      ++count;
-    } else
-      continue;
-
-    for (arma::uword j = i + 1; j < rho.n_cols; ++j) {
-      trait::eT<T1> r =
-        normalize ? cdot(ret2.col(count - 1), ret.col(j))
-                  : cdot(ret2.col(count - 1), ret.col(j)) / (norm1 * norm1);
-      ret.col(j) -= r * ret2.col(count - 1);
+      ret.col(0) =
+        normalize ? (rho.col(pos) / norm1).eval() : rho.col(pos).eval();
+      prj -= normalize
+          ? (ret.col(0) * ret.col(0).t()).eval()
+          : (ret.col(0) * ret.col(0).t() / (norm1 * norm1)).eval();  // check
+      break;
     }
   }
 
-  return ret2.cols(0, count - 1);
+ 
+  arma::uword count(1);
+  for (arma::uword i = pos + 1; i < rho.n_cols; ++i) {
+
+    arma::Col<trait::eT<T1> > entry = prj * rho.col(i);
+    auto norm1 = arma::norm(entry);
+    if (norm1 > _precision::eps<trait::pT<T1> >::value) {
+
+      if (normalize == true) {
+        ret.col(count) = entry / norm1;
+        prj -= ret.col(count) * ret.col(count).t();
+      }
+
+      else {
+        ret.col(count) = std::move(entry);
+        prj -= ret.col(count) * ret.col(count).t() / (norm1 * norm1);
+      }
+      
+      ++count;
+    }
+  }
+
+  if (count != ret.n_cols)
+    ret.shed_cols(count, ret.n_cols - 1);
+
+  return ret;
 }
 
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
-                         std::vector<arma::Col<trait::eT<T1> > > >::type>
-inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
+                         arma::Mat<trait::eT<T1> > >::type>
+inline TR gram_schmidt_old(const std::vector<T1>& rho) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.size() == 0)
     throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
@@ -87,32 +107,35 @@ inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
     throw Exception("qic::gram_schmidt", "Invalid number of column vectors!");
 #endif
 
-  TR ret = rho;
-  TR ret2(rho.size());
-  arma::uword count(0);
+  arma::Mat<trait::eT<T1> > ret(rho[0].eval().n_rows, rho.size());
+  arma::Mat<trait::eT<T1> > prj =
+    arma::eye<arma::Mat<trait::eT<T1> > >(ret.n_rows, ret.n_rows);
 
-  for (arma::uword i = 0; i < rho.size(); ++i) {
-    trait::pT<T1> norm1 = arma::norm(ret[i]);
-
+  arma::uword pos(0);
+  for (; pos < rho.size(); ++pos) {
+    auto norm1 = arma::norm(rho[pos]);
     if (norm1 > _precision::eps<trait::pT<T1> >::value) {
-      ret2[count] =
-        normalize ? (ret[i] / norm1).eval() : ret[i].eval();
-      ++count;
-    } else
-      continue;
-
-    for (arma::uword j = i + 1; j < rho.size(); ++j) {
-      trait::eT<T1> r =
-        normalize ? cdot(ret2[count - 1], ret[j])
-                  : cdot(ret2[count - 1], ret[j]) / (norm1 * norm1);
-      ret[j] -= r * ret2[count - 1];
+      ret.col(0) = rho[pos] / norm1;
+      break;
     }
   }
 
-  auto first = ret2.begin();
-  auto last = first + count;
-  
-  return TR(first, last);
+  prj -= ret.col(0) * ret.col(0).t();
+  arma::uword count(1);
+  for (arma::uword i = pos + 1; i < rho.size(); ++i) {
+    arma::Col<trait::eT<T1> > entry = prj * rho[i];
+    auto norm1 = arma::norm(entry);
+    if (norm1 > _precision::eps<trait::pT<T1> >::value) {
+      ret.col(count) = entry / norm1;
+      prj -= ret.col(count) * ret.col(count).t();
+      ++count;
+    }
+  }
+
+  if (count != ret.n_cols)
+    ret.shed_cols(count, ret.n_cols - 1);
+
+  return ret;
 }
 
 //******************************************************************************
@@ -122,17 +145,17 @@ template <
   typename TR = typename std::enable_if<
     is_floating_point_var<typename arma::get_pod_type<T1>::result>::value,
     arma::Mat<T1> >::type>
-inline TR gram_schmidt(const std::initializer_list<arma::Mat<T1> >& rho,
-                       bool normalize = true) {
+inline TR gram_schmidt_old(const std::initializer_list<arma::Mat<T1> >& rho) {
   return gram_schmidt(static_cast<std::vector<arma::Mat<T1> > >(rho));
 }
 
 //******************************************************************************
 
+
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
-                         arma::field<arma::Col<trait::eT<T1> > > >::type>
-inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
+                         arma::Mat<trait::eT<T1> > >::type>
+inline TR gram_schmidt_old(const arma::field<T1>& rho) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
@@ -152,31 +175,38 @@ inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
     throw Exception("qic::gram_schmidt", "Invalid number of column vectors!");
 #endif
 
-  TR ret(rho);
-  TR ret2(ret.n_elem);
-  arma::uword count(0);
+  arma::Mat<trait::eT<T1> > ret(rho.at(0).eval().n_rows, rho.n_elem);
+  arma::Mat<trait::eT<T1> > prj =
+    arma::eye<arma::Mat<trait::eT<T1> > >(ret.n_rows, ret.n_rows);
 
-  for (arma::uword i = 0; i < ret.n_elem; ++i) {
-    trait::pT<T1> norm1 = arma::norm(ret.at(i));
-
+  arma::uword pos(0);
+  for (; pos < rho.n_elem; ++pos) {
+    auto norm1 = arma::norm(rho.at(pos));
     if (norm1 > _precision::eps<trait::pT<T1> >::value) {
-      ret2.at(count) =
-        normalize ? (ret.at(i) / norm1).eval() : ret.at(i).eval();
-      ++count;
-    } else
-      continue;
-
-    for (arma::uword j = i + 1; j < ret.n_elem; ++j) {
-      trait::eT<T1> r =
-        normalize ? cdot(ret2.at(count - 1), ret.at(j))
-                  : cdot(ret2.at(count - 1), ret.at(j)) / (norm1 * norm1);
-      ret.at(j) -= r * ret2.at(count - 1);
+      ret.col(0) = rho.at(pos) / norm1;
+      break;
     }
   }
 
-  return ret2.rows(0,count-1);
+  prj -= ret.col(0) * ret.col(0).t();
+  arma::uword count(1);
+  for (arma::uword i = pos + 1; i < rho.n_elem; ++i) {
+    arma::Col<trait::eT<T1> > entry = prj * rho.at(i);
+    auto norm1 = arma::norm(entry);
+    if (norm1 > _precision::eps<trait::pT<T1> >::value) {
+      ret.col(count) = entry / norm1;
+      prj -= ret.col(count) * ret.col(count).t();
+      ++count;
+    }
+  }
+
+  if (count != ret.n_cols)
+    ret.shed_cols(count, ret.n_cols - 1);
+
+  return ret;
 }
 
 //******************************************************************************
+
 
 }  // namespace qic

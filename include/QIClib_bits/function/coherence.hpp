@@ -92,7 +92,7 @@ inline TR l1_coh(const T1& rho1, const T2& U1) {
     throw Exception("qic::l1_coh", Exception::type::MATRIX_NOT_SQUARE);
 
   if (p.n_rows != U.n_rows)
-    throw Exception("qic::l1_coh", Exception::type::DIMS_MISMATCH_MATRIX);
+    throw Exception("qic::l1_coh", Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   if (checkV)
@@ -159,7 +159,7 @@ inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
 
   if (p.n_rows != U.n_rows)
     throw Exception("qic::rel_entropy_coh",
-                    Exception::type::DIMS_MISMATCH_MATRIX);
+                    Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   if (checkV)
