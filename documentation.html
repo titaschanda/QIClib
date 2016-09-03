@@ -249,7 +249,7 @@
 	  <hr> <br>
 
 
-	  <a name=eps></a>
+	  <a name="eps"></a>
 	  <b>_precision::eps</b><br><br>
 	  <ul>
 	    <li>Precision for floating point arithmetic. </li><br> 
@@ -279,7 +279,7 @@
 	  <hr><br>
 
 
-	  <a name=spm></a>
+	  <a name="spm"></a>
 	  <b>SPM&lt;type&gt;<br> spm <br> fspm</b><br><br>
 	  <ul>
 	    <li> Several predefined <i> complex </i> special matrices and vectors  like basis states, projectors and operators. 
@@ -438,7 +438,7 @@
 
 
 	  
-	  <a name=is_Hermitian></a>
+	  <a name="is_Hermitian"></a>
 	  <b>is_Hermitian(A)<br>is_Hermitian(A, atol, rtol)</b><br><br>
 	  <ul>
 	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric or Hermitian, else <code>false</code>.</li><br>
@@ -456,7 +456,7 @@
 
 
 
-	  <a name=is_Unitary></a>
+	  <a name="is_Unitary"></a>
 	  <b>is_Unitary(A)<br>is_Unitary(A, atol, rtol)</b><br><br>
 	  <ul>
 	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal or unitary, else <code>false</code>.</li><br>
@@ -473,13 +473,13 @@
 
 
 
-	  <a name=is_pure></a>
+	  <a name="is_pure"></a>
 	  <b>is_pure(A)<br>is_pure(A, check_norm = true)<br>is_pure(A, check_norm, tol)</b><br><br>
 	  <ul>
-	    <li> Check purity of a density matrix. Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li><br>
+	    <li> Check purity of a row/column vector or density matrix. Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li><br>
 	    
 	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and normalisation of the state will 
-	      not be checked and <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or 
+	      be checked and <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or 
 	      <code>float</code> depending on the element type of <code>A</code>.</li>
 	    
 	  </ul>
@@ -490,7 +490,7 @@
 	  
 
 
-	  <a name=is_valid_state></a>
+	  <a name="is_valid_state"></a>
 	  <b>is_valid_state(A)<br>is_valid_state(A, tol)</b><br><br>
 	  <ul>
 	    <li> Check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a 
