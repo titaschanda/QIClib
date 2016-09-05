@@ -68,7 +68,7 @@ template <typename T1 = arma::cx_mat> class discord_space {
   //****************************************************************************
 
   inline discord_space(const T1& rho1, arma::uword nodal, arma::uvec dim);
-  inline discord_space(const T1& rho1, arma::uword nodal, arma::uword dim);
+  inline discord_space(const T1& rho1, arma::uword nodal, arma::uword dim = 2);
 
   //****************************************************************************
 

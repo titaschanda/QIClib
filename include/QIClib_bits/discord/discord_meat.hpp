@@ -205,7 +205,7 @@ inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
 
 template <typename T1>
 inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
-                                        arma::uword dim = 2)
+                                        arma::uword dim)
     : _rho(as_Mat(rho1)), _nodal(nodal), _is_minfo_computed(false),
       _is_computed(false), _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
