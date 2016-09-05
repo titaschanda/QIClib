@@ -33,30 +33,16 @@
 #include <random>
 #include <limits>
 
-#define QICLIB_NLOPT
-// Comment out the previous line, if you don't want to use
-// NLopt dependent features
 
-#ifdef QICLIB_DONT_USE_NLOPT
-#undef QICLIB_NLOPT
-#endif
-
-#if (__GNUC__ && !__clang__)
-
-#define _QICLIB_UNUSED_ __attribute__((unused))
-#else
-#define _QICLIB_UNUSED_
-#endif
-
-#include "QIClib_bits/basic/openmp.hpp"
+#include "QIClib_bits/basic/macro.hpp"
 #include "QIClib_bits/basic/type_traits.hpp"
 
 #include "QIClib_bits/internal/first.hpp"
 #include "QIClib_bits/internal/singleton.hpp"
+#include "QIClib_bits/class/init.hpp"
 
 #include "QIClib_bits/class/exception.hpp"
 #include "QIClib_bits/class/constants.hpp"
-#include "QIClib_bits/class/init.hpp"
 #include "QIClib_bits/class/random_devices.hpp"
 
 
@@ -109,21 +95,27 @@
 #include "QIClib_bits/function/gram_schmidt.hpp"
 #include "QIClib_bits/function/schatten.hpp"
 
-#ifdef QICLIB_NLOPT
 
 // NLopt dependent features
-
+#ifdef QICLIB_NLOPT
 #include <nlopt.hpp>
-#include "QIClib_bits/discord/default_config.hpp"
-#include "QIClib_bits/discord/discord_reg.hpp"
-#include "QIClib_bits/discord/discord3_reg.hpp"
-#include "QIClib_bits/discord/deficit_reg.hpp"
-#include "QIClib_bits/discord/deficit3_reg.hpp"
-#include "QIClib_bits/discord/discord.hpp"
-#include "QIClib_bits/discord/discord3.hpp"
-#include "QIClib_bits/discord/deficit.hpp"
-#include "QIClib_bits/discord/deficit3.hpp"
-
+#ifdef QICLIB_USE_OLD_DISCORD
+#include "QIClib_bits/discord/old/default_config.hpp"
+#include "QIClib_bits/discord/old/discord_reg.hpp"
+#include "QIClib_bits/discord/old/discord3_reg.hpp"
+#include "QIClib_bits/discord/old/deficit_reg.hpp"
+#include "QIClib_bits/discord/old/deficit3_reg.hpp"
+#include "QIClib_bits/discord/old/discord.hpp"
+#include "QIClib_bits/discord/old/discord3.hpp"
+#include "QIClib_bits/discord/old/deficit.hpp"
+#include "QIClib_bits/discord/old/deficit3.hpp"
+#else
+#include "QIClib_bits/discord/to_pass.hpp"
+#include "QIClib_bits/discord/discord_bones.hpp"
+#include "QIClib_bits/discord/discord_meat.hpp"
+#include "QIClib_bits/discord/deficit_bones.hpp"
+#include "QIClib_bits/discord/deficit_meat.hpp"
+#endif
 #endif
 
 #endif

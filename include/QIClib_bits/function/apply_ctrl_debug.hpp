@@ -28,8 +28,8 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
-                     arma::uvec sys, arma::uvec dim) {
+inline TR apply_ctrl_debug(const T1& rho1, const T2& A, arma::uvec ctrl,
+                           arma::uvec sys, arma::uvec dim) {
   using eTR = typename eT_promoter_var<T1, T2>::type;
 
   const auto& rho = as_Mat(rho1);
@@ -153,6 +153,17 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
             J += product[i] * loop_counter[i + n];
           }
 
+          if (o != 0) {
+            arma::uword counter_1(1);
+            for (arma::uword j = 1; j < o; ++j)
+              counter_1 +=
+                loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1]
+                  ? 1
+                  : 0;
+
+            power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
+          }
+
           arma::uword counter(0);
           while (any(sys == i + 1)) {
             if (sys.at(counter) != i + 1) {
@@ -164,17 +175,6 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
             }
           }
         }
-
-        if (o != 0) {
-          arma::uword counter_1(1);
-          for (arma::uword j = 1; j < o; ++j)
-            counter_1 +=
-              loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1] ? 1
-                                                                           : 0;
-
-          power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
-        }
-
         rho_ret.at(I) += Ap.at(power).at(K, L) * rho.at(J);
       }
 
@@ -186,7 +186,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
           p1 = 0;
       }
     }
-    return rho_ret;
+    return rho;
 
   } else {
     arma::Mat<trait::eT<T2> > U(rho.n_rows, rho.n_rows, arma::fill::zeros);
@@ -233,6 +233,17 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
             J += product[i] * loop_counter[i + n];
           }
 
+          if (o != 0) {
+            arma::uword counter_1(1);
+            for (arma::uword j = 1; j < o; ++j)
+              counter_1 +=
+                loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1]
+                  ? 1
+                  : 0;
+
+            power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
+          }
+
           arma::uword counter(0);
           while (any(sys == i + 1)) {
             if (sys.at(counter) != i + 1) {
@@ -244,17 +255,6 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
             }
           }
         }
-
-        if (o != 0) {
-          arma::uword counter_1(1);
-          for (arma::uword j = 1; j < o; ++j)
-            counter_1 +=
-              loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1] ? 1
-                                                                           : 0;
-
-          power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
-        }
-
         U.at(I, J) = Ap.at(power).at(K, L);
       }
 
@@ -277,8 +277,8 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
-                     arma::uvec sys, arma::uword dim = 2) {
+inline TR apply_ctrl_debug(const T1& rho1, const T2& A, arma::uvec ctrl,
+                           arma::uvec sys, arma::uword dim = 2) {
   const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG

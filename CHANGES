@@ -10,8 +10,8 @@ Version 0.0.3 - November 21, 2015
     - bug-fix in tensor
 
 Version 0.0.4 - April 20, 2016
-    - added conv_to_HS
-    - added conv_to_std
+    - added std_to_HS
+    - added HS_to_std
     - added measure
     - _precision::eps is now a class
     - is_H is now is_Hermitian, is_U is now is_Unitary
@@ -25,9 +25,10 @@ Version 0.0.4 - April 20, 2016
 
 Version 0.0.5 - Development version
     - bug fix to tsallis_prob
-    - added gram-schmidt
+    - added gram_schmidt
     - added dense_to_sparse, sparse_to_dense
     - added discord_space, deficit_space
     - added is_Normal
     - added rel_entropy, rel_entropy_prob
 	- added coherence measures, l1 norm coherence and relative entropy of coherence
+	- schmidt_full

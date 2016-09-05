@@ -37,8 +37,8 @@ template <typename T> struct eps<T> {
     std::is_integral<T>::value
       ? 0
       : (std::is_same<trait::RCV<T>, float>::value
-           ? 100.0 * std::numeric_limits<T>::epsilon()
-           : 1000.0 * std::numeric_limits<T>::epsilon());
+         ? QICLIB_FLOAT_PRECISION //std::numeric_limits<T>::epsilon()
+         : QICLIB_DOUBLE_PRECISION); //std::numeric_limits<T>::epsilon());
 };
 
 template <typename T> constexpr T eps<T>::value;

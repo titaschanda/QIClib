@@ -24,15 +24,15 @@ namespace qic {
 //***************************************************************************
 
 template <typename T1>
-inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& m) noexcept {
-  return static_cast<const arma::Col<T1>&>(m);
+inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& V) noexcept {
+  return static_cast<const arma::Col<T1>&>(V);
 }
 
 //***************************************************************************
 
 template <typename T1>
-inline const arma::Col<T1>& as_Col(const arma::Col<T1>& m) noexcept {
-  return m;
+inline const arma::Col<T1>& as_Col(const arma::Col<T1>& V) noexcept {
+  return V;
 }
 
 }  // namespace qic

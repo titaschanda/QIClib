@@ -24,30 +24,30 @@ namespace qic {
 //***************************************************************************
 
 template <typename T1>
-inline const arma::SpMat<T1>& as_SpMat(const arma::SpMat<T1>& m) noexcept {
-  return m;
+inline const arma::SpMat<T1>& as_SpMat(const arma::SpMat<T1>& A) noexcept {
+  return A;
 }
 
 //***************************************************************************
 
 template <typename T1>
-inline const arma::SpMat<T1>& as_SpMat(const arma::SpCol<T1>& m) noexcept {
-  return m;
+inline const arma::SpMat<T1>& as_SpMat(const arma::SpCol<T1>& A) noexcept {
+  return A;
 }
 
 //***************************************************************************
 
 template <typename T1>
-inline const arma::SpMat<T1>& as_SpMat(const arma::SpRow<T1>& m) noexcept {
-  return m;
+inline const arma::SpMat<T1>& as_SpMat(const arma::SpRow<T1>& A) noexcept {
+  return A;
 }
 
 //****************************************************************************
 
 template <typename T1>
 inline arma::SpMat<trait::eT<T1> >
-as_SpMat(const arma::SpBase<trait::eT<T1>, T1>& X) {
-  return X.eval();
+as_SpMat(const arma::SpBase<trait::eT<T1>, T1>& A) {
+  return A.eval();
 }
 
 }  // namespace qic

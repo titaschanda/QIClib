@@ -28,26 +28,26 @@ template <typename T1,
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys,
                    const arma::uvec& dim) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
   const arma::uword n = dim.n_elem;
 
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::sysperm", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::sysperm",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::sysperm", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim) != p.n_rows)
+  if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::sysperm", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (n != sys.n_elem || arma::any(sys == 0) || arma::any(sys > n) ||
@@ -66,7 +66,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);
 
   if (checkV) {
-    arma::Mat<trait::eT<T1> > p_r(p.n_rows, p.n_cols, arma::fill::zeros);
+    arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols, arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
     constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
@@ -90,7 +90,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
         L += productr[i] * loop_counter[sys.at(i) + n - 1];
       }
 
-      p_r.at(K, L) = p.at(I, J);
+      rho_ret.at(K, L) = rho.at(I, J);
 
       ++loop_counter[0];
       while (loop_counter[p1] == MAX[p1]) {
@@ -100,10 +100,10 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
           p1 = 0;
       }
     }
-    return p_r;
+    return rho_ret;
 
   } else {
-    arma::Col<trait::eT<T1> > p_r(p.n_rows, arma::fill::zeros);
+    arma::Col<trait::eT<T1> > rho_ret(rho.n_rows, arma::fill::zeros);
 
     const arma::uword loop_no = n;
     constexpr auto loop_no_buffer = _internal::MAXQDIT + 1;
@@ -124,7 +124,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
         K += productr[i] * loop_counter[sys.at(i) - 1];
       }
 
-      p_r.at(K) = p.at(I);
+      rho_ret.at(K) = rho.at(I);
 
       ++loop_counter[0];
       while (loop_counter[p1] == MAX[p1]) {
@@ -135,7 +135,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       }
     }
 
-    return p_r;
+    return rho_ret;
   }
 }
 
@@ -145,18 +145,18 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::sysperm", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::sysperm",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -165,11 +165,11 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
 #endif
 
   arma::uword n =
-    static_cast<arma::uword>(std::llround(std::log(p.n_rows) / std::log(dim)));
+    static_cast<arma::uword>(std::llround(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return sysperm(p, sys, dim2);
+  return sysperm(rho, sys, dim2);
 }
 
 //******************************************************************************

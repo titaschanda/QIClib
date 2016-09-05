@@ -27,24 +27,24 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  auto p = as_Mat(rho1);
+  auto rho = as_Mat(rho1); // force copy
 
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::Tx", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::Tx", Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::Tx", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim) != p.n_rows)
+  if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::Tx", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
@@ -54,13 +54,13 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 #endif
 
   if (!checkV)
-    p *= p.t();
+    rho *= rho.t();
 
   if (sys.n_elem == dim.n_elem)
-    return p.st();
+    return rho.st();
 
   if (sys.n_elem == 0)
-    return p;
+    return rho;
   
   _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
@@ -100,7 +100,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     }
 
     if (I > K)
-      std::swap(p.at(I, J), p.at(K, L));
+      std::swap(rho.at(I, J), rho.at(K, L));
 
     ++loop_counter[0];
     while (loop_counter[p1] == MAX[p1]) {
@@ -110,7 +110,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
         p1 = 0;
     }
   }
-  return p;
+  return rho;
 }
 
 //******************************************************************************
@@ -119,18 +119,18 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::Tx", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::Tx", Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (dim == 0)
@@ -138,11 +138,11 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 #endif
 
   arma::uword n =
-    static_cast<arma::uword>(std::llround(std::log(p.n_rows) / std::log(dim)));
+    static_cast<arma::uword>(std::llround(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return Tx(p, std::move(sys), std::move(dim2));
+  return Tx(rho, std::move(sys), std::move(dim2));
 }
 
 //******************************************************************************

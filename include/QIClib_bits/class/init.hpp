@@ -23,6 +23,8 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef QICLIB_INIT
+
 namespace qic {
 
 //******************************************************************************
@@ -61,3 +63,5 @@ static const Init& init _QICLIB_UNUSED_ = Init::get_instance();
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

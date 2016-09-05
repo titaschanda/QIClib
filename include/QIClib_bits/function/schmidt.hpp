@@ -112,6 +112,58 @@ inline bool schmidt(const T1& rho1, const arma::uvec& dim,
 
 //******************************************************************************
 
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value, void>::type>
+inline bool schmidt_full(const T1& rho1, const arma::uvec& dim,
+                         arma::Col<trait::pT<T1> >& S,
+                         arma::Mat<trait::eT<T1> >& U,
+                         arma::Mat<trait::eT<T1> >& V) {
+  const auto& rho = as_Mat(rho1);
+
+  bool checkV = true;
+  if (rho.n_cols == 1)
+    checkV = false;
+
+#ifndef QICLIB_NO_DEBUG
+  if (rho.n_elem == 0)
+    return false;
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      return false;
+
+  if (arma::any(dim == 0))
+    return false;
+
+  if (arma::prod(dim) != rho.n_rows)
+    return false;
+
+  if ((dim.n_elem) != 2)
+    return false;
+#endif
+
+  if (checkV) {
+    bool ret = arma::svd(
+      U, S, V, arma::reshape(conv_to_pure(rho), dim.at(1), dim.at(0)).st(),
+      "both", "std");
+
+    if (ret == true)
+      V = arma::conj(V);
+    return (ret);
+
+  } else {
+    bool ret = arma::svd(
+      U, S, V, arma::reshape(rho, dim.at(1), dim.at(0)).st(), "both", "std");
+
+    if (ret == true)
+      V = arma::conj(V);
+    return (ret);
+  }
+}
+
+//******************************************************************************
+
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>

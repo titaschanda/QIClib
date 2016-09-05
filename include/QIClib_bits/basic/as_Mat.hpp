@@ -24,30 +24,32 @@ namespace qic {
 //***************************************************************************
 
 template <typename T1>
-inline const arma::Mat<T1>& as_Mat(const arma::Mat<T1>& m) noexcept {
-  return m;
+inline const arma::Mat<T1>& as_Mat(const arma::Mat<T1>& A) noexcept {
+  return A;
 }
 
 //***************************************************************************
 
 template <typename T1>
-inline const arma::Mat<T1>& as_Mat(const arma::Col<T1>& m) noexcept {
-  return m;
+inline const arma::Mat<T1>& as_Mat(const arma::Col<T1>& A) noexcept {
+  return A;
 }
 
 //***************************************************************************
 
 template <typename T1>
-inline const arma::Mat<T1>& as_Mat(const arma::Row<T1>& m) noexcept {
-  return m;
+inline const arma::Mat<T1>& as_Mat(const arma::Row<T1>& A) noexcept {
+  return A;
 }
 
 //****************************************************************************
 
 template <typename T1>
 inline arma::Mat<trait::eT<T1> >
-as_Mat(const arma::Base<trait::eT<T1>, T1>& X) {
-  return X.eval();
+as_Mat(const arma::Base<trait::eT<T1>, T1>& A) {
+  return A.eval();
 }
+
+//****************************************************************************
 
 }  // namespace qic

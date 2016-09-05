@@ -31,29 +31,44 @@ dense_to_sparse(const T1& rho1,
                 trait::pT<T1> tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = as_Mat(rho1);
   const arma::uword N = rho.n_elem;
-  arma::SpMat<trait::eT<T1> > ret(rho.n_rows, rho.n_cols);
-  arma::uword ii, jj;
+  arma::umat Index(2, N);
+  arma::Col<trait::eT<T1> > value(N);
+
+  arma::uword ii, jj, count(0);
 
   for (ii = 0, jj = 1; jj < N; ii += 2, jj += 2) {
     if (std::abs(rho[ii]) > tol) {
       arma::uword i = ii % rho.n_rows;
       arma::uword j = ii / rho.n_rows;
-      ret.at(i, j) = rho[ii];
+      Index.at(0, count) = i;
+      Index.at(1, count) = j;
+      value.at(count) = rho[ii];
+      ++count;
     }
 
     if (std::abs(rho[jj]) > tol) {
       arma::uword i = jj % rho.n_rows;
       arma::uword j = jj / rho.n_rows;
-      ret.at(i, j) = rho[jj];
+      Index.at(0, count) = i;
+      Index.at(1, count) = j;
+      value.at(count) = rho[jj];
+      ++count;
     }
   }
   if (ii < N) {
     if (std::abs(rho[ii]) > tol) {
       arma::uword i = ii % rho.n_rows;
       arma::uword j = ii / rho.n_rows;
-      ret.at(i, j) = rho[ii];
+      Index.at(0, count) = i;
+      Index.at(1, count) = j;
+      value.at(count) = rho[ii];
+      ++count;
     }
   }
+
+  arma::SpMat<trait::eT<T1> > ret(false, Index.cols(0, count - 1),
+                                  value.rows(0, count - 1), rho.n_rows,
+                                  rho.n_cols, false, false);
 
   return ret;
 }

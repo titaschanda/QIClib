@@ -27,25 +27,25 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::TrX", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::TrX",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::TrX", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim) != p.n_rows)
+  if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::TrX", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
@@ -56,18 +56,18 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   if (sys.n_elem == dim.n_elem) {
     if (checkV)
-      return {arma::trace(p)};
+      return {arma::trace(rho)};
     else
-      return {p.t() * p};
+      return {rho.t() * rho};
   }
 
   if (sys.n_elem == 0) {
     if (checkV)
-      return p;
+      return rho;
     else
-      return p * p.t();
+      return rho * rho.t();
   }
-    
+
   _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
@@ -82,7 +82,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   }
 
   arma::uword dimtrace = arma::prod(dim(sys - 1));
-  arma::uword dimkeep = p.n_rows / dimtrace;
+  arma::uword dimkeep = rho.n_rows / dimtrace;
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
@@ -94,7 +94,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   for (arma::sword i = n - m - 2; i > -1; --i)
     productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
 
-  arma::Mat<trait::eT<T1> > tr_p(dimkeep, dimkeep, arma::fill::zeros);
+  arma::Mat<trait::eT<T1> > tr_rho(dimkeep, dimkeep, arma::fill::zeros);
 
   const arma::uword loop_no = 2 * n;
   constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
@@ -132,7 +132,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
       }
     }
 
-    tr_p.at(K, L) += checkV ? p.at(I, J) : p.at(I) * std::conj(p.at(J));
+    tr_rho.at(K, L) += checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));
 
     ++loop_counter[0];
     while (loop_counter[p1] == MAX[p1]) {
@@ -143,7 +143,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     }
   }
 
-  return tr_p;
+  return tr_rho;
 }
 
 //******************************************************************************
@@ -152,18 +152,18 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::TrX", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::TrX",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -171,12 +171,12 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
     throw Exception("qic::TrX", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n =
-    static_cast<arma::uword>(std::llround(std::log(p.n_rows) / std::log(dim)));
+  arma::uword n = static_cast<arma::uword>(
+    std::llround(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return TrX(p, std::move(sys), std::move(dim2));
+  return TrX(rho, std::move(sys), std::move(dim2));
 }
 
 //******************************************************************************
@@ -188,18 +188,18 @@ template <typename T1,
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
               arma::uvec dim) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::TrX", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::TrX",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -214,26 +214,26 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
       sys.n_elem != arma::unique(sys).eval().n_elem)
     throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
 
-  /*  if ((Sbasis.n_elem != p.n_rows) ||
-      arma::any(Sbasis > arma::prod(dim)) ||
-      Sbasis.n_elem != arma::unique(Sbasis).eval().n_elem)
-      throw Exception("qic::TrX", "Invalid basis!");*/
+  if ((Sbasis.n_elem != rho.n_rows) ||
+    arma::any(Sbasis > arma::prod(dim)) ||
+    Sbasis.n_elem != arma::unique(Sbasis).eval().n_elem)
+    throw Exception("qic::TrX", "Invalid basis!");
 #endif
 
   if (sys.n_elem == dim.n_elem) {
     if (checkV)
-      return {arma::trace(p)};
+      return {arma::trace(rho)};
     else
-      return {p.t() * p};
+      return {rho.t() * rho};
   }
 
   if (sys.n_elem == 0) {
     if (checkV)
-      return p;
+      return rho;
     else
-      return p * p.t();
+      return rho * rho.t();
   }
-    
+
   _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
@@ -260,7 +260,7 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
   for (arma::sword i = n - m - 2; i > -1; --i)
     productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
 
-  arma::Mat<trait::eT<T1> > tr_p(dimkeep, dimkeep, arma::fill::zeros);
+  arma::Mat<trait::eT<T1> > tr_rho(dimkeep, dimkeep, arma::fill::zeros);
 
   const arma::uword loop_no = 2 * n;
   constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
@@ -281,7 +281,7 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
   while (loop_counter[loop_no] == 0) {
     arma::uword I(0), J(0), K(0), L(0), n_to_k(0);
     arma::uword Icount(0), Jcount(0);
-    
+
     for (arma::uword i = 0; i < n; ++i) {
       if (arma::any(sys == i + 1)) {
         I += product[i] * loop_counter[i];
@@ -293,27 +293,24 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
       }
     }
 
-    while (Icount < Sbasis.n_elem && I != Sbasis.at(Icount))
-      ++Icount;
+    while (Icount < Sbasis.n_elem && I != Sbasis.at(Icount)) ++Icount;
 
-    while (Jcount < Sbasis.n_elem && J != Sbasis.at(Jcount))
-      ++Jcount;
+    while (Jcount < Sbasis.n_elem && J != Sbasis.at(Jcount)) ++Jcount;
 
     if (Icount < Sbasis.n_elem && Jcount < Sbasis.n_elem) {
-      
+
       for (arma::uword i = 0; i < n; ++i) {
         if (arma::any(keep == i + 1)) {
           K += productr[n_to_k] * loop_counter[i];
           L += productr[n_to_k] * loop_counter[i + n];
           ++n_to_k;
         }
-      }      
-  
-      tr_p.at(K, L) += checkV
-          ? p.at(Icount, Jcount)
-          : p.at(Icount) * std::conj(p.at(Jcount));
+      }
+
+      tr_rho.at(K, L) += checkV ? rho.at(Icount, Jcount)
+                                : rho.at(Icount) * std::conj(rho.at(Jcount));
     }
-    
+
     ++loop_counter[0];
     while (loop_counter[p1] == MAX[p1]) {
       loop_counter[p1] = 0;
@@ -323,10 +320,10 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
     }
   }
 
-  return tr_p;
+  return tr_rho;
 }
 
-} // namespace experimental
+}  // namespace experimental
 
 //******************************************************************************
 

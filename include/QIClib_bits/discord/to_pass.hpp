@@ -22,8 +22,8 @@
 namespace qic {
 
 //******************************************************************************
-namespace {
-namespace protect {
+
+namespace protect_dis {
 
 //******************************************************************************
 
@@ -39,12 +39,17 @@ template <typename T1> struct TO_PASS {
           const arma::Mat<trait::pT<T1> >& d,
           const arma::Mat<trait::pT<T1> >& e, arma::uword f, arma::uword g)
       : rho(a), eye2(c), eye3(d), eye4(e), nodal(f), party_no(g) {}
-  ~TO_PASS() {}
+
+  ~TO_PASS() = default;
+
+  TO_PASS() = delete;
+  TO_PASS(const TO_PASS&) = delete;
+  TO_PASS& operator=(const TO_PASS&) = delete;
 };
 
 //******************************************************************************
 
-}}  // namespace protect
+}  // namespace protect
 
 //******************************************************************************
 

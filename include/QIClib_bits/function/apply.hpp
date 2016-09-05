@@ -29,22 +29,22 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply(const T1& rho1, const T2& A, arma::uvec sys, arma::uvec dim) {
-  const auto& p = as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
   const auto& A1 = as_Mat(A);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
-  if (p.n_cols == 1)
+  if (rho.n_cols == 1)
     checkV = false;
 
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
 
   if (A1.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::apply",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -54,7 +54,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec sys, arma::uvec dim) {
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::apply", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim) != p.n_rows)
+  if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (arma::prod(dim(sys - 1)) != A1.n_rows)
@@ -66,7 +66,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec sys, arma::uvec dim) {
     throw Exception("qic::apply", Exception::type::INVALID_SUBSYS);
 #endif
 
-  return apply_ctrl(p, A1, {}, std::move(sys), std::move(dim));
+  return apply_ctrl(rho, A1, {}, std::move(sys), std::move(dim));
 }
 
 //******************************************************************************

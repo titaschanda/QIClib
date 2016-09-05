@@ -19,16 +19,51 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef QICLIB_PARALLEL
+// GCC unused variable warning
+#if (__GNUC__ && !__clang__)
+#define _QICLIB_UNUSED_ __attribute__((unused))
+#else
+#define _QICLIB_UNUSED_
+#endif
 
+// Maximum qudit count
+#ifndef QICLIB_MAXQDIT_COUNT
+#define QICLIB_MAXQDIT_COUNT 40
+#endif
+
+// floating point precision
+#ifndef QICLIB_FLOAT_PRECISION
+#define QICLIB_FLOAT_PRECISION (100.0 * std::numeric_limits<float>::epsilon())
+#endif
+#ifndef QICLIB_DOUBLE_PRECISION
+#define QICLIB_DOUBLE_PRECISION (100.0 * std::numeric_limits<double>::epsilon())
+#endif
+
+// init on or off
+#define QICLIB_INIT
+#ifdef QICLIB_NO_INIT_MESSAGE
+#undef QICLIB_INIT
+#endif
+
+// nlopt features on or off
+#define QICLIB_NLOPT
+#ifdef QICLIB_DONT_USE_NLOPT
+#undef QICLIB_NLOPT
+#endif
+
+
+#ifdef QICLIB_USE_OLD_DISCORD
+#undef QICLIB_NEW_DISCORD
+#endif
+
+
+// openmp parallelisation
+#ifdef QICLIB_PARALLEL
 #define QICLIB_OPENMP_FOR _Pragma("omp parallel for")
 #define QICLIB_OPENMP_FOR_COLLAPSE_2 _Pragma("omp parallel for collapse(2)")
 #define QICLIB_OPENMP_CRITICAL _Pragma("omp critical")
-
 #else
-
 #define QICLIB_OPENMP_FOR
 #define QICLIB_OPENMP_FOR_COLLAPSE_2
 #define QICLIB_OPENMP_CRITICAL
-
 #endif
