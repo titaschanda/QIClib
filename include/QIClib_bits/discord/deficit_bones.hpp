@@ -68,7 +68,7 @@ template <typename T1 = arma::cx_mat> class deficit_space {
   //****************************************************************************
 
   inline deficit_space(const T1& rho1, arma::uword nodal, arma::uvec dim);
-  inline deficit_space(const T1& rho1, arma::uword nodal, arma::uword dim);
+  inline deficit_space(const T1& rho1, arma::uword nodal, arma::uword dim = 2);
 
   //****************************************************************************
 

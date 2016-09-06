@@ -63,6 +63,10 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<3, 3> >
     proj3;
 
+  struct {
+    typename arma::Col<T1>::template fixed<4> phim, phip, psim, psip;
+  } bell;
+    
  private:
   SPM() {
     S.set_size(4);
@@ -139,6 +143,13 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
     proj3.at(0, 3) = proj3.at(0, 0);
     proj3.at(1, 3) = proj3.at(1, 0);
     proj3.at(2, 3) = proj3.at(2, 0);
+
+    //**************************************************************************
+
+    bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
+    bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
+    bell.psim  << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
+    bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
   }
   ~SPM() = default;
 };
