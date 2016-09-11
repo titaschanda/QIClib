@@ -37,18 +37,15 @@
 #include "QIClib_bits/basic/macro.hpp"
 #include "QIClib_bits/basic/type_traits.hpp"
 
-#include "QIClib_bits/internal/first.hpp"
+#include "QIClib_bits/internal/constant.hpp"
 #include "QIClib_bits/internal/singleton.hpp"
+#include "QIClib_bits/basic/as_arma.hpp"
 #include "QIClib_bits/class/init.hpp"
 
 #include "QIClib_bits/class/exception.hpp"
 #include "QIClib_bits/class/constants.hpp"
 #include "QIClib_bits/class/random_devices.hpp"
 
-
-#include "QIClib_bits/basic/as_Mat.hpp"
-#include "QIClib_bits/basic/as_SpMat.hpp"
-#include "QIClib_bits/basic/as_Col.hpp"
 #include "QIClib_bits/basic/is_equal.hpp"
 #include "QIClib_bits/basic/is_Hermitian.hpp"
 #include "QIClib_bits/basic/is_Unitary.hpp"
@@ -61,7 +58,7 @@
 #include "QIClib_bits/basic/dense_to_sparse.hpp"
 #include "QIClib_bits/basic/sparse_to_dense.hpp"
 
-#include "QIClib_bits/internal/second.hpp"
+#include "QIClib_bits/internal/algorithm.hpp"
 
 #include "QIClib_bits/function/Tx.hpp"
 #include "QIClib_bits/function/TrX.hpp"

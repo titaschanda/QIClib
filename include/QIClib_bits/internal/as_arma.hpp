@@ -21,7 +21,52 @@
 
 namespace qic {
 
+namespace _internal {
+
 //***************************************************************************
+
+template <typename T1>
+inline const arma::Mat<T1>& as_Mat(const arma::Mat<T1>& A) noexcept {
+  return A;
+}
+
+//***************************************************************************
+
+template <typename T1>
+inline const arma::Mat<T1>& as_Mat(const arma::Col<T1>& A) noexcept {
+  return A;
+}
+
+//***************************************************************************
+
+template <typename T1>
+inline const arma::Mat<T1>& as_Mat(const arma::Row<T1>& A) noexcept {
+  return A;
+}
+
+//****************************************************************************
+
+template <typename T1>
+inline arma::Mat<trait::eT<T1> >
+as_Mat(const arma::Base<trait::eT<T1>, T1>& A) {
+  return A.eval();
+}
+
+//***************************************************************************
+
+template <typename T1>
+inline const arma::Col<T1>& as_Col(const arma::Mat<T1>& V) noexcept {
+  return static_cast<const arma::Col<T1>&>(V);
+}
+
+//***************************************************************************
+
+template <typename T1>
+inline const arma::Col<T1>& as_Col(const arma::Col<T1>& V) noexcept {
+  return V;
+}
+
+//****************************************************************************
 
 template <typename T1>
 inline const arma::SpMat<T1>& as_SpMat(const arma::SpMat<T1>& A) noexcept {
@@ -49,5 +94,9 @@ inline arma::SpMat<trait::eT<T1> >
 as_SpMat(const arma::SpBase<trait::eT<T1>, T1>& A) {
   return A.eval();
 }
+
+//***************************************************************************
+
+} // namespace _internal
 
 }  // namespace qic
