@@ -25,10 +25,12 @@ namespace qic {
 
 template <typename T1 = arma::cx_mat> class discord_space {
  private:
-  const arma::Mat<trait::eT<T1> >& _rho;
+  T1* _rho;
   arma::uword _nodal;
   arma::uword _party_no;
   arma::uvec _dim;
+  arma::uword _n_rows;
+  arma::uword _n_cols;
 
   trait::pT<T1> _mutual_info;
   trait::pT<T1> _result;
@@ -53,7 +55,9 @@ template <typename T1 = arma::cx_mat> class discord_space {
   arma::vec _discord_angle_ini;
 
   inline void init(arma::uvec dim);
+  inline void check_size_change();
   inline void minfo_p();
+  inline void default_setting();
   
   //****************************************************************************
 
@@ -67,8 +71,8 @@ template <typename T1 = arma::cx_mat> class discord_space {
   
   //****************************************************************************
 
-  inline discord_space(const T1& rho1, arma::uword nodal, arma::uvec dim);
-  inline discord_space(const T1& rho1, arma::uword nodal, arma::uword dim = 2);
+  inline discord_space(T1* rho1, arma::uword nodal, arma::uvec dim);
+  inline discord_space(T1* rho1, arma::uword nodal, arma::uword dim = 2);
 
   //****************************************************************************
 
@@ -86,12 +90,16 @@ template <typename T1 = arma::cx_mat> class discord_space {
 
   inline discord_space& compute();
   inline discord_space& compute_reg();
-  inline const arma::Col<trait::pT<T1> >& opt_angles() noexcept;
-  inline const trait::pT<T1>& result() noexcept;
-  inline const trait::pT<T1>& result_reg() noexcept;
-  inline const arma::Col<trait::pT<T1> >& result_reg_all() noexcept;
-  inline discord_space& refresh() noexcept;
-  inline discord_space& reset_party(arma::uword);
+  inline const arma::Col<trait::pT<T1> >& opt_angles();
+  inline const trait::pT<T1>& result();
+  inline const trait::pT<T1>& result_reg();
+  inline const arma::Col<trait::pT<T1> >& result_reg_all();
+  inline discord_space& refresh();
+  inline discord_space& reset(arma::uword);
+  inline discord_space& reset(arma::uword, arma::uvec);
+  inline discord_space& reset(arma::uword, arma::uword);
+  inline discord_space& reset(T1*, arma::uword, arma::uvec);
+  inline discord_space& reset(T1*, arma::uword, arma::uword);
 };
 
 //******************************************************************************

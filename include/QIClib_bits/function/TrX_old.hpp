@@ -21,6 +21,8 @@
 
 namespace qic {
 
+namespace old {
+
 //******************************************************************************
 
 template <typename T1,
@@ -169,5 +171,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 }
 
 //******************************************************************************
+
+} // namespace old
 
 }  // namespace qic

@@ -1,5 +1,28 @@
+/*
+ * QIClib (Quantum information and computation library)
+ *
+ * Copyright (c) 2015 - 2016  Titas Chanda (titas.chanda@gmail.com)
+ *
+ * This file is part of QIClib.
+ *
+ * QIClib is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * QIClib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 namespace qic {
+
+namespace experimental {
 
 template <typename T1>
 arma::Mat<typename T1::elem_type>
@@ -196,4 +219,8 @@ BPF_channel(const T1& rho1, arma::uword party_no, typename T1::pod_type p) {
   }
   return rho;
 }
-}
+
+
+} // namespace experimental
+
+} // namespace qic

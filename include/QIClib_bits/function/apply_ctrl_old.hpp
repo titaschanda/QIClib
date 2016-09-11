@@ -21,6 +21,8 @@
 
 namespace qic {
 
+namespace old {
+
 //******************************************************************************
 
 template <typename T1, typename T2,
@@ -313,5 +315,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 }
 
 //******************************************************************************
+
+} // namespace old
 
 }  // namespace qic

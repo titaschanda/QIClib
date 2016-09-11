@@ -21,6 +21,8 @@
 
 namespace qic {
 
+namespace debug {
+
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
@@ -208,5 +210,6 @@ inline TR gram_schmidt_old(const arma::field<T1>& rho) {
 
 //******************************************************************************
 
+} // namespace debug
 
 }  // namespace qic

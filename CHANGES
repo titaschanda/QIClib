@@ -31,4 +31,4 @@ Version 0.0.5 - Development version
     - added is_Normal
     - added rel_entropy, rel_entropy_prob
 	- added coherence measures, l1 norm coherence and relative entropy of coherence
-	- schmidt_full
+	- added schmidt_full
