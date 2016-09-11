@@ -29,7 +29,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR
 purify(const T1& rho1,
        const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)

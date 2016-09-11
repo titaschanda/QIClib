@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -81,7 +81,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
-  const auto& p = as_Mat(rho1);
+  const auto& p = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;

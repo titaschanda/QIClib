@@ -27,7 +27,7 @@ template <typename T1,
 inline bool
 is_pure(const T1& rho1, bool check_norm = true,
         const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   if ((rho.n_rows == 1) || (rho.n_cols == 1)) {
     if (std::abs(arma::norm(rho) - 1) < tol || !check_norm)

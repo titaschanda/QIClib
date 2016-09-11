@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR mutual_info(const T1& rho1, arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -69,7 +69,7 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
                       arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   arma::uvec sys12 = arma::join_cols(sys1, sys2);
 
@@ -146,7 +146,7 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
                       arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;

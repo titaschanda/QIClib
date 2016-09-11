@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  auto p = as_Mat(rho1);
+  auto p = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (p.n_cols == 1)
@@ -118,7 +118,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
-  const auto& p = as_Mat(rho1);
+  const auto& p = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;

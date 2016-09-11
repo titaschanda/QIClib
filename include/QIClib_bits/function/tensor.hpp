@@ -28,8 +28,8 @@ template <typename T1, typename T2,
             is_arma_type_var<T1, T2>::value && is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR tensor(const T1& rho11, const T2& rho12) {
-  const auto& rho1 = as_Mat(rho11);
-  const auto& rho2 = as_Mat(rho12);
+  const auto& rho1 = _internal::as_Mat(rho11);
+  const auto& rho2 = _internal::as_Mat(rho12);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho1.n_elem == 0 || rho2.n_elem == 0)
@@ -108,7 +108,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR tensor_pow(const T1& rho1, arma::uword n) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)

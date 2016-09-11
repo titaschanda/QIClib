@@ -30,8 +30,8 @@ is_equal(const T1& rho11, const T2& rho12, bool typecheck = false,
          const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
          const trait::pT<T1>& rtol = 10 *
                                      _precision::eps<trait::pT<T1> >::value) {
-  const auto& rho1 = as_Mat(rho11);
-  const auto& rho2 = as_Mat(rho12);
+  const auto& rho1 = _internal::as_Mat(rho11);
+  const auto& rho2 = _internal::as_Mat(rho12);
 
   const arma::uword n1 = rho1.n_rows;
   const arma::uword m1 = rho1.n_cols;

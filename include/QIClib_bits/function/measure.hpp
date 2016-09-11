@@ -32,7 +32,7 @@ template <
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -96,7 +96,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
         tmp = Ks[i].eval() * Ks[i].eval().t() * rho;
       else
         tmp = Ks[i].eval() * rho;
-      prob.at(i) = std::pow(arma::norm(as_Col(tmp)), 2);
+      prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
         outstates.at(i) = tmp / std::sqrt(prob.at(i));
@@ -134,7 +134,7 @@ template <
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -198,7 +198,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
         tmp = Ks.at(i).eval() * Ks.at(i).eval().t() * rho;
       else
         tmp = Ks.at(i).eval() * rho;
-      prob.at(i) = std::pow(arma::norm(as_Col(tmp)), 2);
+      prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
         outstates.at(i) = tmp / std::sqrt(prob.at(i));
@@ -222,8 +222,8 @@ template <
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const T2& U1) {
-  const auto& rho = as_Mat(rho1);
-  const auto& U = as_Mat(U1);
+  const auto& rho = _internal::as_Mat(rho1);
+  const auto& U = _internal::as_Mat(U1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -265,7 +265,7 @@ inline TR measure(const T1& rho1, const T2& U1) {
     QICLIB_OPENMP_FOR
     for (arma::uword i = 0; i < U.n_cols; ++i) {
       mattype tmp = U.col(i) * U.col(i).t() * rho;
-      prob.at(i) = std::pow(arma::norm(as_Col(tmp)), 2);
+      prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
         outstates.at(i) = tmp / std::sqrt(prob.at(i));
@@ -290,7 +290,7 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
                   arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -352,7 +352,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
              : apply(rho, Ks[i].eval(), sys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
-                        : std::pow(arma::norm(as_Col(tmp)), 2);
+                        : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
     if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
       outstates.at(i) = checkV ? tmp / prob.at(i) : tmp / std::sqrt(prob.at(i));
@@ -393,7 +393,7 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
                   arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -454,7 +454,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
         : tmp = apply(rho, Ks.at(i).eval(), sys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
-                        : std::pow(arma::norm(as_Col(tmp)), 2);
+                        : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
     if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
       outstates.at(i) = checkV ? tmp / prob.at(i) : tmp / std::sqrt(prob.at(i));
@@ -478,7 +478,7 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
                   arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -535,7 +535,7 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
                   arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -575,8 +575,8 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
                   arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
-  const auto& U = as_Mat(U1);
+  const auto& rho = _internal::as_Mat(rho1);
+  const auto& U = _internal::as_Mat(U1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -621,7 +621,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
     mattype tmp = apply(rho, (U.col(i) * U.col(i).t()).eval(), sys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
-                        : std::pow(arma::norm(as_Col(tmp)), 2);
+                        : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
     if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
       outstates.at(i) = checkV ? tmp / prob.at(i) : tmp / sqrt(prob.at(i));
@@ -645,8 +645,8 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
                   arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
-  const auto& U = as_Mat(U1);
+  const auto& rho = _internal::as_Mat(rho1);
+  const auto& U = _internal::as_Mat(U1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -681,7 +681,7 @@ template <typename T1,
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
 inline TR measure_comp(const T1& rho1) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -718,7 +718,7 @@ template <typename T1,
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
 inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -769,7 +769,7 @@ template <typename T1,
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
 inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;

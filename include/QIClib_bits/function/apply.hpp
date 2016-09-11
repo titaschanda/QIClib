@@ -29,8 +29,8 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply(const T1& rho1, const T2& A, arma::uvec sys, arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
-  const auto& A1 = as_Mat(A);
+  const auto& rho = _internal::as_Mat(rho1);
+  const auto& A1 = _internal::as_Mat(A);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
@@ -78,7 +78,7 @@ template <typename T1, typename T2,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply(const T1& rho1, const T2& A, arma::uvec sys,
                 arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;

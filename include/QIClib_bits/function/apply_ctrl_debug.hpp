@@ -32,8 +32,8 @@ inline TR apply_ctrl_debug(const T1& rho1, const T2& A, arma::uvec ctrl,
                            arma::uvec sys, arma::uvec dim) {
   using eTR = typename eT_promoter_var<T1, T2>::type;
 
-  const auto& rho = as_Mat(rho1);
-  const auto& A1 = as_Mat(A);
+  const auto& rho = _internal::as_Mat(rho1);
+  const auto& A1 = _internal::as_Mat(A);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -279,7 +279,7 @@ template <typename T1, typename T2,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply_ctrl_debug(const T1& rho1, const T2& A, arma::uvec ctrl,
                            arma::uvec sys, arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;

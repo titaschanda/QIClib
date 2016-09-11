@@ -165,7 +165,7 @@ double def_nlopt3(const std::vector<double>& x, std::vector<double>& grad,
 template <typename T1>
 inline deficit_space<T1>::deficit_space(const T1& rho1, arma::uword nodal,
                                         arma::uvec dim)
-    : _rho(as_Mat(rho1)), _nodal(nodal), _is_computed(false),
+    : _rho(_internal::as_Mat(rho1)), _nodal(nodal), _is_computed(false),
       _is_reg_computed(false), _is_sab_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho.n_elem == 0)
@@ -183,7 +183,7 @@ inline deficit_space<T1>::deficit_space(const T1& rho1, arma::uword nodal,
 template <typename T1>
 inline deficit_space<T1>::deficit_space(const T1& rho1, arma::uword nodal,
                                         arma::uword dim)
-    : _rho(as_Mat(rho1)), _nodal(nodal), _is_computed(false),
+    : _rho(_internal::as_Mat(rho1)), _nodal(nodal), _is_computed(false),
       _is_reg_computed(false), _is_sab_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho.n_elem == 0)

@@ -190,7 +190,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 TR discord3(const T1& rho1, arma::uword nodal, arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
   arma::uword party_no = dim.n_elem;
   arma::uword dim1 = arma::prod(dim);
 

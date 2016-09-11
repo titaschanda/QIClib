@@ -7,7 +7,7 @@ BF_channel(const T1& rho1, arma::uword party_no, typename T1::pod_type p) {
   typedef typename T1::elem_type eT;
   typedef typename T1::pod_type pT;
 
-  auto rho = as_Mat(rho1);
+  auto rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_rows != pow(2, party_no))
@@ -70,7 +70,7 @@ PF_channel(const T1& rho1, arma::uword party_no, typename T1::pod_type p) {
   typedef typename T1::elem_type eT;
   typedef typename T1::pod_type pT;
 
-  auto rho = as_Mat(rho1);
+  auto rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_rows != pow(2, party_no))
@@ -133,7 +133,7 @@ BPF_channel(const T1& rho1, arma::uword party_no, typename T1::pod_type p) {
   typedef typename T1::elem_type eT;
   typedef typename T1::pod_type pT;
 
-  const auto& rho2 = as_Mat(rho1);
+  const auto& rho2 = _internal::as_Mat(rho1);
   arma::Mat<std::complex<pT> > rho =
     arma::conv_to<arma::Mat<std::complex<pT> > >::from(rho2);
 

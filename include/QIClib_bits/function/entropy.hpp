@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR entropy(const T1& rho1) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -61,7 +61,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 inline TR shannon(const T1& prob1) {
-  const auto& prob = as_Mat(prob1);
+  const auto& prob = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
   if (prob.n_elem == 0)
@@ -70,7 +70,7 @@ inline TR shannon(const T1& prob1) {
   if (prob.n_cols != 1)
     throw Exception("qic::shannon", Exception::type::MATRIX_NOT_CVECTOR);
 
-  if (arma::any(as_Col(prob) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::shannon", "Invalid probaility distribution");
 #endif
 
@@ -103,7 +103,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR renyi(const T1& rho1, const trait::pT<T1>& alpha) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -152,7 +152,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
-  const auto& prob2 = as_Mat(prob1);
+  const auto& prob2 = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
   if (prob2.n_elem == 0)
@@ -164,11 +164,11 @@ inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   if (alpha < -_precision::eps<trait::pT<T1> >::value)
     throw Exception("qic::renyi_prob", Exception::type::OUT_OF_RANGE);
 
-  if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::renyi_prob", "Invalid probaility distribution");
 #endif
 
-  const auto& prob = as_Col(prob2);
+  const auto& prob = _internal::as_Col(prob2);
 
   if (alpha < _precision::eps<trait::pT<T1> >::value) {
     return std::log2(static_cast<trait::eT<T1> >(prob.n_elem));
@@ -215,7 +215,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          trait::pT<T1> >::value>
 inline TR tsallis(const T1& rho1, const trait::pT<T1>& alpha) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -256,7 +256,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
-  const auto& prob2 = as_Mat(prob1);
+  const auto& prob2 = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
   if (prob2.n_elem == 0)
@@ -267,11 +267,11 @@ inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   if (alpha < 0)
     throw Exception("qic::tsallis_prob", Exception::type::OUT_OF_RANGE);
 
-  if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::tsallis_prob", "Invalid probaility distribution");
 #endif
 
-  const auto& prob = as_Col(prob2);
+  const auto& prob = _internal::as_Col(prob2);
 
   if (std::abs(alpha - 1) < _precision::eps<trait::pT<T1> >::value) {
     return std::log(2.0) * shannon(prob);
@@ -314,8 +314,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
-  const auto& prob1 = as_Mat(prob11);
-  const auto& prob2 = as_Mat(prob12);
+  const auto& prob1 = _internal::as_Mat(prob11);
+  const auto& prob2 = _internal::as_Mat(prob12);
 
 #ifndef QICLIB_NO_DEBUG
   if (prob1.n_elem == 0 || prob2.n_elem == 0)
@@ -327,8 +327,8 @@ inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
   if (prob1.n_elem != prob2.n_elem)
     throw Exception("qic::rel_entropy_prob", Exception::type::SIZE_MISMATCH);
 
-  if (arma::any(as_Col(prob1) < -_precision::eps<trait::pT<T1> >::value) ||
-      arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob1) < -_precision::eps<trait::pT<T1> >::value) ||
+      arma::any(_internal::as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::rel_entropy_prob", "Invalid probaility distribution");
 #endif
 
@@ -371,8 +371,8 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1> >::value
             || is_same_pT_var<T1, T2>::value, trait::pT<T1> >::type>
 inline TR rel_entropy(const T1& rho11, const T2& rho12) {
-  const auto& rho1 = as_Mat(rho11);
-  const auto& rho2 = as_Mat(rho12);
+  const auto& rho1 = _internal::as_Mat(rho11);
+  const auto& rho2 = _internal::as_Mat(rho12);
 
   bool checkV1 = true;
   if (rho1.n_cols == 1)

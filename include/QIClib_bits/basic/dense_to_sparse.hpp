@@ -29,7 +29,7 @@ template <typename T1,
 inline TR
 dense_to_sparse(const T1& rho1,
                 trait::pT<T1> tol = _precision::eps<trait::pT<T1> >::value) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
   const arma::uword N = rho.n_elem;
   arma::umat Index(2, N);
   arma::Col<trait::eT<T1> > value(N);

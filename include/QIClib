@@ -39,9 +39,9 @@
 
 #include "QIClib_bits/internal/constant.hpp"
 #include "QIClib_bits/internal/singleton.hpp"
-#include "QIClib_bits/basic/as_arma.hpp"
-#include "QIClib_bits/class/init.hpp"
+#include "QIClib_bits/internal/as_arma.hpp"
 
+#include "QIClib_bits/class/init.hpp"
 #include "QIClib_bits/class/exception.hpp"
 #include "QIClib_bits/class/constants.hpp"
 #include "QIClib_bits/class/random_devices.hpp"

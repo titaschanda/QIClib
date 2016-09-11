@@ -160,7 +160,7 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value,
             typename arma::Col<trait::pT<T1> >::template fixed<3> >::type>
 TR discord(const T1& rho1, arma::uword nodal, arma::uvec dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
   arma::uword party_no = dim.n_elem;
   arma::uword dim1 = arma::prod(dim);
 

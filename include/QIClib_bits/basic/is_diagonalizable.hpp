@@ -26,7 +26,7 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool
 is_diagonalizable(const T1& rho1) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;
   const arma::uword m = rho.n_cols;

@@ -28,7 +28,7 @@ template <typename T1,
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys,
                    const arma::uvec& dim) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
 
   bool checkV = true;
@@ -145,7 +145,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
-  const auto& rho = as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = true;
