@@ -23,15 +23,21 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1 = arma::cx_mat> class deficit_space {
+template <typename T1> class deficit_space {
+
+  static_assert(
+    std::is_same<T1, arma::Mat<trait::eT<T1> > >::value,
+    "deficit_space requires Armadillo Mat object as template argument!");
+
  private:
   T1* _rho;
   arma::uword _nodal;
+  arma::uword _n_cols;
+  arma::uword _n_rows;
+
   arma::uword _party_no;
   arma::uvec _dim;
-  arma::uword _n_rows;
-  arma::uword _n_cols;
-
+  
   trait::pT<T1> _S_A_B;
   trait::pT<T1> _result;
   arma::Col<trait::pT<T1> > _tp;

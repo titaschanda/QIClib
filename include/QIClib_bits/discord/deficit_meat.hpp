@@ -26,7 +26,7 @@ namespace qic {
 template <typename T1>
 inline deficit_space<T1>::deficit_space(T1* rho1, arma::uword nodal,
                                         arma::uvec dim)
-    : _rho(rho1), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows), _nodal(nodal),
+    : _rho(rho1), _nodal(nodal), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows),
       _is_computed(false), _is_reg_computed(false), _is_sab_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho->n_elem == 0)
@@ -44,7 +44,7 @@ inline deficit_space<T1>::deficit_space(T1* rho1, arma::uword nodal,
 template <typename T1>
 inline deficit_space<T1>::deficit_space(T1* rho1, arma::uword nodal,
                                         arma::uword dim)
-    : _rho(rho1), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows), _nodal(nodal),
+    : _rho(rho1), _nodal(nodal), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows),
       _is_computed(false), _is_reg_computed(false), _is_sab_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho->n_elem == 0)
@@ -102,7 +102,7 @@ template <typename T1>
 inline void deficit_space<T1>::check_size_change() {
   if (_rho->n_cols != _n_cols || _rho->n_rows !=  _n_rows)
     throw std::runtime_error(
-      "qic::deficit_space(): Matrix size changed! Use reset().");
+      "qic::deficit_space(): Matrix size changed! Use reset()!");
 }
 
 //****************************************************************************

@@ -101,7 +101,7 @@ template <typename T1> inline void discord_space<T1>::init(arma::uvec dim) {
 template <typename T1> inline void discord_space<T1>::check_size_change() {
   if (_rho->n_cols != _n_cols || _rho->n_rows != _n_rows)
     throw std::runtime_error(
-      "qic::discord_space(): Matrix size changed! Use reset().");
+      "qic::discord_space(): Matrix size changed! Use reset()!");
 }
 
 //****************************************************************************
