@@ -17,7 +17,7 @@ Include the header `QIClib` in your source code (make sure that your compiler ca
 
 Make sure that you have [Armadillo](http://arma.sourceforge.net/) (version 4.2 or later) and [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) installed on your system. If you don't want to use [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) specific features (like Quantum Discord), just add the following line before including `QIClib` header:
 
-    #define QIClib_DONT_USE_NLOPT
+    #define QICLIB_DONT_USE_NLOPT
 
 Also make sure that you have an C++11 compliant compiler. [gcc](https://gcc.gnu.org/) version 4.8 or later, or [clang](http://clang.llvm.org/) version 3.3 or later is recomended.
 
