@@ -68,8 +68,7 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
   } bell;
     
  private:
-  SPM() {
-    S.set_size(4);
+  SPM(): S(4), basis2(2, 4), basis3(3, 4), proj2(2, 4), proj3(3, 4) {
 
     S.at(0) << 1.0 << 0.0 << arma::endr << 0.0 << 1.0 << arma::endr;
 
@@ -81,8 +80,6 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
     S.at(3) << 1.0 << 0.0 << arma::endr << 0.0 << -1.0 << arma::endr;
 
     //**************************************************************************
-
-    basis2.set_size(2, 4);
 
     basis2.at(0, 0) << 1.0 << 0.0;
     basis2.at(1, 0) << 0.0 << 1.0;
@@ -97,8 +94,6 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
     basis2.at(1, 3) = basis2.at(1, 0);
 
     //**************************************************************************
-
-    basis3.set_size(3, 4);
 
     basis3.at(0, 0) << 1.0 << 0.0 << 0.0;
     basis3.at(1, 0) << 0.0 << 1.0 << 0.0;
@@ -118,7 +113,6 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 
     //**************************************************************************
 
-    proj2.set_size(2, 4);
     proj2.at(0, 0) = basis2.at(0, 0) * basis2.at(0, 0).t();
     proj2.at(1, 0) = basis2.at(1, 0) * basis2.at(1, 0).t();
     proj2.at(0, 1) = basis2.at(0, 1) * basis2.at(0, 1).t();
@@ -130,7 +124,6 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 
     //**************************************************************************
 
-    proj3.set_size(3, 4);
     proj3.at(0, 0) = basis3.at(0, 0) * basis3.at(0, 0).t();
     proj3.at(1, 0) = basis3.at(1, 0) * basis3.at(1, 0).t();
     proj3.at(2, 0) = basis3.at(2, 0) * basis3.at(2, 0).t();
