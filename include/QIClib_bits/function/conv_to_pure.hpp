@@ -46,10 +46,16 @@ inline TR conv_to_pure(const T1& rho1) {
   arma::Mat<trait::eT<T1> > eig_vec;
   arma::Col<trait::pT<T1> > eig_val;
 
-  if (rho.n_rows > 20)
-    arma::eig_sym(eig_val, eig_vec, rho, "dc");
-  else
-    arma::eig_sym(eig_val, eig_vec, rho, "std");
+  if (rho.n_rows > 20) {
+    bool check = arma::eig_sym(eig_val, eig_vec, rho, "dc");
+    if (!check)
+      throw std::runtime_error("qic::conv_to_pure(): Decomposition failed!");
+
+  } else {
+    bool check = arma::eig_sym(eig_val, eig_vec, rho, "std");
+    if (!check)
+      throw std::runtime_error("qic::conv_to_pure(): Decomposition failed!");
+  }
 
   return eig_vec.col(eig_vec.n_cols - 1);
 }

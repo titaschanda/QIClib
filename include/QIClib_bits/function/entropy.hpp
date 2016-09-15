@@ -409,30 +409,54 @@ inline TR rel_entropy(const T1& rho11, const T2& rho12) {
   
   
   if(checkV1) {
-    if (rho1.n_rows > 20)
-      arma::eig_sym(eigval1, eigvec1, rho1, "dc");
-    else 
-      arma::eig_sym(eigval1, eigvec1, rho1, "std");
+    if (rho1.n_rows > 20) {
+      bool check = arma::eig_sym(eigval1, eigvec1, rho1, "dc");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
 
+    } else { 
+      bool check = arma::eig_sym(eigval1, eigvec1, rho1, "std");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
+    }
+    
   } else {
-    if (rho1.n_cols > 20)
-      arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "dc");
-    else 
-      arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "std");
+    if (rho1.n_cols > 20) {
+      bool check = arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "dc");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
+
+    } else { 
+      bool check = arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "std");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
+    }
   }
   
 
   if(checkV2) {
-    if (rho2.n_rows > 20)
-      arma::eig_sym(eigval2, eigvec2, rho2, "dc");
-    else 
-      arma::eig_sym(eigval2, eigvec2, rho2, "std");
+    if (rho2.n_rows > 20) {
+      bool check = arma::eig_sym(eigval2, eigvec2, rho2, "dc");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
 
+    } else { 
+      bool check = arma::eig_sym(eigval2, eigvec2, rho2, "std");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
+    }
+    
   } else {
-    if (rho2.n_cols > 20)
-      arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "dc");
-    else 
-      arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "std");
+    if (rho2.n_cols > 20) {
+      bool check = arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "dc");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
+    
+    } else { 
+      bool check = arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "std");
+      if (!check)
+        throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
+    }
   }
 
   trait::pT<T1> ret(0.0);

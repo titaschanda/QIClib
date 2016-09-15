@@ -41,10 +41,16 @@ inline TR expm_sym(const T1& rho1, const std::complex<T2>& a) {
   arma::Col<trait::pT<T1> > eigval;
   arma::Mat<trait::eT<T1> > eigvec;
 
-  if (H.n_rows > 20)
-    arma::eig_sym(eigval, eigvec, H, "dc");
-  else
-    arma::eig_sym(eigval, eigvec, H, "std");
+  if (H.n_rows > 20) {
+    bool check = arma::eig_sym(eigval, eigvec, H, "dc");
+    if (!check)
+      throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
+
+  } else {
+    bool check = arma::eig_sym(eigval, eigvec, H, "std");
+    if (!check)
+      throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
+  }
 
   return eigvec * arma::diagmat(arma::exp(a * eigval)) * eigvec.t();
 }
@@ -70,11 +76,17 @@ inline TR expm_sym(const T1& rho1, const T2& a) {
   arma::Col<trait::pT<T1> > eigval;
   arma::Mat<trait::eT<T1> > eigvec;
 
-  if (H.n_rows > 20)
-    arma::eig_sym(eigval, eigvec, H, "dc");
-  else
-    arma::eig_sym(eigval, eigvec, H, "std");
+  if (H.n_rows > 20) {
+    bool check = arma::eig_sym(eigval, eigvec, H, "dc");
+    if (!check)
+      throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
 
+  } else {
+    bool check = arma::eig_sym(eigval, eigvec, H, "std");
+    if (!check)
+      throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
+  }
+  
   return eigvec *
          arma::diagmat(arma::exp(
            a * arma::conv_to<arma::Col<trait::eT<T1> > >::from(eigval))) *
@@ -100,11 +112,17 @@ inline TR expm_sym(const T1& rho1) {
   arma::Col<trait::pT<T1> > eigval;
   arma::Mat<trait::eT<T1> > eigvec;
 
-  if (H.n_rows > 20)
-    arma::eig_sym(eigval, eigvec, H, "dc");
-  else
-    arma::eig_sym(eigval, eigvec, H, "std");
+  if (H.n_rows > 20) {
+    bool check = arma::eig_sym(eigval, eigvec, H, "dc");
+    if (!check)
+      throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
 
+  } else {
+    bool check = arma::eig_sym(eigval, eigvec, H, "std");
+    if (!check)
+      throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
+  }
+  
   return eigvec * arma::diagmat(arma::exp(
                     arma::conv_to<arma::Col<trait::eT<T1> > >::from(eigval))) *
          eigvec.t();

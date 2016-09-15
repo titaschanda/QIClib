@@ -124,7 +124,8 @@ template <
     arma::Mat<T1> >::type>
 inline TR gram_schmidt(const std::initializer_list<arma::Mat<T1> >& rho,
                        bool normalize = true) {
-  return gram_schmidt(static_cast<std::vector<arma::Mat<T1> > >(rho));
+  return gram_schmidt(static_cast<std::vector<arma::Mat<T1> > >(rho),
+                      normalize);
 }
 
 //******************************************************************************

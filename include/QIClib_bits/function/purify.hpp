@@ -52,11 +52,17 @@ purify(const T1& rho1,
     arma::Col<trait::pT<T1> > eigval;
     arma::Mat<trait::eT<T1> > eigvec;
 
-    if (rho.n_rows > 20)
-      arma::eig_sym(eigval, eigvec, rho, "dc");
-    else
-      arma::eig_sym(eigval, eigvec, rho, "std");
-
+    if (rho.n_rows > 20) {
+      bool check = arma::eig_sym(eigval, eigvec, rho, "dc");
+      if (!check)
+        throw std::runtime_error("qic::purify(): Decomposition failed!");
+      
+    } else {
+      bool check = arma::eig_sym(eigval, eigvec, rho, "std");
+      if (!check)
+        throw std::runtime_error("qic::purify(): Decomposition failed!");
+    }
+    
     arma::uword dim = rho.n_rows;
     arma::uword dimE = arma::sum(eigval > tol);
 

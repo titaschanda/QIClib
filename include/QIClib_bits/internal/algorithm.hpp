@@ -21,6 +21,8 @@
 
 namespace qic {
 
+//************************************************************************
+
 namespace _internal {
 
 //************************************************************************
@@ -93,7 +95,9 @@ inline TR powm_gen_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
 
   arma::Col<std::complex<trait::pT<T1> > > eigval;
   arma::Mat<std::complex<trait::pT<T1> > > eigvec;
-  arma::eig_gen(eigval, eigvec, rho);
+  bool check = arma::eig_gen(eigval, eigvec, rho);
+  if (!check)
+    throw std::runtime_error("qic::powm_gen(): Decomposition failed!");
 
   return eigvec * diagmat(arma::pow(eigval, P)) * eigvec.i();
 }
@@ -160,10 +164,16 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
   arma::Col<trait::pT<T1> > eigval;
   arma::Mat<trait::eT<T1> > eigvec;
 
-  if (rho.n_rows > 20)
-    arma::eig_sym(eigval, eigvec, rho, "dc");
-  else
-    arma::eig_sym(eigval, eigvec, rho, "std");
+  if (rho.n_rows > 20) {
+    bool check = arma::eig_sym(eigval, eigvec, rho, "dc");
+    if (!check)
+      throw std::runtime_error("qic::powm_sym(): Decomposition failed!");
+
+  } else {
+    bool check = arma::eig_sym(eigval, eigvec, rho, "std");
+    if (!check)
+      throw std::runtime_error("qic::powm_sym(): Decomposition failed!");
+  }
 
   return eigvec *
          arma::diagmat(arma::pow(
@@ -376,6 +386,10 @@ inline void dim_collapse_sys_ctrl(arma::uvec& dim, arma::uvec& sys,
   dim = std::move(dim2);
 }
 
+//************************************************************************
+
 }  // namespace _internal
+
+//************************************************************************
 
 }  // namespace qic
