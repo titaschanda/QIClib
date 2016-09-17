@@ -27,9 +27,8 @@ namespace _precision {
 
 //******************************************************************************
 
-template <typename T,
-          typename Enable =
-            typename std::enable_if<std::is_arithmetic<T>::value, void>::type>
+template <typename T, typename Enable = typename std::enable_if<
+                        std::is_arithmetic<trait::RCV<T> >::value, void>::type>
 struct eps;
 
 template <typename T> struct eps<T> {
@@ -37,8 +36,10 @@ template <typename T> struct eps<T> {
     std::is_integral<T>::value
       ? 0
       : (std::is_same<trait::RCV<T>, float>::value
-         ? QICLIB_FLOAT_PRECISION //std::numeric_limits<T>::epsilon()
-         : QICLIB_DOUBLE_PRECISION); //std::numeric_limits<T>::epsilon());
+           ? QICLIB_FLOAT_PRECISION  // std::numeric_limits<T>::epsilon()
+           : (std::is_same<trait::RCV<T>, double>::value
+                ? QICLIB_DOUBLE_PRECISION  // std::numeric_limits<T>::epsilon()
+                : 100.0 * std::numeric_limits<trait::RCV<T> >::epsilon()));
 };
 
 template <typename T> constexpr T eps<T>::value;
@@ -66,9 +67,9 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
   struct {
     typename arma::Col<T1>::template fixed<4> phim, phip, psim, psip;
   } bell;
-    
+
  private:
-  SPM(): S(4), basis2(2, 4), basis3(3, 4), proj2(2, 4), proj3(3, 4) {
+  SPM() : S(4), basis2(2, 4), basis3(3, 4), proj2(2, 4), proj3(3, 4) {
 
     S.at(0) << 1.0 << 0.0 << arma::endr << 0.0 << 1.0 << arma::endr;
 
@@ -141,7 +142,7 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 
     bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
     bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
-    bell.psim  << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
+    bell.psim << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
     bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
   }
   ~SPM() = default;

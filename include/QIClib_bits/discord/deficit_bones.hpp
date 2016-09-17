@@ -23,11 +23,16 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1> class deficit_space {
+template <typename T1,
+          typename Enable = typename std::enable_if<
+            std::is_same<T1, arma::Mat<trait::eT<T1> > >::value, void>::type>
+class deficit_space;
 
-  static_assert(
-    std::is_same<T1, arma::Mat<trait::eT<T1> > >::value,
-    "deficit_space requires Armadillo Mat object as template argument!");
+template <typename T1> class deficit_space<T1> {
+
+  // static_assert(
+  // std::is_same<T1, arma::Mat<trait::eT<T1> > >::value,
+  //"deficit_space requires Armadillo Mat object as template argument!");
 
  private:
   T1* _rho;
@@ -37,7 +42,7 @@ template <typename T1> class deficit_space {
 
   arma::uword _party_no;
   arma::uvec _dim;
-  
+
   trait::pT<T1> _S_A_B;
   trait::pT<T1> _result;
   arma::Col<trait::pT<T1> > _tp;
@@ -49,7 +54,7 @@ template <typename T1> class deficit_space {
   bool _is_sab_computed;
   bool _deficit2;
   bool _deficit3;
-  
+
   nlopt::algorithm _deficit_global_opt;
   double _deficit_global_xtol;
   double _deficit_global_ftol;
@@ -64,7 +69,7 @@ template <typename T1> class deficit_space {
   inline void s_a_b();
   inline void check_size_change();
   inline void default_setting();
-  
+
   //****************************************************************************
 
  public:
@@ -74,7 +79,7 @@ template <typename T1> class deficit_space {
   deficit_space(const deficit_space&) = delete;
   deficit_space& operator=(const deficit_space&) = delete;
   ~deficit_space() = default;
-  
+
   //****************************************************************************
 
   inline deficit_space(T1* rho1, arma::uword nodal, arma::uvec dim);
@@ -91,7 +96,7 @@ template <typename T1> class deficit_space {
   inline deficit_space& local_ftol(double a) noexcept;
   inline deficit_space& angle_range(const arma::vec& a);
   inline deficit_space& initial_angle(const arma::vec& a);
-  
+
   //****************************************************************************
 
   inline deficit_space& compute();

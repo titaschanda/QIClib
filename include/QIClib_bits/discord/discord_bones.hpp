@@ -23,13 +23,18 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1> class discord_space {
+template <typename T1,
+          typename Enable = typename std::enable_if<
+            std::is_same<T1, arma::Mat<trait::eT<T1> > >::value, void>::type>
+class discord_space;
 
-  static_assert(
-    std::is_same<T1, arma::Mat<trait::eT<T1> > >::value,
-    "discord_space requires Armadillo Mat object as template argument!");
+template <typename T1> class discord_space<T1> {
 
- private :
+  // static_assert(
+  // std::is_same<T1, arma::Mat<trait::eT<T1> > >::value,
+  // "discord_space requires Armadillo Mat object as template argument!");
+
+ private:
   T1* _rho;
   arma::uword _nodal;
   arma::uword _n_cols;
@@ -37,7 +42,7 @@ template <typename T1> class discord_space {
 
   arma::uword _party_no;
   arma::uvec _dim;
-  
+
   trait::pT<T1> _mutual_info;
   trait::pT<T1> _result;
   arma::Col<trait::pT<T1> > _tp;
@@ -49,7 +54,7 @@ template <typename T1> class discord_space {
   bool _is_reg_computed;
   bool _discord2;
   bool _discord3;
-  
+
   nlopt::algorithm _discord_global_opt;
   double _discord_global_xtol;
   double _discord_global_ftol;
@@ -64,7 +69,7 @@ template <typename T1> class discord_space {
   inline void check_size_change();
   inline void minfo_p();
   inline void default_setting();
-  
+
   //****************************************************************************
 
  public:
@@ -74,7 +79,7 @@ template <typename T1> class discord_space {
   discord_space(const discord_space&) = delete;
   discord_space& operator=(const discord_space&) = delete;
   ~discord_space() = default;
-  
+
   //****************************************************************************
 
   inline discord_space(T1* rho1, arma::uword nodal, arma::uvec dim);
@@ -91,7 +96,7 @@ template <typename T1> class discord_space {
   inline discord_space& local_ftol(double a) noexcept;
   inline discord_space& angle_range(const arma::vec& a);
   inline discord_space& initial_angle(const arma::vec& a);
-  
+
   //****************************************************************************
 
   inline discord_space& compute();

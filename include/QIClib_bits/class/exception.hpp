@@ -220,11 +220,10 @@ class Exception : public std::exception {
       _msg += "type mismatch!";
       break;
 
-      case type::MATRIX_SIZE_MISMATCH:
-        _msg += "Matrix size mismatch!";
-        break;
+    case type::MATRIX_SIZE_MISMATCH:
+      _msg += "Matrix size mismatch!";
+      break;
 
-      
     case type::SIZE_MISMATCH:
       _msg += "Size mismatch!";
       break;

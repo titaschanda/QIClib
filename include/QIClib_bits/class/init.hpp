@@ -35,9 +35,8 @@ class Init final : public _internal::Singleton<const Init> {
  private:
   std::time_t date_start;
 
-  Init(): date_start(std::time(nullptr)) {
-    std::cout << std::endl
-              << ">>> Starting QIClib..." << std::endl;
+  Init() : date_start(std::time(nullptr)) {
+    std::cout << std::endl << ">>> Starting QIClib..." << std::endl;
     std::cout << ">>> " << std::ctime(&date_start) << std::endl;
   }
 
@@ -46,8 +45,7 @@ class Init final : public _internal::Singleton<const Init> {
     std::time_t date_diff = date_end - date_start;
     auto minutes = date_diff / 60;
     auto hours = minutes / 60;
-    std::cout << std::endl
-              << ">>> Exiting QIClib..." << std::endl;
+    std::cout << std::endl << ">>> Exiting QIClib..." << std::endl;
     std::cout << ">>> Total elapsed time... " << hours << " hrs. "
               << minutes % 60 << " mins. " << date_diff % 60 << " seconds"
               << std::endl;

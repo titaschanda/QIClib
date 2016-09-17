@@ -98,17 +98,15 @@ template <typename T1> inline void deficit_space<T1>::init(arma::uvec dim) {
 
 //****************************************************************************
 
-template <typename T1>
-inline void deficit_space<T1>::check_size_change() {
-  if (_rho->n_cols != _n_cols || _rho->n_rows !=  _n_rows)
+template <typename T1> inline void deficit_space<T1>::check_size_change() {
+  if (_rho->n_cols != _n_cols || _rho->n_rows != _n_rows)
     throw std::runtime_error(
       "qic::deficit_space(): Matrix size changed! Use reset()!");
 }
 
 //****************************************************************************
 
-template <typename T1>
-inline void deficit_space<T1>::default_setting() {
+template <typename T1> inline void deficit_space<T1>::default_setting() {
 
   if (_deficit2) {
     _deficit_global_opt = nlopt::GN_DIRECT_L;
@@ -209,7 +207,7 @@ inline deficit_space<T1>& deficit_space<T1>::local_ftol(double a) noexcept {
 template <typename T1>
 inline deficit_space<T1>& deficit_space<T1>::angle_range(const arma::vec& a) {
   check_size_change();
-  
+
 #ifndef QICLIB_NO_DEBUG
   if (_deficit2 && a.n_elem != 2)
     throw Exception(
@@ -232,7 +230,7 @@ inline deficit_space<T1>& deficit_space<T1>::angle_range(const arma::vec& a) {
 template <typename T1>
 inline deficit_space<T1>& deficit_space<T1>::initial_angle(const arma::vec& a) {
   check_size_change();
-  
+
 #ifndef QICLIB_NO_DEBUG
   if (_deficit2 && a.n_elem != 2)
     throw Exception(
@@ -264,7 +262,7 @@ template <typename T1> inline void deficit_space<T1>::s_a_b() {
 template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
   check_size_change();
   s_a_b();
-  
+
   if (_deficit2) {
     arma::uword dim1 = arma::prod(_dim);
     dim1 /= 2;
@@ -281,8 +279,8 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     arma::Mat<trait::pT<T1> > eye4 =
       arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
 
-    _internal::TO_PASS<arma::Mat<trait::eT<T1> > > pass(
-      *_rho, eye2, eye3, eye4, _nodal, _party_no);
+    _internal::TO_PASS<arma::Mat<trait::eT<T1> > > pass(*_rho, eye2, eye3, eye4,
+                                                        _nodal, _party_no);
 
     std::vector<double> lb(2);
     std::vector<double> ub(2);
@@ -313,8 +311,7 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     nlopt::opt opt(_deficit_local_opt, 2);
     opt.set_lower_bounds(lb);
     opt.set_upper_bounds(ub);
-    opt.set_min_objective(_internal::def_nlopt2<T1>,
-                          static_cast<void*>(&pass));
+    opt.set_min_objective(_internal::def_nlopt2<T1>, static_cast<void*>(&pass));
     opt.set_xtol_rel(_deficit_local_xtol);
     opt.set_ftol_rel(_deficit_local_ftol);
     opt.optimize(x, minf);
@@ -341,8 +338,8 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     arma::Mat<trait::pT<T1> > eye4 =
       arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
 
-    _internal::TO_PASS<arma::Mat<trait::eT<T1> > > pass(
-      *_rho, eye2, eye3, eye4, _nodal, _party_no);
+    _internal::TO_PASS<arma::Mat<trait::eT<T1> > > pass(*_rho, eye2, eye3, eye4,
+                                                        _nodal, _party_no);
 
     std::vector<double> lb(5);
     std::vector<double> ub(5);
@@ -374,8 +371,7 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     nlopt::opt opt(_deficit_local_opt, 5);
     opt.set_lower_bounds(lb);
     opt.set_upper_bounds(ub);
-    opt.set_min_objective(_internal::def_nlopt3<T1>,
-                          static_cast<void*>(&pass));
+    opt.set_min_objective(_internal::def_nlopt3<T1>, static_cast<void*>(&pass));
     opt.set_xtol_rel(_deficit_local_xtol);
     opt.set_ftol_rel(_deficit_local_ftol);
     opt.optimize(x, minf);
@@ -428,8 +424,10 @@ inline deficit_space<T1>& deficit_space<T1>::compute_reg() {
         proj2 = kron(kron(eye3, proj2), eye4);
       }
 
-      arma::Mat<std::complex<trait::pT<T1> > > rho_1 = (proj1 * (*_rho) * proj1);
-      arma::Mat<std::complex<trait::pT<T1> > > rho_2 = (proj2 * (*_rho) * proj2);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_1 =
+        (proj1 * (*_rho) * proj1);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_2 =
+        (proj2 * (*_rho) * proj2);
 
       rho_1 += rho_2;
       trait::pT<T1> S_max = entropy(rho_1);
@@ -484,9 +482,12 @@ inline deficit_space<T1>& deficit_space<T1>::compute_reg() {
         proj3 = kron(kron(eye3, proj3), eye4);
       }
 
-      arma::Mat<std::complex<trait::pT<T1> > > rho_1 = (proj1 * (*_rho) * proj1);
-      arma::Mat<std::complex<trait::pT<T1> > > rho_2 = (proj2 * (*_rho) * proj2);
-      arma::Mat<std::complex<trait::pT<T1> > > rho_3 = (proj3 * (*_rho) * proj3);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_1 =
+        (proj1 * (*_rho) * proj1);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_2 =
+        (proj2 * (*_rho) * proj2);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_3 =
+        (proj3 * (*_rho) * proj3);
 
       rho_1 += rho_2 + rho_3;
 
@@ -502,10 +503,9 @@ inline deficit_space<T1>& deficit_space<T1>::compute_reg() {
 //****************************************************************************
 
 template <typename T1>
-inline const arma::Col<trait::pT<T1> >&
-deficit_space<T1>::opt_angles() {
+inline const arma::Col<trait::pT<T1> >& deficit_space<T1>::opt_angles() {
   check_size_change();
-  
+
   if (!_is_computed)
     compute();
   return _tp;
@@ -513,10 +513,9 @@ deficit_space<T1>::opt_angles() {
 
 //******************************************************************************
 
-template <typename T1>
-inline const trait::pT<T1>& deficit_space<T1>::result() {
+template <typename T1> inline const trait::pT<T1>& deficit_space<T1>::result() {
   check_size_change();
-  
+
   if (!_is_computed)
     compute();
   return _result;
@@ -527,7 +526,7 @@ inline const trait::pT<T1>& deficit_space<T1>::result() {
 template <typename T1>
 inline const trait::pT<T1>& deficit_space<T1>::result_reg() {
   check_size_change();
-  
+
   if (!_is_reg_computed)
     compute_reg();
   return _result_reg;
@@ -536,10 +535,9 @@ inline const trait::pT<T1>& deficit_space<T1>::result_reg() {
 //******************************************************************************
 
 template <typename T1>
-inline const arma::Col<trait::pT<T1> >&
-deficit_space<T1>::result_reg_all() {
+inline const arma::Col<trait::pT<T1> >& deficit_space<T1>::result_reg_all() {
   check_size_change();
-  
+
   if (!_is_reg_computed)
     compute_reg();
   return _result_reg_all;
@@ -547,8 +545,7 @@ deficit_space<T1>::result_reg_all() {
 
 //******************************************************************************
 
-template <typename T1>
-inline deficit_space<T1>& deficit_space<T1>::refresh() {
+template <typename T1> inline deficit_space<T1>& deficit_space<T1>::refresh() {
   check_size_change();
   _is_computed = false;
   _is_reg_computed = false;
@@ -567,14 +564,14 @@ inline deficit_space<T1>& deficit_space<T1>::reset(arma::uword nodal) {
   _nodal = nodal;
   _n_cols = _rho->n_cols;
   _n_rows = _rho->n_rows;
-  
+
 #ifndef QICLIB_NO_DEBUG
   if (_rho->n_elem == 0)
     throw Exception("qic::deficit_space::reset", Exception::type::ZERO_SIZE);
 
   if (_rho->n_rows != _rho->n_cols)
-    throw Exception("qic::deficit_space::reset", Exception::type::MATRIX_NOT_SQUARE);
-
+    throw Exception("qic::deficit_space::reset",
+                    Exception::type::MATRIX_NOT_SQUARE);
 
   if (arma::prod(_dim) != _rho->n_rows)
     throw Exception("qic::deficit_space::reset",
@@ -595,7 +592,7 @@ inline deficit_space<T1>& deficit_space<T1>::reset(arma::uword nodal) {
 #endif
 
   default_setting();
-  
+
   return *this;
 }
 
@@ -605,7 +602,7 @@ template <typename T1>
 inline deficit_space<T1>& deficit_space<T1>::reset(arma::uword nodal,
                                                    arma::uvec dim) {
   _dim = std::move(dim);
-  _party_no = _dim.n_elem; 
+  _party_no = _dim.n_elem;
   return reset(nodal);
 }
 
@@ -615,17 +612,17 @@ template <typename T1>
 inline deficit_space<T1>& deficit_space<T1>::reset(arma::uword nodal,
                                                    arma::uword dim) {
 
-#ifndef QICLIB_NO_DEBUG  
+#ifndef QICLIB_NO_DEBUG
   if (dim == 0)
     throw Exception("qic::deficit_space::reset", Exception::type::INVALID_DIMS);
 #endif
-  
+
   arma::uword n = static_cast<arma::uword>(
     std::llround(std::log(_rho->n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return reset(nodal, std::move(dim2)); 
+  return reset(nodal, std::move(dim2));
 }
 
 //******************************************************************************
@@ -634,7 +631,7 @@ template <typename T1>
 inline deficit_space<T1>& deficit_space<T1>::reset(T1* rho, arma::uword nodal,
                                                    arma::uvec dim) {
   _rho = rho;
-  return reset(nodal, std::move(dim)); 
+  return reset(nodal, std::move(dim));
 }
 
 //******************************************************************************
@@ -643,10 +640,9 @@ template <typename T1>
 inline deficit_space<T1>& deficit_space<T1>::reset(T1* rho, arma::uword nodal,
                                                    arma::uword dim) {
   _rho = rho;
-  return reset(nodal, dim); 
+  return reset(nodal, dim);
 }
 
 //******************************************************************************
-
 
 }  // namespace qic
