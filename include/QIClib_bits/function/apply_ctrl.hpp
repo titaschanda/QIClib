@@ -171,10 +171,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
             counter_1 +=
               loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1] ? 1
                                                                            : 0;
-
           power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
         }
-
         rho_ret.at(I) += Ap.at(power).at(K, L) * rho.at(J);
       }
 
@@ -251,10 +249,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
             counter_1 +=
               loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1] ? 1
                                                                            : 0;
-
           power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
         }
-
         U.at(I, J) = Ap.at(power).at(K, L);
       }
 

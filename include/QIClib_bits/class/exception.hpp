@@ -217,7 +217,7 @@ class Exception : public std::exception {
       break;
 
     case type::TYPE_MISMATCH:
-      _msg += "type mismatch!";
+      _msg += "Type mismatch!";
       break;
 
     case type::MATRIX_SIZE_MISMATCH:

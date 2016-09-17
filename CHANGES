@@ -33,4 +33,5 @@ Version 0.0.5 - Development version
 	- added coherence measures, l1 norm coherence and relative entropy of coherence
 	- added schmidt_full
 	- macro features to fine tune library behavior
-	- std::runtime_error exception for eig_sym/eig_gen
+	- std::runtime_error exception for eig_sym/eig_gen decomposition
+	- std::runtime_error exception for qr decomposition

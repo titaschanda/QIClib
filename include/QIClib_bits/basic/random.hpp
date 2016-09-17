@@ -189,7 +189,8 @@ template <typename T1 = int,
           typename TR = typename std::enable_if<
             std::is_arithmetic<T1>::value || is_complex<T1>::value, T1>::type,
           typename TA = typename std::conditional<
-            std::is_unsigned<T1>::value, arma::uword, arma::sword>::type>
+            std::is_unsigned<typename arma::get_pod_type<T1> >::value,
+            arma::uword, arma::sword>::type>
 inline TR randI(const arma::Col<TA>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
