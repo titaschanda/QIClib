@@ -316,6 +316,6 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
 //******************************************************************************
 
-} // namespace old
+}  // namespace old
 
 }  // namespace qic

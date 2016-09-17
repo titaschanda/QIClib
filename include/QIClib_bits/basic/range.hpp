@@ -71,7 +71,6 @@ inline TR range(T1 start, T2 stop) {
   else
     return range(static_cast<pTr>(start), static_cast<pTr>(stop),
                  static_cast<pTr>(-1));
-    
 }
 
 //****************************************************************************

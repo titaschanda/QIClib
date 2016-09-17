@@ -19,7 +19,6 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 namespace qic {
 
 namespace experimental {
@@ -220,7 +219,6 @@ BPF_channel(const T1& rho1, arma::uword party_no, typename T1::pod_type p) {
   return rho;
 }
 
+}  // namespace experimental
 
-} // namespace experimental
-
-} // namespace qic
+}  // namespace qic

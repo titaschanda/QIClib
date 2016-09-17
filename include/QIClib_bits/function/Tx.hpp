@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  auto rho = _internal::as_Mat(rho1); // force copy
+  auto rho = _internal::as_Mat(rho1);  // force copy
 
   bool checkV = true;
   if (rho.n_cols == 1)
@@ -61,12 +61,12 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   if (sys.n_elem == 0)
     return rho;
-  
+
   _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
 
   arma::uword product[_internal::MAXQDIT];
-  product[n-1] = 1;
+  product[n - 1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
     product[i] = product[i + 1] * dim.at(i + 1);
 
@@ -137,8 +137,8 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
     throw Exception("qic::Tx", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n =
-    static_cast<arma::uword>(std::llround(std::log(rho.n_rows) / std::log(dim)));
+  arma::uword n = static_cast<arma::uword>(
+    std::llround(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);

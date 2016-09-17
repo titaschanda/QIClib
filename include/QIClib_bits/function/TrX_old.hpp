@@ -58,7 +58,7 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   if (sys.n_elem == dim.n_elem)
     return {arma::trace(p)};
-  
+
   _internal::dim_collapse_sys(dim, sys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = sys.n_elem;
@@ -172,6 +172,6 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 
 //******************************************************************************
 
-} // namespace old
+}  // namespace old
 
 }  // namespace qic

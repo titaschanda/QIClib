@@ -153,8 +153,8 @@ inline bool schmidt_full(const T1& rho1, const arma::uvec& dim,
     return (ret);
 
   } else {
-    bool ret = arma::svd(
-      U, S, V, arma::reshape(rho, dim.at(1), dim.at(0)).st(), "both", "std");
+    bool ret = arma::svd(U, S, V, arma::reshape(rho, dim.at(1), dim.at(0)).st(),
+                         "both", "std");
 
     if (ret == true)
       V = arma::conj(V);

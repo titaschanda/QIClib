@@ -27,7 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR sysperm(const T1& rho1, const arma::uvec& sys,
-                   const arma::uvec& dim) {
+                  const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
 
@@ -56,17 +56,18 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 #endif
 
   arma::uword product[_internal::MAXQDIT];
-  product[n-1] = 1;
+  product[n - 1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
     product[i] = product[i + 1] * dim.at(i + 1);
 
   arma::uword productr[_internal::MAXQDIT];
-  productr[n-1] = 1;
+  productr[n - 1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
     productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);
 
   if (checkV) {
-    arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols, arma::fill::zeros);
+    arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols,
+                                      arma::fill::zeros);
 
     const arma::uword loop_no = 2 * n;
     constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
@@ -164,8 +165,8 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
     throw Exception("qic::sysperm", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n =
-    static_cast<arma::uword>(std::llround(std::log(rho.n_rows) / std::log(dim)));
+  arma::uword n = static_cast<arma::uword>(
+    std::llround(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);

@@ -49,14 +49,14 @@ inline TR gram_schmidt_old(const T1& rho1, bool normalize = true) {
     if (norm1 > _precision::eps<trait::pT<T1> >::value) {
       ret.col(0) =
         normalize ? (rho.col(pos) / norm1).eval() : rho.col(pos).eval();
-      prj -= normalize
+      prj -=
+        normalize
           ? (ret.col(0) * ret.col(0).t()).eval()
           : (ret.col(0) * ret.col(0).t() / (norm1 * norm1)).eval();  // check
       break;
     }
   }
 
- 
   arma::uword count(1);
   for (arma::uword i = pos + 1; i < rho.n_cols; ++i) {
 
@@ -73,7 +73,7 @@ inline TR gram_schmidt_old(const T1& rho1, bool normalize = true) {
         ret.col(count) = std::move(entry);
         prj -= ret.col(count) * ret.col(count).t() / (norm1 * norm1);
       }
-      
+
       ++count;
     }
   }
@@ -153,7 +153,6 @@ inline TR gram_schmidt_old(const std::initializer_list<arma::Mat<T1> >& rho) {
 
 //******************************************************************************
 
-
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
@@ -210,6 +209,6 @@ inline TR gram_schmidt_old(const arma::field<T1>& rho) {
 
 //******************************************************************************
 
-} // namespace debug
+}  // namespace debug
 
 }  // namespace qic

@@ -70,7 +70,8 @@ inline TR shannon(const T1& prob1) {
   if (prob.n_cols != 1)
     throw Exception("qic::shannon", Exception::type::MATRIX_NOT_CVECTOR);
 
-  if (arma::any(_internal::as_Col(prob) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob) <
+                -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::shannon", "Invalid probaility distribution");
 #endif
 
@@ -164,7 +165,8 @@ inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   if (alpha < -_precision::eps<trait::pT<T1> >::value)
     throw Exception("qic::renyi_prob", Exception::type::OUT_OF_RANGE);
 
-  if (arma::any(_internal::as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob2) <
+                -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::renyi_prob", "Invalid probaility distribution");
 #endif
 
@@ -267,7 +269,8 @@ inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   if (alpha < 0)
     throw Exception("qic::tsallis_prob", Exception::type::OUT_OF_RANGE);
 
-  if (arma::any(_internal::as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob2) <
+                -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::tsallis_prob", "Invalid probaility distribution");
 #endif
 
@@ -321,19 +324,22 @@ inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
   if (prob1.n_elem == 0 || prob2.n_elem == 0)
     throw Exception("qic::rel_entropy_prob", Exception::type::ZERO_SIZE);
 
-  if (prob1.n_cols != 1 || prob2.n_cols !=1)
-    throw Exception("qic::rel_entropy_prob", Exception::type::MATRIX_NOT_CVECTOR);
+  if (prob1.n_cols != 1 || prob2.n_cols != 1)
+    throw Exception("qic::rel_entropy_prob",
+                    Exception::type::MATRIX_NOT_CVECTOR);
 
   if (prob1.n_elem != prob2.n_elem)
     throw Exception("qic::rel_entropy_prob", Exception::type::SIZE_MISMATCH);
 
-  if (arma::any(_internal::as_Col(prob1) < -_precision::eps<trait::pT<T1> >::value) ||
-      arma::any(_internal::as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
+  if (arma::any(_internal::as_Col(prob1) <
+                -_precision::eps<trait::pT<T1> >::value) ||
+      arma::any(_internal::as_Col(prob2) <
+                -_precision::eps<trait::pT<T1> >::value))
     throw Exception("qic::rel_entropy_prob", "Invalid probaility distribution");
 #endif
 
   trait::pT<T1> ret(0.0);
-  for(arma::uword ii = 0; ii < prob1.n_elem; ++ii) {
+  for (arma::uword ii = 0; ii < prob1.n_elem; ++ii) {
     ret += prob1.at(ii) > _precision::eps<trait::pT<T1> >::value
              ? prob1.at(ii) * log2(prob1.at(ii) / prob2.at(ii))
              : 0.0;
@@ -354,10 +360,8 @@ inline TR rel_entropy_prob(const std::vector<T1>& prob1,
 
 //****************************************************************************
 
-template <
-  typename T1,
-  typename TR = typename std::enable_if<
-    std::is_arithmetic<T1>::value, T1>::type>
+template <typename T1, typename TR = typename std::enable_if<
+                         std::is_arithmetic<T1>::value, T1>::type>
 inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
                            const std::initializer_list<T1>& prob2) {
   return rel_entropy_prob(static_cast<arma::Col<double> >(prob1),
@@ -368,8 +372,9 @@ inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1> >::value
-            || is_same_pT_var<T1, T2>::value, trait::pT<T1> >::type>
+            is_floating_point_var<trait::pT<T1> >::value ||
+              is_same_pT_var<T1, T2>::value,
+            trait::pT<T1> >::type>
 inline TR rel_entropy(const T1& rho11, const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
@@ -382,7 +387,6 @@ inline TR rel_entropy(const T1& rho11, const T2& rho12) {
   if (rho2.n_cols == 1)
     checkV2 = false;
 
-  
 #ifndef QICLIB_NO_DEBUG
   if (rho1.n_elem == 0 || rho2.n_elem == 0)
     throw Exception("qic::rel_entropy", Exception::type::ZERO_SIZE);
@@ -406,53 +410,51 @@ inline TR rel_entropy(const T1& rho11, const T2& rho12) {
 
   arma::Col<trait::pT<T2> > eigval2;
   arma::Mat<trait::eT<T2> > eigvec2;
-  
-  
-  if(checkV1) {
+
+  if (checkV1) {
     if (rho1.n_rows > 20) {
       bool check = arma::eig_sym(eigval1, eigvec1, rho1, "dc");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
 
-    } else { 
+    } else {
       bool check = arma::eig_sym(eigval1, eigvec1, rho1, "std");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
     }
-    
+
   } else {
     if (rho1.n_cols > 20) {
       bool check = arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "dc");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
 
-    } else { 
+    } else {
       bool check = arma::eig_sym(eigval1, eigvec1, rho1 * rho1.t(), "std");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
     }
   }
-  
 
-  if(checkV2) {
+  if (checkV2) {
     if (rho2.n_rows > 20) {
       bool check = arma::eig_sym(eigval2, eigvec2, rho2, "dc");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
 
-    } else { 
+    } else {
       bool check = arma::eig_sym(eigval2, eigvec2, rho2, "std");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
     }
-    
+
   } else {
     if (rho2.n_cols > 20) {
       bool check = arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "dc");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
-    
-    } else { 
+
+    } else {
       bool check = arma::eig_sym(eigval2, eigvec2, rho2 * rho2.t(), "std");
       if (!check)
         throw std::runtime_error("qic::rel_entropy(): Decomposition failed!");
@@ -460,12 +462,12 @@ inline TR rel_entropy(const T1& rho11, const T2& rho12) {
   }
 
   trait::pT<T1> ret(0.0);
-  
+
   for (arma::uword ii = 0; ii < eigval1.n_elem; ++ii) {
     ret += eigval1(ii) > _precision::eps<trait::pT<T1> >::value
              ? eigval1(ii) * log2(eigval1.at(ii))
              : 0.0;
-    
+
     for (arma::uword jj = 0; jj < eigval2.n_elem; ++jj) {
       ret -= eigval1(ii) > _precision::eps<trait::pT<T1> >::value
                ? eigval1(ii) * log2(eigval2.at(jj)) *
@@ -478,8 +480,5 @@ inline TR rel_entropy(const T1& rho11, const T2& rho12) {
 }
 
 //****************************************************************************
-
-
-
 
 }  // namespace qic

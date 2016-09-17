@@ -56,16 +56,20 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
   friend class _internal::Singleton<const SPM<T1> >;
 
  public:
-  arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> > S{0};
-  arma::field<typename arma::Col<std::complex<T1> >::template fixed<2> > basis2{0};
-  arma::field<typename arma::Col<std::complex<T1> >::template fixed<3> > basis3{0};
+  arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> > S{
+    0};
+  arma::field<typename arma::Col<std::complex<T1> >::template fixed<2> > basis2{
+    0};
+  arma::field<typename arma::Col<std::complex<T1> >::template fixed<3> > basis3{
+    0};
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> >
     proj2{0};
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<3, 3> >
     proj3{0};
 
   struct {
-    typename arma::Col<T1>::template fixed<4> phim{0}, phip{0}, psim{0}, psip{0};
+    typename arma::Col<T1>::template fixed<4> phim{0}, phip{0}, psim{0},
+      psip{0};
   } bell;
 
  private:

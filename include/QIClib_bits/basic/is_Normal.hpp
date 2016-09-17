@@ -26,8 +26,9 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 inline bool
 is_Normal(const T1& rho1,
-           const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
-           const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
+          const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
+          const trait::pT<T1>& rtol = 10 *
+                                      _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = _internal::as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;
@@ -39,10 +40,9 @@ is_Normal(const T1& rho1,
   } else {
     arma::Mat<trait::eT<T1> > eye1 = rho * rho.t();
     arma::Mat<trait::eT<T1> > eye2 = rho.t() * rho;
-   
+
     return is_equal(eye1, eye2, false, atol, rtol);
   }
 }
-
 
 }  // namespace qic

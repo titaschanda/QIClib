@@ -56,13 +56,13 @@ purify(const T1& rho1,
       bool check = arma::eig_sym(eigval, eigvec, rho, "dc");
       if (!check)
         throw std::runtime_error("qic::purify(): Decomposition failed!");
-      
+
     } else {
       bool check = arma::eig_sym(eigval, eigvec, rho, "std");
       if (!check)
         throw std::runtime_error("qic::purify(): Decomposition failed!");
     }
-    
+
     arma::uword dim = rho.n_rows;
     arma::uword dimE = arma::sum(eigval > tol);
 

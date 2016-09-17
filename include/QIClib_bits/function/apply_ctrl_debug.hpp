@@ -305,11 +305,12 @@ inline TR apply_ctrl_debug(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return apply_ctrl_debug(rho, A, std::move(ctrl), std::move(sys), std::move(dim2));
+  return apply_ctrl_debug(rho, A, std::move(ctrl), std::move(sys),
+                          std::move(dim2));
 }
 
 //******************************************************************************
 
-} // namespace debug
+}  // namespace debug
 
 }  // namespace qic

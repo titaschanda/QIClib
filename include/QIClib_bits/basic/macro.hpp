@@ -51,11 +51,9 @@
 #undef QICLIB_NLOPT
 #endif
 
-
 #ifdef QICLIB_USE_OLD_DISCORD
 #undef QICLIB_NEW_DISCORD
 #endif
-
 
 // openmp parallelisation
 #ifdef QICLIB_PARALLEL

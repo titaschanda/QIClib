@@ -214,9 +214,8 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
       sys.n_elem != arma::unique(sys).eval().n_elem)
     throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
 
-  if ((Sbasis.n_elem != rho.n_rows) ||
-    arma::any(Sbasis > arma::prod(dim)) ||
-    Sbasis.n_elem != arma::unique(Sbasis).eval().n_elem)
+  if ((Sbasis.n_elem != rho.n_rows) || arma::any(Sbasis > arma::prod(dim)) ||
+      Sbasis.n_elem != arma::unique(Sbasis).eval().n_elem)
     throw Exception("qic::TrX", "Invalid basis!");
 #endif
 

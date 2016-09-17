@@ -95,23 +95,22 @@ inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
     trait::pT<T1> norm1 = arma::norm(ret[i]);
 
     if (norm1 > _precision::eps<trait::pT<T1> >::value) {
-      ret2[count] =
-        normalize ? (ret[i] / norm1).eval() : ret[i].eval();
+      ret2[count] = normalize ? (ret[i] / norm1).eval() : ret[i].eval();
       ++count;
     } else
       continue;
 
     for (arma::uword j = i + 1; j < rho.size(); ++j) {
-      trait::eT<T1> r =
-        normalize ? cdot(ret2[count - 1], ret[j])
-                  : cdot(ret2[count - 1], ret[j]) / (norm1 * norm1);
+      trait::eT<T1> r = normalize
+                          ? cdot(ret2[count - 1], ret[j])
+                          : cdot(ret2[count - 1], ret[j]) / (norm1 * norm1);
       ret[j] -= r * ret2[count - 1];
     }
   }
 
   auto first = ret2.begin();
   auto last = first + count;
-  
+
   return TR(first, last);
 }
 
@@ -175,7 +174,7 @@ inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
     }
   }
 
-  return ret2.rows(0,count-1);
+  return ret2.rows(0, count - 1);
 }
 
 //******************************************************************************

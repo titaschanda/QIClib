@@ -44,13 +44,13 @@ inline TR sqrtm_sym(const T1& rho1) {
     bool check = arma::eig_sym(eigval, eigvec, rho, "dc");
     if (!check)
       throw std::runtime_error("qic::sqrtm_sym(): Decomposition failed!");
-    
+
   } else {
     bool check = arma::eig_sym(eigval, eigvec, rho, "std");
     if (!check)
       throw std::runtime_error("qic::sqrtm_sym(): Decomposition failed!");
   }
-  
+
   return eigvec *
          arma::diagmat(arma::sqrt(
            arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
@@ -79,7 +79,7 @@ inline TR sqrtm_gen(const T1& rho1) {
   bool check = arma::eig_gen(eigval, eigvec, rho);
   if (!check)
     throw std::runtime_error("qic::sqrtm_gen(): Decomposition failed!");
-  
+
   return eigvec * arma::diagmat(arma::sqrt(eigval)) * eigvec.t();
 }
 

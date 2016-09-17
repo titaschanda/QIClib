@@ -24,8 +24,7 @@ namespace qic {
 template <typename T1,
           typename = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
-inline bool
-is_diagonalizable(const T1& rho1) {
+inline bool is_diagonalizable(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;
@@ -42,6 +41,5 @@ is_diagonalizable(const T1& rho1) {
     return (check && ret);
   }
 }
-
 
 }  // namespace qic

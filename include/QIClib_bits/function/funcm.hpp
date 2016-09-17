@@ -51,11 +51,12 @@ inline TR funcm_sym(const T1& rho1, functor P) {
     if (!check)
       throw std::runtime_error("qic::funm_sym(): Decomposition failed!");
   }
-  
+
   return eigvec *
          arma::diagmat(
            arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
-             eigval).transform(P)) *
+             eigval)
+             .transform(P)) *
          eigvec.t();
 }
 

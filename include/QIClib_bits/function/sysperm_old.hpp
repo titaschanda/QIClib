@@ -177,6 +177,6 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
 
 //******************************************************************************
 
-} // namespace old
+}  // namespace old
 
 }  //  namespace qic
