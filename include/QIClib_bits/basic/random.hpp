@@ -341,13 +341,12 @@ inline arma::Mat<T1> randUnitary(const arma::uword& m) {
 inline arma::uvec randPerm(arma::uword n, arma::uword start = 0) {
 #ifndef QICLIB_NO_DEBUG
   if (n == 0)
-        throw Exception("qic::randPerm", Exception::type::INVALID_PERM);
+    throw Exception("qic::randPerm", Exception::type::INVALID_PERM);
 #endif
-  
+
   arma::uvec ret(n);
   std::iota(ret.begin(), ret.end(), start);
-  std::shuffle(ret.begin(), ret.end(),
-               rdevs.rng);
+  std::shuffle(ret.begin(), ret.end(), rdevs.rng);
 
   return ret;
 }
