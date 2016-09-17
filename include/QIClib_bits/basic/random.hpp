@@ -323,7 +323,10 @@ inline arma::Mat<T1> randUnitary(const arma::uword& m) {
     randN<arma::Mat<T1> >(m, m) * std::sqrt(static_cast<T1>(0.5));
 
   arma::Mat<T1> Q, R;
-  arma::qr(Q, R, A);
+  bool check = arma::qr(Q, R, A);
+
+  if (!bool) {
+    throw std::runtime_error("qic::randUnitary(): Decomposition failed!");
 
   arma::Col<T1> P = R.diag() / arma::abs(R.diag());
 
