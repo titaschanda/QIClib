@@ -217,13 +217,14 @@ inline TR randI(const arma::Col<TA>& range = {0, 1000}) {
 //****************************************************************************
 
 template <typename T1 = arma::ivec,
-          typename TR = typename std::enable_if<
-            is_arma_type_var<T1>::value && (arma::is_Col<T1>::value ||
-                arma::is_Row<T1>::value), T1>::type,
-          typename TA = typename std::conditional<
-            std::is_unsigned<T1>::value, arma::uword, arma::sword>::type>
-inline TR randI(const arma::uword& N,
-                const arma::Col<TA>& range = {0, 1000}) {
+          typename TR = typename std::enable_if<is_arma_type_var<T1>::value &&
+                                                  (arma::is_Col<T1>::value ||
+                                                   arma::is_Row<T1>::value),
+                                                T1>::type,
+          typename TA =
+            typename std::conditional<std::is_unsigned<trait::pT<T1> >::value,
+                                      arma::uword, arma::sword>::type>
+inline TR randI(const arma::uword& N, const arma::Col<TA>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
     throw Exception("qic::randI", "Not proper range");
@@ -250,12 +251,13 @@ inline TR randI(const arma::uword& N,
 
 //****************************************************************************
 
-template <typename T1 = arma::imat,
-          typename TR = typename std::enable_if<
-            is_arma_type_var<T1>::value && arma::is_Mat_only<T1>::value,
-            arma::Mat<trait::eT<T1> > >::type,
-          typename TA = typename std::conditional<
-            std::is_unsigned<T1>::value, arma::uword, arma::sword>::type>
+template <
+  typename T1 = arma::imat,
+  typename TR = typename std::enable_if<is_arma_type_var<T1>::value &&
+                                          arma::is_Mat_only<T1>::value,
+                                        arma::Mat<trait::eT<T1> > >::type,
+  typename TA = typename std::conditional<
+    std::is_unsigned<trait::pT<T1> >::value, arma::uword, arma::sword>::type>
 inline TR randI(const arma::uword& m, const arma::uword& n,
                 const arma::Col<TA>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
