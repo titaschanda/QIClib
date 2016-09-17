@@ -31,7 +31,7 @@ inline TR randU(
   const arma::Col<typename arma::get_pod_type<T1>::result>& range = {0, 1}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
-    throw Exception("qic::randU", "Not proper range");
+    throw Exception("qic::randU", "Not proper range!");
 #endif
 
   std::uniform_real_distribution<typename arma::get_pod_type<T1>::result> dis(
@@ -57,7 +57,7 @@ inline TR randU(const arma::uword& N,
                 const arma::Col<trait::pT<T1> >& range = {0, 1}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
-    throw Exception("qic::randU", "Not proper range");
+    throw Exception("qic::randU", "Not proper range!");
 #endif
 
   std::uniform_real_distribution<trait::pT<T1> > dis(range.at(0), range.at(1));
@@ -84,7 +84,7 @@ inline TR randU(const arma::uword& m, const arma::uword& n,
                 const arma::Col<trait::pT<T1> >& range = {0, 1}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
-    throw Exception("qic::randU", "Not proper range");
+    throw Exception("qic::randU", "Not proper range!");
 #endif
 
   std::uniform_real_distribution<trait::pT<T1> > dis(range.at(0), range.at(1));
@@ -112,7 +112,7 @@ inline TR randN(
   if (meansd.n_elem != 2 ||
       meansd.at(1) <
         _precision::eps<typename arma::get_pod_type<T1>::result>::value)
-    throw Exception("qic::randN", "Not proper mean and standard deviation");
+    throw Exception("qic::randN", "Not proper mean and standard deviation!");
 #endif
 
   std::normal_distribution<typename arma::get_pod_type<T1>::result> dis(
@@ -139,7 +139,7 @@ inline TR randN(const arma::uword& N,
 #ifndef QICLIB_NO_DEBUG
   if (meansd.n_elem != 2 ||
       meansd.at(1) < _precision::eps<trait::pT<T1> >::value)
-    throw Exception("qic::randN", "Not proper mean and standard deviation");
+    throw Exception("qic::randN", "Not proper mean and standard deviation!");
 #endif
 
   std::normal_distribution<trait::pT<T1> > dis(meansd.at(0), meansd.at(1));
@@ -167,7 +167,7 @@ inline TR randN(const arma::uword& m, const arma::uword& n,
 #ifndef QICLIB_NO_DEBUG
   if (meansd.n_elem != 2 ||
       meansd.at(1) < _precision::eps<trait::pT<T1> >::value)
-    throw Exception("qic::randN", "Not proper mean and standard deviation");
+    throw Exception("qic::randN", "Not proper mean and standard deviation!");
 #endif
 
   std::normal_distribution<trait::pT<T1> > dis(meansd.at(0), meansd.at(1));
@@ -194,11 +194,11 @@ template <typename T1 = int,
 inline TR randI(const arma::Col<TA>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
-    throw Exception("qic::randI", "Not proper range");
+    throw Exception("qic::randI", "Not proper range!");
 
   if (std::is_unsigned<typename arma::get_pod_type<T1> >::value &&
       arma::any(range < 0))
-    throw Exception("qic::randI", "Negative range for unsigned type");
+    throw Exception("qic::randI", "Negative range for unsigned type!");
 #endif
 
   std::uniform_int_distribution<TA> dis(range.at(0), range.at(1));
@@ -228,10 +228,10 @@ template <typename T1 = arma::ivec,
 inline TR randI(const arma::uword& N, const arma::Col<TA>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
-    throw Exception("qic::randI", "Not proper range");
+    throw Exception("qic::randI", "Not proper range!");
 
   if (std::is_unsigned<trait::pT<T1> >::value && arma::any(range < 0))
-    throw Exception("qic::randI", "Negative range for unsigned type");
+    throw Exception("qic::randI", "Negative range for unsigned type!");
 #endif
 
   std::uniform_int_distribution<TA> dis(range.at(0), range.at(1));
@@ -263,10 +263,10 @@ inline TR randI(const arma::uword& m, const arma::uword& n,
                 const arma::Col<TA>& range = {0, 1000}) {
 #ifndef QICLIB_NO_DEBUG
   if (range.n_elem != 2 || range.at(0) > range.at(1))
-    throw Exception("qic::randI", "Not proper range");
+    throw Exception("qic::randI", "Not proper range!");
 
   if (std::is_unsigned<trait::pT<T1> >::value && arma::any(range < 0))
-    throw Exception("qic::randI", "Negative range for unsigned type");
+    throw Exception("qic::randI", "Negative range for unsigned type!");
 #endif
 
   std::uniform_int_distribution<TA> dis(range.at(0), range.at(1));
