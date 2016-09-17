@@ -52,7 +52,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 
   if (n != sys.n_elem || arma::any(sys == 0) || arma::any(sys > n) ||
       sys.n_elem != arma::unique(sys).eval().n_elem)
-    throw Exception("qic::sysperm", Exception::type::PERM_INVALID);
+    throw Exception("qic::sysperm", Exception::type::INVALID_PERM);
 #endif
 
   arma::uword product[_internal::MAXQDIT];

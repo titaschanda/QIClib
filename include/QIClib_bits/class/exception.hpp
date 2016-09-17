@@ -48,7 +48,7 @@ class Exception : public std::exception {
     DIMS_MISMATCH_CVECTOR,
     DIMS_MISMATCH_RVECTOR,
     DIMS_MISMATCH_VECTOR,
-    PERM_INVALID,  //
+    INVALID_PERM,  //
     NOT_QUBIT_MATRIX,
     NOT_QUBIT_CVECTOR,
     NOT_QUBIT_RVECTOR,
@@ -149,7 +149,7 @@ class Exception : public std::exception {
       break;
 
     case type::SUBSYS_MISMATCH_DIMS:
-      _msg += "Subsystems mismatch dimensions!";
+      _msg += "Subsystem(s) mismatch dimensions!";
       break;
 
     case type::DIMS_MISMATCH_CVECTOR:
@@ -164,7 +164,7 @@ class Exception : public std::exception {
       _msg += "Dimension(s) mismatch vector!";
       break;
 
-    case type::PERM_INVALID:
+    case type::INVALID_PERM:
       _msg += "Invalid permutation!";
       break;
 

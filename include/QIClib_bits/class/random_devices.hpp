@@ -56,7 +56,7 @@ class RandomDevices final : public _internal::Singleton<RandomDevices> {
 #ifdef _NO_THREAD_LOCAL
 static RandomDevices& rdevs _QICLIB_UNUSED_ = RandomDevices::get_instance();
 #else
-thread_local static RandomDevices& rdevs _QICLIB_UNUSED_ =
+static thread_local RandomDevices& rdevs _QICLIB_UNUSED_ =
   RandomDevices::get_thread_local_instance();
 #endif
 
