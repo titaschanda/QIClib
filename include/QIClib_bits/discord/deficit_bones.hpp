@@ -35,35 +35,35 @@ template <typename T1> class deficit_space<T1> {
   //"deficit_space requires Armadillo Mat object as template argument!");
 
  private:
-  T1* _rho;
-  arma::uword _nodal;
-  arma::uword _n_cols;
-  arma::uword _n_rows;
+  T1* _rho{0};
+  arma::uword _nodal{0};
+  arma::uword _n_cols{0};
+  arma::uword _n_rows{0};
 
-  arma::uword _party_no;
-  arma::uvec _dim;
+  arma::uword _party_no{0};
+  arma::uvec _dim{0};
 
-  trait::pT<T1> _S_A_B;
-  trait::pT<T1> _result;
-  arma::Col<trait::pT<T1> > _tp;
-  trait::pT<T1> _result_reg;
-  arma::Col<trait::pT<T1> > _result_reg_all;
+  trait::pT<T1> _S_A_B{0};
+  trait::pT<T1> _result{0};
+  arma::Col<trait::pT<T1> > _tp{0};
+  trait::pT<T1> _result_reg{0};
+  arma::Col<trait::pT<T1> > _result_reg_all{0};
 
-  bool _is_computed;
-  bool _is_reg_computed;
-  bool _is_sab_computed;
-  bool _deficit2;
-  bool _deficit3;
+  bool _is_computed{0};
+  bool _is_reg_computed{0};
+  bool _is_sab_computed{0};
+  bool _deficit2{0};
+  bool _deficit3{0};
 
-  nlopt::algorithm _deficit_global_opt;
-  double _deficit_global_xtol;
-  double _deficit_global_ftol;
-  bool _deficit_global;
-  nlopt::algorithm _deficit_local_opt;
-  double _deficit_local_xtol;
-  double _deficit_local_ftol;
-  arma::vec _deficit_angle_range;
-  arma::vec _deficit_angle_ini;
+  nlopt::algorithm _deficit_global_opt{};
+  double _deficit_global_xtol{0};
+  double _deficit_global_ftol{0};
+  bool _deficit_global{0};
+  nlopt::algorithm _deficit_local_opt{};
+  double _deficit_local_xtol{0};
+  double _deficit_local_ftol{0};
+  arma::vec _deficit_angle_range{0};
+  arma::vec _deficit_angle_ini{0};
 
   inline void init(arma::uvec dim);
   inline void s_a_b();

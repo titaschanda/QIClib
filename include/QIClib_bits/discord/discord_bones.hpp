@@ -35,35 +35,35 @@ template <typename T1> class discord_space<T1> {
   // "discord_space requires Armadillo Mat object as template argument!");
 
  private:
-  T1* _rho;
-  arma::uword _nodal;
-  arma::uword _n_cols;
-  arma::uword _n_rows;
+  T1* _rho{0};
+  arma::uword _nodal{0};
+  arma::uword _n_cols{0};
+  arma::uword _n_rows{0};
 
-  arma::uword _party_no;
-  arma::uvec _dim;
+  arma::uword _party_no{0};
+  arma::uvec _dim{0};
 
-  trait::pT<T1> _mutual_info;
-  trait::pT<T1> _result;
-  arma::Col<trait::pT<T1> > _tp;
-  trait::pT<T1> _result_reg;
-  arma::Col<trait::pT<T1> > _result_reg_all;
+  trait::pT<T1> _mutual_info{0};
+  trait::pT<T1> _result{0};
+  arma::Col<trait::pT<T1> > _tp{0};
+  trait::pT<T1> _result_reg{0};
+  arma::Col<trait::pT<T1> > _result_reg_all{0};
 
-  bool _is_minfo_computed;
-  bool _is_computed;
-  bool _is_reg_computed;
-  bool _discord2;
-  bool _discord3;
+  bool _is_minfo_computed{0};
+  bool _is_computed{0};
+  bool _is_reg_computed{0};
+  bool _discord2{0};
+  bool _discord3{0};
 
-  nlopt::algorithm _discord_global_opt;
-  double _discord_global_xtol;
-  double _discord_global_ftol;
-  bool _discord_global;
-  nlopt::algorithm _discord_local_opt;
-  double _discord_local_xtol;
-  double _discord_local_ftol;
-  arma::vec _discord_angle_range;
-  arma::vec _discord_angle_ini;
+  nlopt::algorithm _discord_global_opt{};
+  double _discord_global_xtol{0};
+  double _discord_global_ftol{0};
+  bool _discord_global{0};
+  nlopt::algorithm _discord_local_opt{};
+  double _discord_local_xtol{0};
+  double _discord_local_ftol{0};
+  arma::vec _discord_angle_range{0};
+  arma::vec _discord_angle_ini{0};
 
   inline void init(arma::uvec dim);
   inline void check_size_change();

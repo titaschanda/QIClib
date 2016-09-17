@@ -328,7 +328,7 @@ inline arma::Mat<T1> randUnitary(const arma::uword& m) {
   arma::Mat<T1> Q, R;
   bool check = arma::qr(Q, R, A);
 
-  if (!bool) {
+  if (!check) 
     throw std::runtime_error("qic::randUnitary(): Decomposition failed!");
 
   arma::Col<T1> P = R.diag() / arma::abs(R.diag());
@@ -336,6 +336,6 @@ inline arma::Mat<T1> randUnitary(const arma::uword& m) {
   return Q * arma::diagmat(P);
 }
 
-//****************************************************************************
+  //****************************************************************************
 
 }  // namespace qic

@@ -252,7 +252,7 @@ inline deficit_space<T1>& deficit_space<T1>::initial_angle(const arma::vec& a) {
 
 template <typename T1> inline void deficit_space<T1>::s_a_b() {
   if (!_is_sab_computed) {
-    _S_A_B = entropy(_rho);
+    _S_A_B = entropy(*_rho);
     _is_sab_computed = true;
   }
 }

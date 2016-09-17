@@ -27,7 +27,8 @@ template <typename T1>
 inline discord_space<T1>::discord_space(T1* rho1, arma::uword nodal,
                                         arma::uvec dim)
     : _rho(rho1), _nodal(nodal), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows),
-      _is_minfo_computed(false), _is_computed(false), _is_reg_computed(false) {
+      _is_minfo_computed(false), _is_computed(false),
+      _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho->n_elem == 0)
     throw Exception("qic::discord_space", Exception::type::ZERO_SIZE);
@@ -260,7 +261,7 @@ template <typename T1> inline void discord_space<T1>::minfo_p() {
 
     auto rho_A = TrX(*_rho, rest, _dim);
     auto S_A = entropy(rho_A);
-    auto S_A_B = entropy(_rho);
+    auto S_A_B = entropy(*_rho);
     _mutual_info = S_A - S_A_B;
     _is_minfo_computed = true;
   }

@@ -83,7 +83,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1> >::value,
             arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR powm_gen_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
-  const auto& rho = _internal::as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -109,7 +109,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1> >::value,
             arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_gen_implement(const T1& rho1, const T2& P, int_tag<T1>) {
-  const auto& rho = _internal::as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -131,7 +131,7 @@ template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_gen_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
-  const auto& rho = _internal::as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -151,7 +151,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1> >::value,
             arma::Mat<std::complex<trait::pT<T1> > > >::type>
 inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
-  const auto& rho = _internal::as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -190,7 +190,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1> >::value,
             arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_sym_implement(const T1& rho1, const T2& P, int_tag<T1>) {
-  const auto& rho = _internal::as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -211,7 +211,7 @@ template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR powm_sym_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
-  const auto& rho = _internal::as_Mat(rho1);
+  const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)

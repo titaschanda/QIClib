@@ -68,8 +68,8 @@ class Exception : public std::exception {
     CUSTOM_EXCEPTION
   };
 
-  Exception(const std::string& where, const type& type)
-      : _where{where}, _msg{}, _type{type}, _custom{} {
+  Exception(const std::string& where, const type& Type)
+      : _where{where}, _msg{}, _type{Type}, _custom{} {
     _construct_exception_msg();
   }
 

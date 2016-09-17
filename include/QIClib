@@ -59,6 +59,7 @@
 #include "QIClib_bits/basic/sparse_to_dense.hpp"
 
 #include "QIClib_bits/internal/algorithm.hpp"
+#include "QIClib_bits/class/gates.hpp"
 
 #include "QIClib_bits/function/Tx.hpp"
 #include "QIClib_bits/function/TrX.hpp"
