@@ -219,6 +219,29 @@ inline bool is_prime(arma::uword n) {
 
 //******************************************************************************
 
+inline bool is_primepower(arma::uword n) {
+  arma::uword i(2),j(0);
+  //j = 0;
+  //i = 2;
+
+  while ((i <= static_cast<arma::uword>(
+                 std::llround(std::floor(std::pow(n, .5))))) &&
+         (j == 0)) {
+    if((n % i) == 0) {
+      j = i;
+    }
+    ++i;
+  }
+  for (arma::uword i = 2; i <= static_cast<arma::uword>(std::llround(std::floor(log(n) / log(j))) + 1) ; i++) {
+    if(std::pow(j , i) == n) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//******************************************************************************
+
 inline arma::uvec factors(arma::uword n) {
 #ifndef QICLIB_NO_DEBUG
   if (n == 0 || n == 1)
