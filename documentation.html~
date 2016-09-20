@@ -315,10 +315,13 @@
 		<tr><td>  </td><td>  </td><td> </td></tr>
 
 
-		<tr><td><a href="#apply"> apply </a> </td><td>  </td><td>Apply a gate to a quantum state</td></tr>	      
+		<tr><td><a href="#apply"> apply </a> </td><td>  </td><td>Apply a quantum gate to a quantum state</td></tr>	      
 		
-		<tr><td><a href="#apply_ctrl"> apply_ctrl </a> </td><td>  </td><td>Apply a controlled-gate to 
-		    a quantum state</td></tr>
+		<tr><td><a href="#apply_ctrl"> apply_ctrl </a> </td><td>  </td><td>Apply a quantum gate to 
+		    a quantum state as a controlled gate</td></tr>
+		    
+		<tr><td><a href="#apply_ctrl"> make_ctrl </a> </td><td>  </td><td>Convert a quantum gate into 
+		    a controlled quantum gate</td></tr>
 
 		<tr><td><a href="#measure"> measure </a> </td><td>  </td><td>Measure a state using a set of Kraus 
 		    or projection operators</td></tr>
@@ -565,8 +568,7 @@
 		mat CXX2 = make_ctrl(gates.X,{1},{2},2,2); // same as above
 		mat CXX3 = make_ctrl(gates.X,{1},{2},2);   // same as above
 		                                           // default dim = 2 is taken
-	-->      
-	     </pre>
+	-->  </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
