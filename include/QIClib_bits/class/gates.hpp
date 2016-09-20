@@ -79,7 +79,8 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
  public:
   //**************************************************************************
 
-  arma::Mat<std::complex<T1> > U2(T1 theta, const arma::Col<T1>& unit) const {
+  typename arma::Mat<std::complex<T1> >::template fixed<2, 2>
+  U2(T1 theta, const arma::Col<T1>& unit) const {
 #ifndef QICLIB_NO_DEBUG
     if (unit.size() != 3)
       throw Exception("qic::GATES::U2", "Vector is not 3-dimensional!");
@@ -89,7 +90,8 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
 #endif
 
     const auto& I = _internal::cond_I<std::complex<T1> >::value;
-    return std::cos(0.5 * theta) * arma::eye<arma::Mat<std::complex<T1> > > +
+    return std::cos(0.5 * theta) *
+             arma::eye<arma::Mat<std::complex<T1> > >(2, 2) +
            I * std::sin(0.5 * theta) *
              (unit.at(0) * X + unit.at(1) * Y + unit.at(2) * Z);
   }
@@ -122,8 +124,8 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
   template <typename T2, typename TR = typename std::enable_if<
                            is_floating_point_var<trait::pT<T2> >::value,
                            arma::Mat<trait::eT<T2> > >::type>
-  inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec sys,
-                      arma::uvec dim) {
+  inline TR make_ctrl(const T2& A, arma::uvec ctrl, arma::uvec sys,
+                      arma::uvec dim) const {
     const auto& A1 = _internal::as_Mat(A);
 
     arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
@@ -185,7 +187,8 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
     arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
     arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
-    for (arma::uword i = 0; i <= p_num; ++i) Ap.at(i) = powm_gen(A1, i);
+    for (arma::uword i = 0; i <= p_num; ++i)
+      Ap.at(i) = _internal::POWM_GEN_INT(A1, i);
 
     arma::Mat<trait::eT<T2> > U(N, N, arma::fill::zeros);
 
@@ -270,8 +273,8 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
   template <typename T2, typename TR = typename std::enable_if<
                            is_floating_point_var<trait::pT<T1> >::value,
                            arma::Mat<trait::eT<T2> > >::type>
-  inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec sys,
-                      arma::uword n, arma::uword dim = 2) {
+  inline TR make_ctrl(const T2& A, arma::uvec ctrl, arma::uvec sys,
+                      arma::uword n, arma::uword dim = 2) const {
     const auto& A1 = _internal::as_Mat(A);
 
 #ifndef QICLIB_NO_DEBUG

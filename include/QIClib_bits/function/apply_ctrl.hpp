@@ -105,7 +105,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
   arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
-  for (arma::uword i = 0; i <= p_num; ++i) Ap.at(i) = powm_gen(A1, i);
+  for (arma::uword i = 0; i <= p_num; ++i)
+    Ap.at(i) = _internal::POWM_GEN_INT(A1, i);
 
   if (!checkV) {
     arma::Col<eTR> rho_ret(rho.n_rows, arma::fill::zeros);
