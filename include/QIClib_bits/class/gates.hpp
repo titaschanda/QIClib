@@ -29,11 +29,11 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
   friend class _internal::Singleton<const GATES<T1> >;
 
  public:
-  typename arma::Mat<T1>::template fixed<2, 2> Had{0};
   typename arma::Mat<T1>::template fixed<2, 2> X{0};
   typename arma::Mat<std::complex<T1> >::template fixed<2, 2> Y{0};
   typename arma::Mat<T1>::template fixed<2, 2> Z{0};
-
+  typename arma::Mat<T1>::template fixed<2, 2> Had{0};
+  
   typename arma::Mat<T1>::template fixed<4, 4> CNOT{0};
   typename arma::Mat<T1>::template fixed<4, 4> CZ{0};
   typename arma::Mat<T1>::template fixed<4, 4> swap{0};
