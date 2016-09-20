@@ -29,17 +29,20 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
   friend class _internal::Singleton<const GATES<T1> >;
 
  public:
-  typename arma::Mat<T1>::template fixed<2, 2> X{0};
-  typename arma::Mat<std::complex<T1> >::template fixed<2, 2> Y{0};
-  typename arma::Mat<T1>::template fixed<2, 2> Z{0};
-  typename arma::Mat<T1>::template fixed<2, 2> Had{0};
+  typename arma::Mat<T1>::template fixed<2, 2> X{arma::fill::zeros};
 
-  typename arma::Mat<T1>::template fixed<4, 4> CNOT{0};
-  typename arma::Mat<T1>::template fixed<4, 4> CZ{0};
-  typename arma::Mat<T1>::template fixed<4, 4> swap{0};
+  typename arma::Mat<std::complex<T1> >::template fixed<2, 2> Y{
+    arma::fill::zeros};
 
-  typename arma::Mat<T1>::template fixed<8, 8> Tof{0};
-  typename arma::Mat<T1>::template fixed<8, 8> Fred{0};
+  typename arma::Mat<T1>::template fixed<2, 2> Z{arma::fill::zeros};
+  typename arma::Mat<T1>::template fixed<2, 2> Had{arma::fill::zeros};
+
+  typename arma::Mat<T1>::template fixed<4, 4> CNOT{arma::fill::zeros};
+  typename arma::Mat<T1>::template fixed<4, 4> CZ{arma::fill::zeros};
+  typename arma::Mat<T1>::template fixed<4, 4> swap{arma::fill::zeros};
+
+  typename arma::Mat<T1>::template fixed<8, 8> Tof{arma::fill::zeros};
+  typename arma::Mat<T1>::template fixed<8, 8> Fred{arma::fill::zeros};
 
  private:
   GATES()
@@ -52,23 +55,18 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
 
     //**************************************************************************
 
-    CNOT.fill(0.0);
     CNOT.at(0, 0) = CNOT.at(1, 1) = CNOT.at(2, 3) = CNOT.at(3, 2) = 1.0;
 
-    CZ.fill(0.0);
     CZ.at(0, 0) = CZ.at(1, 1) = CZ.at(2, 2) = 1.0;
     CZ.at(3, 3) = -1.0;
 
-    swap.fill(0.0);
     swap.at(0, 0) = swap.at(1, 2) = swap.at(2, 1) = swap.at(3, 3) = 1.0;
 
     //**************************************************************************
 
-    Tof.fill(0.0);
     Tof.at(0, 0) = Tof.at(1, 1) = Tof.at(2, 2) = Tof.at(3, 3) = Tof.at(4, 4) =
       Tof.at(5, 5) = Tof.at(6, 7) = Tof.at(7, 6) = 1.0;
 
-    Fred.fill(0.0);
     Fred.at(0, 0) = Fred.at(1, 1) = Fred.at(2, 2) = Fred.at(3, 3) =
       Fred.at(4, 4) = Fred.at(5, 6) = Fred.at(6, 5) = Fred.at(7, 7) = 1.0;
 
@@ -90,10 +88,26 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
 #endif
 
     const auto& I = _internal::cond_I<std::complex<T1> >::value;
-    return std::cos(0.5 * theta) *
-             arma::eye<arma::Mat<std::complex<T1> > >(2, 2) +
+    typename arma::Mat<std::complex<T1> >::template fixed<2, 2> ret(
+      arma::fill::eye);
+
+    return std::cos(0.5 * theta) * ret +
            I * std::sin(0.5 * theta) *
              (unit.at(0) * X + unit.at(1) * Y + unit.at(2) * Z);
+  }
+
+  //**************************************************************************
+
+  typename arma::Mat<std::complex<T1> >::template fixed<2, 2>
+  PS(T1 phi) const {
+
+    const auto& I = _internal::cond_I<std::complex<T1> >::value;
+    typename arma::Mat<std::complex<T1> >::template fixed<2, 2> ret(
+      arma::fill::zeros);
+
+    ret.at(0, 0) = 1;
+    ret.at(1, 1) = std::exp(I * phi);
+    return ret;
   }
 
   //**************************************************************************
