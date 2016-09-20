@@ -185,7 +185,7 @@ inline TR randN(const arma::uword& m, const arma::uword& n,
 
 //****************************************************************************
 
-template <typename T1 = int,
+template <typename T1 = arma::sword,
           typename TR = typename std::enable_if<
             std::is_arithmetic<T1>::value || is_complex<T1>::value, T1>::type,
           typename TA = typename std::conditional<
