@@ -450,7 +450,10 @@
 	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;POD_TYPE&gt;</code> class, but you can take reference to
 	    	<code>const</code>. For this use <code>const SPM&lt;POD_TYPE&gt;& SOMENAME  = SPM&lt;POD_TYPE&gt;::get_instance();</code>.
 	    	However, for each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference 
-	      to <code>const</code> (See the following example).</li><br> 
+	      to <code>const</code> (See the following example).
+	      <br>
+	      <br><font color="blueviolet"><i><b>Note</b>: Taking copy or reference to <code>const</code> is not advisable for the 
+	      member variables. Direct use of member variables is recommended.</i></font></li><br> 
 
 
 	    <li> Example:
@@ -494,7 +497,7 @@
 				<code>gatesf</code> is recommended rather than explicit <code>GATES&lt;POD_TYPE&gt;::get_instance()</code>.</li><br>
 	     
 	    <li> <code>gates.X</code>, <code>gates.Y</code>, <code>gates.Z</code>, and <code>gates.Had</code> give Pauli X,Y, and Z and 
-	    Hadamard gates respectively. <code>gates.Y</code> is constant complex matrix (<code>const cx_mat</code>), 
+	    Hadamard gates respectively. <code>gates.Y</code> is a constant complex matrix (<code>const cx_mat</code>), 
 	    where as others are constant real matrices (<code>const mat</code>). 
 	    <br>(Similarly for <code>gatesf.X</code>, <code>gatesf.Y</code>, <code>gatesf.Z</code>, and <code>gatesf.Had</code>.)</li><br> 
 	    
@@ -502,44 +505,67 @@
 		 and swap gates respectively as constant real matrices (<code>const mat</code>).
 	    <br>(Similarly for <code>gatesf.CNOT</code>, <code>gatesf.CZ</code>, and <code>gatesf.swap</code>.)</li><br> 	    
 	    
+		 <li> <code>gates.Tof</code> and <code>gates.Fred</code> give Toffoli and Fredkin gates respectively as constant 
+		 real matrices (<code>const mat</code>).
+	    <br>(Similarly for <code>gatesf.Tof</code> and <code>gatesf.Fred</code>.)</li><br> 	    
+	    	    
+	    
 	    <li> <code>gates.U2(theta, unitV)</code>: Generates a member of U(2) group. <code>theta</code> is a <code>double</code>
-			and <code>uniV</code> is a 3-dimensional unit column vector as <code>vec</code>. Output is a complex unitary matrix 
-			(<code>cx_mat</code>) as <i>U = cos(theta/2) I + i sin(theta/2)(unitV.&sigma;)</i>. 
+			and <code>uniV</code> is a 3-dimensional unit column vector (<code>vec</code>). Output is a fixed size 2x2 complex 
+			unitary matrix (<code>cx_mat22</code>) as <i>U = cos(theta/2) I + i sin(theta/2)(unitV.&sigma;)</i>. 
 			<br>(Similarly for <code>gatesf.U2(theta, unitV)</code>.)</li><br>
 
 		
-		 <li> <code>gates.qft(dim)</code>: Generates a member of U(2) group. <code>theta</code> is a <code>double</code>
-		 and <code>uniV</code> is a 3-dimensional unit column vector as <code>vec</code>. Output is a complex unitary matrix 
-		 (<code>cx_mat</code>) as <i>U = cos(theta/2) I + i sin(theta/2)(unitV.&sigma;)</i>. 
-		 <br>(Similarly for <code>gatesf.U2(theta, unitV)</code>.)</li><br>
+		 <li> <code>gates.qft(dim)</code>: Generates unitary matrix for quantum Fourier transform of dimension 
+		 specified by <code>dim</code>, as complex matrix (<code>cx_mat</code>). 
+		 <br>(Similarly for <code>gatesf.qft(dim)</code>.)</li><br>
 		 
+		 
+		 <li> <code>gates.make_ctrl(U, ctrl, subsys, dim)</code>: Convert a quantum gate <code>U</code> (<code>mat</code> 
+		 or <code>cx_mat</code>) into a controlled quantum gate, where <code>subsys</code> is a <code>uvec</code> containing the indices
+		  of subsystems where <code>U</code> will be applied, and <code>ctrl</code> is a <code>uvec</code> containing the indices 
+		  of control subsystems. <code>dim</code> is a <code>uvec</code> containing the dimensions of all subsystems.
+		  <br><b>Note:</b> Indices in <code>subsys</code> and <code>ctrl</code> start from 1, i.e., 
+		  first party has the index 1, second party has the index 2 and so on.
+		  <br><b>Note:</b> Return type is same as that of <code>U</code>.
+		  <br>(Similarly for <code>gatesf.make_ctrl(U, ctrl, subsys, dim)</code>.) </li><br>
+		 
+		 <li> <code>gates.make_ctrl(U, ctrl, subsys, n, dim = 2)</code>: Same as above.
+			Here <code>n</code> specifies the total number of subsystems, and every subsystem has same dimension specified by <code>dim</code>
+			(optional, by default it is 2). <code>n</code> and <code>dim</code> both are 
+			<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>.
+			<br>(Similarly for <code>gatesf.make_ctrl(U, ctrl, subsys, n, dim = 2)</code>.) </li><br>
 		 
 		 		
-	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;POD_TYPE&gt;</code> class, but you can take reference to
-	    	<code>const</code>. For this use <code>const SPM&lt;POD_TYPE&gt;& SOMENAME  = SPM&lt;POD_TYPE&gt;::get_instance();</code>.
-	    	However, for each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference 
-	      to <code>const</code> (See the following example).</li><br> 
+	    <li> <b>Note:</b> You cannot take a copy of the whole <code>GATES&lt;POD_TYPE&gt;</code> class, but you can take reference to
+	    	<code>const</code>. For this use <code>const GATES&lt;POD_TYPE&gt;& SOMENAME  = GATES&lt;POD_TYPE&gt;::get_instance();</code>.
+	    	However, for each member variables, like <code>Had</code> or <code>CNOT</code> etc., you can either take a copy or reference 
+	      to <code>const</code>. Member functions like <code>U2</code> or <code>qft</code> etc. behave like 
+	      normal functions. (See the following example).
+	      <br>
+	      <br><font color="blueviolet"><i><b>Note</b>: Taking copy or reference to <code>const</code> is not advisable for the 
+	      member variables. Direct use of member variables is recommended.</i></font></li><br> 
 
 
 	    <li> Example:
 	      <pre> 
-	  	const SPM&lt;double&gt;& myspm 
-   	 	   = SPM&lt;double&gt;::get_instance(); // take const ref of the whole class
+	  	const GATES&lt;double&gt;& mygates 
+   	 	   = GATES&lt;double&gt;::get_instance(); // take const ref of the whole class
 	   
-		const cx_mat& S1 = spm.S(1);   // \sigma_x matrix, take reference
-		cx_mat S2 = spm.S(2);          // \sigma_y matrix, take a copy
+		const mat& XX = gates.X;   // \sigma_x matrix, take reference
+		cx_mat YY = gates.Y;       // \sigma_y matrix, take a copy
 
-		const cx_vec& plus = spm.basis2(0, 1);     // |+&gt state
-		const cx_mat& proj_plus = spm.proj2(0, 1); // |+&gt&lt+| projector
+		cx_mat Q = gates.qft(8); // quantum Fourier transform 
+		                         // for 8 dimension 
 
-		const cx_vec& U = spm.basis3(0, 3); // 1st eigenvector of 
-                //Spin S_z operator in 3-dim
-
-		const cx_mat& M = spm.basis3(1, 3); // 2nd eigenvector of 
-                //Spin S_z operator in 3-dim
-	
-		const cx_mat& M = spm.basis3(2, 3); // 3rd eigenvector of 
-                //Spin S_z operator in 3-dim
+		mat CXX 
+		    = make_ctrl(gates.X,{1},{2},{2,2}); // make control Pauli X gate 
+		                                        // where control qubit is 1
+		                                        // and target qubit is 2
+													 
+		mat CXX2 = make_ctrl(gates.X,{1},{2},2,2); // same as above
+		mat CXX3 = make_ctrl(gates.X,{1},{2},2);   // same as above
+		                                           // default dim = 2 is taken
 	      </pre>
 	    </li>
 	  </ul>
@@ -597,15 +623,20 @@
 	  <a name="RandomDevices"></a>
 	  <b>RandomDevices<br>rdevs</b><br><br>
 	  <ul>
-	    <li> Predefined random number engines/generators, to be used with functions like <a href="#randU">randU</a> etc. This class is thread safe.</li><br>
+	    <li> Predefined random number engines/generators, used in functions like <a href="#randU">randU</a> etc. 
+	    This class is thread safe.</li><br>
 
-	    <li> This is a singleton class, which is constructed only once.
-	      Instantiated by <code>static RandomDevices& rdevs  = RandomDevices::get_instance();</code> You don't need to do this as
-	      it is automatically instantiated if you use this library. Just use <code>rdevs</code> (see below). </li><br>
+		<li>  This is a singleton class, can be constructed only once. 
+				You can only take reference of this class using <code>RandomDevices::get_thread_local_instance()</code>
+				or <code>RandomDevices::get_instance()</code>, <font color="blueviolet"><i>but this is not advisable at all</i></font>.
+				QIClib library automatically instantiates this class as <code>redvs</code>.
+				Use <code>rdevs</code> rather than explicit  <code>RandomDevices::get_thread_local_instance()</code> or
+				<code>RandomDevices::get_instance()</code>.</li><br>
 
-	    <li> There are two member variables, <code>rd</code> and <code>rng</code>. <code>rd</code> is a instance of <code>std::random_device</code>, and 
-	      <code>rng</code> is a instance of Mersenne twister engine, <code>std::mt19937_64</code> or <code>std::mt19937</code> depending on the
-	      architecture of the machine.</li><br>
+	    <li>There are two member variables, <code>rd</code> and <code>rng</code>. <code>rd</code> is an instance of 
+	    <code>std::random_device</code>, and <code>rng</code> is an instance of Mersenne twister engine, <code>std::mt19937_64</code> 
+	    or <code>std::mt19937</code> depending on whether <a href="http://arma.sourceforge.net/">Armadillo</a> uses 64bit integers or 
+	    not. See <a href="http://arma.sourceforge.net/docs.html#uword">this</a>. </li><br>
 
 	    <li> By default <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> with user defined
 	      value, use <code>rdevs.set_seed(YOUR_SEED)</code>. To seed <code>rng</code> with the random return value of <code>rd</code> again, use
@@ -620,22 +651,27 @@
 
 		// seed is random, by default
 		for(int i = 0; i < 10; ++i) {
-				   a[i] = dis(rdevs.rng); // generate 10 random number
-				   // according to Cauchy distribution with parameters 0 and 1	   
-				   }
+		  a[i] = dis(rdevs.rng); // generate 10 random number
+		                         // according to Cauchy distribution 
+		                         // with parameters 0 and 1	   
+		}
 				   
-				   rdevs.set_seed(10); // set seed to 10
-				   for(int i = 0; i < 10; ++i) {
-						      b[i] = dis(redvs.rng); // generate 10 random number
-						      // according to Cauchy distribution with parameters 0 and 1	   
-						      }
+		rdevs.set_seed(10); // set seed to 10
+		
+		for(int i = 0; i < 10; ++i) {
+		  b[i] = dis(redvs.rng); // generate 10 random number
+		                         // according to Cauchy distribution 
+		                         // with parameters 0 and 1	   
+		}
 						      
-						      rdevs.set_seed_random(); // again seed is random
-						      for(int i = 0; i < 10; ++i) {
-									 c[i] = dis(rdevs.rng); // generate 10 random number
-									 // according to Cauchy distribution with parameters 0 and 1	   
-									 }
-									 </pre>
+		rdevs.set_seed_random(); // again seed is random
+		
+		for(int i = 0; i < 10; ++i) {
+		  c[i] = dis(rdevs.rng); // generate 10 random number
+		                         // according to Cauchy distribution 
+		                         // with parameters 0 and 1	   
+		}
+			</pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
