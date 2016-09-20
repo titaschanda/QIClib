@@ -99,7 +99,7 @@ inline arma::ivec real_to_contfrac(double x, arma::uword n,
   arma::uword count(0);
 
   for (arma::uword i = 0; i < n; ++i) {
-    result.at(i) = std::llround(std::floor(x));
+    result.at(i) = QICLIB_ROUND_OFF(std::floor(x));
     x = 1 / (x - std::floor(x));
     count++;
     if (!std::isfinite(x) || x > tol) {
@@ -157,7 +157,7 @@ inline arma::uword denominator(double c, arma::uword qmax) {
     } else {
       return (q1);
     }
-    q2 = std::llround(floor(y)) * q1 + q0;
+    q2 = QICLIB_ROUND_OFF(floor(y)) * q1 + q0;
     if (q2 >= qmax) {
       return (q1);
     }
@@ -175,7 +175,7 @@ inline arma::sword numerator(double c, arma::uword qmax) {
 #endif
 
   arma::uword den = denominator(c, qmax);
-  return std::llround(std::floor(den * c + 0.5));
+  return QICLIB_ROUND_OFF(std::floor(den * c + 0.5));
 }
 
 //******************************************************************************
@@ -208,7 +208,7 @@ inline bool is_prime(arma::uword n) {
 #endif
 
   for (arma::uword i = 2;
-       i <= static_cast<arma::uword>(std::llround(std::floor(std::sqrt(n))));
+       i <= static_cast<arma::uword>(QICLIB_ROUND_OFF(std::floor(std::sqrt(n))));
        i++) {
     if (n % i == 0) {
       return false;
@@ -225,14 +225,14 @@ inline bool is_primepower(arma::uword n) {
   //i = 2;
 
   while ((i <= static_cast<arma::uword>(
-                 std::llround(std::floor(std::pow(n, .5))))) &&
+                 QICLIB_ROUND_OFF(std::floor(std::pow(n, .5))))) &&
          (j == 0)) {
     if((n % i) == 0) {
       j = i;
     }
     ++i;
   }
-  for (arma::uword i = 2; i <= static_cast<arma::uword>(std::llround(std::floor(log(n) / log(j))) + 1) ; i++) {
+  for (arma::uword i = 2; i <= static_cast<arma::uword>(QICLIB_ROUND_OFF(std::floor(log(n) / log(j))) + 1) ; i++) {
     if(std::pow(j , i) == n) {
       return true;
     }
@@ -251,7 +251,7 @@ inline arma::uvec factors(arma::uword n) {
   std::vector<arma::uword> ret;
 
   for (arma::uword i = 2;
-       i <= static_cast<arma::uword>(std::llround(std::floor(std::sqrt(n))));
+       i <= static_cast<arma::uword>(QICLIB_ROUND_OFF(std::floor(std::sqrt(n))));
        i++) {
     if (n % i == 0) {
       ret.push_back(i);

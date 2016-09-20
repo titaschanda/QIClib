@@ -36,3 +36,4 @@ Version 0.0.5 - Development version
 	- std::runtime_error exception for eig_sym/eig_gen decomposition
 	- std::runtime_error exception for qr decomposition
 	- added is_primepower
+	- added randPerm

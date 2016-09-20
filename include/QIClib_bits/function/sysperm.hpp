@@ -166,7 +166,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);

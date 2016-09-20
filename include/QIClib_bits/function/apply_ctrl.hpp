@@ -295,7 +295,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);

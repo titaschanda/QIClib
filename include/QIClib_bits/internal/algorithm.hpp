@@ -56,17 +56,17 @@ inline TR POWM_GEN_INT(const T1& rho, const T2& P) {
 
 template <typename T1> struct int_tag {
   typedef int_tag type;
-  //  typedef arma::Mat<trait::eT<T1> > ret_type;
+  typedef arma::Mat<trait::eT<T1> > ret_type;
 };
 
 template <typename T1> struct uint_tag {
   typedef uint_tag type;
-  //  typedef arma::Mat<trait::eT<T1> > ret_type;
+  typedef arma::Mat<trait::eT<T1> > ret_type;
 };
 
 template <typename T1> struct nonint_tag {
   typedef nonint_tag type;
-  //  typedef arma::Mat<std::complex<trait::pT<T1> > > ret_type;
+  typedef arma::Mat<std::complex<trait::pT<T1> > > ret_type;
 };
 
 template <typename T1, typename T2>

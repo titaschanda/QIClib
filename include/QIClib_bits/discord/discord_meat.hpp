@@ -58,7 +58,7 @@ inline discord_space<T1>::discord_space(T1* rho1, arma::uword nodal,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(_rho->n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(_rho->n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
@@ -647,7 +647,7 @@ inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(_rho->n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(_rho->n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);

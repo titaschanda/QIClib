@@ -45,6 +45,13 @@
 #undef QICLIB_INIT
 #endif
 
+// round_off for uword/sword, don't change
+#ifdef ARMA_64BIT_WORD
+#define QICLIB_ROUND_OFF std::llround
+#else
+#define QICLIB_ROUND_OFF std::lround
+#endif
+
 // nlopt features on or off
 #define QICLIB_NLOPT
 #ifdef QICLIB_DONT_USE_NLOPT

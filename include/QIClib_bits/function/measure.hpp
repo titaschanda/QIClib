@@ -498,7 +498,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
@@ -555,7 +555,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
@@ -666,7 +666,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
@@ -786,7 +786,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);

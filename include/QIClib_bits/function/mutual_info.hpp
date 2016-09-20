@@ -166,7 +166,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    std::llround(std::log(rho.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
