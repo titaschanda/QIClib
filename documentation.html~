@@ -521,10 +521,10 @@
 		 <br>(Similarly for <code>gatesf.qft(dim)</code>.)</li><br>
 		 
 		 
-		 <li> <code>gates.make_ctrl(U, ctrl, subsys, dim)</code>: Convert a quantum gate <code>U</code> (<code>mat</code> 
+<!--		 <li> <code>gates.make_ctrl(U, ctrl, subsys, dim)</code>: Convert a quantum gate <code>U</code> (<code>mat</code> 
 		 or <code>cx_mat</code>) into a controlled quantum gate, where <code>subsys</code> is a <code>uvec</code> containing the indices
-		  of subsystems where <code>U</code> will be applied, and <code>ctrl</code> is a <code>uvec</code> containing the indices 
-		  of control subsystems. <code>dim</code> is a <code>uvec</code> containing the dimensions of all subsystems.
+		  of subsystems where <code>U</code> will be applied (target subsystems), and <code>ctrl</code> is a <code>uvec</code> 
+		  containing the indices of control subsystems. <code>dim</code> is a <code>uvec</code> containing the dimensions of all subsystems.
 		  <br><b>Note:</b> Indices in <code>subsys</code> and <code>ctrl</code> start from 1, i.e., 
 		  first party has the index 1, second party has the index 2 and so on.
 		  <br><b>Note:</b> Return type is same as that of <code>U</code>.
@@ -535,7 +535,7 @@
 			(optional, by default it is 2). <code>n</code> and <code>dim</code> both are 
 			<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>.
 			<br>(Similarly for <code>gatesf.make_ctrl(U, ctrl, subsys, n, dim = 2)</code>.) </li><br>
-		 
+-->		 
 		 		
 	    <li> <b>Note:</b> You cannot take a copy of the whole <code>GATES&lt;POD_TYPE&gt;</code> class, but you can take reference to
 	    	<code>const</code>. For this use <code>const GATES&lt;POD_TYPE&gt;& SOMENAME  = GATES&lt;POD_TYPE&gt;::get_instance();</code>.
@@ -557,8 +557,7 @@
 
 		cx_mat Q = gates.qft(8); // quantum Fourier transform 
 		                         // for 8 dimension 
-
-		mat CXX 
+	<!--	mat CXX 
 		    = make_ctrl(gates.X,{1},{2},{2,2}); // make control Pauli X gate 
 		                                        // where control qubit is 1
 		                                        // and target qubit is 2
@@ -566,7 +565,8 @@
 		mat CXX2 = make_ctrl(gates.X,{1},{2},2,2); // same as above
 		mat CXX3 = make_ctrl(gates.X,{1},{2},2);   // same as above
 		                                           // default dim = 2 is taken
-	      </pre>
+	-->      
+	     </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
