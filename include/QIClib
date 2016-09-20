@@ -78,6 +78,7 @@
 
 #include "QIClib_bits/function/apply_ctrl.hpp"
 #include "QIClib_bits/function/apply.hpp"
+#include "QIClib_bits/function/make_ctrl.hpp"
 #include "QIClib_bits/function/measure.hpp"
 #include "QIClib_bits/function/entropy.hpp"
 #include "QIClib_bits/function/entanglement.hpp"
