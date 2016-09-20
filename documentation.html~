@@ -519,6 +519,12 @@
 			<br>(Similarly for <code>gatesf.U2(theta, unitV)</code>.)</li><br>
 
 		
+		<li> <code>gates.PS(phi)</code>: Generates a member phase-shift gate according to the angle <code>phi</code> (<code>double</code>).
+			Output is a fixed size 2x2 complex unitary matrix (<code>cx_mat22</code>) as <i>U = diag(1, exp(i*phi))</i>. 
+			<br>(Similarly for <code>gatesf.PS(phi)</code>.)</li><br>
+
+
+		
 		 <li> <code>gates.qft(dim)</code>: Generates unitary matrix for quantum Fourier transform of dimension 
 		 specified by <code>dim</code>, as complex matrix (<code>cx_mat</code>). 
 		 <br>(Similarly for <code>gatesf.qft(dim)</code>.)</li><br>
