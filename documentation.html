@@ -417,13 +417,13 @@
 	  <b>SPM&lt;POD_TYPE&gt;<br> spm <br> spmf</b><br><br>
 	  <ul>
 	    <li> Several predefined special matrices and vectors like, basis, projectors, operators etc. 
-	      <code>POD_TYPE</code> can be either <code>double</code> or <code>float</code>.</li><br>
+	      <code>POD_TYPE</code> can be either <code>double</code> or <code>float</code>.</li>
 
 	    <li> This is a singleton class, can be constructed only once. 
 				You can only take <code>const</code> reference of this class using <code>SPM&lt;POD_TYPE&gt;::get_instance()</code>
 				function (see below). For the ease of use, QIClib library automatically instantiates this class for <code>double</code> and
 				<code>float</code> as <code>spm</code> and <code>spmf</code> respectively. Use of <code>spm</code> or <code>spmf</code>
-				is recommended rather than explicit <code>SPM&lt;POD_TYPE&gt;::get_instance()</code>.</li><br>
+				is recommended rather than explicit <code>SPM&lt;POD_TYPE&gt;::get_instance()</code>.</li>
 	     <!--
 	      Instantiated by <code>static const SPM&lt;double&gt;& spm  = SPM&lt;double&gt;::get_instance();</code> for 
 	      <code>double</code> or <code>static const SPM&lt;float&gt;& spmf  = SPM&lt;float&gt;::get_instance();</code> for
@@ -433,33 +433,33 @@
 	      of Pauli matrices as constant complex matrices (<code>const cx_mat</code>). <code>spm.S(0)</code>, 
 	      <code>spm.S(1)</code>, <code>spm.S(2)</code>, and <code>spm.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, 
 	      <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, and <i> &sigma;<sub>z</sub></i>.
-	      <br>(Similarly for <code>spmf.S</code>).</li><br>
+	      <br>(Similarly for <code>spmf.S</code>).</li>
 
 	    <li> <code>spm.basis2</code> gives <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      2-dimensional basis vectors as constant complex column vectors (<code>const cx_vec</code>). <code>spm.basis2(0, i)</code> 
 	      and <code>spm.basis2(1, i)</code> 
 	      are respectively |0&gt and |1&gt in <i>i</i> direction <i>(i = 0, 1, 2, 3)</i>. <br>
 	      <code>spm.proj2</code> gives corresponding projectors as constant complex matrices (<code>const cx_mat</code>). 
-	      <br>(Similarly for <code>spmf.basis2</code> and <code>spmf.proj2</code>).</li><br>
+	      <br>(Similarly for <code>spmf.basis2</code> and <code>spmf.proj2</code>).</li>
 
 	    <li> <code>spm.basis3</code> gives <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      3-dimensional basis vectors constant complex column vectors (<code>const cx_vec</code>). <code>spm.basis3(0, i)</code>, 
 	      <code>spm.basis3(1, i)</code> and 
 	      <code>spm.basis3(2, i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction <i>(i = 0, 1, 2, 3)</i>. 
 	      <br><code>spm.proj3</code> gives corresponding projectors constant complex matrices (<code>const cx_mat</code>). 
-	      <br>(Similarly for <code>spmf.basis3</code> and <code>spmf.proj3</code>).</li><br>
+	      <br>(Similarly for <code>spmf.basis3</code> and <code>spmf.proj3</code>).</li>
 
 		 <li> <code>spm.bell.phim</code>, <code>spm.bell.phip</code>, <code>spm.bell.psim</code>, and <code>spm.bell.psip</code>
 				give four Bell states as constant real vectors (<code>const vec</code>).				
-				<br>(Similarly for <code>spmf.bell</code>).</li><br>				
+				<br>(Similarly for <code>spmf.bell</code>).</li>	
 				
 	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;POD_TYPE&gt;</code> class, but you can take reference to
 	    	<code>const</code>. For this use <code>const SPM&lt;POD_TYPE&gt;& SOMENAME  = SPM&lt;POD_TYPE&gt;::get_instance();</code>.
 	    	However, for each member variables, like <code>S</code> or <code>proj3</code> etc., you can either take a copy or reference 
 	      to <code>const</code> (See the following example).
-	      <br>
+	      
 	      <br><font color="blueviolet"><i><b>Note</b>: Taking copy or reference to <code>const</code> is not advisable for the 
-	      member variables. Direct use of member variables is recommended.</i></font></li><br> 
+	      member variables. Direct use of member variables is recommended.</i></font></li>
 
 
 	    <li> Example:
@@ -494,43 +494,43 @@
 	  <b>GATES&lt;POD_TYPE&gt;<br> gates <br> gatesf</b><br><br>
 	  <ul>
 	    <li> Several predefined constant quantum gates and generators of quantum gates. 
-	      <code>POD_TYPE</code> can be either <code>double</code> or <code>float</code>.</li><br>
+	      <code>POD_TYPE</code> can be either <code>double</code> or <code>float</code>.</li>
 
 	    <li> This is a singleton class, can be constructed only once. 
 				You can only take <code>const</code> reference of this class using <code>GATES&lt;POD_TYPE&gt;::get_instance()</code>
 				function (see below). For the ease of use, QIClib library automatically instantiates this class for <code>double</code> and
 				<code>float</code> as <code>gates</code> and <code>gatesf</code> respectively. Use of <code>gates</code> or 
-				<code>gatesf</code> is recommended rather than explicit <code>GATES&lt;POD_TYPE&gt;::get_instance()</code>.</li><br>
+				<code>gatesf</code> is recommended rather than explicit <code>GATES&lt;POD_TYPE&gt;::get_instance()</code>.</li>
 	     
 	    <li> <code>gates.X</code>, <code>gates.Y</code>, <code>gates.Z</code>, and <code>gates.Had</code> give Pauli X,Y, and Z and 
 	    Hadamard gates respectively. <code>gates.Y</code> is a constant complex matrix (<code>const cx_mat</code>), 
 	    where as others are constant real matrices (<code>const mat</code>). 
-	    <br>(Similarly for <code>gatesf.X</code>, <code>gatesf.Y</code>, <code>gatesf.Z</code>, and <code>gatesf.Had</code>).</li><br> 
+	    <br>(Similarly for <code>gatesf.X</code>, <code>gatesf.Y</code>, <code>gatesf.Z</code>, and <code>gatesf.Had</code>).</li>
 	    
 		 <li> <code>gates.CNOT</code>, <code>gates.CZ</code> and <code>gates.swap</code> give controlled NOT, controlled Pauli Z,
 		 and swap gates respectively as constant real matrices (<code>const mat</code>).
-	    <br>(Similarly for <code>gatesf.CNOT</code>, <code>gatesf.CZ</code>, and <code>gatesf.swap</code>).</li><br> 	    
+	    <br>(Similarly for <code>gatesf.CNOT</code>, <code>gatesf.CZ</code>, and <code>gatesf.swap</code>).</li>    
 	    
 		 <li> <code>gates.Tof</code> and <code>gates.Fred</code> give Toffoli and Fredkin gates respectively as constant 
 		 real matrices (<code>const mat</code>).
-	    <br>(Similarly for <code>gatesf.Tof</code> and <code>gatesf.Fred</code>).</li><br> 	    
+	    <br>(Similarly for <code>gatesf.Tof</code> and <code>gatesf.Fred</code>).</li>	    
 	    	    
 	    
 	    <li> <code>gates.U2(theta, unitV)</code>: Generates a member of U(2) group. <code>theta</code> is a <code>double</code>
 			and <code>uniV</code> is a 3-dimensional unit column vector (<code>vec</code>). Output is a fixed size 2x2 complex 
 			unitary matrix (<code>cx_mat22</code>) as <i>U = cos(theta/2) I + i sin(theta/2)(unitV.&sigma;)</i>. 
-			<br>(Similarly for <code>gatesf.U2(theta, unitV)</code>).</li><br>
+			<br>(Similarly for <code>gatesf.U2(theta, unitV)</code>).</li>
 
 		
 		<li> <code>gates.PS(phi)</code>: Generates a phase-shift gate according to the angle <code>phi</code> (<code>double</code>).
 			Output is a fixed size 2x2 complex unitary matrix (<code>cx_mat22</code>) as <i>U = diag(1, exp(i*phi))</i>. 
-			<br>(Similarly for <code>gatesf.PS(phi)</code>).</li><br>
+			<br>(Similarly for <code>gatesf.PS(phi)</code>).</li>
 
 
 		
 		 <li> <code>gates.qft(dim)</code>: Generates unitary matrix for quantum Fourier transform of dimension 
 		 specified by <code>dim</code>, as complex matrix (<code>cx_mat</code>). 
-		 <br>(Similarly for <code>gatesf.qft(dim)</code>).</li><br>
+		 <br>(Similarly for <code>gatesf.qft(dim)</code>).</li>
 		 
 		 
 <!--		 <li> <code>gates.make_ctrl(U, ctrl, subsys, dim)</code>: Convert a quantum gate <code>U</code> (<code>mat</code> 
@@ -554,9 +554,9 @@
 	    	However, for each member variables, like <code>Had</code> or <code>CNOT</code> etc., you can either take a copy or reference 
 	      to <code>const</code>. Member functions like <code>U2</code> or <code>qft</code> etc. behave like 
 	      normal functions. (See the following example).
-	      <br>
+	      
 	      <br><font color="blueviolet"><i><b>Note</b>: Taking copy or reference to <code>const</code> is not advisable for the 
-	      member variables. Direct use of member variables is recommended.</i></font></li><br> 
+	      member variables. Direct use of member variables is recommended.</i></font></li>
 
 
 	    <li> Example:
@@ -591,33 +591,38 @@
 	  <b>Func&lttype&gt<br> func <br> funcf</b><br><br>
 	  <ul>
 	    <li> Class with several predefined static member functions to be used with <code><a href = "#funcm_sym">funcm_sym</a></code> or 
-	      <code><a href = "#funcm_gen">funcm_gen</a></code>.</li><br>
+	      <code><a href = "#funcm_gen">funcm_gen</a></code>.</li>
 	    
 	    <li> <code>func</code> is an alias for <code>Func&lt;double&gt;</code> and <code>funcf</code> is an alias for 
-	      <code>Func&lt;float&gt;</code>.</li><br>
+	      <code>Func&lt;float&gt;</code>.</li>
 	    
-	    <li> Every member function takes one <i>complex</i> type and returns one <i>complex</i> type.</li><br>
+	    <li> Every member function takes one <i>complex</i> type and returns one <i>complex</i> type.</li>
 	    
 	    <li> List of member functions:
 	      <ul>
-		<li> func::sin</li>
-		<li> func::cos</li>
-		<li> func::tan</li><br>
-		<li> func::asin</li>
-		<li> func::acos</li>
-		<li> func::atan</li><br>
-		<li> func::sinh</li>
-		<li> func::cosh</li>
-		<li> func::tanh</li><br>
-		<li> func::asinh</li>
-		<li> func::acosh</li>
-		<li> func::atanh</li><br>
-		<li> func::sqrt</li>
-		<li> func::log</li>
-		<li> func::log2</li><br>
-		<li> func::real</li>
-		<li> func::imag</li>
-		<li> func::norm</li><br>
+		<li> func::sin<br>
+ 			  func::cos<br>
+			  func::tan</li>
+			 
+		<li> func::asin<br>
+		     func::acos<br>
+		     func::atan</li>
+		
+		<li> func::sinh<br>
+		     func::cosh<br>
+		     func::tanh</li>
+
+		<li> func::asinh<br>
+		     func::acosh<br>
+		     func::atanh</li>
+
+		<li> func::sqrt<br>
+		     func::log<br>
+		     func::log2</li>
+		
+		<li> func::real<br>
+		     func::imag<br>
+		     func::norm</li>
 	      </ul>
 	    </li>
 	  </ul>
@@ -635,23 +640,23 @@
 	  <b>RandomDevices<br>rdevs</b><br><br>
 	  <ul>
 	    <li> Predefined random number engines/generators, used in functions like <a href="#randU">randU</a> etc. 
-	    This class is thread safe.</li><br>
+	    This class is thread safe.</li>
 
 		<li>  This is a singleton class, can be constructed only once. 
 				You can only take reference of this class using <code>RandomDevices::get_thread_local_instance()</code>
 				or <code>RandomDevices::get_instance()</code>, <font color="blueviolet"><i>but this is not advisable at all</i></font>.
 				QIClib library automatically instantiates this class as <code>redvs</code>.
 				Use <code>rdevs</code> rather than explicit  <code>RandomDevices::get_thread_local_instance()</code> or
-				<code>RandomDevices::get_instance()</code>.</li><br>
+				<code>RandomDevices::get_instance()</code>.</li>
 
 	    <li>There are two member variables, <code>rd</code> and <code>rng</code>. <code>rd</code> is an instance of 
 	    <code>std::random_device</code>, and <code>rng</code> is an instance of Mersenne twister engine, <code>std::mt19937_64</code> 
 	    or <code>std::mt19937</code> depending on whether <a href="http://arma.sourceforge.net/">Armadillo</a> uses 64bit integers or 
-	    not. See <a href="http://arma.sourceforge.net/docs.html#uword">this</a>. </li><br>
+	    not. See <a href="http://arma.sourceforge.net/docs.html#uword">this</a>. </li>
 
 	    <li> By default <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> with user defined
 	      value, use <code>rdevs.set_seed(YOUR_SEED)</code>. To seed <code>rng</code> with the random return value of <code>rd</code> again, use
-	      <code>rdevs.set_seed_random()</code>.</li><br>
+	      <code>rdevs.set_seed_random()</code>.</li>
 
 	    <li> Example:
 	      <pre>
