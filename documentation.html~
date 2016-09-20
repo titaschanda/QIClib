@@ -616,8 +616,8 @@
 		     func::acosh<br>
 		     func::atanh</li>
 
-		<li> func::sqrt
-		     func::log
+		<li> func::sqrt<br>
+		     func::log<br>
 		     func::log2</li>
 		
 		<li> func::real<br>
