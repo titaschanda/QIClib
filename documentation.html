@@ -29,9 +29,10 @@
     </section>
 
     <section class="main-content">
+      <a name="top"></a>
       
-      <a name=top></a>  
-      <center><h2> API Reference for QIClib 0.0.4
+      <!--<a name=top></a>-->  
+      <center><h2> API Reference for QIClib 1.0
       </h2></center>
 
       
@@ -45,19 +46,19 @@
 	    <li>
 	      Every functions, classes, or constants in QIClib belongs to the <code> namespace qic</code>.
 	    </li>
-	    <br>
+	   
 	    <li>
 	      First time users may want to have a look on  <a href="sample.html#samples">sample programs</a>.
 	    </li>
-	    <br>
+	   
 	    <li>
 	      First time users may want to have a look on  <a href="#faq">frequently asked questions</a>.
 	    </li>
-	    <br>
+	   
 	    <li>
 	      If you discover any bugs or regressions, please <a href="index.html#found-an-issue-or-bug">report them</a>
 	    </li>
-	    <br>
+	   
 	    <li>
 	      Notes on <a href="#api_additions">API additions</a>
 	    </li>
@@ -76,6 +77,8 @@
 	    <li><a href="#macro">Preprocessor macros to tune the library in compile time</a></li>
 	  </ul>
 	  <br>
+
+	<a class="noprint" style="display:scroll; position:fixed; bottom:5px; right:5px;" href="#top"><font>[top]</font></a>
 
 
 	  <a name="classes"></a>
@@ -430,25 +433,25 @@
 	      of Pauli matrices as constant complex matrices (<code>const cx_mat</code>). <code>spm.S(0)</code>, 
 	      <code>spm.S(1)</code>, <code>spm.S(2)</code>, and <code>spm.S(3)</code> are respectively <i>I<sub>2x2</sub></i>, 
 	      <i> &sigma;<sub>x</sub></i>, <i> &sigma;<sub>y</sub></i>, and <i> &sigma;<sub>z</sub></i>.
-	      <br>(Similarly for <code>spmf.S</code>.)</li><br>
+	      <br>(Similarly for <code>spmf.S</code>).</li><br>
 
 	    <li> <code>spm.basis2</code> gives <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      2-dimensional basis vectors as constant complex column vectors (<code>const cx_vec</code>). <code>spm.basis2(0, i)</code> 
 	      and <code>spm.basis2(1, i)</code> 
 	      are respectively |0&gt and |1&gt in <i>i</i> direction <i>(i = 0, 1, 2, 3)</i>. <br>
 	      <code>spm.proj2</code> gives corresponding projectors as constant complex matrices (<code>const cx_mat</code>). 
-	      <br>(Similarly for <code>spmf.basis2</code> and <code>spmf.proj2</code>.)</li><br>
+	      <br>(Similarly for <code>spmf.basis2</code> and <code>spmf.proj2</code>).</li><br>
 
 	    <li> <code>spm.basis3</code> gives <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      3-dimensional basis vectors constant complex column vectors (<code>const cx_vec</code>). <code>spm.basis3(0, i)</code>, 
 	      <code>spm.basis3(1, i)</code> and 
 	      <code>spm.basis3(2, i)</code> are respectively |0&gt, |1&gt and |2&gt in <i>i</i> direction <i>(i = 0, 1, 2, 3)</i>. 
 	      <br><code>spm.proj3</code> gives corresponding projectors constant complex matrices (<code>const cx_mat</code>). 
-	      <br>(Similarly for <code>spmf.basis3</code> and <code>spmf.proj3</code>.)</li><br>
+	      <br>(Similarly for <code>spmf.basis3</code> and <code>spmf.proj3</code>).</li><br>
 
 		 <li> <code>spm.bell.phim</code>, <code>spm.bell.phip</code>, <code>spm.bell.psim</code>, and <code>spm.bell.psip</code>
 				give four Bell states as constant real vectors (<code>const vec</code>).				
-				<br>(Similarly for <code>spmf.bell</code>.)</li><br>				
+				<br>(Similarly for <code>spmf.bell</code>).</li><br>				
 				
 	    <li> <b>Note:</b> You cannot take a copy of the whole <code>SPM&lt;POD_TYPE&gt;</code> class, but you can take reference to
 	    	<code>const</code>. For this use <code>const SPM&lt;POD_TYPE&gt;& SOMENAME  = SPM&lt;POD_TYPE&gt;::get_instance();</code>.
@@ -502,32 +505,32 @@
 	    <li> <code>gates.X</code>, <code>gates.Y</code>, <code>gates.Z</code>, and <code>gates.Had</code> give Pauli X,Y, and Z and 
 	    Hadamard gates respectively. <code>gates.Y</code> is a constant complex matrix (<code>const cx_mat</code>), 
 	    where as others are constant real matrices (<code>const mat</code>). 
-	    <br>(Similarly for <code>gatesf.X</code>, <code>gatesf.Y</code>, <code>gatesf.Z</code>, and <code>gatesf.Had</code>.)</li><br> 
+	    <br>(Similarly for <code>gatesf.X</code>, <code>gatesf.Y</code>, <code>gatesf.Z</code>, and <code>gatesf.Had</code>).</li><br> 
 	    
 		 <li> <code>gates.CNOT</code>, <code>gates.CZ</code> and <code>gates.swap</code> give controlled NOT, controlled Pauli Z,
 		 and swap gates respectively as constant real matrices (<code>const mat</code>).
-	    <br>(Similarly for <code>gatesf.CNOT</code>, <code>gatesf.CZ</code>, and <code>gatesf.swap</code>.)</li><br> 	    
+	    <br>(Similarly for <code>gatesf.CNOT</code>, <code>gatesf.CZ</code>, and <code>gatesf.swap</code>).</li><br> 	    
 	    
 		 <li> <code>gates.Tof</code> and <code>gates.Fred</code> give Toffoli and Fredkin gates respectively as constant 
 		 real matrices (<code>const mat</code>).
-	    <br>(Similarly for <code>gatesf.Tof</code> and <code>gatesf.Fred</code>.)</li><br> 	    
+	    <br>(Similarly for <code>gatesf.Tof</code> and <code>gatesf.Fred</code>).</li><br> 	    
 	    	    
 	    
 	    <li> <code>gates.U2(theta, unitV)</code>: Generates a member of U(2) group. <code>theta</code> is a <code>double</code>
 			and <code>uniV</code> is a 3-dimensional unit column vector (<code>vec</code>). Output is a fixed size 2x2 complex 
 			unitary matrix (<code>cx_mat22</code>) as <i>U = cos(theta/2) I + i sin(theta/2)(unitV.&sigma;)</i>. 
-			<br>(Similarly for <code>gatesf.U2(theta, unitV)</code>.)</li><br>
+			<br>(Similarly for <code>gatesf.U2(theta, unitV)</code>).</li><br>
 
 		
 		<li> <code>gates.PS(phi)</code>: Generates a phase-shift gate according to the angle <code>phi</code> (<code>double</code>).
 			Output is a fixed size 2x2 complex unitary matrix (<code>cx_mat22</code>) as <i>U = diag(1, exp(i*phi))</i>. 
-			<br>(Similarly for <code>gatesf.PS(phi)</code>.)</li><br>
+			<br>(Similarly for <code>gatesf.PS(phi)</code>).</li><br>
 
 
 		
 		 <li> <code>gates.qft(dim)</code>: Generates unitary matrix for quantum Fourier transform of dimension 
 		 specified by <code>dim</code>, as complex matrix (<code>cx_mat</code>). 
-		 <br>(Similarly for <code>gatesf.qft(dim)</code>.)</li><br>
+		 <br>(Similarly for <code>gatesf.qft(dim)</code>).</li><br>
 		 
 		 
 <!--		 <li> <code>gates.make_ctrl(U, ctrl, subsys, dim)</code>: Convert a quantum gate <code>U</code> (<code>mat</code> 

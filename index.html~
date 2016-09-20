@@ -36,9 +36,9 @@
       <a href="documentation.html" class="btn">API Documentation</a>
       <a href="sample.html" class="btn">Sample Codes</a>
       <br>
-      <a href="https://github.com/titaschanda/QIClib" class="btn">View on GitHub</a>
-      <a href="https://github.com/titaschanda/QIClib/archive/v0.0.4.3.zip" class="btn">Download .zip</a>
-      <a href="https://github.com/titaschanda/QIClib/archive/v0.0.4.3.tar.gz" class="btn">Download .tar.gz</a>
+		<a href="https://github.com/titaschanda/QIClib" class="btn">View on <br> GitHub</a>
+      <a href="https://github.com/titaschanda/QIClib/archive/v0.0.4.3.zip" class="btn">Download .zip <br> v1.0.0</a>
+      <a href="https://github.com/titaschanda/QIClib/archive/v0.0.4.3.tar.gz" class="btn">Download .tar.gz <br> v1.0.0</a>
     </section>
 
     <section class="main-content">
@@ -48,49 +48,81 @@
 
       <p align="justify">
 	QIClib is a mordern C++11 library for general purpose quantum computing, supporting Linux, Windows and Mac OS X. 
-	It is a header only template library, using <a href="http://arma.sourceforge.net/">Armadillo</a> (developed by Conrad Sanderson et al., Data61, Australia) for highly efficient linear algebra calculations, and if available, the <a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> nonlinear optimization library for certain features.</p>
+	It is a header only template library, using <a href="http://arma.sourceforge.net/">Armadillo</a> 
+	(developed by Conrad Sanderson et al., Data61, Australia) for highly efficient linear algebra calculations, and if available, 
+	the <a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> nonlinear optimization library for certain features.</p>
 
       <h2>
-	<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+	<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+	Getting started</h2>
       
-      <p align="justify">QIClib is a header only library, so there is no need to compile the source. Download QIClib either from the above download link or using <code>git clone</code> with the command:<br></p>
-      <code>git clone https://github.com/titaschanda/QIClib</code>. <br><br>
+      <ul>
+      <li><p align="justify">QIClib is a header only library, so there is no need to compile the source. 
+      Download QIClib either from the above download 
+      link or using <code>git clone</code> with the command:
+      <code>git clone https://github.com/titaschanda/QIClib</code></p></li>
 
-      <p align="justify">Include the header <code>QIClib</code> in your source code (make sure that your compiler can find the path of the header file, i.e., 
-	the <i>include</i> directory in the library) and QIClib is ready to fly.</p>
+      <li><p align="justify">Include the header <code>QIClib</code> in your source code (make sure that your compiler 
+      can find the path of the header file, i.e., the <i>include</i> directory in the library) and QIClib is ready to fly.</p></li>
 
-      <p align="justify">Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (<b>version 4.2 or later</b>) and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), just add the following line <b>before</b> including <code>QIClib</code> header: </p>
-      <code>#define QICLIB_DONT_USE_NLOPT</code><br><br>
+      <li><p align="justify">Make sure that you have <a href="http://arma.sourceforge.net/">Armadillo</a> (<b>version 4.2 or later</b>) 
+      and <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> installed on your system. If you don't want to use 
+      <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> specific features (like Quantum Discord), just add the 
+      following line <b>before</b> including <code>QIClib</code> header:<br>
+      <code>#define QICLIB_DONT_USE_NLOPT</code></p></li>
 
-      <p align="justify">Also make sure that you have a C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8 or later, or <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended.<br></p>
+      <li><p align="justify">Also make sure that you have a C++11 compliant compiler. <a href="https://gcc.gnu.org/">gcc</a> version 4.8
+       or later, or <a href = "http://clang.llvm.org/">clang</a> version 3.3 or later are recommended.<br></p></li>
 
 
-      <p align="justify">For example codes, see <a href ="sample.html">here</a>. You will also find detailed API information <a href = "documentation.html">here</a>.<br></p>
+      <li><p align="justify">For example codes, see <a href ="sample.html">here</a>. You will also find detailed 
+      API information <a href = "documentation.html">here</a>.<br></p></li>
 
 
 
-      <p align="justify"><b>Note:</b> Instead of using standard <a href = "http://www.netlib.org/blas">BLAS</a>, link <a href = "http://www.openblas.net/">OpenBLAS</a>,  <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a> (or <a href = "https://developer.apple.com/library/tvos/documentation/Accelerate/Reference/AccelerateFWRef/index.html"> Accelerate Framework </a> in MAC OSX) with latest version of <a href="http://arma.sourceforge.net/">Armadillo</a> for better performance. For more see, <a href = "http://arma.sourceforge.net/faq.html#linking">this</a> and <a href = "https://gist.github.com/bdsatish/5646151">this</a>. Also turn on compiler optimizations, e.g., in <a href="https://gcc.gnu.org/">gcc</a>, <a href = "http://clang.llvm.org/">clang</a> or <a href = "https://software.intel.com/en-us/c-compilers">icc</a> add <code>-O3</code> flag during compilation. You can also add <code>-march=native</code> flag to enable <a href = "https://en.wikipedia.org/wiki/SSE3">SSE3</a>, <a href = "https://en.wikipedia.org/wiki/SSE4">SSE4</a>, and <a href = "https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</a> instructions for further speed ups.</p>
+      <li><p align="justify"><b>Note:</b> Instead of using standard <a href = "http://www.netlib.org/blas">BLAS</a>, 
+     link <a href = "http://www.openblas.net/">OpenBLAS</a>,  <a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>,
+     or <a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a>
+     (or <a href = "https://developer.apple.com/library/tvos/documentation/Accelerate/Reference/AccelerateFWRef/index.html">Accelerate Framework</a> 
+     in MAC OSX) with latest version of <a href="http://arma.sourceforge.net/">Armadillo</a> for better performance.
+     For more see, <a href = "http://arma.sourceforge.net/faq.html#linking">this</a> 
+     and <a href = "https://gist.github.com/bdsatish/5646151">this</a>.
+     Also turn on compiler optimizations, e.g., in <a href="https://gcc.gnu.org/">gcc</a>, <a href = "http://clang.llvm.org/">clang</a> or 
+     <a href = "https://software.intel.com/en-us/c-compilers">icc</a> add <code>-O3</code> flag during compilation. 
+     You can also add <code>-march=native</code> flag to enable <a href = "https://en.wikipedia.org/wiki/SSE3">SSE3</a>, 
+     <a href = "https://en.wikipedia.org/wiki/SSE4">SSE4</a>, and 
+     <a href = "https://en.wikipedia.org/wiki/Advanced_Vector_Extensions">AVX</a> 
+     instructions for further speed ups.</p></li>
+	</ul>
+	
+   <h2>
+	<a id="got-a-problem-or-question" class="anchor" href="#got-a-problem-or-question" aria-hidden="true">
+	<span class="octicon octicon-link"></span>
+	</a>Got a Problem or Question?</h2>
+      <p align="justify">
+		If you have a question about how to use QIClib, create a new issue at 
+		<a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a>
+		 labelled <code>discussion</code>.</p>
 
       <h2>
-	<a id="got-a-problem-or-question" class="anchor" href="#got-a-problem-or-question" aria-hidden="true"><span class="octicon octicon-link"></span></a>Got a Problem or Question?</h2>
+	<a id="found-an-issue-or-bug" class="anchor" href="#found-an-issue-or-bug" aria-hidden="true">
+	<span class="octicon octicon-link"></span></a>Found an Issue or Bug?</h2>
       <p align="justify">
-	If you have a question about how to use QIClib, create a new issue at <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a> labelled <code>discussion</code>.</p>
-
-      <h2>
-	<a id="found-an-issue-or-bug" class="anchor" href="#found-an-issue-or-bug" aria-hidden="true"><span class="octicon octicon-link"></span></a>Found an Issue or Bug?</h2>
-      <p align="justify">
-	If you found a bug in the source code or a mistake in any kind of documentation, please let us know by adding an issue to the  <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a>. <br><br>
-
+	If you found a bug in the source code or a mistake in any kind of documentation, please let us know by adding an issue to 
+	the  <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a>. <br>
 
 	You are welcomed to submit a pull request with your fix afterwards, if at hand. </p>
 
 
       <h2>
-	<a id="requesting-a-feature" class="anchor" href="#requesting-a-feature" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requesting a Feature?</h2>
+	<a id="requesting-a-feature" class="anchor" href="#requesting-a-feature" aria-hidden="true">
+	<span class="octicon octicon-link"></span></a>Requesting a Feature?</h2>
       <p align="justify">
-	If you are missing some features within QIClib, feel free to ask us about it by adding a new request to the <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a> labelled <code>feature request</code>.<br><br>
+	If you are missing some features within QIClib, feel free to ask us about it by adding a new request to 
+	the <a href = "https://github.com/titaschanda/QIClib/issues">issue tracker</a> labelled <code>feature request</code>.<br>
 
-	Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually speeds up the process.</p>
+	Note that submitting a pull request, providing the needed changes to introduced your requested feature, usually 
+	speeds up the process.</p>
 
 
       <h2>
