@@ -66,11 +66,16 @@ dense_to_sparse(const T1& rho1,
     }
   }
 
-  arma::SpMat<trait::eT<T1> > ret(false, Index.cols(0, count - 1),
-                                  value.rows(0, count - 1), rho.n_rows,
-                                  rho.n_cols, false, false);
+  if (count == 0)
+    return arma::SpMat<trait::eT<T1> >(rho.n_rows, rho.n_cols);
+  else if (count == N)
+    return arma::SpMat<trait::eT<T1> >(false, Index, value, rho.n_rows,
+                                       rho.n_cols, false, false);
 
-  return ret;
+  else
+    return arma::SpMat<trait::eT<T1> >(false, Index.cols(0, count - 1),
+                                       value.rows(0, count - 1), rho.n_rows,
+                                       rho.n_cols, false, false);
 }
 
 //******************************************************************************

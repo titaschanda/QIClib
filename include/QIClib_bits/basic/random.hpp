@@ -291,9 +291,11 @@ inline TR randI(const arma::uword& m, const arma::uword& n,
 template <typename T1 = arma::cx_double,
           typename = typename std::enable_if<is_complex_fp<T1>::value>::type>
 inline arma::Mat<T1> randHermitian(const arma::uword& m) {
-  T1 I = {0.0, 1.0};
-  arma::Mat<T1> ret = 2.0 * randU<arma::Mat<T1> >(m, m) -
-                      (1.0 + I) * arma::ones<arma::Mat<T1> >(m, m);
+  T1 I(0.0, 1.0);
+  arma::Mat<T1> ret =
+    2.0 * randU<arma::Mat<T1> >(m, m) -
+    (static_cast<typename arma::get_pod_type<T1>::result>(1.0) + I) *
+      arma::ones<arma::Mat<T1> >(m, m);
 
   return ret + ret.t();
 }
@@ -312,7 +314,7 @@ inline arma::Col<T1> randPsi(const arma::uword& m) {
 template <typename T1 = arma::cx_double,
           typename = typename std::enable_if<is_complex_fp<T1>::value>::type>
 inline arma::Mat<T1> randRho(const arma::uword& m) {
-  arma::Mat<T1> ret = 10 * randHermitian<T1>(m);
+  arma::Mat<T1> ret = 10.0 * randHermitian<T1>(m);
   ret *= ret.t();
   return ret / arma::trace(ret);
 }

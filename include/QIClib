@@ -49,6 +49,7 @@
 #include "QIClib_bits/basic/is_equal.hpp"
 #include "QIClib_bits/basic/is_Hermitian.hpp"
 #include "QIClib_bits/basic/is_Unitary.hpp"
+#include "QIClib_bits/basic/is_Normal.hpp"
 #include "QIClib_bits/basic/is_pure.hpp"
 #include "QIClib_bits/basic/is_valid_state.hpp"
 #include "QIClib_bits/basic/is_diagonalizable.hpp"

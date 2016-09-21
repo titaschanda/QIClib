@@ -33,7 +33,7 @@ struct eps;
 
 template <typename T> struct eps<T> {
   static constexpr T value =
-    std::is_integral<T>::value
+    std::is_integral<trait::RCV<T> >::value
       ? 0
       : (std::is_same<trait::RCV<T>, float>::value
            ? QICLIB_FLOAT_PRECISION  // std::numeric_limits<T>::epsilon()

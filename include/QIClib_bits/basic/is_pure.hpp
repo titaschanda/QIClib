@@ -36,7 +36,7 @@ is_pure(const T1& rho1, bool check_norm = true,
       return false;
   } else if (!is_Hermitian(rho, tol, 10 * tol)) {
     return false;
-  } else if (arma::rank(rho) != 1) {
+  } else if (!is_equal(rho, rho * rho, false, tol, 10 * tol)) {
     return false;
   } else {
     if (std::abs(std::abs(arma::trace(rho)) - 1.0) < tol || !check_norm)

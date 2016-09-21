@@ -28,7 +28,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::Mat<trait::eT<T1> > >::type>
 inline TR sparse_to_dense(const T1& rho1) {
   const auto& rho = _internal::as_SpMat(rho1);
-  return arma::conv_to<arma::Mat<trait::eT<T1> > >::from(rho);
+  return arma::Mat<trait::eT<T1> >(rho);
 }
 
 //******************************************************************************
