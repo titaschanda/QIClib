@@ -18,6 +18,7 @@
       <img src="qic.png" alt="QIClib logo" style="width:80px;height:80px;">
       <h1 class="project-name">Quantum Information and Computation library <br> (QIClib)</h1>
       <h2 class="project-tagline">A C++11 library for quantum information and computation based on Armadillo</h2>
+
       <a href="index.html" class="btn">Home</a>
       <a href="documentation.html" class="btn">API Documentation</a>
       <a href="sample.html" class="btn">Sample Codes</a>
@@ -397,7 +398,7 @@
 -->
 
 	  <a name=init></a>
-	  <b>Init</b><br><br>
+	  <b>Init</b><br>
 	  <ul>
 	    <li>Class for library initialization. Automatically loaded if you use this library. </li>
 
@@ -414,7 +415,7 @@
 
 
 	  <a name="spm"></a>
-	  <b>SPM&lt;POD_TYPE&gt;<br> spm <br> spmf</b><br><br>
+	  <b>SPM&lt;POD_TYPE&gt;<br> spm <br> spmf</b><br>
 	  <ul>
 	    <li> Several predefined special matrices and vectors like, basis, projectors, operators etc. 
 	      <code>POD_TYPE</code> can be either <code>double</code> or <code>float</code>.</li>
@@ -491,7 +492,7 @@
 
 
 	  <a name="gates"></a>
-	  <b>GATES&lt;POD_TYPE&gt;<br> gates <br> gatesf</b><br><br>
+	  <b>GATES&lt;POD_TYPE&gt;<br> gates <br> gatesf</b><br>
 	  <ul>
 	    <li> Several predefined constant quantum gates and generators of quantum gates. 
 	      <code>POD_TYPE</code> can be either <code>double</code> or <code>float</code>.</li>
@@ -588,7 +589,7 @@
 
 
 	  <a name=func></a>
-	  <b>Func&lttype&gt<br> func <br> funcf</b><br><br>
+	  <b>Func&lttype&gt<br> func <br> funcf</b><br>
 	  <ul>
 	    <li> Class with several predefined static member functions to be used with <code><a href = "#funcm_sym">funcm_sym</a></code> or 
 	      <code><a href = "#funcm_gen">funcm_gen</a></code>.</li>
@@ -637,7 +638,7 @@
 
 
 	  <a name="RandomDevices"></a>
-	  <b>RandomDevices<br>rdevs</b><br><br>
+	  <b>RandomDevices<br>rdevs</b><br>
 	  <ul>
 	    <li> Predefined random number engines/generators, used in functions like <a href="#randU">randU</a> etc. 
 	    This class is thread safe.</li>
@@ -654,9 +655,9 @@
 	    or <code>std::mt19937</code> depending on whether <a href="http://arma.sourceforge.net/">Armadillo</a> uses 64bit integers or 
 	    not. See <a href="http://arma.sourceforge.net/docs.html#uword">this</a>. </li>
 
-	    <li> By default <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> with user defined
-	      value, use <code>rdevs.set_seed(YOUR_SEED)</code>. To seed <code>rng</code> with the random return value of <code>rd</code> again, use
-	      <code>rdevs.set_seed_random()</code>.</li>
+	    <li> By default <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> 
+	    with user defined value, use <code>rdevs.set_seed(YOUR_SEED)</code>. To seed <code>rng</code> with the random return 
+	    value of <code>rd</code> again, use <code>rdevs.set_seed_random()</code>.</li>
 
 	    <li> Example:
 	      <pre>
@@ -704,67 +705,81 @@
 
 	  
 	  <a name="is_Hermitian"></a>
-	  <b>is_Hermitian(A)<br>is_Hermitian(A, atol, rtol)</b><br><br>
+	  <b>is_Hermitian(A)<br>is_Hermitian(A, atol, rtol)</b><br>
 	  <ul>
-	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric or Hermitian, else <code>false</code>.</li><br>
+	    <li> Hermiticity check. Returns <code>true</code> if <code>A</code> is real symmetric (<code>mat</code>) or 
+	    Hermitian (<code>cx_mat</code>), 
+	    else <code>false</code>.</li>
 
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol =  _precision::eps&lt;POD_TYPE&gt;::value</code> and 
-	      <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> can be either <code>double</code> or 
-	      <code>float</code> depending on the element type of <code>A</code>.</li>
-	    
+	    <li> <code>atol</code> and <code>rtol</code> are optional.
+				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>			
+				    
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
 	  <hr><br>
 	  
 
 
 
 	  <a name="is_Unitary"></a>
-	  <b>is_Unitary(A)<br>is_Unitary(A, atol, rtol)</b><br><br>
+	  <b>is_Unitary(A)<br>is_Unitary(A, atol, rtol)</b><br>
 	  <ul>
-	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal or unitary, else <code>false</code>.</li><br>
+	    <li> Unitarity check. Returns <code>true</code> if <code>A</code> is real orthogonal (<code>mat</code>) or unitary 
+	    (<code>cx_mat</code>), else <code>false</code>.</li>
 	    
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = _precision::eps&lt;POD_TYPE&gt;::value</code> and 
-	      <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>
-	      depending on the element type of <code>A</code>.</li>	    
+	    <li> <code>atol</code> and <code>rtol</code> are optional.
+				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>			
+		
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
 	  <hr><br>
 	  
+	  
+	  
+   <a name="is_Normal"></a>
+	  <b>is_Normal(A)<br>is_Normal(A, atol, rtol)</b><br>
+	  <ul>
+	    <li> To check whether the the matrix is normal or not. 
+	    Returns <code>true</code> if <code>A</code> is a normal matrix, else <code>false</code>.</li>
+	    
+	    <li> <code>atol</code> and <code>rtol</code> are optional.
+				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>			
+		
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
 
 
 
 	  <a name="is_pure"></a>
-	  <b>is_pure(A)<br>is_pure(A, check_norm = true)<br>is_pure(A, check_norm, tol)</b><br><br>
+	  <b>is_pure(A)<br>is_pure(A, check_norm = true)<br>is_pure(A, check_norm, tol)</b><br>
 	  <ul>
-	    <li> Check purity of a row/column vector or density matrix. Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li><br>
+	    <li> To check purity of a row/column vector or density matrix. 
+	    Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li>
 	    
-	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and normalisation of the state will 
-	      be checked and <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is either <code>double</code> or 
-	      <code>float</code> depending on the element type of <code>A</code>.</li>
+	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and 
+	    normalization of the vector or matrix will be checked, and <code>tol</code> is floating point precision used in QIClib.
+	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
-	  
-	  
 	  <hr><br>
 	  
 
 
 	  <a name="is_valid_state"></a>
-	  <b>is_valid_state(A)<br>is_valid_state(A, tol)</b><br><br>
+	  <b>is_valid_state(A)<br>is_valid_state(A, tol)</b><br>
 	  <ul>
-	    <li> Check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a 
-	      valid quantum state, else <code>false</code>.</li><br>
+	    <li> To check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a 
+	      valid quantum state, else <code>false</code>.</li>
 	    
-	    <li> <code>tol</code> is optional, by default <code>tol = _precision::eps&lt;POD_TYPE&gt;::value</code>, <code>POD_TYPE</code> is 
-	      either <code>double</code> or <code>float</code> depending on the element type of <code>A</code>.</li><br>
+	    <li> <code>tol</code> is optional, by default <code>tol</code> is floating point precision used in QIClib.
+	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
 
-	    <li> <b>Note:</b> Normalisation will always be checked.</li>
+	    <li> <b>Note:</b> Normalization will always be checked.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  
@@ -774,9 +789,10 @@
 
 
 	  <a name="is_diagonalizable"></a>
-	  <b>is_diagonalizable(A)</b><br><br>
+	  <b>is_diagonalizable(A)</b>
 	  <ul>
-	    <li> Check whether the matrix is diagonalizable or not. Returns <code>true</code> if <code>A</code> is diagonalizable, else <code>false</code>.</li><br>
+	    <li> To check whether the matrix is diagonalizable. 
+	    Returns <code>true</code> if <code>A</code> is diagonalizable, else <code>false</code>.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  
@@ -785,34 +801,65 @@
 
 
 
-	  <a name=is_equal></a>
-	  <b>is_equal(A, B)<br>is_equal(A, B, typecheck = false)<br>is_equal(A, B, typecheck, atol, rtol)</b><br><br>
+	  <a name="is_equal"></a>
+	  <b>is_equal(A, B)<br>is_equal(A, B, typecheck = false)<br>is_equal(A, B, typecheck, atol, rtol)</b><br>
 	  <ul>
-	    <li> Check whether two matrices are equal. Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise equal, 
-	      else <code>false</code>.</li><br>
+	    <li> To check whether two matrices are equal in values. 
+	    Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise (approximately) equal, 
+	    else <code>false</code>.</li>
 	    
-	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types (<i>complex</i> or <i>real</i>) of 
-	      <code>A</code> and <code>B</code> will not be checked.
+	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types 
+	    (<i>complex</i> or <i>real</i>) of <code>A</code> and <code>B</code> need not to be same.</li>
 
-	    <li> <code>atol</code> and <code>rtol</code> are optional, by default <code>atol = _precision::eps&lt;POD_TYPE&gt;::value</code> and 
-	      <code>rtol = 10 * _precision::eps&lt;POD_TYPE&gt;::value</code>. <code>POD_TYPE</code> is either <code>double</code> or <code>float</code>
-	      depending on the element type of <code>A</code> or <code>B</code>.</li>	 
-	    
+	    <li>	<code>atol</code> and <code>rtol</code> are optional.
+				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+	  <hr><br>
+	  
+	  
+	  
+	  
+	  <a name="dense_to_sparse"></a>
+	  <b>dense_to_sparse(A)<br>dense_to_sparse(A, tol)</b><br>
+	  <ul>
+	    <li> To Convert a dense matrix <code>A</code> 
+		    (<a href="http://arma.sourceforge.net/docs.html#Mat">Mat</a>) to a sparse 
+		    (<a href="http://arma.sourceforge.net/docs.html#SpMat">SpMat</a>) matrix with the same element type.</li>
+
+	    <li>	<code>tol</code> is optional. Any element having absolute value less than <code>tol</code> will be treated as zero.
+				By default <code>tol</code> is floating point precision used in QIClib.
+				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
+	  
 
 
+	  <a name="sparse_to_dense"></a>
+	  <b>sparse_to_dense(A)</b><br>
+	  <ul>
+	    <li> To Convert a sparse matrix <code>A</code> 
+		    (<a href="http://arma.sourceforge.net/docs.html#SpMat">SpMat</a>) to a dense 
+		    (<a href="http://arma.sourceforge.net/docs.html#Mat">Mat</a>) matrix with the same element type.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
 	  <hr><br>
 
 
-	  <a name=range></a>
-	  <b>range(stop)<br>range(start, stop)<br>range(start, stop, step)</b><br><br>
+
+	  
+
+
+	  <a name="range"></a>
+	  <b>range(stop)<br>range(start, stop)<br>range(start, stop, step)</b>
 	  <ul>
 	    <li> Similar to Python's <code>range()</code> function. Useful in range-based <code>for</code> loops. 
-	      Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) <code>start</code> to 
-	      (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li><br>
+	      Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) 
+	      <code>start</code> to (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li>
 	    
-	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li><br>
+	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li>
 
 	    <li> Example:
 	      <pre>
