@@ -159,11 +159,10 @@
 
 		<tr><td><a href="#sysperm"> sysperm </a> </td><td>  </td><td> Permute subsystems of a quantum state</td></tr>
 		
-		<tr><td><a href="#sqrtm_sym"> sqrtm_sym </a> </td><td>  </td><td>Principal square root of matrix for 
+		<tr><td><a href="#sqrtm_sym"> sqrtm_sym </a> </td><td>  </td><td>Principal square root of 
 		    real symmetric or Hermitian matrices</td></tr>
 
-		<tr><td><a href="#sqrtm_gen"> sqrtm_gen </a> </td><td>  </td><td>Principal square root of matrix 
-		    for general square matrices</td></tr>
+		<tr><td><a href="#sqrtm_gen"> sqrtm_gen </a> </td><td>  </td><td>Principal square root of general square matrices</td></tr>
 		
 		<tr><td><a href="#powm_sym"> powm_sym </a> </td><td>  </td><td>Matrix power for real symmetric 
 		    or Hermitian matrices</td></tr>
@@ -998,28 +997,29 @@
 		
 		// permute 2nd and 3rd party
 		cx_mat B1 = sysperm(B, {1, 3, 2}, {2, 3, 2}); // explicitly written dimensions
-																	 // for B1, dim = {2, 2, 3} 
+		                                              // for B1, dim = {2, 2, 3} 
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
 
-	  <a name=sqrtm_sym></a>
-	  <b>sqrtm_sym(A)</b><br><br>
+	  <a name="sqrtm_sym"></a>
+	  <b>sqrtm_sym(A)</b><br>
 	  <ul>
-	    <li>Principal square root of matrix for real symmetric or Hermitian matrices.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li><br>
+	    <li>Principal square root of real symmetric or Hermitian matrices.</li>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
+	    
+	    <li> Due to generality, always returns <i>complex</i> matrices (<code>cx_mat</code>), even for <i>positive real</i> 
+	    matrices.</li>
+
 	    <li> <b>Note:</b> <code>sqrtm_sym</code> is faster than <code><a href = "#sqrtm_gen">sqrtm_gen</a></code>. For real symmetric or 
 	      Hermitian matrices always use
-	      <code>sqrtm_sym</code>.</li><br>
+	      <code>sqrtm_sym</code>.</li>
+	      
 	    <li> Example:
 
 	      <pre>
@@ -1036,24 +1036,26 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
 
-	  <a name=sqrtm_gen></a>
-	  <b>sqrtm_gen(A)</b><br><br>
+	  <a name="sqrtm_gen"></a>
+	  <b>sqrtm_gen(A)</b>
 	  <ul>
-	    <li>Principal square root of matrix for general square matrices.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li><br>
+	    <li>Principal square root of general square matrices.</li>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
+	    
+	    <li> Due to generality, always returns <i>complex</i> matrices, even for <i>positive real</i> matrices.</li>
+	    
 	    <li> <b>Note:</b> <code><a href = "#sqrtm_sym">sqrtm_sym</a></code> is faster than <code>sqrtm_gen</code>. For real symmetric or 
 	      Hermitian matrices always use
-	      <code><a href = "#sqrtm_sym">sqrtm_sym</a></code>.</li><br>
+	      <code><a href = "#sqrtm_sym">sqrtm_sym</a></code>.</li>
+
 	    <li> <b>Note:</b> Only works if <code>A</code> is diagonalizable matrix. To make sure, use <code><a href="#is_diagonalizable">is_diagonalizable</a></code>
-	      function first.</li><br>
+	      function first.</li>
+	      
 	    <li> Example:
 
 	      <pre>
@@ -1068,25 +1070,26 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
 
-	  <a name=powm_sym></a>
-	  <b>powm_sym(A, n)</b><br><br>
+	  <a name="powm_sym"></a>
+	  <b>powm_sym(A, n)</b><br>
 	  <ul>
-	    <li>Matrix power for real symmetric or Hermitian matrices.</li><br>
+	    <li>Matrix power for real symmetric or Hermitian matrices.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, 
-	      like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
-	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not <i>integer type</i>), even for <i>positive real</i> matrices.
-	      If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li><br>
+	      like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li>
+	      
+	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not of <i>integer type</i>), 
+	     even for <i>positive real</i> matrices. If <code>n</code> is of <i>integer type</i> matrix element 
+	     type will be preserved.</li>
+
 	    <li> <b>Note:</b> <code>powm_sym</code> is faster than <code><a href = "#powm_gen">powm_gen</a></code>. For real symmetric or 
 	      Hermitian matrices always use
-	      <code>powm_sym</code>.</li><br>
+	      <code>powm_sym</code>.</li>
+	    
 	    <li> Example:
 
 	      <pre>
@@ -1100,25 +1103,30 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
-	  <a name=powm_gen></a>
-	  <b>powm_gen(A, n)</b><br><br>
+
+	  <a name="powm_gen"></a>
+	  <b>powm_gen(A, n)</b><br>
 	  <ul>
-	    <li>Matrix power for general square matrices.</li><br>
+	    <li>Matrix power for general square matrices.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <code>n</code> can be any type of scaler, 
-	      like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
-	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not <i>integer type</i>), even for <i>positive real</i> matrices.
-	      If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li><br>
+	      like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li>
+	      
+	    <li> Due to generality, always returns <i>complex</i> matrices (if <code>n</code> is not of <i>integer type</i>), 
+	    even for <i>positive real</i> matrices.
+	     If <code>n</code> is of <i>integer type</i> matrix element type will be preserved.</li>
+	      
 	    <li> <b>Note:</b> <code><a href = "#powm_sym">powm_sym</a></code> is faster than <code>powm_gen</code>. 
 	      For real symmetric or Hermitian matrices always use
-	      <code><a href = "#powm_sym">powm_sym</a></code>.</li><br>
-	    <li> <b>Note:</b> Only works if <code>A</code> is diagonalizable matrix. To make sure, use <code><a href="#is_diagonalizable">is_diagonalizable</a></code>
-	      function first.</li><br>
+	      <code><a href = "#powm_sym">powm_sym</a></code>.</li>
+	    
+	    <li> <b>Note:</b> Only works if <code>A</code> is diagonalizable matrix. To make sure, 
+	    use <code><a href="#is_diagonalizable">is_diagonalizable</a></code>
+	    function first.</li>
+	    
 	    <li> Example:
 
 	      <pre>
@@ -1131,26 +1139,23 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
 
-	  <a name=expm_sym></a>
-	  <b>expm_sym(A)<br>expm_sym(A, n)</b><br><br>
+	  <a name="expm_sym"></a>
+	  <b>expm_sym(A)<br>expm_sym(A, n)</b><br>
 	  <ul>
-	    <li>Matrix exponential for real symmetric or Hermitian matrices.<code>expm_sym(A,n)</code> calculates <i>exp(n*A)</i>.</li><br>
+	    <li>Matrix exponential for real symmetric or Hermitian matrices.<code>expm_sym(A,n)</code> calculates <i>exp(n*A)</i>.</li>
 	    
 	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). 
-	      <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, <code>int</code> etc.</li><br>
+	      <code>n</code> can be any type of scaler, like <code>double</code>, <code>complex&lt;double&gt;</code>, 
+	      <code>int</code> etc.</li>
 	    
 	    <li> <b>Note:</b> <code>expm_sym</code> is often slower but more accurate than <code><a href = "#expm_gen">expm_gen</a></code> 
-	      or <a href="http://arma.sourceforge.net">Armadillo's</a> <code><a href = "http://arma.sourceforge.net/docs.html#expmat">expmat</a></code>. 
-	      But for very large matrices it can be faster than the alternatives.</li><br>
+	      or <a href="http://arma.sourceforge.net">Armadillo's</a> 
+	      <code><a href = "http://arma.sourceforge.net/docs.html#expmat">expmat</a></code>. 
+	      But for very large matrices it can be faster than the alternatives.</li>
 	    
 	    <li> Example:
 	      <pre>
@@ -1160,32 +1165,25 @@
 		mat A_e = expm_sym(A);
 
 		complex&lt;double&gt; I (0.0, 1.0);
-		cx_mat AI_e = expm_sym(A, I);
+		cx_mat AI_e = expm_sym(A, I); // exp(I*A)
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
 	  <hr><br>
 
 
 
 	  <a name="expm_gen"></a>
-	  <b>expm_gen(A)</b><br><br>
+	  <b>expm_gen(A)</b><br>
 	  <ul>
-	    <li>Matrix exponential for general square matrices.    </li><br>
+	    <li>Matrix exponential for general square matrices.</li>
 	    
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). </li><br>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
 	    
 	    <li> <b>Note:</b> <code>expm_gen</code> is basically same as <a href="http://arma.sourceforge.net">Armadillo's</a> 
 	      <code><a href = "http://arma.sourceforge.net/docs.html#expmat">expmat</a></code>, and only to be used with older 
-	      versions of <a href="http://arma.sourceforge.net">Armadillo</a>. </li><br>
+	      versions of <a href="http://arma.sourceforge.net">Armadillo</a>.</li>
 	    
 	    <li> Example:
 
@@ -1200,32 +1198,31 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+		<hr><br>
 
 
 
-
-
-	  <hr><br>
-
-
-
-	  <a name=funcm_sym></a>
-	  <b>funcm_sym(A, function pointer)<br>funcm_sym(A, functor)<br>funcm_sym(A, lambda function)</b><br><br>
+	  <a name="funcm_sym"></a>
+	  <b>funcm_sym(A, function pointer)<br>funcm_sym(A, functor)<br>funcm_sym(A, lambda function)</b><br>
 	  <ul>
 	    
-	    <li><a href = "https://en.wikipedia.org/wiki/Matrix_function">Matrix function</a> for real symmetric or Hermitian matrices.   </li><br>
+	    <li><a href = "https://en.wikipedia.org/wiki/Matrix_function">Matrix function</a> 
+	    for real symmetric or Hermitian matrices.</li>
 	    
 	    <li> <code>A</code> has to be a square real symmetric or Hermitian matrix (<code>mat</code> or <code>cx_mat</code>). 
-	      <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
+	      <i>function pointer</i>, <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and 
+	      return one <i>complex</i> type.</li>
 	    
-	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <code><a href="#func">Func&lt;type&gt;</a></code> 
-	      class.</li><br>
+		<li> Due to generality, always returns <i>complex</i> matrices.</li>	    
+	    
+	    <li> If you want to use standard <i>complex</i> functions, use static member functions of 
+	    <code><a href="#func">Func&lt;type&gt;</a></code> class.</li>
 	    
 	    <li> <b>Note:</b> <code>funcm_sym</code> is faster than <code><a href = "#funcm_gen">funcm_gen</a></code>. For real symmetric or 
-	      Hermitian matrices always use <code>funcm_sym</code>. </li><br>
+	      Hermitian matrices always use <code>funcm_sym</code>. </li>
 	    
 	    <li> <b>Note:</b> If you want to transform the matrix element-wise, use 
-	      <code><a href="http://arma.sourceforge.net/docs.html#transform">.transform</a></code> instead.</li><br>
+	      <code><a href="http://arma.sourceforge.net/docs.html#transform">.transform</a></code> instead.</li>
 	    
 	    <li> Example:
 
@@ -1239,41 +1236,37 @@
 		cx_mat A_sin = funcm_sym(A, sinm); // calculate sin(A)
 
 		cx_mat A_sin2 = funcm_sym(A, func::sin); // same as A_sin, 
-		//using <code>Func&lt;type&gt;</code> class
+		                                         //using <code>Func&lt;type&gt;</code> class
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
 
 	  <a name="funcm_gen"></a>
-	  <b>funcm_gen(A, function pointer)<br>funcm_gen(A, functor)<br>funcm_gen(A, lambda function)</b><br><br>
+	  <b>funcm_gen(A, function pointer)<br>funcm_gen(A, functor)<br>funcm_gen(A, lambda function)</b><br>
 	  <ul>
 	    
-	    <li><a href = "https://en.wikipedia.org/wiki/Matrix_function">Matrix function</a> for general square matrices.   </li><br>
+	    <li><a href = "https://en.wikipedia.org/wiki/Matrix_function">Matrix function</a> for general square matrices.</li>
 	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). <i>function pointer</i>, 
-	      <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li><br>
+	      <i>functor</i> or <i>lambda function</i> has to take one <i>complex</i> type and return one <i>complex</i> type.</li>
 	    
-	    <li> If you want to use standard <i>complex</i> functions, use static member functions of <code><a href="#func">Func&lt;type&gt;</a></code> 
-	      class.</li><br>
+	     <li> Due to generality, always returns <i>complex</i> matrices.</li>
+	     
+	    <li> If you want to use standard <i>complex</i> functions, use static member functions of 
+	    <code><a href="#func">Func&lt;type&gt;</a></code> class.</li>
 	    
-	    <li> <b>Note:</b> <code><a href = "#funcm_sym">funcm_sym</a></code> is faster than <code>funcm_gen</code>. For real symmetric or Hermitian 
-	      matrices always use <code><a href = "#funcm_sym">funcm_sym</a></code>.</li><br>
+	    <li> <b>Note:</b> <code><a href = "#funcm_sym">funcm_sym</a></code> is faster than <code>funcm_gen</code>. 
+	    For real symmetric or Hermitian matrices always use <code><a href = "#funcm_sym">funcm_sym</a></code>.</li>
 
-	    <li> <b>Note:</b> Only works if <code>A</code> is diagonalizable matrix. To make sure, use <code><a href="#is_diagonalizable">is_diagonalizable</a></code>
-	      function first.</li><br>	    
+	    <li> <b>Note:</b> Only works if <code>A</code> is diagonalizable matrix. To make sure, use 
+	    	<code><a href="#is_diagonalizable">is_diagonalizable</a></code> function first.</li>	    
 
 	    <li> <b>Note:</b> If you want to transform the matrix element-wise, use 
-	      <code><a href="http://arma.sourceforge.net/docs.html#transform">.transform</a></code> instead.</li><br>
+	      <code><a href="http://arma.sourceforge.net/docs.html#transform">.transform</a></code> instead.</li>
 	    
 
 	    <li> Example:
@@ -1287,16 +1280,11 @@
 		cx_mat A_sin = funcm_gen(A, sinm); // calculate sin(A)
 
 		cx_mat A_sin2 = funcm_gen(A, func::sin); // same as A_sin, 
-		// using <code>Func&lt;type&gt;</code> class
+		                                         // using <code>Func&lt;type&gt;</code> class
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
