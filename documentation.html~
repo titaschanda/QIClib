@@ -412,7 +412,6 @@
 
 
 
-
 	  <a name="spm"></a>
 	  <b>SPM&lt;POD_TYPE&gt;<br> spm <br> spmf</b><br>
 	  <ul>
@@ -758,8 +757,7 @@
 	    
 	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and 
 	    normalization of the vector or matrix will be checked, and <code>tol</code> is floating point precision used in QIClib.
-	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
-	    
+	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>	    
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  <hr><br>
@@ -1375,7 +1373,8 @@
 	  <b>absm(A)</b><br>
 	  <ul>
 	    <li>Matrix absolute value of a square matrix.</li>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). Always returns real
+	    matrix (<code>mat</code>).</li>
 	    <li>Returns <code>sqrtm_sym(rho.t()*rho)</code>.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -1434,7 +1433,7 @@
 	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of 4x4.</li>
 	   
-	    <li> Always returns a real matrix.</li>
+	    <li> Always returns a 4x4 fixed size real matrix (<code>mat44</code>).</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  <hr><br>
@@ -1447,7 +1446,7 @@
 	    
 	    <li> <code>A</code> has to be a real square matrix (<code>mat</code>) of 4x4.</li>
 	    
-	    <li> Always returns a complex matrix (<code>cx_mat</code>).</li>
+	    <li> Always returns a 4x4 fixed size complex matrix (<code>cx_mat44</code>).</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  <hr><br>
@@ -1520,7 +1519,7 @@
 		                          // each subsystem is qubit
 
 		cx_mat B = mproj&lt;complex&lt;double&gt; &gt;({0, 0, 1}); // same a above
-		                                               // but complex vector returned
+		                                               // but complex matrix returned
 		
 		mat C = mproj({0, 0, 1}, 2); // same a above
 		
@@ -1528,19 +1527,11 @@
 		                                     // 1st and 3rd party are qubit
 		                                     // 2nd one is qutrit
 
-		cx_vec E = mket&lt;complex&lt;double&gt; &gt;({0, 2, 1},{2, 3, 2}); //same as above
-		                                                        // but complex vector returned
+		cx_mat E = mproj&lt;complex&lt;double&gt; &gt;({0, 2, 1},{2, 3, 2}); //same as above
+		                                                         // but complex matrix returned
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
 	  <hr><br>
 
 
