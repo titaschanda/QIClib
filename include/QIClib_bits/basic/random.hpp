@@ -289,7 +289,8 @@ inline TR randI(const arma::uword& m, const arma::uword& n,
 //****************************************************************************
 
 template <typename T1 = arma::cx_double,
-          typename = typename std::enable_if<is_complex_fp<T1>::value>::type>
+          typename = typename std::enable_if<
+            is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Mat<T1> randHermitian(const arma::uword& m) {
   auto& I = _internal::cond_I<T1>::value;
   arma::Mat<T1> ret =
@@ -303,7 +304,8 @@ inline arma::Mat<T1> randHermitian(const arma::uword& m) {
 //****************************************************************************
 
 template <typename T1 = arma::cx_double,
-          typename = typename std::enable_if<is_complex_fp<T1>::value>::type>
+          typename = typename std::enable_if<
+            is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Col<T1> randPsi(const arma::uword& m) {
   auto ret = randN<arma::Col<T1> >(m);
   return ret / arma::norm(ret);
@@ -312,7 +314,8 @@ inline arma::Col<T1> randPsi(const arma::uword& m) {
 //****************************************************************************
 
 template <typename T1 = arma::cx_double,
-          typename = typename std::enable_if<is_complex_fp<T1>::value>::type>
+          typename = typename std::enable_if<
+            is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Mat<T1> randRho(const arma::uword& m) {
   arma::Mat<T1> ret = 10.0 * randHermitian<T1>(m);
   ret *= ret.t();
@@ -322,7 +325,8 @@ inline arma::Mat<T1> randRho(const arma::uword& m) {
 //****************************************************************************
 
 template <typename T1 = arma::cx_double,
-          typename = typename std::enable_if<is_complex_fp<T1>::value>::type>
+          typename = typename std::enable_if<
+            is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Mat<T1> randUnitary(const arma::uword& m) {
   arma::Mat<T1> A =
     randN<arma::Mat<T1> >(m, m) * std::sqrt(static_cast<T1>(0.5));

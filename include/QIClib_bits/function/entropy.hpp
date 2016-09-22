@@ -71,8 +71,10 @@ inline TR shannon(const T1& prob1) {
     throw Exception("qic::shannon", Exception::type::MATRIX_NOT_CVECTOR);
 
   if (arma::any(_internal::as_Col(prob) <
-                -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::shannon", "Invalid probaility distribution");
+                -_precision::eps<trait::pT<T1> >::value) ||
+      std::abs(arma::accu(prob) - static_cast<trait::pT<T1> >(1.0)) >
+        _precision::eps<trait::pT<T1> >::value)
+    throw Exception("qic::shannon", "Invalid probaility distribution!");
 #endif
 
   trait::eT<T1> S = 0.0;
@@ -166,8 +168,10 @@ inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
     throw Exception("qic::renyi_prob", Exception::type::OUT_OF_RANGE);
 
   if (arma::any(_internal::as_Col(prob2) <
-                -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::renyi_prob", "Invalid probaility distribution");
+                -_precision::eps<trait::pT<T1> >::value) ||
+      std::abs(arma::accu(prob2) - static_cast<trait::pT<T1> >(1.0)) >
+        _precision::eps<trait::pT<T1> >::value)
+    throw Exception("qic::renyi_prob", "Invalid probaility distribution!");
 #endif
 
   const auto& prob = _internal::as_Col(prob2);
@@ -270,8 +274,10 @@ inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
     throw Exception("qic::tsallis_prob", Exception::type::OUT_OF_RANGE);
 
   if (arma::any(_internal::as_Col(prob2) <
-                -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::tsallis_prob", "Invalid probaility distribution");
+                -_precision::eps<trait::pT<T1> >::value) ||
+      std::abs(arma::accu(prob2) - static_cast<trait::pT<T1> >(1.0)) >
+        _precision::eps<trait::pT<T1> >::value)
+    throw Exception("qic::tsallis_prob", "Invalid probaility distribution!");
 #endif
 
   const auto& prob = _internal::as_Col(prob2);
@@ -334,8 +340,13 @@ inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
   if (arma::any(_internal::as_Col(prob1) <
                 -_precision::eps<trait::pT<T1> >::value) ||
       arma::any(_internal::as_Col(prob2) <
-                -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::rel_entropy_prob", "Invalid probaility distribution");
+                -_precision::eps<trait::pT<T1> >::value) ||
+      std::abs(arma::accu(prob1) - static_cast<trait::pT<T1> >(1.0)) >
+        _precision::eps<trait::pT<T1> >::value ||
+      std::abs(arma::accu(prob2) - static_cast<trait::pT<T1> >(1.0)) >
+        _precision::eps<trait::pT<T1> >::value)
+    throw Exception("qic::rel_entropy_prob",
+                    "Invalid probaility distribution!");
 #endif
 
   trait::pT<T1> ret(0.0);
