@@ -199,17 +199,17 @@
 		
 		<tr><td><a href="#gram_schmidt"> gram_schmidt </a> </td><td>  </td><td>Modified Gram-Schmidt orthogonalization</td></tr>
 		
-		<tr><td><a href="#conv_to_pure"> conv_to_pure </a> </td><td>  </td><td>Convert density matrix of a 
+		<tr><td><a href="#conv_to_pure"> conv_to_pure </a> </td><td>  </td><td> To convert density matrix of a 
 		    pure state to a column vector</td></tr>
 
-		<tr><td><a href="#std_to_HS"> std_to_HS </a> </td><td>  </td><td>Convert 2-qubit density matrix 
+		<tr><td><a href="#std_to_HS"> std_to_HS </a> </td><td>  </td><td> To convert 2-qubit density matrix 
 		    from the standard basis to the Hilbert-Schmidt basis </td></tr>
 		
-		<tr><td><a href="#HS_to_std"> HS_to_std </a> </td><td>  </td><td>Convert 2-qubit density matrix from 
+		<tr><td><a href="#HS_to_std"> HS_to_std </a> </td><td>  </td><td>To convert 2-qubit density matrix from 
 		    the Hilbert-Schmidt basis back to the standard basis</td></tr>
 		
-		<tr><td><a href="#mket"> mket </a> </td><td>  </td><td> Generate multipartite qudit pure state </td></tr>
-		<tr><td><a href="#mproj"> mproj </a> </td><td>  </td><td> Genearte multipartite qudit projector </td></tr>
+		<tr><td><a href="#mket"> mket </a> </td><td>  </td><td>To generate multipartite qudit pure state </td></tr>
+		<tr><td><a href="#mproj"> mproj </a> </td><td>  </td><td>To genearte multipartite qudit projector </td></tr>
 
 
 		<tr><td>  </td><td>  </td><td> </td></tr>
@@ -1288,21 +1288,24 @@
 	  <hr><br>
 
 
-	  <a name=tensor></a>
-	  <b>tensor(A, B, ...)</b><br><br>
+
+
+	  <a name="tensor"></a>
+	  <b>tensor(A, B, ...)</b><br>
 	  <ul>
-	    <li>Tensor product of arbitrary no. of matrices <code>A,B,...</code>.   </li><br>
-	    <li> Can also take <code>std::vector</code> and <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices.</li><br>
-	    
+	    <li>Tensor product of arbitrary no. of matrices <code>A,B,...</code>. Return type is deduced from the types of input matrices.</li>
+	    <li> Can also take <code>std::vector</code> and 
+	    <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices.</li>
 	    <li> Example:
 
 	      <pre>
 		cx_mat A = randn&lt;cx_mat&gt;(5, 5); //complex matrix
 		cx_mat B = randn&lt;cx_mat&gt;(4, 4); //complex matrix
 		cx_mat C = randn&lt;cx_mat&gt;(3, 3); //complex matrix
-		mat D = randn&lt;mat&gt;(6, 6); //real matrix
+		mat D = randn&lt;mat&gt;(6, 6);       //real matrix
 		
 		cx_mat T1 = tensor(A, B, C, D); // tensor product of A,B,C,D 
+		                                // return type is deduced as cx_mat
 
 		std::vector&lt;cx_mat&gt; V = {A, B, C};
 		cx_mat T2 = tensor(V); // tensor product of A,B,C
@@ -1312,249 +1315,221 @@
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+	<hr><br>
 
 
 
-
-	  <hr><br>
-
-
-	  <a name=tensor_pow></a>
-	  <b>tensor_pow(A, n)</b><br><br>
+	  <a name="tensor_pow"></a>
+	  <b>tensor_pow(A, n)</b><br>
 	  <ul>
-	    <li>Tensor product power of a matrix.   </li><br>
-	    <li>Returns <i>A <sup>&otimes;n</sup></i> .</li>
+	    <li>Tensor product power of a matrix.</li>
+	    <li>Returns <i>A<sup>&otimes;n</sup></i> .</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-	  
 	  <hr><br>
 
 
-	  <a name=dsum></a>
-	  <b>dsum(A, B, ...)</b><br><br>
+
+	  <a name="dsum"></a>
+	  <b>dsum(A, B, ...)</b><br>
 	  <ul>
-	    <li>Direct sum of arbitrary no. of matrices <code>A,B,...</code>.   </li><br>
-	    <li> Can also take <code>std::vector</code> and <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices.</li><br>
-	    
+	    <li>Direct sum of arbitrary no. of matrices <code>A,B,...</code>. Return type is deduced from the types of input matrices.</li>
+	    <li> Can also take <code>std::vector</code> and 
+	    <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices.</li>
 	    <li> Example:
 
 	      <pre>
-		cx_mat A = randn&lt;cx_mat&gt;(5, 5); 
-		cx_mat B = randn&lt;cx_mat&gt;(4, 4); 
-		cx_mat C = randn&lt;cx_mat&gt;(3, 3); 
-		cx_mat D = randn&lt;cx_mat&gt;(6, 6); 
+		cx_mat A = randn&lt;cx_mat&gt;(5, 5); // complex matrix 
+		cx_mat B = randn&lt;cx_mat&gt;(4, 4); // complex matrix
+		cx_mat C = randn&lt;cx_mat&gt;(3, 3); // complex matrix
+		mat D = randn&lt;mat&gt;(6, 6);       // real matrix
 		
-		cx_mat T1 = dsum(A, B, C, D);  
+		cx_mat T1 = dsum(A, B, C, D); // direct sum of A, B, C, D
+		                              // return type is deduced to be cx_mat
 
-		std::vector&lt;cx_mat&gt; V = {A, B, C, D};
-		cx_mat T2 = dsum(V); 
+		std::vector&lt;cx_mat&gt; V = {A, B, C}; 
+		cx_mat T2 = dsum(V); // direct sum of A, B, C
 		
-		cx_mat T3 = dsum({A, B, C});  
+		cx_mat T3 = dsum({A, B, C}); // same as above
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=dsum_pow></a>
-	  <b>dsum_pow(A, n)</b><br><br>
+	  <a name="dsum_pow"></a>
+	  <b>dsum_pow(A, n)</b><br>
 	  <ul>
-	    <li>Direct sum power of a matrix.   </li><br>
-	    <li>Returns <i>A <sup>&oplus;n</sup></i> .</li>
+	    <li>Direct sum power of a matrix.   </li>
+	    <li>Returns <i>A<sup>&oplus;n</sup></i> .</li>
 	    
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=absm></a>
-	  <b>absm(A)</b><br><br>
+
+	  <a name="absm"></a>
+	  <b>absm(A)</b><br>
 	  <ul>
-	    <li>Matrix absolute value of a square matrix.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
+	    <li>Matrix absolute value of a square matrix.</li>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
 	    <li>Returns <code>sqrtm_sym(rho.t()*rho)</code>.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+	<hr><br>
 
 
-
-	  <hr><br>
-
-
-	  <a name=schatten></a>
-	  <b>schatten(A, p)</b><br><br>
+	  <a name="schatten"></a>
+	  <b>schatten(A, p)</b><br>
 	  <ul>
-	    <li>Schatten p-norm of a matrix.</li><br>
-	    <li> <code>p</code> has to be greater than or equal to <i>0</i>.</li><br>
+	    <li>Schatten p-norm of a matrix.</li>
+	    
+	    <li> <code>p</code> has to be greater than or equal to <i>0</i>.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
+
 
 
 	  <a name="purify"></a>
-	  <b>purify(rho)<br>purify(rho, tol)</b><br><br>
+	  <b>purify(rho)<br>purify(rho, tol)</b><br>
 	  <ul>
-	    <li>Returns (<code>vec</code> or <code>cx_vec</code>) a minimal purification of a density matrix.</li><br>
-	    <li> <code>tol</code> is optional. By default, it defined by <code><a href="#eps">_precision::eps</a></code>. Eigenvalues less than <code>tol</code> 
-	      are taken to be zero.</li><br>
+	    <li> Minimal purification of a density matrix. Returns <code>vec</code> or <code>cx_vec</code> depending on the
+	    type of <code>rho</code>.</li>
+	    
+	    <li> <code>tol</code> is optional. By default, <code>tol</code> is equal to the floating point precision used in QIClib.
+	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.
+	    Eigenvalues (of <code>rho</code>) less than <code>tol</code> are treated zero.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
 	  <a name="conv_to_pure"></a>
-	  <b>conv_to_pure(A)</b><br><br>
+	  <b>conv_to_pure(A)</b><br>
 	  <ul>
-	    <li>Convert density matrix of a pure state to a column vector.</li><br>
+	    <li>To convert density matrix of a pure state to a column vector
+	    (<code>vec</code> or <code>cx_vec</code>).</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
-	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> If <code>A</code> is a column vector, then it is returned back. </li><br>
+	      (<code>vec</code> or <code>cx_vec</code>).</li>
+	      
+	    <li> If <code>A</code> is a column vector, then it is returned back unchanged. </li>
+	    
 	    <li> If <code>A</code> is not a pure state, then eigenvector corresponding to highest eigenvalue is returned. 
-	      To make sure use <code><a href="#is_pure">is_pure</a></code> function first.</li><br>
+	      To make sure, use <code><a href="#is_pure">is_pure</a></code> function first.</li>
+	      
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
 	  <a name="std_to_HS"></a>
-	  <b>std_to_HS(A)</b><br><br>
+	  <b>std_to_HS(A)</b><br>
 	  <ul>
-	    <li>Convert 2-qubit density matrix from the standard basis to the Hilbert-Schmidt basis.</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of 4x4.</li><br>
-	    <li> Always returns a real matrix.</li><br>
+	    <li>To convert 2-qubit density matrix from the standard basis to the Hilbert-Schmidt (or Pauli) basis.</li>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of 4x4.</li>
+	   
+	    <li> Always returns a real matrix.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
 	  <hr><br>
 
 
 	  <a name="HS_to_std"></a>
-	  <b>HS_to_std(A)</b><br><br>
+	  <b>HS_to_std(A)</b><br>
 	  <ul>
-	    <li>Convert 2-qubit density matrix from the Hilbert-Schmidt basis to the standard basis.</li><br>
-	    <li> <code>A</code> has to be a real square matrix (<code>mat</code>) of 4x4.</li><br>
-	    <li> Always returns a complex matrix.</li><br>
+	    <li>To convert 2-qubit density matrix from the Hilbert-Schmidt (or Pauli) basis to the standard basis.</li>
+	    
+	    <li> <code>A</code> has to be a real square matrix (<code>mat</code>) of 4x4.</li>
+	    
+	    <li> Always returns a complex matrix (<code>cx_mat</code>).</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=mket></a>
+	  <a name="mket"></a>
 	  <b>mket(mask) <br>
-	    mket&lt;ELEMENT_TYPE&gt;(mask) <br> 
+	    mket&lt;ELEM_TYPE&gt;(mask) <br> 
 	    mket(mask, dim) <br>
-	    mket&lt;ELEMENT_TYPE&gt;(mask, dim)</b><br><br>
+	    mket&lt;ELEM_TYPE&gt;(mask, dim)</b><br>
 	  <ul>
-	    <li>Create multipartite qudit pure state according to <i>mask</i> <code>uvec</code> (See following example).</li><br>
-	    <li> <code>ELEMENT_TYPE</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of 
-	      returned column vector.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	    <li>Create multipartite qudit pure state in standard computational basis according to the <code>uvec</code> <code>mask</code>. 
+	    (See following example).</li>
+	    
+	    <li> <code>ELEM_TYPE</code> is optional, by default it is <code>double</code>. It specifies the element type of 
+	      returned column vector. <code>ELEM_TYPE</code> can be <i>real</i> or <i>complex</i> types.</li>
+	      
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) 
+	    or <code>uvec</code> containing dimensions of every subsystem. 
+	     When it is unsigned integer type, all subsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of 
-	      every subystem.</li><br>
+	      every subsystem.</li>
 	    <li>Example:
 	      <pre>
-		cx_vec A = mket({0, 0, 1}); // |001&gt; state
-		// each subsystem is qubit
+		vec A = mket({0, 0, 1}); // |001&gt; state
+		                         // each subsystem is qubit
 
-		vec B = mket&lt;double&gt;({0, 0, 1}); // same a above
-		// but real vector returned
+		cx_vec B = mket&lt;complex&lt;double&gt; &gt;({0, 0, 1}); // same a above
+		                                              // but complex vector returned
 		
-		vec C = mket&lt;double&gt;({0, 0, 1}, 2); // same a above
+		vec C = mket({0, 0, 1}, 2); // same a above
 		
-		cx_vec D = mket({0, 2, 1}, {2, 3, 2}); //|021&gt; state
-		// 1st and 3rd party are qubit
-		// 2nd one is qutrit
+		vec D = mket({0, 2, 1}, {2, 3, 2}); //|021&gt; state
+		                                    // 1st and 3rd party are qubit
+		                                    // 2nd one is qutrit
 
-		vec E = mket&lt;double&gt;({0, 2, 1},{2, 3, 2}); //same as above
-		// but real vector returned
+		cx_vec E = mket&lt;complex&lt;double&gt; &gt;({0, 2, 1},{2, 3, 2}); //same as above
+		                                                        // but complex vector returned
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=mproj></a>
+	  <a name="mproj"></a>
 	  <b>mproj(mask) <br>
-	    mproj&lt;ELEMENT_TYPE&gt;(mask) <br> 
+	    mproj&lt;ELEM_TYPE&gt;(mask) <br> 
 	    mproj(mask, dim) <br>
-	    mproj&lt;ELEMENT_TYPE&gt;(mask, dim)</b><br><br>
+	    mproj&lt;ELEM_TYPE&gt;(mask, dim)</b><br><br>
 	  <ul>
-	    <li>Create multipartite qudit projectors to <i>mask</i> <code>uvec</code> (See following example).</li><br>
-	    <li> <code>ELEMENT_TYPE</code> is optional, by default it is <code>complex&lt;double&gt;</code>. It specifies the element type of 
-	      returned matrix.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
-	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of 
-	      every subystem.</li><br>
+	    <li>Create multipartite qudit projectors in standard computational basis according to the <code>uvec</code> 
+	    <code>mask</code>  (See following example).</li>
+	    
+	    <li> <code>ELEM_TYPE</code> is optional, by default it is <code>double</code>. It specifies the element type of 
+	      returned matrix. <code>ELEM_TYPE</code> can be <i>real</i> or <i>complex</i> types.</li>
+	      
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. 
+	      When it is unsigned integer type, all subsystems are supposed to have same dimensions (equal to <code>dim</code>). 
+	      By default it is 
+	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
+	      dimensions of 
+	      every subsystem.</li>
+	      
 	    <li>Example:
 	      <pre>
-		cx_mat A = mproj({0, 0, 1}); // |001&gt;&lt;001| projector
-		// each subsystem is qubit
+		mat A = mproj({0, 0, 1}); // |001&gt;&lt;001| projector
+		                          // each subsystem is qubit
 
-		mat B = mproj&lt;double&gt;({0, 0, 1}); // same a above
-		// but real matrix returned
+		cx_mat B = mproj&lt;complex&lt;double&gt; &gt;({0, 0, 1}); // same a above
+		                                               // but complex vector returned
 		
-		mat C = mproj&lt;double&gt;({0, 0, 1}, 2); // same a above
+		mat C = mproj({0, 0, 1}, 2); // same a above
 		
-		cx_mat D = mproj({0, 2, 1}, {2, 3, 2}); //|021&gt;&lt;021| projector
-		// 1st and 3rd party are qubit
-		// 2nd one is qutrit
+		mat D = mproj({0, 2, 1}, {2, 3, 2}); //|021&gt;&lt;021| projector
+		                                     // 1st and 3rd party are qubit
+		                                     // 2nd one is qutrit
 
-		mat E = mproj&lt;double&gt;({0, 2, 1}, {2, 3, 2}); //same as above
-		// but real matrix returned
+		cx_vec E = mket&lt;complex&lt;double&gt; &gt;({0, 2, 1},{2, 3, 2}); //same as above
+		                                                        // but complex vector returned
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
