@@ -216,24 +216,24 @@
 		<tr><td>  </td><td>  </td><td> </td></tr>
 
 
-		<tr><td><a href="#randU"> randU </a> </td><td>  </td><td> Generate object with random values 
+		<tr><td><a href="#randU"> randU </a> </td><td>  </td><td> To generate object with random values 
 		    (uniform distribution)</td></tr>
 
-		<tr><td><a href="#randN"> randN </a> </td><td>  </td><td> Generate object with random values 
+		<tr><td><a href="#randN"> randN </a> </td><td>  </td><td> To generate object with random values 
 		    (normal distribution)</td></tr>
 
-		<tr><td><a href="#randI"> randI </a> </td><td>  </td><td> Generate object with random integers</td></tr>
+		<tr><td><a href="#randI"> randI </a> </td><td>  </td><td> To generate object with random integers</td></tr>
 		
-		<tr><td><a href="#randHermitian"> randHermitian </a> </td><td>  </td><td> Generate random Hermitian 
+		<tr><td><a href="#randHermitian"> randHermitian </a> </td><td>  </td><td> To generate random Hermitian 
 		    matrix</td></tr>
 
-		<tr><td><a href="#randUnitary"> randUnitary </a> </td><td>  </td><td> Generate random unitary matrix</td></tr>
+		<tr><td><a href="#randUnitary"> randUnitary </a> </td><td>  </td><td> To generate random unitary matrix</td></tr>
 		
-		<tr><td><a href="#randPsi"> randPsi </a> </td><td>  </td><td> Generate random pure states</td></tr>
+		<tr><td><a href="#randPsi"> randPsi </a> </td><td>  </td><td> To generate random pure states</td></tr>
 		
-		<tr><td><a href="#randRho"> randRho </a> </td><td>  </td><td> Generate random mixed states</td></tr>
+		<tr><td><a href="#randRho"> randRho </a> </td><td>  </td><td> To generate random mixed states</td></tr>
 
-		<tr><td><a href="#randPerm"> randPerm </a> </td><td>  </td><td> Generate random permutation of unsigned integers</td></tr>
+		<tr><td><a href="#randPerm"> randPerm </a> </td><td>  </td><td> To generate random permutation of unsigned integers</td></tr>
 
 
 		<tr><td>  </td><td>  </td><td> </td></tr>
@@ -372,8 +372,10 @@
 
 	  <hr><hr>
 
-	  In this documentation the <i>mat</i>, <i>cx_mat</i>, <i>vec</i>, and <i>cx_vec</i>  type is used for convenience. 
-	  But every function should also work with <i>float</i> counterparts, like <i>fmat</i>, <i>cx_fmat</i>, <i>fvec</i>, and <i>cx_fvec</i>.
+	  <font color="blueviolet">In this documentation the <i>mat</i>, <i>cx_mat</i>, <i>vec</i>, and <i>cx_vec</i>  
+	  type is used for convenience. 
+	  But every function should also work with <i>float</i> counterparts, like <i>fmat</i>, <i>cx_fmat</i>, <i>fvec</i>, 
+	  and <i>cx_fvec</i>.</font>
 
 	  <hr><hr>
 
@@ -650,7 +652,7 @@
 	    or <code>std::mt19937</code> depending on whether <a href="http://arma.sourceforge.net/">Armadillo</a> uses 64bit integers or 
 	    not. See <a href="http://arma.sourceforge.net/docs.html#uword">this</a>. </li>
 
-	    <li> By default <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> 
+	    <li> By default, <code>rng</code> is seeded with the random return value of <code>rd</code>. To seed <code>rng</code> 
 	    with user defined value, use <code>rdevs.set_seed(YOUR_SEED)</code>. To seed <code>rng</code> with the random return 
 	    value of <code>rd</code> again, use <code>rdevs.set_seed_random()</code>.</li>
 
@@ -707,7 +709,7 @@
 	    else <code>false</code>.</li>
 
 	    <li> <code>atol</code> and <code>rtol</code> are optional.
-				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				By default, <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
 				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>			
 				    
 	  </ul>
@@ -724,7 +726,7 @@
 	    (<code>cx_mat</code>), else <code>false</code>.</li>
 	    
 	    <li> <code>atol</code> and <code>rtol</code> are optional.
-				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				By default, <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
 				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>			
 		
 	  </ul>
@@ -740,7 +742,7 @@
 	    Returns <code>true</code> if <code>A</code> is a normal matrix, else <code>false</code>.</li>
 	    
 	    <li> <code>atol</code> and <code>rtol</code> are optional.
-				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				By default, <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
 				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>			
 		
 	  </ul>
@@ -755,7 +757,7 @@
 	    <li> To check purity of a row/column vector or density matrix. 
 	    Returns <code>true</code> if <code>A</code> is a pure state, else <code>false</code>.</li>
 	    
-	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default <code>check_norm = true</code> and 
+	    <li> <code>check_norm</code> and <code>tol</code> are optional. By default, <code>check_norm = true</code> and 
 	    normalization of the vector or matrix will be checked, and <code>tol</code> is floating point precision used in QIClib.
 	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>	    
 	  </ul>
@@ -770,7 +772,7 @@
 	    <li> To check whether the matrix or vector represents a valid quantum state. Returns <code>true</code> if <code>A</code> is a 
 	      valid quantum state, else <code>false</code>.</li>
 	    
-	    <li> <code>tol</code> is optional, by default <code>tol</code> is floating point precision used in QIClib.
+	    <li> <code>tol</code> is optional, by default, <code>tol</code> is floating point precision used in QIClib.
 	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
 
 	    <li> <b>Note:</b> Normalization will always be checked.</li>
@@ -802,11 +804,11 @@
 	    Returns <code>true</code> if <code>A</code> and <code>B</code> are element-wise (approximately) equal, 
 	    else <code>false</code>.</li>
 	    
-	    <li> <code>typecheck</code> is optional. By default <code>typecheck=false</code>, and element types 
+	    <li> <code>typecheck</code> is optional. By default, <code>typecheck=false</code>, and element types 
 	    (<i>complex</i> or <i>real</i>) of <code>A</code> and <code>B</code> need not to be same.</li>
 
 	    <li>	<code>atol</code> and <code>rtol</code> are optional.
-				By default <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
+				By default, <code>atol</code> is floating point precision used in QIClib, and <code>rtol</code> is 10 times of that.
 				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -823,7 +825,7 @@
 		    (<a href="http://arma.sourceforge.net/docs.html#SpMat">SpMat</a>) matrix with the same element type.</li>
 
 	    <li>	<code>tol</code> is optional. Any element having absolute value less than <code>tol</code> will be treated as zero.
-				By default <code>tol</code> is floating point precision used in QIClib.
+				By default, <code>tol</code> is floating point precision used in QIClib.
 				See  <a href="#macro">preprocessor macros in QIClib</a> for details.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -853,7 +855,7 @@
 	      Returns <code>std::vector</code> of arithmetic (floating point or integral types) values, from (and including) 
 	      <code>start</code> to (and excluding) <code>stop</code> with step-size equal to <code>step</code>.</li>
 	    
-	    <li> <code>start</code> and <code>step</code> are optional, by default <code>start = 0</code> and <code>step = 1</code>.</li>
+	    <li> <code>start</code> and <code>step</code> are optional, by default, <code>start = 0</code> and <code>step = 1</code>.</li>
 
 	    <li> Example:
 	      <pre>
@@ -889,7 +891,7 @@
 	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
 	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
 	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
-	    (equal to <code>dim</code>). By default it is <i>2</i>. 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
 	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
 	      containing dimensions of every subsystem.</li>
 	    
@@ -930,7 +932,7 @@
 	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
 	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
 	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
-	    (equal to <code>dim</code>). By default it is <i>2</i>. 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
 	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
 	      containing dimensions of every subsystem.</li>
 	    
@@ -973,7 +975,7 @@
 	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing dimensions 
 	    of every subsystem. 
 	     When it is unsigned integer type, all subsystems are supposed to have same dimensions (equal to <code>dim</code>). 
-	     By default it is <i>2</i>. 
+	     By default, it is <i>2</i>. 
 	     If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
 	     containing dimensions of every subsystem.</li>
 	    
@@ -1452,22 +1454,24 @@
 	  <hr><br>
 
 
+
 	  <a name="mket"></a>
 	  <b>mket(mask) <br>
 	    mket&lt;ELEM_TYPE&gt;(mask) <br> 
 	    mket(mask, dim) <br>
 	    mket&lt;ELEM_TYPE&gt;(mask, dim)</b><br>
 	  <ul>
-	    <li>Create multipartite qudit pure state in standard computational basis according to the <code>uvec</code> <code>mask</code>. 
+	    <li> To create multipartite qudit pure state in standard computational basis according to the <code>uvec</code> <code>mask</code>. 
 	    (See following example).</li>
 	    
-	    <li> <code>ELEM_TYPE</code> is optional, by default it is <code>double</code>. It specifies the element type of 
+	    <li> <code>ELEM_TYPE</code> is optional, by default, it is <code>double</code>. It specifies the element type of 
 	      returned column vector. <code>ELEM_TYPE</code> can be <i>real</i> or <i>complex</i> types.</li>
 	      
 	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
 	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) 
 	    or <code>uvec</code> containing dimensions of every subsystem. 
-	     When it is unsigned integer type, all subsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	     When it is unsigned integer type, all subsystems are supposed to have same dimensions (equal to <code>dim</code>). By default,
+	      it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions of 
 	      every subsystem.</li>
 	    <li>Example:
@@ -1498,17 +1502,17 @@
 	    mproj(mask, dim) <br>
 	    mproj&lt;ELEM_TYPE&gt;(mask, dim)</b><br><br>
 	  <ul>
-	    <li>Create multipartite qudit projectors in standard computational basis according to the <code>uvec</code> 
+	    <li>To create multipartite qudit projectors in standard computational basis according to the <code>uvec</code> 
 	    <code>mask</code>  (See following example).</li>
 	    
-	    <li> <code>ELEM_TYPE</code> is optional, by default it is <code>double</code>. It specifies the element type of 
+	    <li> <code>ELEM_TYPE</code> is optional, by default, it is <code>double</code>. It specifies the element type of 
 	      returned matrix. <code>ELEM_TYPE</code> can be <i>real</i> or <i>complex</i> types.</li>
 	      
 	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
 	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
 	    dimensions of every subsystem. 
 	      When it is unsigned integer type, all subsystems are supposed to have same dimensions (equal to <code>dim</code>). 
-	      By default it is 
+	      By default, it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
 	      dimensions of 
 	      every subsystem.</li>
@@ -1535,37 +1539,40 @@
 	  <hr><br>
 
 
-	  <a name=randU></a>
-	  <b>randU&lt;TYPE = double&gt;(range = {0, 1}) <br>
+
+
+	  <a name="randU"></a>
+	  <b>randU&lt;ELEM_TYPE = double&gt;(range = {0, 1}) <br>
 	    randU&lt;VEC_TYPE = vec&gt;(n_elem, range = {0, 1}) <br>
 	    randU&lt;MAT_TYPE = mat&gt;(n_rows, n_cols, range = {0, 1})
-	  </b><br><br>
+	  </b><br>
 	  <ul>
-	    <li>Generate object with uniform random values in the range specified by the <i>column vector</i> <code>range</code>. By default the range is 
-	      in between <code>0</code> to <code>1</code>.</li><br>
+	    <li>To generate object with uniform random values in the range specified by the <i>column vector</i> <code>range</code>. 
+	    By default, the range is in between <code>0</code> to <code>1</code>.</li>
 
-	    <li> The first function generate only one random element of type (<i>real</i> or <i>complex</i>) specified by <code>TYPE</code>. By 
-	      default <code>TYPE</code> is <code>double</code>.</li><br>
+	    <li> The first functions generate only one random element of type (<i>real</i> or <i>complex</i>) specified by 
+	    <code>ELEM_TYPE</code>. By default, <code>TYPE</code> is <code>double</code>.</li>
 
-	    <li> The second function generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
-	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default <code>VEC_TYPE</code> is <code>vec</code>.</li><br>
+	    <li> The second functions generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default, <code>VEC_TYPE</code> is 
+	      <code>vec</code>.</li>
 
 
-	    <li> The third function generate a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	    <li> The third function generates a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
 	      <code>MAT_TYPE</code>, with <code>n_rows</code> number of rows, <code>n_cols</code> number of columns. 
-	      By default <code>MAT_TYPE</code> is <code>mat</code>.</li><br>
+	      By default, <code>MAT_TYPE</code> is <code>mat</code>.</li>
 
-	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
 	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
-	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li>
 
 
 	    <li>Example:
 	      <pre>
 		double a = randU(); // random number between 0 and 1
 		
-		complex&lt;double&gt; b = randU&lt;complex&lt;double&gt; &gt;(); 
-		// complex random number between (0,0) and (1,1)
+		complex&lt;double&gt; b = randU&lt;complex&lt;double&gt; &gt;();  // complex random number 
+		                                                // between (0,0) and (1,1)
 		
 		double c = randU({-5, 5}); // random number between -5 and 5
 		
@@ -1581,56 +1588,49 @@
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=randN></a>
-	  <b>randN&lt;TYPE = double&gt;(meansd = {0, 1}) <br>
-	    randN&lt;VEC_TYPE = vec&gt;(n_elem, meansd = {0, 1}) <br>
-	    randN&lt;MAT_TYPE = mat&gt;(n_rows, n_cols, meansd = {0, 1})
-	  </b><br><br>
-	  <ul>
-	    <li>Generate object with random values from normal distribution with mean and standard deviation specified by the 
-	      <i>column vector</i> <code>range</code>. By default the mean and standard deviation are <code>0</code> and <code>1</code> respectively.</li><br>
 
-	    <li> The first function generate only one random element of type (<i>real</i> or <i>complex</i>) specified by <code>TYPE</code>. By 
-	      default <code>TYPE</code> is <code>double</code>.</li><br>
+	  <a name="randN"></a>
+	  <b>randN&lt;ELEM_TYPE = double&gt;(mean_sd = {0, 1}) <br>
+	    randN&lt;VEC_TYPE = vec&gt;(n_elem, mean_sd = {0, 1}) <br>
+	    randN&lt;MAT_TYPE = mat&gt;(n_rows, n_cols, mean_sd = {0, 1})
+	  </b><br>
+	  <ul>
+	    <li>To generate object with random values from normal distribution with mean and standard deviation specified by the 
+	      <i>column vector</i> <code>mean_sd</code>. By default, the mean and standard deviation are <code>0</code> and <code>1</code> 
+	      respectively.</li>
+
+	    <li> The first function generate only one random element of type (<i>real</i> or <i>complex</i>) specified by 
+	    <code>ELEM_TYPE</code>. By 
+      default <code>TYPE</code> is <code>double</code>.</li>
 
 	    <li> The second function generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
-	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default <code>VEC_TYPE</code> is <code>vec</code>.</li><br>
+	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default, <code>VEC_TYPE</code> is 
+	      <code>vec</code>.</li>
 
 
 	    <li> The third function generate a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
 	      <code>MAT_TYPE</code>, with <code>n_rows</code> number of rows, <code>n_cols</code> number of columns. 
-	      By default <code>MAT_TYPE</code> is <code>mat</code>.</li><br>
+	      By default, <code>MAT_TYPE</code> is <code>mat</code>.</li>
 
-	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
 	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
-	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li>
 
 
 	    <li>Example:
 	      <pre>
-		double a = randN(); 
-		// random number from a normal distribution with mean 0 and sd 1
+		double a = randN(); // random number from a normal distribution 
+		                    // with mean 0 and sd 1
 		
-		complex&lt;double&gt; b = randN&lt;complex&lt;double&gt; &gt;(); 
-		// complex random number from a normal distribution with mean 0 and sd 1
+		complex&lt;double&gt; b = randN&lt;complex&lt;double&gt; &gt;(); // complex random number 
+		                                               // from a normal distribution 
+		                                               // with mean 0 and sd 1
 		
-		double c = randN({-5, 5}); 
-		// random number from a normal distribution with mean -5 and sd 5
+		double c = randN({-5, 5}); // random number from a normal distribution 
+		                           // with mean -5 and sd 5
 		
 		cx_vec V = randN&lt;cx_vec&gt;(10); // cx_vec with 10 elements 
 
@@ -1644,50 +1644,49 @@
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=randI></a>
-	  <b>randI&lt;TYPE = int&gt;(range = {0, 1000}) <br>
+
+	  <a name="randI"></a>
+	  <b>randI&lt;ELEM_TYPE = sword&gt;(range = {0, 1000}) <br>
 	    randI&lt;VEC_TYPE = ivec&gt;(n_elem, range = {0, 1000}) <br>
 	    randI&lt;MAT_TYPE = imat&gt;(n_rows, n_cols, range = {0, 1000})
-	  </b><br><br>
+	  </b><br>
 	  <ul>
-	    <li>Generate object with uniform random integers in the range specified by the <i>column vector</i> <code>range</code>. By default the range is 
-	      in between <code>0</code> to <code>1</code>.</li><br>
+	    <li>To generate object with uniform random integers in the range specified by the <i>column vector</i> <code>range</code>. 
+	    By default, the range is 
+	      in between <code>0</code> to <code>1000</code>.</li>
 
-	    <li> The first function generate only one random integer of type (<i>real</i> or <i>complex</i>) specified by <code>TYPE</code>. By 
-	      default <code>TYPE</code> is <code>int</code>.</li><br>
+	    <li> The first function generates only one random integer of type (<i>real</i> or <i>complex</i>) 
+	    specified by <code>ELEM_TYPE</code>. By 
+	      default <code>TYPE</code> is <code><a href = "http://arma.sourceforge.net/docs.html#uword">sword</a></code>.</li>
 
-	    <li> The second function generate a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
-	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default <code>VEC_TYPE</code> is <code>ivec</code>.</li><br>
+	    <li> The second function generates a row or column vector of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	      <code>VEC_TYPE</code>, with <code>n_elem</code> number of elements. By default, <code>VEC_TYPE</code> is 
+	      <code>ivec</code>.</li>
 
 
-	    <li> The third function generate a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
+	    <li> The third function generates a matrix of type (with <i>real</i> or <i>complex</i> elements) specified by 
 	      <code>MAT_TYPE</code>, with <code>n_rows</code> number of rows, <code>n_cols</code> number of columns. 
-	      By default <code>MAT_TYPE</code> is <code>imat</code>.</li><br>
+	      By default, <code>MAT_TYPE</code> is <code>imat</code>.</li>
 
-	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
 	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
-	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li>
 
 
 	    <li>Example:
 	      <pre>
-		int a = randI(); // random integer between 0 and 10000
+		sword a = randI(); // random integer (arma::sword) between 0 and 10000
+		int a1 = randI&lt;int&gt;(); // random integer (int) between 0 and 10000
+
 		
-		complex&lt;double&gt; b = randI&lt;complex&lt;double&gt; &gt;(); 
-		// complex random integer (typecasted to double) between (0,0) and (1000,1000)
+		complex&lt;double&gt; b = randI&lt;complex&lt;double&gt; &gt;(); // complex random integer 
+		                                               // (type-casted to complex&lt;double&gt;) 
+		                                               // between (0,0) and (1000,1000)
 		
-		int c = randI({-100, 100}); // random integer between -100 and 100
+		sword c = randI({-100, 100}); // random integer (arma::sword) between -100 and 100
 		
 		ivec V = randI(10); // ivec with 10 elements 
 
@@ -1699,37 +1698,31 @@
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=randHermitian></a>
+	  <a name="randHermitian"></a>
 	  <b>randHermitian&lt;ELEM_TYPE = complex&lt;double&gt; &gt;(dim)
-	  </b><br><br>
+	  </b><br>
 	  <ul>
-	    <li>Generate random Hermitian matrix <code>cx_mat</code>. 
-	      <code>dim</code> is an <i>unsigned integer</i> type specifying the dimension of the matrix.</li><br>
+	    <li>To generate random Hermitian (<code>cx_mat</code>) or real symmetric matrix (<code>mat</code>). 
+	      <code>dim</code> is an <i>unsigned integer</i> 
+	      (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>) specifying the dimension of the matrix.</li>
 
-	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex floating point</i> type). By default it is 
-	      <code>complex&lt;double&gt</code>.</li><br>
+	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex (or real) floating point</i> type). 
+	    By default, it is <code>complex&lt;double&gt</code>. If <code>ELEM_TYPE</code> is real number (<code>double</code>)
+	    the function generates random real symmetric matrix.</li>
 
-	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
 	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
-	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li>
 
 
 	    <li>Example:
 	      <pre>
 		cx_mat H1 = randHermitian(10); // 10x10 Hermitian cx_mat
 
-		cx_fmat H2 = randHermitian&lt;complex&lt;float&gt; &gt;(10); // 10x10 Hermitian cx_fmat
+		mat H2 = randHermitian&lt;double&gt;(10); // 10x10 real symmetric matrix
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -1740,17 +1733,20 @@
 	  <hr><br>
 
 
-	  <a name=randUnitary></a>
+	  <a name="randUnitary"></a>
 	  <b>randUnitary&lt;ELEM_TYPE = complex&lt;double&gt; &gt;(dim)
-	  </b><br><br>
+	  </b><br>
 	  <ul>
-	    <li>Generate random Unitary matrix <code>cx_mat</code>, uniformly distributed according to the Haar measure.
-	      <code>dim</code> is an <i>unsigned integer</i> type specifying the dimension of the matrix.</li><br>
+	    <li>To generate random unitary (<code>cx_mat</code>) or real orthogonal matrix (<code>mat</code>), 
+	    uniformly distributed according to the Haar measure.
+	      <code>dim</code> is an <i>unsigned integer</i> (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>) 
+	      specifying the dimension of the matrix.</li>
 
-	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex floating point</i> type). By default it is 
-	      <code>complex&lt;double&gt</code>.</li><br>
+	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex (or real) floating point</i> type). 
+	    By default, it is <code>complex&lt;double&gt</code>. If <code>ELEM_TYPE</code> is real number (<code>double</code>)
+	    the function generates random real orthogonal matrix.</li>
 
-	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
 	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
 	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
 
@@ -1759,53 +1755,65 @@
 	      <pre>
 		cx_mat U1 = randUnitary(10); // 10x10 Unitary cx_mat
 
-		cx_fmat U2 = randUnitary&lt;complex&lt;float&gt; &gt;(10); // 10x10 Unitary cx_fmat
+		mat U2 = randUnitary&lt;double&gt;(10); // 10x10 real orthogonal matrix
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
 
-	  <a name=randPsi></a>
+	  <a name="randPsi"></a>
 	  <b>randPsi&lt;ELEM_TYPE = complex&lt;double&gt; &gt;(dim)
-	  </b><br><br>
+	  </b><br>
 	  <ul>
-	    <li>Generate random pure states <code>cx_vec</code>, uniformly distributed according to the Haar measure.
-	      <code>dim</code> is an <i>unsigned integer</i> type specifying the dimension of the state.</li><br>
+	    <li>To generate random pure states (<code>cx_vec</code> or <code>vec</code>), uniformly distributed according to the Haar measure.
+	      <code>dim</code> is an <i>unsigned integer</i> (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>)
+	       specifying the dimension of the state.</li>
 
-	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex floating point</i> type). By default it is 
-	      <code>complex&lt;double&gt</code>.</li><br>
+	    <li> <code>ELEM_TYPE</code> specifies the element type of the matrix (<i>complex (or real) floating point</i> type). 
+	    By default, it is <code>complex&lt;double&gt</code>.</li>
 
-	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed use 
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
 	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
-	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li><br>
-
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li>
 
 	    <li>Example:
 	      <pre>
 		cx_vec psi1 = randPsi(10); // pure state (cx_vec) of dimension 10
 
-		cx_fvec psi2 = randPsi&lt;complex&lt;float&gt; &gt;(10); // pure state (cx_fvec) of dimension 10
+		vec psi2 = randPsi&lt;double&gt;(10); // real pure state (vec) 
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-
 	  <hr><br>
+
+
+
+	  <a name="randPerm"></a>
+	  <b>randPerm(n, start = 0)
+	  </b><br>
+	  <ul>
+	    <li>To generate random permutation of <i>unsigned</i> (positive) integers of size <code>n</code>. Returns a 
+	    <code>uvec</code>.</li>
+
+	    <li> <code>start</code> (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>) is optional. 
+	    It specifies starting point of the permutation. By default, it is 0.</li>
+
+	    <li> To change the seed of the random number generator, use <code>rdevs.set_seed(YOUR_SEED)</code>. To set random seed, use 
+	      <code>rdevs.set_seed_random()</code>. By default, the random number generator is instantiated with random seed. See 
+	      <code><a href="#RandomDevices">RandomDevices</a></code> class for more details.</li>
+
+	    <li>Example:
+	      <pre>
+		uvec perm1 = randPerm(5); // random permutation of {0,1,2,3,4}
+		uvec perm2 = randPerm(5, 2); // random permutation of {2,3,4,5,6}
+	      </pre>
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
+
+
 
 
 	  <a name=entropy></a>
@@ -1929,7 +1937,7 @@
 
 	    <li> In the second case, <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> 
 	      containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions 
-	      (equal to <code>dim</code>). By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> 
+	      (equal to <code>dim</code>). By default, it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> 
 	      as a <code>uvec</code> containing dimensions of every subystem.
 	      <code>subsys1</code> and <code>subsys1</code> are  <code>uvec</code> containing the indices of 1st party and 2nd party respectively.
 
@@ -2002,7 +2010,7 @@
 	      <code>cx_vec</code>).</li><br>
 	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
 	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). 
-	      By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      By default, it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
 	      containing dimensions of every subystem.</li><br>
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
 	      index <i>2</i> and so on.</li><br>  
@@ -2040,7 +2048,7 @@
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
 	      <code>cx_vec</code>).</li><br>
 	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions 
 	      of every subystem.</li><br>
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
@@ -2258,7 +2266,7 @@
 	    <li> The dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
 	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
 	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). 
-	      By default it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      By default, it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
 	      containing dimensions of every subystem.</li><br>
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
 	      <i>2</i> and so on.</li><br>  
@@ -2299,7 +2307,7 @@
 	    <li> The dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
 	    <li> All control subsystems must have same dimensions.</li><br>
 	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
 	      dimensions of every subystem.</li><br>
 	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
@@ -2363,7 +2371,7 @@
 	    <li> All Kraus or projection operators must have same dimensions.</li><br>
 
 	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
 	      dimensions of every subystem.</li><br>
 
@@ -2420,7 +2428,7 @@
 	      <code>rho</code>, where the subsystems are specified in <code>subsys</code>.</li><br>
 
 	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default it is 
+	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
 	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
 	      dimensions of every subystem.</li><br>
 
