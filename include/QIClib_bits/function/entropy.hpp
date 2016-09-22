@@ -268,7 +268,7 @@ inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
     throw Exception("qic::tsallis_prob", Exception::type::OUT_OF_RANGE);
 
   if (arma::any(as_Col(prob2) < -_precision::eps<trait::pT<T1> >::value))
-    throw Exception("qic::tsallis", "Invalid probaility distribution");
+    throw Exception("qic::tsallis_prob", "Invalid probaility distribution");
 #endif
 
   const auto& prob = as_Col(prob2);
