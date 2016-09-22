@@ -25,7 +25,7 @@ namespace qic {
 
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
-                         arma::Mat<trait::eT<T1> > >::type>
+                         arma::Mat<trait::pT<T1> > >::type>
 inline TR absm(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 

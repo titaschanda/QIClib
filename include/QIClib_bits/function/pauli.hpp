@@ -23,9 +23,10 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<trait::pT<T1> >::value,
-                         arma::Mat<trait::pT<T1> > >::type>
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1> >::value,
+            typename arma::Mat<trait::pT<T1> >::template fixed<4, 4> >::type>
 inline TR std_to_HS(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -42,7 +43,8 @@ inline TR std_to_HS(const T1& rho1) {
 
   auto& S = SPM<trait::pT<T1> >::get_instance().S;
 
-  arma::Mat<trait::pT<T1> > ret(4, 4);
+  typename arma::Mat<trait::pT<T1> >::template fixed<4, 4> ret(
+    arma::fill::zeros);
 
   for (arma::uword j = 0; j < 4; ++j) {
     for (arma::uword i = 0; i < 4; ++i)
@@ -55,7 +57,8 @@ inline TR std_to_HS(const T1& rho1) {
 
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
-                         arma::Mat<std::complex<trait::pT<T1> > > >::type>
+                         typename arma::Mat<std::complex<trait::pT<T1> > >::
+                           template fixed<4, 4> >::type>
 inline TR HS_to_std(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -75,7 +78,8 @@ inline TR HS_to_std(const T1& rho1) {
 
   auto& S = SPM<trait::pT<T1> >::get_instance().S;
 
-  arma::Mat<std::complex<trait::pT<T1> > > ret(4, 4, arma::fill::zeros);
+  typename arma::Mat<std::complex<trait::pT<T1> > >::template fixed<4, 4> ret(
+    arma::fill::zeros);
 
   for (arma::uword j = 0; j < 4; ++j) {
     for (arma::uword i = 0; i < 4; ++i)
