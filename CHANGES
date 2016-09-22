@@ -38,3 +38,4 @@ Version 0.0.5 - Development version
 	- added is_primepower
 	- added randPerm
 	- added make_ctrl
+	- default template parameter of mket(), mproj() is now double 
