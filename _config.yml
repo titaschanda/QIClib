@@ -1,0 +1,4 @@
+gems: [jekyll-coffeescript, jekyll-watch, jekyll-assets]
+
+gems:
+   - jekyll-seo-tag
