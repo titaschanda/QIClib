@@ -385,7 +385,7 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     opt.optimize(x, minf);
 
     _result = _mutual_info + static_cast<trait::pT<T1> >(minf);
-    _tp = arma::conv_to<arma::Col<trait::pT<T1> > >::from(x);
+    _tp = _internal::as_type<arma::Col<trait::pT<T1> > >::from(x);
     _is_computed = true;
   }
   return *this;

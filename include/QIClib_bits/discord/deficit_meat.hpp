@@ -377,7 +377,7 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     opt.optimize(x, minf);
 
     _result = -_S_A_B + static_cast<trait::pT<T1> >(minf);
-    _tp = arma::conv_to<arma::Col<trait::pT<T1> > >::from(x);
+    _tp = _internal::as_type<arma::Col<trait::pT<T1> > >::from(x);
     _is_computed = true;
   }
   return *this;

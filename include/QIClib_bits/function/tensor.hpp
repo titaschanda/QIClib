@@ -47,7 +47,7 @@ template <typename T1, typename T2, typename... T3,
               is_same_pT_var<T1, T2, T3...>::value,
             arma::Mat<typename eT_promoter_var<T1, T2, T3...>::type> >::type>
 inline TR tensor(const T1& rho1, const T2& rho2, const T3&... rho3) {
-  return arma::kron(rho1, tensor(rho2, rho3...)).eval();
+  return tensor(rho1.eval(), tensor(rho2, rho3...)).eval();
 }
 
 //******************************************************************************
@@ -67,7 +67,7 @@ inline TR tensor(const arma::field<T1>& rho) {
 
   auto ret = rho.at(0).eval();
 
-  for (arma::uword i = 1; i < rho.n_elem; ++i) ret = arma::kron(ret, rho.at(i));
+  for (arma::uword i = 1; i < rho.n_elem; ++i) ret = tensor(ret, rho.at(i));
 
   return ret;
 }
@@ -89,7 +89,7 @@ inline TR tensor(const std::vector<T1>& rho) {
 
   auto ret = rho[0].eval();
 
-  for (arma::uword i = 1; i < rho.size(); ++i) ret = arma::kron(ret, rho[i]);
+  for (arma::uword i = 1; i < rho.size(); ++i) ret = tensor(ret, rho[i]);
 
   return ret;
 }

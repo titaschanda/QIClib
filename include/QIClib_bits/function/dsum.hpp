@@ -46,8 +46,9 @@ inline TR dsum(const T1& rho11, const T2& rho12) {
 
   mattype ret(n1 + n2, m1 + m2, arma::fill::zeros);
 
-  ret.submat(0, 0, n1 - 1, m1 - 1) = rho1;
-  ret.submat(n1, m1, n1 + n2 - 1, m1 + m2 - 1) = rho2;
+  ret.submat(0, 0, n1 - 1, m1 - 1) = _internal::as_type<mattype>::from(rho1);
+  ret.submat(n1, m1, n1 + n2 - 1, m1 + m2 - 1) =
+    _internal::as_type<mattype>::from(rho2);
 
   return ret;
 }

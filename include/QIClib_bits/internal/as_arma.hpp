@@ -99,6 +99,17 @@ as_SpMat(const arma::SpBase<trait::eT<T1>, T1>& A) {
 
 //***************************************************************************
 
+template <typename out_type> class as_type {
+ public:
+  inline static const out_type& from(const out_type& A) { return A; }
+
+  template <typename T1> inline static out_type from(const T1& A) {
+    return arma::conv_to<out_type>::from(A);
+  }
+};
+
+//***************************************************************************
+
 }  // namespace _internal
 
 //************************************************************************

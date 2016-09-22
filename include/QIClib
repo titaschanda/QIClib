@@ -37,7 +37,7 @@
 #include "QIClib_bits/basic/macro.hpp"
 #include "QIClib_bits/basic/type_traits.hpp"
 
-#include "QIClib_bits/internal/constant.hpp"
+#include "QIClib_bits/internal/constants.hpp"
 #include "QIClib_bits/internal/singleton.hpp"
 #include "QIClib_bits/internal/as_arma.hpp"
 

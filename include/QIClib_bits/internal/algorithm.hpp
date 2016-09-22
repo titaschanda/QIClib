@@ -177,7 +177,7 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P, nonint_tag<T1>) {
 
   return eigvec *
          arma::diagmat(arma::pow(
-           arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
+           _internal::as_type<arma::Col<std::complex<trait::pT<T1> > > >::from(
              eigval),
            P)) *
          eigvec.t();

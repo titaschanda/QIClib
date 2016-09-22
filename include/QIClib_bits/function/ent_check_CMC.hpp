@@ -41,7 +41,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  std::complex<trait::pT<T1> > I(0.0, 1.0);
+  auto& I = _internal::cond_I<std::complex<trait::pT<T1> > >::value;
   arma::Mat<std::complex<trait::pT<T1> > > Eye(dim, dim, arma::fill::eye);
 
   arma::Cube<std::complex<trait::pT<T1> > > M(dim, dim, dim * dim);
@@ -117,7 +117,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  std::complex<trait::pT<T1> > I(0.0, 1.0);
+  auto& I = _internal::cond_I<std::complex<trait::pT<T1> > >::value;
   arma::Mat<std::complex<trait::pT<T1> > > Eye1(dim1, dim1, arma::fill::eye);
   arma::Mat<std::complex<trait::pT<T1> > > Eye2(dim2, dim2, arma::fill::eye);
 

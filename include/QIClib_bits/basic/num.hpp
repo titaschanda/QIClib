@@ -207,8 +207,8 @@ inline bool is_prime(arma::uword n) {
     throw Exception("qic::is_prime", Exception::type::OUT_OF_RANGE);
 #endif
 
-  for (arma::uword i = 2;
-       i <= static_cast<arma::uword>(QICLIB_ROUND_OFF(std::floor(std::sqrt(n))));
+  for (arma::uword i = 2; i <= static_cast<arma::uword>(
+                                 QICLIB_ROUND_OFF(std::floor(std::sqrt(n))));
        i++) {
     if (n % i == 0) {
       return false;
@@ -220,20 +220,22 @@ inline bool is_prime(arma::uword n) {
 //******************************************************************************
 
 inline bool is_primepower(arma::uword n) {
-  arma::uword i(2),j(0);
-  //j = 0;
-  //i = 2;
+  arma::uword i(2), j(0);
 
   while ((i <= static_cast<arma::uword>(
                  QICLIB_ROUND_OFF(std::floor(std::pow(n, .5))))) &&
          (j == 0)) {
-    if((n % i) == 0) {
+    if ((n % i) == 0) {
       j = i;
     }
     ++i;
   }
-  for (arma::uword i = 2; i <= static_cast<arma::uword>(QICLIB_ROUND_OFF(std::floor(log(n) / log(j))) + 1) ; i++) {
-    if(std::pow(j , i) == n) {
+
+  for (arma::uword i = 2;
+       i <= static_cast<arma::uword>(
+              QICLIB_ROUND_OFF(std::floor(log(n) / log(j))) + 1);
+       i++) {
+    if (std::pow(j, i) == n) {
       return true;
     }
   }
@@ -245,20 +247,20 @@ inline bool is_primepower(arma::uword n) {
 inline arma::uvec factors(arma::uword n) {
 #ifndef QICLIB_NO_DEBUG
   if (n == 0 || n == 1)
-    throw Exception("qic::is_prime", Exception::type::OUT_OF_RANGE);
+    throw Exception("qic::factors", Exception::type::OUT_OF_RANGE);
 #endif
 
   std::vector<arma::uword> ret;
 
-  for (arma::uword i = 2;
-       i <= static_cast<arma::uword>(QICLIB_ROUND_OFF(std::floor(std::sqrt(n))));
+  for (arma::uword i = 2; i <= static_cast<arma::uword>(
+                                 QICLIB_ROUND_OFF(std::floor(std::sqrt(n))));
        i++) {
     if (n % i == 0) {
       ret.push_back(i);
       ret.push_back(n / i);
     }
   }
-  return arma::conv_to<arma::uvec>::from(ret);
+  return _internal::as_type<arma::uvec>::from(ret);
 }
 
 //******************************************************************************

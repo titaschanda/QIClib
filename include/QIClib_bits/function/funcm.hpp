@@ -54,7 +54,7 @@ inline TR funcm_sym(const T1& rho1, functor P) {
 
   return eigvec *
          arma::diagmat(
-           arma::conv_to<arma::Col<std::complex<trait::pT<T1> > > >::from(
+           _internal::as_type<arma::Col<std::complex<trait::pT<T1> > > >::from(
              eigval)
              .transform(P)) *
          eigvec.t();

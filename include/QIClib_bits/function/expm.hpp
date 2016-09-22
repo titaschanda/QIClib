@@ -89,7 +89,7 @@ inline TR expm_sym(const T1& rho1, const T2& a) {
 
   return eigvec *
          arma::diagmat(arma::exp(
-           a * arma::conv_to<arma::Col<trait::eT<T1> > >::from(eigval))) *
+           a * _internal::as_type<arma::Col<trait::eT<T1> > >::from(eigval))) *
          eigvec.t();
 }
 
@@ -123,8 +123,9 @@ inline TR expm_sym(const T1& rho1) {
       throw std::runtime_error("qic::expm_sym(): Decomposition failed!");
   }
 
-  return eigvec * arma::diagmat(arma::exp(
-                    arma::conv_to<arma::Col<trait::eT<T1> > >::from(eigval))) *
+  return eigvec *
+         arma::diagmat(arma::exp(
+           _internal::as_type<arma::Col<trait::eT<T1> > >::from(eigval))) *
          eigvec.t();
 }
 
