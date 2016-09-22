@@ -35,7 +35,7 @@ template <typename T1> class discord_space<T1> {
   // "discord_space requires Armadillo Mat object as template argument!");
 
  private:
-  T1* _rho{0};
+  T1* _rho{nullptr};
   arma::uword _nodal{0};
   arma::uword _n_cols{0};
   arma::uword _n_rows{0};
