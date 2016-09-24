@@ -64,7 +64,8 @@ purify(const T1& rho1,
     }
 
     arma::uword dim = rho.n_rows;
-    arma::uword dimE = QICLIB_ROUND_OFF(arma::sum(eigval > tol));
+    arma::uword dimE =
+      static_cast<arma::uword>(QICLIB_ROUND_OFF(arma::sum(eigval > tol)));
 
     arma::Col<trait::eT<T1> > ret(dim * dimE, arma::fill::zeros);
 

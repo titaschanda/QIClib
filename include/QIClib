@@ -45,6 +45,7 @@
 #include "QIClib_bits/class/exception.hpp"
 #include "QIClib_bits/class/constants.hpp"
 #include "QIClib_bits/class/random_devices.hpp"
+#include "QIClib_bits/class/gates.hpp"
 
 #include "QIClib_bits/basic/is_equal.hpp"
 #include "QIClib_bits/basic/is_Hermitian.hpp"
@@ -59,8 +60,7 @@
 #include "QIClib_bits/basic/dense_to_sparse.hpp"
 #include "QIClib_bits/basic/sparse_to_dense.hpp"
 
-#include "QIClib_bits/internal/algorithm.hpp"
-#include "QIClib_bits/class/gates.hpp"
+#include "QIClib_bits/internal/algorithms.hpp"
 
 #include "QIClib_bits/function/Tx.hpp"
 #include "QIClib_bits/function/TrX.hpp"

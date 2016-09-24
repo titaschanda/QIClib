@@ -23,6 +23,11 @@ namespace qic {
 
 //******************************************************************************
 
+#ifndef QICLIB_USE_OPENMP
+// USE SERIAL ALGORITHM
+
+//******************************************************************************
+
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
@@ -139,6 +144,118 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
     return rho_ret;
   }
 }
+
+//******************************************************************************
+
+#else
+// USE PARALLEL ALGORITHM
+
+//******************************************************************************
+
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+inline TR sysperm(const T1& rho1, const arma::uvec& sys,
+                  const arma::uvec& dim) {
+  const auto& rho = _internal::as_Mat(rho1);
+  const arma::uword n = dim.n_elem;
+
+  bool checkV = true;
+  if (rho.n_cols == 1)
+    checkV = false;
+
+#ifndef QICLIB_NO_DEBUG
+  if (rho.n_elem == 0)
+    throw Exception("qic::sysperm", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::sysperm",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim.n_elem == 0 || arma::any(dim == 0))
+    throw Exception("qic::sysperm", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(dim) != rho.n_rows)
+    throw Exception("qic::sysperm", Exception::type::DIMS_MISMATCH_MATRIX);
+
+  if (n != sys.n_elem || arma::any(sys == 0) || arma::any(sys > n) ||
+      sys.n_elem != arma::unique(sys).eval().n_elem)
+    throw Exception("qic::sysperm", Exception::type::INVALID_PERM);
+#endif
+
+  arma::uword productr[_internal::MAXQDIT];
+  productr[n - 1] = 1;
+  for (arma::sword i = n - 2; i >= 0; --i)
+    productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);
+
+  if (checkV) {
+    arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_rows);
+
+    auto worker = [n, &dim, &sys, &productr, &rho](arma::uword I, arma::uword J)
+      noexcept -> trait::eT<T1> {
+
+      arma::uword Iindex[_internal::MAXQDIT];
+      arma::uword Jindex[_internal::MAXQDIT];
+
+      for (arma::sword i = n - 1; i > 0; --i) {
+        Iindex[i] = I % dim.at(i);
+        Jindex[i] = J % dim.at(i);
+        I /= dim.at(i);
+        J /= dim.at(i);
+      }
+      Iindex[0] = I;
+      Jindex[0] = J;
+
+      arma::uword K(0), L(0);
+      for (arma::uword i = 0; i < n; ++i) {
+        K += productr[i] * Iindex[sys.at(i) - 1];
+        L += productr[i] * Jindex[sys.at(i) - 1];
+      }
+
+      return rho.at(K, L);
+    };
+
+#pragma omp parallel for collapse(2)
+    for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
+      for (arma::uword II = 0; II < rho.n_rows; ++II)
+        rho_ret.at(II, JJ) = worker(II, JJ);
+    }
+
+    return rho_ret;
+
+  } else {
+    arma::Col<trait::eT<T1> > rho_ret(rho.n_rows);
+
+    auto worker = [n, &dim, &sys, &productr, &rho](arma::uword I)
+      noexcept -> trait::eT<T1> {
+
+      arma::uword Iindex[_internal::MAXQDIT];
+
+      for (arma::sword i = n - 1; i > 0; --i) {
+        Iindex[i] = I % dim.at(i);
+        I /= dim.at(i);
+      }
+      Iindex[0] = I;
+
+      arma::uword K(0);
+      for (arma::uword i = 0; i < n; ++i) {
+        K += productr[i] * Iindex[sys.at(i) - 1];
+      }
+
+      return rho.at(K);
+    };
+
+#pragma omp parallel for
+    for (arma::uword II = 0; II < rho.n_rows; ++II) rho_ret.at(II) = worker(II);
+
+    return rho_ret;
+  }
+}
+
+//******************************************************************************
+
+#endif
 
 //******************************************************************************
 

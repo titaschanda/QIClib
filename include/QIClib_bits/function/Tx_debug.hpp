@@ -23,10 +23,10 @@ namespace qic {
 
 //******************************************************************************
 
-#ifndef QICLIB_USE_OPENMP
-// USE SERIAL ALGORITHM
+namespace debug {
 
 //******************************************************************************
+
 
 template <typename T1,
           typename TR = typename std::enable_if<
@@ -120,112 +120,6 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
 //******************************************************************************
 
-#else
-// USE PARALLEL ALGORITHM
-
-//******************************************************************************
-
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
-#ifndef QICLIB_NO_DEBUG
-  if (rho.n_elem == 0)
-    throw Exception("qic::Tx", Exception::type::ZERO_SIZE);
-
-  if (checkV)
-    if (rho.n_rows != rho.n_cols)
-      throw Exception("qic::Tx", Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-
-  if (dim.n_elem == 0 || arma::any(dim == 0))
-    throw Exception("qic::Tx", Exception::type::INVALID_DIMS);
-
-  if (arma::prod(dim) != rho.n_rows)
-    throw Exception("qic::Tx", Exception::type::DIMS_MISMATCH_MATRIX);
-
-  if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
-      arma::any(sys > dim.n_elem) ||
-      sys.n_elem != arma::unique(sys).eval().n_elem)
-    throw Exception("qic::Tx", Exception::type::INVALID_SUBSYS);
-#endif
-
-  if (sys.n_elem == dim.n_elem) {
-    if (checkV)
-      return rho.st();
-    else
-      return (rho * rho.t()).st();
-  }
-
-  if (sys.n_elem == 0) {
-    if (checkV)
-      return rho;
-    else
-      return rho * rho.t();
-  }
-
-  _internal::dim_collapse_sys(dim, sys);
-  const arma::uword n = dim.n_elem;
-
-  arma::uword product[_internal::MAXQDIT];
-  product[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
-
-  arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
-
-  auto worker = [n, checkV, &dim, &sys, &product,
-                 &rho](arma::uword I, arma::uword J) noexcept -> trait::eT<T1> {
-    arma::uword K(0), L(0);
-
-    for (arma::sword i = n - 1; i > 0; --i) {
-      arma::uword Iindex = I % dim.at(i);
-      arma::uword Jindex = J % dim.at(i);
-      I /= dim.at(i);
-      J /= dim.at(i);
-
-      if (arma::any(sys == i + 1)) {
-        K += product[i] * Jindex;
-        L += product[i] * Iindex;
-      } else {
-        K += product[i] * Iindex;
-        L += product[i] * Jindex;
-      }
-    }
-  
-    if (arma::any(sys==1)) {
-      K += product[0] * J;
-      L += product[0] * I;
-    } else {
-      K += product[0] * I;
-      L += product[0] * J;
-    }
-    
-    if (checkV)
-      return rho.at(K,L);
-    else
-      return rho.at(K) * std::conj(rho.at(L));
-  };
-
-  QICLIB_OPENMP_FOR_COLLAPSE_2
-  for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
-    for (arma::uword II = 0; II < rho.n_rows; ++II)
-      tr_rho.at(II, JJ) = worker(II, JJ);
-  }
-  return tr_rho;
-}
-
-//******************************************************************************
-
-#endif
-
-//******************************************************************************
-
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
@@ -255,6 +149,10 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   dim2.fill(dim);
   return Tx(rho, std::move(sys), std::move(dim2));
 }
+
+//******************************************************************************
+
+} // namespace debug
 
 //******************************************************************************
 

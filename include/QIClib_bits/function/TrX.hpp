@@ -23,6 +23,11 @@ namespace qic {
 
 //******************************************************************************
 
+#ifndef QICLIB_USE_OPENMP
+// USE SERIAL ALGORITHM
+
+//******************************************************************************
+
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
@@ -148,6 +153,153 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
 //******************************************************************************
 
+#else
+// USE PARALLEL ALGORITHM
+
+//******************************************************************************
+
+template <typename T1,
+          typename TR = typename std::enable_if<
+            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+  const auto& rho = _internal::as_Mat(rho1);
+
+  bool checkV = true;
+  if (rho.n_cols == 1)
+    checkV = false;
+
+#ifndef QICLIB_NO_DEBUG
+  if (rho.n_elem == 0)
+    throw Exception("qic::TrX", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::TrX",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim.n_elem == 0 || arma::any(dim == 0))
+    throw Exception("qic::TrX", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(dim) != rho.n_rows)
+    throw Exception("qic::TrX", Exception::type::DIMS_MISMATCH_MATRIX);
+
+  if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
+      arma::any(sys > dim.n_elem) ||
+      sys.n_elem != arma::unique(sys).eval().n_elem)
+    throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
+#endif
+
+  if (sys.n_elem == dim.n_elem) {
+    if (checkV)
+      return {arma::trace(rho)};
+    else
+      return {rho.t() * rho};
+  }
+
+  if (sys.n_elem == 0) {
+    if (checkV)
+      return rho;
+    else
+      return rho * rho.t();
+  }
+
+  _internal::dim_collapse_sys(dim, sys);
+  const arma::uword n = dim.n_elem;
+  const arma::uword m = sys.n_elem;
+
+  arma::uword keep[_internal::MAXQDIT];
+  arma::uword keep_count(0);
+  for (arma::uword run = 0; run < n; ++run) {
+    if (!arma::any(sys == run + 1)) {
+      keep[keep_count] = run + 1;
+      ++keep_count;
+    }
+  }
+
+  arma::uword dimtrace = arma::prod(dim(sys - 1));
+  arma::uword dimkeep = rho.n_rows / dimtrace;
+
+  arma::uword product[_internal::MAXQDIT];
+  product[n - 1] = 1;
+  for (arma::sword i = n - 2; i > -1; --i)
+    product[i] = product[i + 1] * dim.at(i + 1);
+
+  arma::Mat<trait::eT<T1> > tr_rho(dimkeep, dimkeep);
+
+  auto worker = [n, m, checkV, &dim, &keep, &sys, &product,
+                 &rho](arma::uword K, arma::uword L) noexcept -> trait::eT<T1> {
+
+    arma::uword Kindex[_internal::MAXQDIT];
+    arma::uword Lindex[_internal::MAXQDIT];
+
+    for (arma::sword i = n - m - 1; i > 0; --i) {
+      Kindex[i] = K % dim.at(keep[i] - 1);
+      Lindex[i] = L % dim.at(keep[i] - 1);
+      K /= dim.at(keep[i] - 1);
+      L /= dim.at(keep[i] - 1);
+    }
+    Kindex[0] = K;
+    Lindex[0] = L;
+
+    arma::uword Iindex[_internal::MAXQDIT];
+    arma::uword Jindex[_internal::MAXQDIT];
+    trait::eT<T1> ret = static_cast<trait::eT<T1> >(0);
+
+    const arma::uword loop_no = m;
+    constexpr auto loop_no_buffer = _internal::MAXQDIT;
+    arma::uword loop_counter[loop_no_buffer] = {0};
+    arma::uword MAX[loop_no_buffer];
+
+    for (arma::uword i = 0; i < m; ++i) {
+      MAX[i] = dim.at(sys.at(i) - 1);
+    }
+    MAX[loop_no] = 2;
+    arma::uword p1 = 0;
+
+    while (loop_counter[loop_no] == 0) {
+      arma::uword I(0), J(0), countK(0), countI(0);
+
+      for (arma::uword i = 0; i < n; ++i) {
+        if (arma::any(sys == i + 1)) {
+          Iindex[i] = Jindex[i] = loop_counter[countI];
+          ++countI;
+        } else {
+          Iindex[i] = Kindex[countK];
+          Jindex[i] = Lindex[countK];
+          ++countK;
+        }
+        I += product[i] * Iindex[i];
+        J += product[i] * Jindex[i];
+      }
+
+      ret += checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));
+
+      ++loop_counter[0];
+      while (loop_counter[p1] == MAX[p1]) {
+        loop_counter[p1] = 0;
+        loop_counter[++p1]++;
+        if (loop_counter[p1] != MAX[p1])
+          p1 = 0;
+      }
+    }
+
+    return ret;
+  };
+
+  QICLIB_OPENMP_FOR_COLLAPSE_2
+  for (arma::uword LL = 0; LL < dimkeep; ++LL) {
+    for (arma::uword KK = 0; KK < dimkeep; ++KK)
+      tr_rho.at(KK, LL) = worker(KK, LL);
+  }
+  return tr_rho;
+}
+
+//******************************************************************************
+
+#endif
+
+//******************************************************************************
+
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
@@ -182,6 +334,8 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 //******************************************************************************
 
 namespace experimental {
+
+//******************************************************************************
 
 template <typename T1,
           typename TR = typename std::enable_if<
@@ -321,6 +475,8 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec sys,
 
   return tr_rho;
 }
+
+//******************************************************************************
 
 }  // namespace experimental
 
