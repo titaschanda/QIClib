@@ -56,24 +56,38 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
   friend class _internal::Singleton<const SPM<T1> >;
 
  public:
+
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> > S{
-    0};
+    4};
   arma::field<typename arma::Col<std::complex<T1> >::template fixed<2> > basis2{
-    0};
+    2, 4};
   arma::field<typename arma::Col<std::complex<T1> >::template fixed<3> > basis3{
-    0};
+    3, 4};
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> >
-    proj2{0};
+    proj2{2, 4};
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<3, 3> >
-    proj3{0};
+    proj3{3, 4};
 
   struct {
-    typename arma::Col<T1>::template fixed<4> phim{0}, phip{0}, psim{0},
-      psip{0};
+    const typename arma::Col<T1>::template fixed<4> phim{
+      static_cast<T1>(std::sqrt(0.5)), static_cast<T1>(0.0),
+      static_cast<T1>(0.0), static_cast<T1>(-std::sqrt(0.5))};
+
+    const typename arma::Col<T1>::template fixed<4> phip{
+      static_cast<T1>(std::sqrt(0.5)), static_cast<T1>(0.0),
+      static_cast<T1>(0.0), static_cast<T1>(std::sqrt(0.5))};
+
+    const typename arma::Col<T1>::template fixed<4> psim{
+      static_cast<T1>(0.0), static_cast<T1>(std::sqrt(0.5)),
+      static_cast<T1>(-std::sqrt(0.5)), static_cast<T1>(0.0)};
+
+    const typename arma::Col<T1>::template fixed<4> psip{
+      static_cast<T1>(0.0), static_cast<T1>(std::sqrt(0.5)),
+      static_cast<T1>(std::sqrt(0.5)), static_cast<T1>(0.0)};
   } bell;
 
  private:
-  SPM() : S(4), basis2(2, 4), basis3(3, 4), proj2(2, 4), proj3(3, 4), bell() {
+  SPM() : bell() {
 
     S.at(0) << 1.0 << 0.0 << arma::endr << 0.0 << 1.0 << arma::endr;
 
@@ -144,18 +158,22 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 
     //**************************************************************************
 
-    bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
-    bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
-    bell.psim << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
-    bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
+    // bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
+    // bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
+    // bell.psim << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
+    // bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
   }
   ~SPM() = default;
 };
 
 //******************************************************************************
 
+#ifdef QICLIB_SPM
+
 static const SPM<double>& spm _QICLIB_UNUSED_ = SPM<double>::get_instance();
 static const SPM<float>& spmf _QICLIB_UNUSED_ = SPM<float>::get_instance();
+
+#endif
 
 //******************************************************************************
 

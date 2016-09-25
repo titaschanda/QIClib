@@ -98,8 +98,7 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
 
   //**************************************************************************
 
-  typename arma::Mat<std::complex<T1> >::template fixed<2, 2>
-  PS(T1 phi) const {
+  typename arma::Mat<std::complex<T1> >::template fixed<2, 2> PS(T1 phi) const {
 
     const auto& I = _internal::cond_I<std::complex<T1> >::value;
     typename arma::Mat<std::complex<T1> >::template fixed<2, 2> ret(
@@ -138,10 +137,14 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
 
 //******************************************************************************
 
+#ifdef QICLIB_GATES
+
 static const GATES<double>& gates _QICLIB_UNUSED_ =
   GATES<double>::get_instance();
 static const GATES<float>& gatesf _QICLIB_UNUSED_ =
   GATES<float>::get_instance();
+
+#endif
 
 //******************************************************************************
 
