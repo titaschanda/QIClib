@@ -23,7 +23,7 @@ namespace qic {
 
 //******************************************************************************
 
-#ifndef QICLIB_USE_OPENMP
+#ifdef QICLIB_USE_SERIAL_TRX
 // USE SERIAL ALGORITHM
 
 //******************************************************************************
@@ -286,7 +286,9 @@ inline TR TrX(const T1& rho1, arma::uvec sys, arma::uvec dim) {
     return ret;
   };
 
-  QICLIB_OPENMP_FOR_COLLAPSE_2
+#if defined(_OPENMP)
+#pragma omp parallel for collapse(2)
+#endif
   for (arma::uword LL = 0; LL < dimkeep; ++LL) {
     for (arma::uword KK = 0; KK < dimkeep; ++KK)
       tr_rho.at(KK, LL) = worker(KK, LL);

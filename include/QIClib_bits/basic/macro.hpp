@@ -40,9 +40,18 @@
 #endif
 
 // init on or off
+#ifndef QICLIB_NO_INIT_MESSAGE
 #define QICLIB_INIT
-#ifdef QICLIB_NO_INIT_MESSAGE
-#undef QICLIB_INIT
+#endif
+
+// SPM on or off
+#ifndef QICLIB_NO_SPM
+#define QICLIB_SPM
+#endif
+
+// GATES on or off
+#ifndef QICLIB_NO_GATES
+#define QICLIB_GATES
 #endif
 
 // round_off for uword/sword, don't change
@@ -53,17 +62,17 @@
 #endif
 
 // nlopt features on or off
+#ifndef QICLIB_DONT_USE_NLOPT
 #define QICLIB_NLOPT
-#ifdef QICLIB_DONT_USE_NLOPT
-#undef QICLIB_NLOPT
 #endif
 
-#ifdef QICLIB_USE_OLD_DISCORD
-#undef QICLIB_NEW_DISCORD
+// use old or new discord
+#ifndef QICLIB_USE_OLD_DISCORD
+#define QICLIB_NEW_DISCORD
 #endif
 
-// openmp parallelisation
-#ifdef QICLIB_USE_OPENMP
+// openmp parallelization
+#if defined(QICLIB_USE_OPENMP) && defined(_OPENMP)
 #define QICLIB_OPENMP_FOR _Pragma("omp parallel for")
 #define QICLIB_OPENMP_FOR_COLLAPSE_2 _Pragma("omp parallel for collapse(2)")
 #define QICLIB_OPENMP_CRITICAL _Pragma("omp critical")
@@ -71,4 +80,29 @@
 #define QICLIB_OPENMP_FOR
 #define QICLIB_OPENMP_FOR_COLLAPSE_2
 #define QICLIB_OPENMP_CRITICAL
+#define QICLIB_USE_SERIAL_TRX
+#define QICLIB_USE_SERIAL_TX
+#define QICLIB_USE_SERIAL_SYSPERM
+#define QICLIB_USE_SERIAL_APPLY
+#define QICLIB_USE_SERIAL_MEASURE
+#endif
+
+#if defined(QICLIB_USE_OPENMP_TRX) && defined(_OPENMP)
+#undef QICLIB_USE_SERIAL_TRX
+#endif
+
+#if defined(QICLIB_USE_OPENMP_TX) && defined(_OPENMP)
+#undef QICLIB_USE_SERIAL_TX
+#endif
+
+#if defined(QICLIB_USE_OPENMP_SYSPERM) && defined(_OPENMP)
+#undef QICLIB_USE_SERIAL_SYSPERM
+#endif
+
+#if defined(QICLIB_USE_OPENMP_APPLY) && defined(_OPENMP)
+#undef QICLIB_USE_SERIAL_APPLY
+#endif
+
+#if defined(QICLIB_USE_OPENMP_MEASURE) && defined(_OPENMP)
+#undef QICLIB_USE_SERIAL_MEASURE
 #endif

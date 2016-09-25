@@ -23,7 +23,7 @@ namespace qic {
 
 //******************************************************************************
 
-#ifndef QICLIB_USE_OPENMP
+#ifdef QICLIB_USE_SERIAL_SYSPERM
 // USE SERIAL ALGORITHM
 
 //******************************************************************************
@@ -216,10 +216,12 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       return rho.at(K, L);
     };
 
+#if defined(_OPENMP)
 #pragma omp parallel for collapse(2)
+#endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II < rho.n_rows; ++II)
-        rho_ret.at(II, JJ) = worker(II, JJ);
+        rho_ret.at(JJ, II) = worker(JJ, II);
     }
 
     return rho_ret;
@@ -246,7 +248,9 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       return rho.at(K);
     };
 
-#pragma omp parallel for
+#if defined(_OPENMP)
+#pragma omp parallel
+#endif
     for (arma::uword II = 0; II < rho.n_rows; ++II) rho_ret.at(II) = worker(II);
 
     return rho_ret;

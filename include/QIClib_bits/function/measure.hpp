@@ -74,7 +74,10 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
   arma::field<mattype> outstates(Ks.size());
 
   if (checkV) {
-    QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
       if (checkK)
@@ -89,7 +92,10 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
     }
 
   } else {
-    QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
       if (checkK)
@@ -176,7 +182,10 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
   arma::field<mattype> outstates(Ks.n_elem);
 
   if (checkV) {
-    QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (arma::uword i = 0; i < Ks.n_elem; ++i) {
       mattype tmp;
       if (checkK)
@@ -191,7 +200,10 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
     }
 
   } else {
-    QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
       if (checkK)
@@ -252,7 +264,10 @@ inline TR measure(const T1& rho1, const T2& U1) {
   arma::field<mattype> outstates(U.n_cols);
 
   if (checkV) {
-    QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (arma::uword i = 0; i < U.n_cols; ++i) {
       mattype tmp = U.col(i) * U.col(i).t() * rho * U.col(i) * U.col(i).t();
       prob.at(i) = std::abs(arma::trace(tmp));
@@ -262,7 +277,10 @@ inline TR measure(const T1& rho1, const T2& U1) {
     }
 
   } else {
-    QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (arma::uword i = 0; i < U.n_cols; ++i) {
       mattype tmp = U.col(i) * U.col(i).t() * rho;
       prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -345,7 +363,10 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
   arma::Col<trait::pT<T1> > prob(Ks.size());
   arma::field<mattype> outstates(Ks.size());
 
-  QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
   for (arma::uword i = 0; i < Ks.size(); ++i) {
     mattype tmp =
       checkK ? apply(rho, (Ks[i].eval() * Ks[i].eval().t()).eval(), sys, dim)
@@ -446,7 +467,10 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
   arma::Col<trait::pT<T1> > prob(Ks.n_elem);
   arma::field<mattype> outstates(Ks.n_elem);
 
-  QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) && \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
   for (arma::uword i = 0; i < Ks.n_elem; ++i) {
     mattype tmp =
       checkK
@@ -616,7 +640,10 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
   arma::Col<trait::pT<T1> > prob(U.n_cols);
   arma::field<mattype> outstates(U.n_cols);
 
-  QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
   for (arma::uword i = 0; i < U.n_cols; ++i) {
     mattype tmp = apply(rho, (U.col(i) * U.col(i).t()).eval(), sys, dim);
 
@@ -699,7 +726,10 @@ inline TR measure_comp(const T1& rho1) {
 
   arma::Col<trait::pT<T1> > prob(rho.n_rows);
 
-  QICLIB_OPENMP_FOR
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
+  defined(_OPENMP)
+#pragma omp parallel for
+#endif
   for (arma::uword i = 0; i < rho.n_rows; ++i) {
     prob.at(i) =
       checkV ? std::abs(rho.at(i, i)) : std::pow(std::abs(rho.at(i)), 2);
