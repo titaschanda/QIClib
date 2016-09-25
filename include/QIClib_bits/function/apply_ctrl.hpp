@@ -359,8 +359,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::Mat<trait::eT<T2> > U(rho.n_rows, rho.n_rows);
 
-  auto worker = [n, o, &dim, &sys, &ctrl, &keep, &productr, &Ap,
-                 &rho](arma::uword I, arma::uword J) noexcept -> trait::eT<T2> {
+  auto worker = [n, o, &dim, &sys, &ctrl, &keep, &productr,
+                 &Ap](arma::uword I, arma::uword J) noexcept -> trait::eT<T2> {
 
     bool equality_check = I == J;
     arma::uword Iindex[_internal::MAXQDIT];

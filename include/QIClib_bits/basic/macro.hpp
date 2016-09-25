@@ -85,6 +85,7 @@
 #define QICLIB_USE_SERIAL_SYSPERM
 #define QICLIB_USE_SERIAL_APPLY
 #define QICLIB_USE_SERIAL_MEASURE
+#define QICLIB_USE_SERIAL_MAKE_CTRL
 #endif
 
 #if defined(QICLIB_USE_OPENMP_TRX) && defined(_OPENMP)
@@ -105,4 +106,8 @@
 
 #if defined(QICLIB_USE_OPENMP_MEASURE) && defined(_OPENMP)
 #undef QICLIB_USE_SERIAL_MEASURE
+#endif
+
+#if defined(QICLIB_USE_OPENMP_MAKE_CTRL) && defined(_OPENMP)
+#undef QICLIB_USE_SERIAL_MAKE_CTRL
 #endif
