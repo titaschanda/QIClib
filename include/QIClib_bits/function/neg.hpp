@@ -30,10 +30,8 @@ inline TR neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
+  bool checkV = (rho.n_cols != 1);
+  
   if (rho.n_elem == 0)
     throw Exception("qic::neg", Exception::type::ZERO_SIZE);
 
@@ -81,18 +79,16 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
-  const auto& p = _internal::as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (p.n_cols == 1)
-    checkV = false;
-
-  if (p.n_elem == 0)
+  bool checkV = (rho.n_cols != 1);
+  
+  if (rho.n_elem == 0)
     throw Exception("qic::neg", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::neg",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -101,11 +97,11 @@ inline TR neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    QICLIB_ROUND_OFF(std::log(p.n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return neg(rho1, std::move(subsys), std::move(dim2));
+  return neg(rho, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************

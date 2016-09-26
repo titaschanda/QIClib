@@ -27,8 +27,8 @@ template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value,
             arma::Mat<std::complex<trait::pT<T1> > > >::type>
-inline TR expm_sym(const T1& rho1, const std::complex<T2>& a) {
-  const auto& H = _internal::as_Mat(rho1);
+inline TR expm_sym(const T1& H1, const std::complex<T2>& a) {
+  const auto& H = _internal::as_Mat(H1);
 
 #ifndef QICLIB_NO_DEBUG
   if (H.n_elem == 0)
@@ -62,8 +62,8 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1> >::value &&
               std::is_arithmetic<T2>::value,
             arma::Mat<trait::eT<T1> > >::type>
-inline TR expm_sym(const T1& rho1, const T2& a) {
-  const auto& H = _internal::as_Mat(rho1);
+inline TR expm_sym(const T1& H1, const T2& a) {
+  const auto& H = _internal::as_Mat(H1);
 
 #ifndef QICLIB_NO_DEBUG
   if (H.n_elem == 0)
@@ -98,8 +98,8 @@ inline TR expm_sym(const T1& rho1, const T2& a) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR expm_sym(const T1& rho1) {
-  const auto& H = _internal::as_Mat(rho1);
+inline TR expm_sym(const T1& H1) {
+  const auto& H = _internal::as_Mat(H1);
 
 #ifndef QICLIB_NO_DEBUG
   if (H.n_elem == 0)
@@ -134,8 +134,8 @@ inline TR expm_sym(const T1& rho1) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR expm_gen(const T1& rho1) {
-  auto A = _internal::as_Mat(rho1);
+inline TR expm_gen(const T1& A1) {
+  auto A = _internal::as_Mat(A1);
 
 #ifndef QICLIB_NO_DEBUG
   if (A.n_elem == 0)

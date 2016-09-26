@@ -30,10 +30,8 @@ inline TR mutual_info(const T1& rho1, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
+  bool checkV = (rho.n_cols != 1);
+  
   if (rho.n_elem == 0)
     throw Exception("qic::mutual_info", Exception::type::ZERO_SIZE);
 
@@ -74,9 +72,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
   arma::uvec sys12 = arma::join_cols(sys1, sys2);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::mutual_info", Exception::type::ZERO_SIZE);
@@ -149,9 +145,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::mutual_info", Exception::type::ZERO_SIZE);

@@ -29,9 +29,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -68,10 +66,7 @@ inline bool schmidt(const T1& rho1, const arma::uvec& dim,
                     arma::Col<trait::pT<T1> >& S, arma::Mat<trait::eT<T1> >& U,
                     arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -120,10 +115,7 @@ inline bool schmidt_full(const T1& rho1, const arma::uvec& dim,
                          arma::Mat<trait::eT<T1> >& U,
                          arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -169,10 +161,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -220,10 +209,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -271,10 +257,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::field<arma::Mat<trait::eT<T1> > > >::type>
 inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -327,10 +310,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -379,10 +359,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::Mat<trait::eT<T1> > >::type>
 inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -431,10 +408,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          arma::field<arma::Mat<trait::eT<T1> > > >::type>
 inline TR schmidtAB_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)

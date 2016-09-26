@@ -34,9 +34,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
   const auto& A1 = _internal::as_Mat(A);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
@@ -82,9 +80,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
@@ -115,10 +111,7 @@ template <typename T1, typename T2,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply(const T1& rho1, const std::vector<T2>& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -152,7 +145,7 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks) {
   defined(_OPENMP)
 #pragma omp parallel for
 #endif
-  for (arma::uowrd i = 0; i < Ks.size(); ++i) {
+  for (arma::uword i = 0; i < Ks.size(); ++i) {
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
 #pragma omp critical
@@ -174,10 +167,7 @@ template <typename T1, typename T2,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply(const T1& rho1, const arma::field<T2>& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -211,7 +201,7 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks) {
   defined(_OPENMP)
 #pragma omp parallel for
 #endif
-  for (arma::uowrd i = 0; i < Ks.n_elem; ++i) {
+  for (arma::uword i = 0; i < Ks.n_elem; ++i) {
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
 #pragma omp critical
@@ -248,7 +238,6 @@ template <typename T1, typename T2,
 inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
                 arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
   bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -297,13 +286,13 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
   defined(_OPENMP)
 #pragma omp parallel for
 #endif
-  for (arma::uowrd i = 0; i < Ks.size(); ++i) {
+  for (arma::uword i = 0; i < Ks.size(); ++i) {
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
 #pragma omp critical
 #endif
     {
-      auto tmp = apply(rho, Ks[i], sybsys, dim);
+      auto tmp = apply(rho, Ks[i], subsys, dim);
       ret += checkV ? tmp : tmp * tmp.t();
     }
   }
@@ -320,7 +309,6 @@ template <typename T1, typename T2,
 inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
                 arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
   bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -369,13 +357,13 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
   defined(_OPENMP)
 #pragma omp parallel for
 #endif
-  for (arma::uowrd i = 0; i < Ks.n_elem; ++i) {
+  for (arma::uword i = 0; i < Ks.n_elem; ++i) {
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
 #pragma omp critical
 #endif
     {
-      auto tmp = apply(rho, Ks.at(i), sybsys, dim);
+      auto tmp = apply(rho, Ks.at(i), subsys, dim);
       ret += checkV ? tmp : tmp * tmp.t();
     }
   }
@@ -399,4 +387,86 @@ inline TR apply(const T1& rho1, const std::initializer_list<arma::Mat<T2> >& Ks,
 
 //******************************************************************************
 
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
+              is_same_pT_var<T1, T2>::value,
+            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
+                arma::uword dim = 2) {
+  const auto& rho = _internal::as_Mat(rho1);
+  bool checkV = (rho.n_cols != 1);
+
+#ifndef QICLIB_NO_DEBUG
+  if (rho.n_elem == 0)
+    throw Exception("qic::apply", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::apply",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim == 0)
+    throw Exception("qic::apply", Exception::type::INVALID_DIMS);
+#endif
+
+  arma::uword n = static_cast<arma::uword>(
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
+
+  arma::uvec dim2(n);
+  dim2.fill(dim);
+
+  return apply(rho, Ks, std::move(subsys), std::move(dim2));
+}
+
+//******************************************************************************
+
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
+              is_same_pT_var<T1, T2>::value,
+            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
+                arma::uword dim = 2) {
+  const auto& rho = _internal::as_Mat(rho1);
+  bool checkV = (rho.n_cols != 1);
+
+#ifndef QICLIB_NO_DEBUG
+  if (rho.n_elem == 0)
+    throw Exception("qic::apply", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::apply",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim == 0)
+    throw Exception("qic::apply", Exception::type::INVALID_DIMS);
+#endif
+
+  arma::uword n = static_cast<arma::uword>(
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
+
+  arma::uvec dim2(n);
+  dim2.fill(dim);
+
+  return apply(rho, Ks, std::move(subsys), std::move(dim2));
+}
+
+//******************************************************************************
+
+template <
+  typename T1, typename T2,
+  typename TR = typename std::enable_if<
+    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
+      is_same_pT_var<T1, arma::Mat<T2> >::value,
+    arma::Mat<typename eT_promoter_var<T1, arma::Mat<T2> >::type> >::type>
+inline TR apply(const T1& rho1, const std::initializer_list<arma::Mat<T2> >& Ks,
+                arma::uvec subsys, arma::uword dim = 2) {
+  const auto& rho = _internal::as_Mat(rho1);
+  return apply(rho, static_cast<std::vector<arma::Mat<T2> > >(Ks),
+               std::move(subsys), std::move(dim));
+}
+
+//******************************************************************************
 }  // namespace qic

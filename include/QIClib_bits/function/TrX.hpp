@@ -33,10 +33,7 @@ template <typename T1,
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -163,10 +160,7 @@ template <typename T1,
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -309,9 +303,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::TrX", Exception::type::ZERO_SIZE);
@@ -345,10 +337,7 @@ template <typename T1,
 inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec subsys,
               arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)

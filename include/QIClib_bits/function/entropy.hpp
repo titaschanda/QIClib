@@ -28,10 +28,7 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR entropy(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -89,7 +86,7 @@ inline TR shannon(const T1& prob1) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<T1>::value, T1>::type>
 inline TR shannon(const std::vector<T1>& prob1) {
-  return shannon(static_cast<arma::Col<T1> >(prob1));
+  return shannon(_internal::as_type<arma::Col<T1> >::from(prob1));
 }
 
 //****************************************************************************
@@ -107,10 +104,7 @@ template <typename T1,
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR renyi(const T1& rho1, const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -201,7 +195,8 @@ template <typename T1, typename T2,
             is_floating_point_var<T1>::value && std::is_arithmetic<T2>::value,
             T1>::type>
 inline TR renyi_prob(const std::vector<T1>& prob1, const T2& alpha) {
-  return renyi_prob(static_cast<arma::Col<T1> >(prob1), static_cast<T1>(alpha));
+  return renyi_prob(_internal::as_type<arma::Col<T1> >::from(prob1),
+                    static_cast<T1>(alpha));
 }
 
 //****************************************************************************
@@ -222,10 +217,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          trait::pT<T1> >::value>
 inline TR tsallis(const T1& rho1, const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -301,7 +293,7 @@ template <typename T1, typename T2,
             is_floating_point_var<T1>::value && std::is_arithmetic<T2>::value,
             T1>::type>
 inline TR tsallis_prob(const std::vector<T1>& prob1, const T2& alpha) {
-  return tsallis_prob(static_cast<arma::Col<T1> >(prob1),
+  return tsallis_prob(_internal::as_type<arma::Col<T1> >::from(prob1),
                       static_cast<T1>(alpha));
 }
 
@@ -365,8 +357,8 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<T1>::value, T1>::type>
 inline TR rel_entropy_prob(const std::vector<T1>& prob1,
                            const std::vector<T1>& prob2) {
-  return rel_entropy_prob(static_cast<arma::Col<T1> >(prob1),
-                          static_cast<arma::Col<T1> >(prob2));
+  return rel_entropy_prob(_internal::as_type<arma::Col<T1> >::from(prob1),
+                          _internal::as_type<arma::Col<T1> >::from(prob2));
 }
 
 //****************************************************************************
@@ -390,13 +382,8 @@ inline TR rel_entropy(const T1& rho11, const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
 
-  bool checkV1 = true;
-  if (rho1.n_cols == 1)
-    checkV1 = false;
-
-  bool checkV2 = true;
-  if (rho2.n_cols == 1)
-    checkV2 = false;
+  bool checkV1 = (rho1.n_cols != 1);
+  bool checkV2 = (rho2.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho1.n_elem == 0 || rho2.n_elem == 0)

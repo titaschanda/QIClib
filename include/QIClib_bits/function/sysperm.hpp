@@ -23,7 +23,7 @@ namespace qic {
 
 //******************************************************************************
 
-#ifdef QICLIB_USE_SERIAL_SYSPERM
+#ifdef QICLIB_USE_SERIAL_PERM
 // USE SERIAL ALGORITHM
 
 //******************************************************************************
@@ -31,14 +31,11 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR sysperm(const T1& rho1, const arma::uvec& sys,
+inline TR sysperm(const T1& rho1, const arma::uvec& perm,
                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -49,14 +46,14 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       throw Exception("qic::sysperm",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
-  if (dim.n_elem == 0 || arma::any(dim == 0))
+  if (n == 0 || arma::any(dim == 0))
     throw Exception("qic::sysperm", Exception::type::INVALID_DIMS);
 
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::sysperm", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (n != sys.n_elem || arma::any(sys == 0) || arma::any(sys > n) ||
-      sys.n_elem != arma::unique(sys).eval().n_elem)
+  if (n != perm.n_elem || arma::any(perm == 0) || arma::any(perm > n) ||
+      perm.n_elem != arma::unique(perm).eval().n_elem)
     throw Exception("qic::sysperm", Exception::type::INVALID_PERM);
 #endif
 
@@ -68,7 +65,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
   arma::uword productr[_internal::MAXQDIT];
   productr[n - 1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);
+    productr[i] = productr[i + 1] * dim.at(perm.at(i + 1) - 1);
 
   if (checkV) {
     arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols,
@@ -92,8 +89,8 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       for (arma::uword i = 0; i < n; ++i) {
         I += product[i] * loop_counter[i];
         J += product[i] * loop_counter[i + n];
-        K += productr[i] * loop_counter[sys.at(i) - 1];
-        L += productr[i] * loop_counter[sys.at(i) + n - 1];
+        K += productr[i] * loop_counter[perm.at(i) - 1];
+        L += productr[i] * loop_counter[perm.at(i) + n - 1];
       }
 
       rho_ret.at(K, L) = rho.at(I, J);
@@ -127,7 +124,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       arma::uword I(0), K(0);
       for (arma::uword i = 0; i < n; ++i) {
         I += product[i] * loop_counter[i];
-        K += productr[i] * loop_counter[sys.at(i) - 1];
+        K += productr[i] * loop_counter[perm.at(i) - 1];
       }
 
       rho_ret.at(K) = rho.at(I);
@@ -155,14 +152,11 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR sysperm(const T1& rho1, const arma::uvec& sys,
+inline TR sysperm(const T1& rho1, const arma::uvec& perm,
                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -173,26 +167,26 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
       throw Exception("qic::sysperm",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
-  if (dim.n_elem == 0 || arma::any(dim == 0))
+  if (n == 0 || arma::any(dim == 0))
     throw Exception("qic::sysperm", Exception::type::INVALID_DIMS);
 
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::sysperm", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (n != sys.n_elem || arma::any(sys == 0) || arma::any(sys > n) ||
-      sys.n_elem != arma::unique(sys).eval().n_elem)
+  if (n != perm.n_elem || arma::any(perm == 0) || arma::any(perm > n) ||
+      perm.n_elem != arma::unique(perm).eval().n_elem)
     throw Exception("qic::sysperm", Exception::type::INVALID_PERM);
 #endif
 
   arma::uword productr[_internal::MAXQDIT];
   productr[n - 1] = 1;
   for (arma::sword i = n - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(sys.at(i + 1) - 1);
+    productr[i] = productr[i + 1] * dim.at(perm.at(i + 1) - 1);
 
   if (checkV) {
     arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_rows);
 
-    auto worker = [n, &dim, &sys, &productr, &rho](arma::uword I, arma::uword J)
+    auto worker = [n, &dim, &perm, &productr, &rho](arma::uword I, arma::uword J)
       noexcept -> trait::eT<T1> {
 
       arma::uword Iindex[_internal::MAXQDIT];
@@ -209,8 +203,8 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 
       arma::uword K(0), L(0);
       for (arma::uword i = 0; i < n; ++i) {
-        K += productr[i] * Iindex[sys.at(i) - 1];
-        L += productr[i] * Jindex[sys.at(i) - 1];
+        K += productr[i] * Iindex[perm.at(i) - 1];
+        L += productr[i] * Jindex[perm.at(i) - 1];
       }
 
       return rho.at(K, L);
@@ -229,7 +223,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
   } else {
     arma::Col<trait::eT<T1> > rho_ret(rho.n_rows);
 
-    auto worker = [n, &dim, &sys, &productr, &rho](arma::uword I)
+    auto worker = [n, &dim, &perm, &productr, &rho](arma::uword I)
       noexcept -> trait::eT<T1> {
 
       arma::uword Iindex[_internal::MAXQDIT];
@@ -242,7 +236,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 
       arma::uword K(0);
       for (arma::uword i = 0; i < n; ++i) {
-        K += productr[i] * Iindex[sys.at(i) - 1];
+        K += productr[i] * Iindex[perm.at(i) - 1];
       }
 
       return rho.at(K);
@@ -266,13 +260,11 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys,
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
+inline TR sysperm(const T1& rho1, const arma::uvec& perm, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::sysperm", Exception::type::ZERO_SIZE);
@@ -291,7 +283,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& sys, arma::uword dim = 2) {
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return sysperm(rho, sys, dim2);
+  return sysperm(rho, perm, dim2);
 }
 
 //******************************************************************************

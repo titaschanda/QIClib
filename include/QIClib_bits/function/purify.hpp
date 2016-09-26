@@ -30,10 +30,7 @@ inline TR
 purify(const T1& rho1,
        const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)

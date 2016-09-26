@@ -27,18 +27,15 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR l1_coh(const T1& rho1) {
-  const auto& p = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (p.n_cols == 1)
-    checkV = false;
+  const auto& rho = _internal::as_Mat(rho1);
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::l1_coh", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::l1_coh",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 #endif
@@ -46,17 +43,17 @@ inline TR l1_coh(const T1& rho1) {
   trait::pT<T1> ret(0.0);
 
   if (checkV) {
-    for (arma::uword ii = 0; ii < p.n_cols; ++ii) {
-      for (arma::uword jj = 0; jj < p.n_rows; ++jj) {
-        ret += ii != jj ? std::abs(p.at(jj, ii)) : 0.0;
+    for (arma::uword ii = 0; ii < rho.n_cols; ++ii) {
+      for (arma::uword jj = 0; jj < rho.n_rows; ++jj) {
+        ret += ii != jj ? std::abs(rho.at(jj, ii)) : 0.0;
       }
     }
 
   } else {
 
-    for (arma::uword ii = 0; ii < p.n_rows; ++ii) {
-      for (arma::uword jj = 0; jj < p.n_rows; ++jj) {
-        ret += ii != jj ? std::abs(p[ii] * std::conj(p[jj])) : 0.0;
+    for (arma::uword ii = 0; ii < rho.n_rows; ++ii) {
+      for (arma::uword jj = 0; jj < rho.n_rows; ++jj) {
+        ret += ii != jj ? std::abs(rho.at(ii) * std::conj(rho.at(jj))) : 0.0;
       }
     }
   }
@@ -72,33 +69,30 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
 inline TR l1_coh(const T1& rho1, const T2& U1) {
-  const auto& p = _internal::as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-
-  bool checkV = true;
-  if (p.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0 || U.n_elem == 0)
+  if (rho.n_elem == 0 || U.n_elem == 0)
     throw Exception("qic::l1_coh", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::l1_coh",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (U.n_rows != U.n_cols)
     throw Exception("qic::l1_coh", Exception::type::MATRIX_NOT_SQUARE);
 
-  if (p.n_rows != U.n_rows)
+  if (rho.n_rows != U.n_rows)
     throw Exception("qic::l1_coh", Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   if (checkV)
-    return l1_coh((U * p * U.t()).eval());
+    return l1_coh((U * rho * U.t()).eval());
   else
-    return l1_coh((U * p).eval());
+    return l1_coh((U * rho).eval());
 }
 
 //******************************************************************************
@@ -107,27 +101,24 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR rel_entropy_coh(const T1& rho1) {
-  const auto& p = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (p.n_cols == 1)
-    checkV = false;
+  const auto& rho = _internal::as_Mat(rho1);
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::rel_entropy_coh", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::rel_entropy_coh",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 #endif
 
   if (checkV)
-    return shannon(arma::real(arma::diagvec(p))) - entropy(p);
+    return shannon(arma::real(arma::diagvec(rho))) - entropy(rho);
 
   else
-    return shannon(arma::pow(arma::abs(p), 2.0));
+    return shannon(arma::pow(arma::abs(rho), 2.0));
 }
 
 //******************************************************************************
@@ -138,34 +129,31 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
 inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
-  const auto& p = _internal::as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-
-  bool checkV = true;
-  if (p.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0 || U.n_elem == 0)
+  if (rho.n_elem == 0 || U.n_elem == 0)
     throw Exception("qic::rel_entropy_coh", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::rel_entropy_coh",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (U.n_rows != U.n_cols)
     throw Exception("qic::rel_entropy_coh", Exception::type::MATRIX_NOT_SQUARE);
 
-  if (p.n_rows != U.n_rows)
+  if (rho.n_rows != U.n_rows)
     throw Exception("qic::rel_entropy_coh",
                     Exception::type::MATRIX_SIZE_MISMATCH);
 #endif
 
   if (checkV)
-    return rel_entropy_coh((U * p * U.t()).eval());
+    return rel_entropy_coh((U * rho * U.t()).eval());
   else
-    return rel_entropy_coh((U * p).eval());
+    return rel_entropy_coh((U * rho).eval());
 }
 
 //******************************************************************************

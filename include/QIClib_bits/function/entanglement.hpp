@@ -27,32 +27,30 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR entanglement(const T1& rho1, arma::uvec dim) {
-  const auto& p = _internal::as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (p.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::entanglement", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::entanglement",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   if (arma::any(dim) == 0)
     throw Exception("qic::entanglement", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim) != p.n_rows)
+  if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::entanglement", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if ((dim.n_elem) != 2)
+  if (dim.n_elem != 2)
     throw Exception("qic::entanglement", Exception::type::NOT_BIPARTITE);
 #endif
 
-  return entropy(TrX(p, {1}, std::move(dim)));
+  return entropy(TrX(rho, {1}, std::move(dim)));
 }
 
 //******************************************************************************

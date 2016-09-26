@@ -27,23 +27,23 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR concurrence(const T1& rho1) {
-  const auto& p = _internal::as_Mat(rho1);
+  const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::concurrence", Exception::type::ZERO_SIZE);
 
-  if (p.n_rows != p.n_cols)
+  if (rho.n_rows != rho.n_cols)
     throw Exception("qic::concurrence", Exception::type::MATRIX_NOT_SQUARE);
 
-  if (p.n_rows != 4)
+  if (rho.n_rows != 4)
     throw Exception("qic::concurrence", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
   auto& S2 = SPM<trait::pT<T1> >::get_instance().S.at(2);
 
   typename arma::Mat<std::complex<trait::pT<T1> > >::template fixed<4, 4> pbar =
-    p * arma::kron(S2, S2) * arma::conj(p) * arma::kron(S2, S2);
+    rho * arma::kron(S2, S2) * arma::conj(rho) * arma::kron(S2, S2);
 
   typename arma::Col<trait::pT<T1> >::template fixed<4> eig =
     arma::sort(arma::real(arma::eig_gen(pbar)));

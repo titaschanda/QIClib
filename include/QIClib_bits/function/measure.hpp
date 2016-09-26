@@ -33,10 +33,7 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -141,10 +138,7 @@ template <
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
 inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -236,10 +230,7 @@ template <
 inline TR measure(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -309,10 +300,7 @@ template <
 inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   arma::uword D = arma::prod(dim);
@@ -415,10 +403,7 @@ template <
 inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   arma::uword D = arma::prod(dim);
@@ -505,9 +490,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -562,9 +545,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -601,10 +582,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   arma::uword D = arma::prod(dim);
@@ -676,9 +654,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
   const auto& U = _internal::as_Mat(U1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -709,10 +685,7 @@ template <typename T1,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
 inline TR measure_comp(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -751,10 +724,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
+  bool checkV = (rho.n_cols != 1);
   arma::uword D = arma::prod(dim);
 
   if (rho.n_elem == 0)
@@ -802,9 +772,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
+  bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);

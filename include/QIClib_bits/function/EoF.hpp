@@ -27,32 +27,28 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 inline TR EoF(const T1& rho1) {
-  const auto& p = _internal::as_Mat(rho1);
-
-  bool checkV = true;
-
-  if (p.n_cols == 1)
-    checkV = false;
-
+  const auto& rho = _internal::as_Mat(rho1);
+  bool checkV = (rho.n_cols != 1);
+  
 #ifndef QICLIB_NO_DEBUG
-  if (p.n_elem == 0)
+  if (rho.n_elem == 0)
     throw Exception("qic::EoF", Exception::type::ZERO_SIZE);
 
   if (checkV)
-    if (p.n_rows != p.n_cols)
+    if (rho.n_rows != rho.n_cols)
       throw Exception("qic::EoF",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
-  if (p.n_rows != 4)
+  if (rho.n_rows != 4)
     throw Exception("qic::EoF", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
   if (!checkV) {
-    return entanglement(p, {2, 2});
+    return entanglement(rho, {2, 2});
 
   } else {
     trait::pT<T1> ret =
-      0.5 * (1.0 + std::sqrt(1.0 - std::pow(concurrence(p), 2.0)));
+      0.5 * (1.0 + std::sqrt(1.0 - std::pow(concurrence(rho), 2.0)));
     trait::pT<T1> ret2(0.0);
     if (ret > _precision::eps<trait::pT<T1> >::value)
       ret2 -= ret * std::log2(ret);

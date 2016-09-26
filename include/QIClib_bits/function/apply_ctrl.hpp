@@ -34,16 +34,13 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
-                     arma::uvec sys, arma::uvec dim) {
+                     arma::uvec subsys, arma::uvec dim) {
   using eTR = typename eT_promoter_var<T1, T2>::type;
 
   const auto& rho = _internal::as_Mat(rho1);
   const auto& A1 = _internal::as_Mat(A);
 
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
+  bool checkV = (rho.n_cols != 1);
   arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
 
 #ifndef QICLIB_NO_DEBUG
@@ -71,27 +68,27 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (arma::prod(dim(sys - 1)) != A1.n_rows)
+  if (arma::prod(dim(subsys - 1)) != A1.n_rows)
     throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  const arma::uvec ctrlsys = arma::join_cols(sys, ctrl);
+  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
 
-  if (ctrlsys.n_elem > dim.n_elem ||
-      arma::unique(ctrlsys).eval().n_elem != ctrlsys.n_elem ||
-      arma::any(ctrlsys > dim.n_elem) || arma::any(ctrlsys == 0))
+  if (ctrlsubsys.n_elem > dim.n_elem ||
+      arma::unique(ctrlsubsys).eval().n_elem != ctrlsubsys.n_elem ||
+      arma::any(ctrlsubsys > dim.n_elem) || arma::any(ctrlsubsys == 0))
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
 #endif
 
-  _internal::dim_collapse_sys_ctrl(dim, sys, ctrl);
+  _internal::dim_collapse_sys_ctrl(dim, subsys, ctrl);
 
   const arma::uword n = dim.n_elem;
-  const arma::uword m = sys.n_elem;
+  const arma::uword m = subsys.n_elem;
   const arma::uword o = ctrl.n_elem;
 
   arma::uvec keep(n - m);
   arma::uword keep_count(0);
   for (arma::uword run = 0; run < n; ++run) {
-    if (!arma::any(sys == run + 1)) {
+    if (!arma::any(subsys == run + 1)) {
       keep.at(keep_count) = run + 1;
       ++keep_count;
     }
@@ -105,7 +102,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   arma::uword productr[_internal::MAXQDIT];
   productr[m - 1] = 1;
   for (arma::sword i = m - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(sys(i) - 1);
+    productr[i] = productr[i + 1] * dim.at(subsys.at(i) - 1);
 
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
@@ -160,8 +157,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
           }
 
           arma::uword count3(0);
-          while (arma::any(sys == i + 1)) {
-            if (sys.at(count3) != i + 1) {
+          while (arma::any(subsys == i + 1)) {
+            if (subsys.at(count3) != i + 1) {
               ++count3;
             } else {
               K += productr[count3] * loop_counter[i];
@@ -238,8 +235,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
           }
 
           arma::uword counter(0);
-          while (arma::any(sys == i + 1)) {
-            if (sys.at(counter) != i + 1) {
+          while (arma::any(subsys == i + 1)) {
+            if (subsys.at(counter) != i + 1) {
               ++counter;
             } else {
               K += productr[counter] * loop_counter[i];
@@ -285,14 +282,11 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
-                     arma::uvec sys, arma::uvec dim) {
+                     arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& A1 = _internal::as_Mat(A);
 
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
+  bool checkV = (rho.n_cols != 1);
   arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
 
 #ifndef QICLIB_NO_DEBUG
@@ -320,27 +314,27 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (arma::prod(dim(sys - 1)) != A1.n_rows)
+  if (arma::prod(dim(subsys - 1)) != A1.n_rows)
     throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  const arma::uvec ctrlsys = arma::join_cols(sys, ctrl);
+  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
 
-  if (ctrlsys.n_elem > dim.n_elem ||
-      arma::unique(ctrlsys).eval().n_elem != ctrlsys.n_elem ||
-      arma::any(ctrlsys > dim.n_elem) || arma::any(ctrlsys == 0))
+  if (ctrlsubsys.n_elem > dim.n_elem ||
+      arma::unique(ctrlsubsys).eval().n_elem != ctrlsubsys.n_elem ||
+      arma::any(ctrlsubsys > dim.n_elem) || arma::any(ctrlsubsys == 0))
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
 #endif
 
-  _internal::dim_collapse_sys_ctrl(dim, sys, ctrl);
+  _internal::dim_collapse_sys_ctrl(dim, subsys, ctrl);
 
   const arma::uword n = dim.n_elem;
-  const arma::uword m = sys.n_elem;
+  const arma::uword m = subsys.n_elem;
   const arma::uword o = ctrl.n_elem;
 
   arma::uvec keep(n - m);
   arma::uword keep_count(0);
   for (arma::uword run = 0; run < n; ++run) {
-    if (!arma::any(sys == run + 1)) {
+    if (!arma::any(subsys == run + 1)) {
       keep.at(keep_count) = run + 1;
       ++keep_count;
     }
@@ -349,7 +343,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   arma::uword productr[_internal::MAXQDIT];
   productr[m - 1] = 1;
   for (arma::sword i = m - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(sys(i) - 1);
+    productr[i] = productr[i + 1] * dim.at(subsys.at(i) - 1);
 
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
@@ -359,7 +353,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::Mat<trait::eT<T2> > U(rho.n_rows, rho.n_rows);
 
-  auto worker = [n, o, &dim, &sys, &ctrl, &keep, &productr,
+  auto worker = [n, o, &dim, &subsys, &ctrl, &keep, &productr,
                  &Ap](arma::uword I, arma::uword J) noexcept -> trait::eT<T2> {
 
     bool equality_check = I == J;
@@ -395,8 +389,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     arma::uword K(0), L(0);
     for (arma::uword i = 0; i < n; ++i) {
       arma::uword count2(0);
-      while (arma::any(sys == i + 1)) {
-        if (sys.at(count2) != i + 1) {
+      while (arma::any(subsys == i + 1)) {
+        if (subsys.at(count2) != i + 1) {
           ++count2;
         } else {
           K += productr[count2] * Iindex[i];
@@ -444,14 +438,11 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
-                     arma::uvec sys, arma::uword dim = 2) {
+                     arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = true;
-  if (rho.n_cols == 1)
-    checkV = false;
-
+  bool checkV = (rho.n_cols != 1);
   if (rho.n_elem == 0)
     throw Exception("qic::apply_ctrl", Exception::type::ZERO_SIZE);
 
@@ -469,7 +460,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return apply_ctrl(rho, A, std::move(ctrl), std::move(sys), std::move(dim2));
+  return apply_ctrl(rho, A, std::move(ctrl), std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************
