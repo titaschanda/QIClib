@@ -280,7 +280,7 @@
 		<tr><td><a href="#EoF"> EoF </a> </td><td>  </td><td>Entanglement of formation of a two-qubit 
 		    quantum state</td></tr>
 
-		<tr><td><a href="#ent_check_CMC"> ent_check_CMC </a> </td><td>  </td><td> Check if a bipartite state 
+		<tr><td><a href="#ent_check_CMC"> ent_check_CMC </a> </td><td>  </td><td> To check if a bipartite state 
 		    is entangled or not (based on covariant matrix formulation, can be used to detect bound entangled states)</td></tr>
 		
 		<tr><td><a href="#schmidt"> schmidt, schmidt_full </a> </td><td>  </td><td> Schmidt decomposition of a 
@@ -318,18 +318,18 @@
 		<tr><td>  </td><td>  </td><td> </td></tr>
 
 
-		<tr><td><a href="#apply"> apply </a> </td><td>  </td><td>Apply a quantum gate to a quantum state</td></tr>	      
+		<tr><td><a href="#apply"> apply </a> </td><td>  </td><td>To apply a quantum gate to a quantum state</td></tr>	      
 		
-		<tr><td><a href="#apply_ctrl"> apply_ctrl </a> </td><td>  </td><td>Apply a quantum gate to 
+		<tr><td><a href="#apply_ctrl"> apply_ctrl </a> </td><td>  </td><td>To apply a quantum gate or a set of Kraus operators to 
 		    a quantum state as a controlled gate</td></tr>
 		    
-		<tr><td><a href="#apply_ctrl"> make_ctrl </a> </td><td>  </td><td>Convert a quantum gate into 
+		<tr><td><a href="#apply_ctrl"> make_ctrl </a> </td><td>  </td><td>To convert a quantum gate into 
 		    a controlled quantum gate</td></tr>
 
-		<tr><td><a href="#measure"> measure </a> </td><td>  </td><td>Measure a state using a set of Kraus 
+		<tr><td><a href="#measure"> measure </a> </td><td>  </td><td>To measure a quantum state using a set of Kraus 
 		    or projection operators</td></tr>
 
-		<tr><td><a href="#measure_comp"> measure_comp </a> </td><td>  </td><td>Measure a state in the 
+		<tr><td><a href="#measure_comp"> measure_comp </a> </td><td>  </td><td>To measure a quantum state in the 
 		    computational basis</td></tr>
 
 
@@ -1807,6 +1807,7 @@
 	    <li>Example:
 	      <pre>
 		uvec perm1 = randPerm(5); // random permutation of {0,1,2,3,4}
+		
 		uvec perm2 = randPerm(5, 2); // random permutation of {2,3,4,5,6}
 	      </pre>
 	  </ul>
@@ -1816,134 +1817,114 @@
 
 
 
-	  <a name=entropy></a>
-	  <b>entropy(A)</b><br><br>
+	  <a name="entropy"></a>
+	  <b>entropy(A)</b><br>
 	  <ul>
-	    <li>von Neumann entropy of a quantum state.</li><br>
+	    <li>von Neumann entropy of a quantum state.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
-	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> If <code>A</code> is a column vector, then always zero is returned. </li>
+	      (<code>vec</code> or <code>cx_vec</code>).</li>
+	      
+	    <li> If <code>A</code> is a column vector, return value is always zero. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=shannon></a>
-	  <b>shannon(V)</b><br><br>
+	  <a name="shannon"></a>
+	  <b>shannon(V)</b><br>
 	  <ul>
-	    <li>Shannon entropy of a probability distribution.</li><br>
-	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive real numbers.</li>
+	    <li>Shannon entropy of a probability distribution.</li>
+	    
+	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code> or <code>std::vector</code> of 
+	    positive real numbers).</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
 
 
-	  <a name=renyi></a>
-	  <b>renyi(A, a)</b><br><br>
+	  <a name="renyi"></a>
+	  <b>renyi(A, a)</b><br>
 	  <ul>
-	    <li>Renyi entropy of a quantum state.</li><br>
+	    <li>Renyi entropy of a quantum state.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
-	      (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li><br>
-	    <li> If <code>A</code> is a column vector, then always zero is returned. </li>
+	      (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li>
+	      
+	    <li> If <code>A</code> is a column vector, return value is always zero. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=renyi_prob></a>
-	  <b>renyi_prob(V, a)</b><br><br>
+	  <a name="renyi_prob"></a>
+	  <b>renyi_prob(V, a)</b><br>
 	  <ul>
-	    <li>Renyi entropy of a probability distribution.</li><br>
-	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive 
-	      real numbers, and <code>a</code> has to to greater than or equal to zero.</li>
+	    <li>Renyi entropy of a probability distribution.</li>
+	    
+	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code> or <code>std::vector</code> of positive 
+	      real numbers), and <code>a</code> has to to greater than or equal to zero.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
 
 
-	  <a name=tsallis></a>
-	  <b>tsallis(A, a)</b><br><br>
+	  <a name="tsallis"></a>
+	  <b>tsallis(A, a)</b><br>
 	  <ul>
-	    <li>Tsallis entropy of a quantum state.</li><br>
+	    <li>Tsallis entropy of a quantum state.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
-	      (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li><br>
-	    <li> If <code>A</code> is a column vector, then always zero is returned. </li>
+	      (<code>vec</code> or <code>cx_vec</code>), and <code>a</code> has to to greater than or equal to zero.</li>
+	      
+	    <li> If <code>A</code> is a column vector, return value is always zero. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
+
 
 
 	  <a name="tsallis_prob"></a>
-	  <b>tsallis_prob(V, a)</b><br><br>
+	  <b>tsallis_prob(V, a)</b><br>
 	  <ul>
-	    <li>Tsallis entropy of a probability distribution.</li><br>
-	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code>) or <code>std::vector</code> of positive 
-	      real numbers, and <code>a</code> has to to greater than or equal to zero.</li>
+	    <li>Tsallis entropy of a probability distribution.</li>
+	    
+	    <li> <code>V</code>  has to be a positive real column vector (<code>vec</code> or <code>std::vector</code> of positive 
+	      real numbers), and <code>a</code> has to to greater than or equal to zero.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
 
-	  <a name=mutual_info></a>
+	  <a name="mutual_info"></a>
 	  <b>mutual_info(A, dim) <br> 
 	    mutual_info(A, subsys1, subsys2)<br> 
-	    mutual_info(A, subsys1, subsys2, dim)</b><br><br>
+	    mutual_info(A, subsys1, subsys2, dim)</b><br>
 	  <ul>
-	    <li> Quantum mutual information between 2 subsystems of a quantum state.</li><br>
+	    <li> Quantum mutual information between 2 subsystems of a quantum state.</li>
 	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
-	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
+	      (<code>vec</code> or <code>cx_vec</code>).</li>
 
-	    <li> In the first case, <code>dim</code> has to be a <code>uvec</code> of two elements, containing the dimensions of two subsystems.</li><br>
+	    <li> In the first case, <code>dim</code> has to be a <code>uvec</code> of two elements, 
+	    containing the dimensions of two subsystems.</li>
 
-	    <li> In the second case, <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> 
-	      containing dimensions of every subystem. When it is unsigned integer type, all sybsystems are supposed to have same dimensions 
+	    <li> In the second case, <code>dim</code> is optional. It can be either <i>unsigned integer</i> type
+	     (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> 
+	      containing dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
 	      (equal to <code>dim</code>). By default, it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> 
-	      as a <code>uvec</code> containing dimensions of every subystem.
-	      <code>subsys1</code> and <code>subsys1</code> are  <code>uvec</code> containing the indices of 1st party and 2nd party respectively.
-
-	    </li><br>
+	      as a <code>uvec</code> containing dimensions of every subsystem.
+	      <code>subsys1</code> and <code>subsys1</code> are  <code>uvec</code> containing the indices parties that constitute 
+	      of 1st partition and 2nd partition respectively.
+	    </li>
+	    
 	    <li> Indices in <code>subsys1</code> and <code>subsys2</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
-	      second party has the index <i>2</i> and so on.</li><br>  
+	      second party has the index <i>2</i> and so on.</li>  
 	    <li> Example:
 	      <pre>
 		
@@ -1953,67 +1934,87 @@
 
 		// mutual_info between two parties with dim 4 and 3
 		double A1 = mutual_info(A, {4, 3}); // 1st party has dim=4,
-		// 2nd party has dim=3
+		                                    // 2nd party has dim=3
 
 		// mutual_info between 1,3 and 2,4 parties
 		double B1 = mutual_info(B, {1, 3}, {2, 4});
 
 		double B2 = mutual_info(B, {1, 3}, {2, 4}, 2); //same as above
-		// all party has dim = 2
+		                                               // all party has dim = 2
 
-		double B1 = mutual_info(B, {1, 3}, {2, 4}, {2, 2, 2, 2}); 
-		// explicitly writen dimensions
+		double B1 = mutual_info(B, {1, 3}, {2, 4}, {2, 2, 2, 2}); // same as above
+		                                                          // explicitly written dimensions
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+	  <hr><br>
+
+
+    <a name="rel_entropy"></a>
+	  <b>rel_entropy(A, B)</b><br>
+	  <ul>
+	    <li>Relative entropy of between two quantum state.</li>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+	      (<code>vec</code> or <code>cx_vec</code>). Same for <code>B</code>.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
 
 
 
-
-
-
-
-
-
-
+	  <a name="rel_entropy_prob"></a>
+	  <b>rel_entropy_prob(V1, V2)</b><br>
+	  <ul>
+	    <li>Relative entropy of between two probability distribution.</li>
+	    
+	    <li> <code>V1</code> and <code>V2</code> have to be positive real column vectors of same type (<code>vec</code> or 
+	    <code>std::vector</code> of positive real numbers).</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
 	  <hr><br>
 
 
 
 
-	  <a name=entanglement></a>
-	  <b>entanglement(A, dim)</b><br><br>
+	  <a name="entanglement"></a>
+	  <b>entanglement(A, dim)</b>
 	  <ul>
-	    <li>Entanglement entropy of a pure quantum state.</li><br>
+	    <li>Entanglement entropy of a pure quantum state.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
 	      (<code>vec</code> or <code>cx_vec</code>), and <code>dim</code> has to be a <code>uvec</code> of two elements, 
-	      containing the dimensions of two subsystems..</li><br>
+	      containing the dimensions of two subsystems..</li>
+	      
 	    <li> If <code>A</code> is a square matrix and not a density matrix of a pure state, then von Neumann entropy of traced out 
 	      2nd party density matrix is returned. To make sure use <code><a href="#is_pure">is_pure</a></code> function first. </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
 
 
-	  <a name=neg></a>
-	  <b>neg(A, subsys) <br> neg(A, subsys, dim) </b><br><br>
+	  <a name="neg"></a>
+	  <b>neg(A, subsys) <br> neg(A, subsys, dim) </b><br>
 	  <ul>
-	    <li> Negativity of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of transposed subsystems.</li><br>
+	    <li> Negativity of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices of 
+	    transposed subsystems.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). 
-	      By default, it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
-	      containing dimensions of every subystem.</li><br>
+	      <code>cx_vec</code>).</li>
+	      
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
+	      
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
-	      index <i>2</i> and so on.</li><br>  
+	      index <i>2</i> and so on.</li>
+	        
 	    <li> Example:
 	      <pre>
 		cx_mat A = randRho(8); // 8x8 density matrix
@@ -2024,35 +2025,34 @@
 		double A1 = neg(A, {2, 3}); // all dim are 2, total 3 parties
 
 		// negativity by transposing 2nd and 3rd party
-		double B1 = neg(B, {2, 3}, {2, 3, 2}); // explicitly writen dimensions
+		double B1 = neg(B, {2, 3}, {2, 3, 2}); // explicitly written dimensions
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
 
 
-	  <a name=log_neg></a>
-	  <b>log_neg(A, subsys) <br> log_neg(A, subsys, dim) </b><br><br>
+	  <a name="log_neg"></a>
+	  <b>log_neg(A, subsys) <br> log_neg(A, subsys, dim) </b><br>
 	  <ul>
 	    <li> Logarithmic negativity of a quantum state, where <code>subsys</code> is a <code>uvec</code> containing the indices 
-	      of transposed subsystems.</li><br>
+	      of transposed subsystems.</li>
+	      
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
-	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing dimensions 
-	      of every subystem.</li><br>
-	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
-	      <i>2</i> and so on.</li><br>  
+	      <code>cx_vec</code>).</li>
+	      
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+       If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+       containing dimensions of every subsystem.</li>
+	    
+  	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
+	      <i>2</i> and so on.</li> 
 	    <li> Example:
 	      <pre>
 		cx_mat A = randRho(8); // 8x8 density matrix
@@ -2063,85 +2063,85 @@
 		double A1 = log_neg(A, {2, 3}); // all dim are 2, total 3 parties
 
 		// logarithmic negativity by transposing 2nd and 3rd party
-		double B1 = log_neg(B, {2, 3}, {2, 3, 2}); // explicitly writen dimensions
+		double B1 = log_neg(B, {2, 3}, {2, 3, 2}); // explicitly written dimensions
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
 
 
-	  <a name=concurrence></a>
-	  <b>concurrence(A) </b><br><br>
+	  <a name="concurrence"></a>
+	  <b>concurrence(A) </b><br>
 	  <ul>
 	    <li> Concurrence of a two-qubit quantum state.</li><br>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of dimension 4.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
 	  <hr><br>
 
 
-	  <a name=EoF></a>
-	  <b>EoF(A) </b><br><br>
+	  <a name="EoF"></a>
+	  <b>EoF(A) </b><br>
 	  <ul>
 	    <li> Entanglement of formation of a two-qubit quantum state.</li><br>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector  
 	      (<code>vec</code> or <code>cx_vec</code>) of dimension 4.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
 	  <a name="ent_check_CMC"></a>
 	  <b>ent_check_CMC(A, dim) <br > ent_check_CMC(A, dim1, dim2) </b><br><br>
 	  <ul>
-	    <li> Check if a bipartite state is entangled or not (based on covariant matrix formulation).</li><br>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Returns <code>true</code> if <code>A</code> is entangled, else <code>false</code>. It also can detect large part of bound entangled states.</li><br>
-	    <li> The first case assumes both the subsystems have same dimension. <code>dim</code> is an unsigned integer type stating the 
-	      dimensions of both the subsystems.</li><br>
+	    <li> To check if a bipartite state is entangled or not (based on covariant matrix formulation, 
+	    can be used to detect bound entangled states)</li>
+	    
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
+	    
+	    <li> Returns <code>true</code> if <code>A</code> is entangled, else <code>false</code>. </li>
+	    
+	    <li> The first form assumes both the subsystems have same dimension. <code>dim</code> is an unsigned integer type
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) stating the 
+	      dimensions of both the subsystems.</li>
+	      
 	    <li> The second case applies if the subsystems have different  dimensions. <code>dim1</code> and <code>dim2</code> are unsigned 
-	      integer types stating the dimensions of 1st and 2nd parties respectively.</li>
+	      integer types (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) stating the dimensions of 
+	      1st and 2nd party respectively.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
 	  <hr><br>
 
 
+
 	  <a name="schmidt"></a>
-	  <b>vec S = schmidt(A, dim) <br > schmidt(A, dim, S, U, V) </b><br><br>
+	  <b>vec S = schmidt(A, dim) <br > schmidt(A, dim, S, U, V) <br>
+	  schmidt_full(A, dim, S, U, V) </b><br>
 	  <ul>
-	    <li> Schmidt decomposition of a bipartite pure state.</li><br>
+	    <li> Schmidt decomposition of a bipartite pure state.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li><br>
+	      <code>cx_vec</code>).</li>
+	      
+	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li>
+	    
 	    <li> <code>S</code> is a real vector containing Schmidt coefficients. <code>U</code> and <code>V</code> are matrices that 
-	      store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron( U.col(i) , V.col(i) )</code>.</li><br>
+	      store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron( U.col(i) , V.col(i) )</code>.</li>
+
+		 <li>	<code>schmidt_full</code> gives full Schmidt basis on both sides (i.e., <code>U</code> and <code>V</code>).</li>      
+	      
 	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using 
-	      <code><a href=#conv_to_pure>conv_to_pure</a></code>.</li><br>
+	      <code><a href="#conv_to_pure">conv_to_pure</a></code>.</li>
+	      
 	    <li> If decomposition fails then <code>vec S = schmidt(A,dim)</code> throws <code>std::runtime_error</code> exception, 
-	      and <code>schmidt(A,dim,S,U,V)</code> returns <code>false</code> and resets <code>S</code>, <code>U</code>, and <code>V</code>.</li><br>
+	      and <code>schmidt(A,dim,S,U,V)</code> and <code>schmidt_full(A,dim,S,U,V)</code> returns <code>false</code> and 
+	      resets <code>S</code>, <code>U</code>, and <code>V</code>.</li>
 	    <li> Example:
 	      <pre>
-		cx_mat A = randPsi(8); // 8 dimensional pure state
+		cx_vec A = randPsi(8); // 8 dimensional pure state
 
 		vec S1 = schmidt(A, {2, 4});
 
@@ -2151,32 +2151,36 @@
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
 	  <a name="schmidt_base"></a>
 	  <b>schmidtA(A, dim) <br > schmidtA_full(A, dim) <br>
 	    schmidtB(A, dim) <br > schmidtB_full(A, dim)<br>
-	    schmidtAB(A, dim) <br > schmidtAB_full(A, dim)</b><br><br>
+	    schmidtAB(A, dim) <br > schmidtAB_full(A, dim)</b><br>
 	  <ul>
-	    <li> Schmidt vectors of a bipartite pure state.</li><br>
+	    <li> Schmidt vectors of a bipartite pure state.</li>
+	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector 
-	      (<code>vec</code> or <code>cx_vec</code>).</li><br>
-	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li><br>
-	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using <code><a href=#conv_to_pure>conv_to_pure</a></code>.</li><br>
+	      (<code>vec</code> or <code>cx_vec</code>).</li>
+	      
+	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li>
+	    
+	    <li> If <code>A</code> is a square matrix, then it is translated into a column vector using 
+	    <code><a href="#conv_to_pure">conv_to_pure</a></code>.</li>
 	    
 	    <li> <code>schmidtA(A,dim)</code> returns truncated Schmidt basis on Alice's side in a column-wise manner, while 
-	      <code>schmidtA_full(A,dim)</code> returns full Schmidt basis on Alice's side.</li><br>
+	      <code>schmidtA_full(A,dim)</code> returns full Schmidt basis on Alice's side.</li>
+	      
 	    <li> <code>schmidtB(A,dim)</code> returns truncated Schmidt basis on Bob's side in a column-wise manner, 
-	      while <code>schmidtB_full(A,dim)</code> returns full Schmidt basis on Bob's side.</li><br>
+	      while <code>schmidtB_full(A,dim)</code> returns full Schmidt basis on Bob's side.</li>
+	      
 	    <li> <code>schmidtAB(A,dim)</code> returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of 
 	      matrices containing truncated Schmidt basis on both sides in a column-wise manner, while <code>schmidtAB_full(A,dim)</code> 
-	      returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices containing full Schmidt basis on both side.</li><br>
-	    <li> If decomposition fails then these functions throw <code>std::runtime_error</code> exception.</li><br>
+	      returns <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of matrices containing full Schmidt 
+	      basis on both side.</li>
+	      
+	    <li> If decomposition fails then these functions throw <code>std::runtime_error</code> exception.</li>
 	    <li> Example:
 	      <pre>
 		cx_mat A = randPsi(8); // 8 dimensional pure state
@@ -2191,150 +2195,210 @@
 	      </pre>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=HS_dist></a>
-	  <b>HS_dist(A, B) </b><br><br>
+	  <a name="HS_dist"></a>
+	  <b>HS_dist(A, B) </b><br>
 	  <ul>
-	    <li> Hilbert-Schmidt distance between two density matrices.</li><br>
-	    <li> <code>A</code> and <code>B</code> have to be square matrices (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
+	    <li> Hilbert-Schmidt distance between two density matrices.</li>
+	    <li> <code>A</code> and <code>B</code> have to be square matrices 
+	    (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
-	  <a name=tr_dist></a>
-	  <b>tr_dist(A, B) </b><br><br>
+	  <a name="tr_dist"></a>
+	  <b>tr_dist(A, B) </b><br>
 	  <ul>
-	    <li> Trace distance between two density matrices.</li><br>
-	    <li> <code>A</code> and <code>B</code> have to be square matrices (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
+	    <li> Trace distance between two density matrices.</li>
+	    <li> <code>A</code> and <code>B</code> have to be square matrices 
+	    (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
-	  <a name=bures_dist></a>
-	  <b>bures_dist(A, B) </b><br><br>
+	  <a name="bures_dist"></a>
+	  <b>bures_dist(A, B) </b><br>
 	  <ul>
-	    <li> Bures distance between two density matrices.</li><br>
-	    <li> <code>A</code> and <code>B</code> have to be square matrices (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
+	    <li> Bures distance between two density matrices.</li>
+	    <li> <code>A</code> and <code>B</code> have to be square matrices 
+	    (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
-	  <a name=fidelity></a>
-	  <b>fidelity(A, B) </b><br><br>
+	  <a name="fidelity"></a>
+	  <b>fidelity(A, B) </b><br>
 	  <ul>
-	    <li> Fidelity between two density matrices.</li><br>
-	    <li> <code>A</code> and <code>B</code> have to be square matrices (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
+	    <li> Fidelity between two density matrices.</li>
+	    <li> <code>A</code> and <code>B</code> have to be square matrices 
+	    (<code>mat</code> or <code>cx_mat</code>) of same dimension.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
 	  <hr><br>
 
 
 
 
-	  <a name=apply></a>
-	  <b>apply(A, U, subsys) <br> apply(A, U, subsys, dim) </b><br><br>
+	  <a name="apply"></a>
+	  <b> apply(A, U, subsys) 
+	  <br> apply(A, U, subsys, dim) 
+	  <br> apply(A, Ks, subsys, dim) 
+	  <br> apply(A, Ks)</b><br>
 	  <ul>
-	    <li>Apply a gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> 
-	      containing the indices of applicable subsystems.</li><br>
+	    <li>To apply a quantum gate <code>U</code> or a set of Kraus operators <code>Ks</code>to a quantum state <code>A</code>.</li>
+
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
-	    <li> The dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). 
-	      By default, it is <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
-	      containing dimensions of every subystem.</li><br>
+	      <code>cx_vec</code>).</li>
+
+		
+		<li> <code>U</code> has to a square matrix (<code>mat</code> or <code>cx_mat</code>), and <code>Ks</code> can be a 
+	    <code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> or a <code>std::vector</code> of
+	    square matrices (<code>mat</code> or <code>cx_mat</code>) having same dimensions.</li>
+
+	    
+	    <li> In the first three cases, <code>subsys</code> is a <code>uvec</code> containing the indices of subsystems, where the gate
+	    or the Kraus operators will be applied.</li>
+	    
+	    
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the index 
-	      <i>2</i> and so on.</li><br>  
-	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>. For simplicity use
-	      <code>auto</code> for return type.</li><br>
+	      <i>2</i> and so on.</li>
+	    
+	    <li> In the first three cases, the dimension of the gate <code>U</code> or the Kraus operators <code>Ks</code> must match the 
+	    dimension of subsystems specified in <code>subsys</code>.</li>
+
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
+
+		<li> In the last case, the set of Kraus operators <code>Ks</code> acts on the whole quantum state <code>A</code>. 
+		      The dimension of the Kraus operators <code>Ks</code> must match the dimension of the quantum state <code>A</code>.</li>
+	      
+	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>/<code>Ks</code>. 
+	    For simplicity use <code>auto</code> to deduce the return type.</li>
+	      
 	    <li> Example:
 	      <pre>
 		cx_mat A = randRho(8); // 8x8 density matrix
+		cx_mat B = randRho(2); // 2x2 density matrix
 
-		const cx_mat& U1 = spm.S(1); // \sigma_x gate
-		
-		cx_mat U2 = kron(spm.S(1),spm.S(1)); 
-		// kron(\sigma_x,\sigma_x) gate 
+		const mat& U1 = spm.S(1); // \sigma_x gate
+		cx_mat U2 = kron(spm.S(1),spm.S(1)); // kron(\sigma_x,\sigma_x) gate 
 
+		vector&lt;cx_mat&gt; BF = {(1 - 0.25) * spm.S(0), 0.25 * spm.S(1)};
+		// Kraus operators for Bit-Flip channel with p = 0.25 
+					
 		cx_mat A1 = apply(A, U1, {2}); // all dim are 2, total 3 parties
-
-		cx_mat A2 = apply(A, U2, {1, 3}, {2, 2, 2}); 
-		// explicitly writen dimensions
+		cx_mat A2 = apply(A, U2, {1, 3}, {2, 2, 2}); // explicitly written dimensions
+		
+		cx_mat A3 = apply(A, BF, {2}, {2, 2, 2}); // apply Bit-Flip on 2nd party
+		
+		cx_mat B1 = apply(B, BF); // apply Bit-Flip on B
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
 	  <hr><br>
 
 
 
 
 	  <a name="apply_ctrl"></a>
-	  <b>apply_ctrl(A, U, ctrl, subsys) <br> apply_ctrl(A, U, ctrl, subsys, dim) </b><br><br>
+	  <b>apply_ctrl(A, U, ctrl, subsys) <br> apply_ctrl(A, U, ctrl, subsys, dim) </b><br>
 	  <ul>
-	    <li>Apply a controlled-gate <code>U</code> to a quantum state <code>A</code>, where <code>subsys</code> is a <code>uvec</code> 
-	      containing the indices of applicable subsystems, and <code>ctrl</code> is a <code>uvec</code> containing the indices of control subsystems.</li><br>
+	    <li> To apply a quantum gate <code>U</code> to a quantum state <code>A</code> as a controlled gate. 
+	    <code>subsys</code> is a <code>uvec</code> 
+	      containing the indices subsystems, where the gate will be applied, and <code>ctrl</code> is a <code>uvec</code> 
+	      containing the indices of control subsystems.</li>
+	      
 	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
-	    <li> The dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
-	    <li> All control subsystems must have same dimensions.</li><br>
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
-	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
-	      dimensions of every subystem.</li><br>
+	      <code>cx_vec</code>).</li>
+	      
+	    <li> <code>U</code> to has be a square matrix (<code>mat</code> or <code>cx_mat</code>) and the
+	    dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li>
+	    
+	    <li> All control subsystems must have same dimensions.</li>
+	    
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
+
 	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
-	      second party has the index <i>2</i> and so on.</li><br>  
+	      second party has the index <i>2</i> and so on.</li>
+	        
 	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>. For simplicity use
-	      <code>auto</code> for return type.</li><br>
+	      <code>auto</code> to deduce the return type.</li>
+	      
 	    <li> Example:
 	      <pre>
 		cx_mat A = randRho(8); // 8x8 density matrix
 
-		const cx_mat& U1 = spm.S(1); // \sigma_x gate
+		const mat& U1 = gates.X; // \sigma_x gate
 		
-		cx_mat U2 = kron(spm.S(1),spm.S(1)); 
-		// kron(\sigma_x,\sigma_x) gate 
+		mat U2 = kron(gates.X, gates.X); // kron(\sigma_x,\sigma_x) gate 
 
-		cx_mat A1 = apply_ctrl(A, U1, {1}, {2}); 
-		// all dim are 2, total 3 parties
+		cx_mat A1 = apply_ctrl(A, U1, {1}, {2}); // all dim are 2, total 3 parties
 
-		cx_mat A2 = apply_ctrl(A, U2, {2}, {1, 3}, {2, 2, 2}); 
-		// explicitly writen dimensions
+		cx_mat A2 = apply_ctrl(A, U2, {2}, {1, 3}, {2, 2, 2}); // explicitly written dimensions
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
+	  <hr><br>
 
 
-	  <hr><hr>
+	  <a name="make_ctrl"></a>
+	  <b>make_ctrl(U, ctrl, subsys, n, dim = 2) <br> make_ctrl(U, ctrl, subsys, dim)</b><br>
+	  <ul>
+	    <li> To convert a quantum gate <code>U</code> into a controlled quantum gate. 
+	    <code>subsys</code> is a <code>uvec</code> 
+	      containing the indices subsystems, where the gate will be applied, and <code>ctrl</code> is a <code>uvec</code> 
+	      containing the indices of control subsystems.</li>
+	      
+	   <li> <code>U</code> to has be a square matrix (<code>mat</code> or <code>cx_mat</code>) and the
+	    dimension of gate <code>U</code> must match the dimension of subsystems specified in <code>subsys</code>.</li>	    
+	    
+	    <li> All control subsystems must have same dimensions.</li>
+	    
+	    <li> In the first case, <code>n</code> is a <code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>
+	    mentioning total number of subsystems, having same dimensions equal to <code>dim</code> 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>). 
+	    By default, <code>dim</code> is 2.</li>
+	    
+	    <li> In the second case, <code>dim</code> is a <code>uvec</code> containing 
+	    dimensions of every subsystem. These form is needed if different subsystems have different dimensions.
+	    </li>
+
+	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li>
+	      
+	    <li> Example:
+	      <pre>
+		const mat& U = gates.X; // \sigma_x gate
+		
+		mat CU1 = make_ctrl(U, {1}, {2}, 2); // make two-party controlled X gate
+		                                     // where 1st party is control and
+		                                     // second party is target.
+		                                     // Here, n = 2 and 
+		                                     // dim = 2 (by default)
+
+		mat CU2 = make_ctrl(U, {1}, {2}, {2, 2}); //same as above 
+		                                          // explicitly written dimensions
+	      </pre>
+	    </li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
 
 
 
@@ -2345,44 +2409,48 @@
 	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(cx_mat rho, Ks, subsys, dim)<br> 
 	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(mat rho, Ks, subsys, dim)
 	  </b>
-	  
-	  <br><br>
+	  <br>
 	  <ul>
-	    <li>Measure a state <code>rho</code> using a set of Kraus or projection operators <code>Ks</code>. Returns <code>std::tuple</code> 
-	      of: 1. result of the measurement (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), 
+	    <li>To measure a quantum state <code>rho</code> using a set of Kraus or projection operators <code>Ks</code>. 
+	    Returns <code>std::tuple</code> of: 1. result of the measurement 
+	    (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), 
 	      2. vector of outcome probabilities (<code>vec</code>), 
 	      and 3. <code><a href = "http://arma.sourceforge.net/docs.html#field">
-		  field</a></code> of post-measurement normalized states (<code>field&lt;cx_mat&gt;</code> or <code>field&lt;mat&gt;</code>).</li><br>
+		  field</a></code> of post-measurement normalized states (<code>field&lt;cx_mat&gt;</code> or <code>field&lt;mat&gt;</code>).</li>
 
 	    <li> <code>rho</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
+	      <code>cx_vec</code>).</li>
 
-	    <li> <code>Ks</code> can be a <code>std::vector</code>, <code>std::initializer_list</code> or a 
+	    <li> <code>Ks</code> can be a <code>std::vector</code>  or a 
 	      <code><a href = "http://arma.sourceforge.net/docs.html#field">
 		  field</a></code> of Kraus or projection operators (either <code>cx_mat</code>, <code>mat</code>, <code>cx_vec</code> or 
-	      <code>vec</code>). It can also be a <code>cx_mat</code> or <code>mat</code>, where each column is treated as projection operators.</li><br>
+	      <code>vec</code>). It can also be a <code>cx_mat</code> or <code>mat</code>, where each column will be treated as projection 
+	      operators.</li>
 
 	    <li> First two functions measure the whole quantum state <code>rho</code>, and the dimension of the operators in <code>Ks</code> 
-	      must match the dimension of <code>rho</code>.</li><br>
+	      must match the dimension of <code>rho</code>.</li>
 
-	    <li> Last two functions partially measure the subsystems of the state <code>rho</code>, where the subsystems are specified in <code>subsys</code>.
-	      The dimension of the operators in <code>Ks</code> must match the dimension of subsystems specified in <code>subsys</code>.</li><br>
+	    <li> Last two functions partially measure the subsystems of the state <code>rho</code>. The indices of measured subsystems
+	     are specified in <code>subsys</code> (<code>uvec</code>).    
+	      The dimension of the operators in <code>Ks</code> must match the dimension of subsystems specified 
+	      in <code>subsys</code>.</li>
 
-	    <li> All Kraus or projection operators must have same dimensions.</li><br>
+	    <li> All Kraus or projection operators must have same dimensions.</li>
 
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
-	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
-	      dimensions of every subystem.</li><br>
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
+
 
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
-	      second party has the index <i>2</i> and so on.</li><br>  
+	      second party has the index <i>2</i> and so on.</li>
 
-	    <li> This function will run faster on multi-core machines when OpenMP is enabled in your compiler (eg. <code>-fopenmp</code> in GCC) and
-	      <code>QICLIB_PARALLEL</code> macro is defined before including <code>QIClib</code> header.</li><br>
-
-	    <li> <b>Note:</b> <code>MATRIX_TYPE</code> is deduced from the element types of <code>rho</code> and <code>Ks</code>. For simplicity use
-	      <code>auto</code> for return type.</li><br>
+	    <li> <b>Note:</b> <code>MATRIX_TYPE</code> is deduced from the element types of <code>rho</code> and <code>Ks</code>. 
+	    For simplicity use
+	      <code>auto</code> to deduce return type.</li>
 	    <li> Example:
 	      <pre>
 		cx_mat rho1 = randRho(2); // 2x2 random density matrix
@@ -2390,22 +2458,19 @@
 		std::vector<cx_mat> Ks = {spm.basis2(0,1), spm.basis2(1,1)};
 		  // std::vector of projection operators in \sigma_x direction
 
-		  auto A = measure(rho1, Ks); // measurement
-		  std::get<0>(A); // measurement result
-		    std::get<1>(A); //  outcome probabilities
-		      std::get<2>(A); //  post measurement normalised states
+		auto A = measure(rho1, Ks); // measurement
+		std::get<0>(A); // measurement result
+		std::get<1>(A); // outcome probabilities
+		std::get<2>(A); // post measurement normalised states
 			
-			cx_mat rho2 = randRho(8); //8x8 random density matrix
+		cx_mat rho2 = randRho(8); //8x8 random density matrix
 
-			auto B = measure(rho2, Ks, {2}, {2,2,2}); measure the 2nd party
+		auto B = measure(rho2, Ks, {2}, {2,2,2}); measure the 2nd party
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-	  <hr><hr>
+	  <hr><br>
 
 
 
@@ -2414,29 +2479,27 @@
 	  <b>std::tuple&lt;uword, vec&gt; A = measure_comp(rho) <br> 
 	    std::tuple&lt;uword, vec&gt; A = measure_comp(rho, subsys, dim) 
 	  </b>
-	  
-	  <br><br>
+	  <br>
 	  <ul>
-	    <li>Measure a state <code>rho</code> in the computational basis. Returns <code>std::tuple</code> 
+	    <li>To measure a quantum state <code>rho</code> in the computational basis. Returns <code>std::tuple</code> 
 	      of: 1. result of the measurement (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>) 
-	      and 2. vector of outcome probabilities (<code>vec</code>).</li><br>
+	      and 2. vector of outcome probabilities (<code>vec</code>).</li>
 
 	    <li> <code>rho</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
-	      <code>cx_vec</code>).</li><br>
+	      <code>cx_vec</code>).</li>
 
 	    <li> The first function measures the whole quantum state, where as the last function partially measures the subsystems of the state 
-	      <code>rho</code>, where the subsystems are specified in <code>subsys</code>.</li><br>
+	      <code>rho</code>, where the indices of measured subsystems are specified in <code>subsys</code>.</li>
 
-	    <li> <code>dim</code> is optional. It can be either unsigned integer type or <code>uvec</code> containing dimensions of every subystem. 
-	      When it is unsigned integer type, all sybsystems are supposed to have same dimensions (equal to <code>dim</code>). By default, it is 
-	      <i>2</i>. If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> containing 
-	      dimensions of every subystem.</li><br>
-
-	    <li> This function will run faster on multi-core machines when OpenMP is enabled in your compiler (eg. <code>-fopenmp</code> in GCC) and
-	      <code>QICLIB_PARALLEL</code> macro is defined before including <code>QIClib</code> header.</li><br>
+	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
 
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
-	      second party has the index <i>2</i> and so on.</li><br>  
+	      second party has the index <i>2</i> and so on.</li>
 
 	    <li> Example:
 	      <pre>
@@ -2444,16 +2507,16 @@
 
 		auto A = measure_comp(rho1); // measurement
 		std::get<0>(A); // measurement result
-		  std::get<1>(A); //  outcome probabilities
+		std::get<1>(A); //  outcome probabilities
 		    
-		    cx_mat rho2 = randRho(8); //8x8 random density matrix
+		cx_mat rho2 = randRho(8); //8x8 random density matrix
 
-		    auto B = measure_comp(rho2, {2}, {2,2,2}); measure the 2nd party
+		auto B = measure_comp(rho2, {2}, {2,2,2}); measure the 2nd party
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
+		
 
 
 
