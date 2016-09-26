@@ -52,8 +52,8 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::Tx", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (dim.n_elem < subsys.n_elem || arma::any(subsys== 0) ||
-      arma::any(subsys> dim.n_elem) ||
+  if (dim.n_elem < subsys.n_elem || arma::any(subsys == 0) ||
+      arma::any(subsys > dim.n_elem) ||
       subsys.n_elem != arma::unique(subsys).eval().n_elem)
     throw Exception("qic::Tx", Exception::type::INVALID_SUBSYS);
 #endif
@@ -95,7 +95,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
       I += product[i] * loop_counter[i];
       J += product[i] * loop_counter[i + n];
 
-      if (arma::any(subsys== i + 1)) {
+      if (arma::any(subsys == i + 1)) {
         K += product[i] * loop_counter[i + n];
         L += product[i] * loop_counter[i];
       } else {
@@ -149,8 +149,8 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::Tx", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (dim.n_elem < subsys.n_elem || arma::any(subsys== 0) ||
-      arma::any(subsys> dim.n_elem) ||
+  if (dim.n_elem < subsys.n_elem || arma::any(subsys == 0) ||
+      arma::any(subsys > dim.n_elem) ||
       subsys.n_elem != arma::unique(subsys).eval().n_elem)
     throw Exception("qic::Tx", Exception::type::INVALID_SUBSYS);
 #endif
@@ -189,7 +189,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
       I /= dim.at(i);
       J /= dim.at(i);
 
-      if (arma::any(subsys== i + 1)) {
+      if (arma::any(subsys == i + 1)) {
         K += product[i] * Jindex;
         L += product[i] * Iindex;
       } else {
@@ -197,17 +197,17 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
         L += product[i] * Jindex;
       }
     }
-  
-    if (arma::any(subsys==1)) {
+
+    if (arma::any(subsys == 1)) {
       K += product[0] * J;
       L += product[0] * I;
     } else {
       K += product[0] * I;
       L += product[0] * J;
     }
-    
+
     if (checkV)
-      return rho.at(K,L);
+      return rho.at(K, L);
     else
       return rho.at(K) * std::conj(rho.at(L));
   };

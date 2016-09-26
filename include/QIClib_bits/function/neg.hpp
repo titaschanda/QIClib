@@ -26,7 +26,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
-inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+inline TR neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -48,14 +48,14 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::neg", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
-      arma::any(sys > dim.n_elem) ||
-      sys.n_elem != arma::unique(sys).eval().n_elem)
+  if (dim.n_elem < subsys.n_elem || arma::any(subsys == 0) ||
+      arma::any(subsys > dim.n_elem) ||
+      subsys.n_elem != arma::unique(subsys).eval().n_elem)
     throw Exception("qic::neg", Exception::type::INVALID_SUBSYS);
 
 #endif
 
-  auto rho_T = Tx(rho, std::move(sys), std::move(dim));
+  auto rho_T = Tx(rho, std::move(subsys), std::move(dim));
   auto eigval = arma::eig_sym(rho_T);
   trait::pT<T1> Neg = 0.0;
 
@@ -71,8 +71,8 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
-inline TR log_neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
-  return std::log2(2.0 * neg(rho1, std::move(sys), std::move(dim)) + 1.0);
+inline TR log_neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
+  return std::log2(2.0 * neg(rho1, std::move(subsys), std::move(dim)) + 1.0);
 }
 
 //******************************************************************************
@@ -80,7 +80,7 @@ inline TR log_neg(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
-inline TR neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
+inline TR neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& p = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -100,12 +100,12 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
     throw Exception("qic::neg", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n =
-    static_cast<arma::uword>(QICLIB_ROUND_OFF(std::log(p.n_rows) / std::log(dim)));
+  arma::uword n = static_cast<arma::uword>(
+    QICLIB_ROUND_OFF(std::log(p.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return neg(rho1, std::move(sys), std::move(dim2));
+  return neg(rho1, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************
@@ -113,8 +113,8 @@ inline TR neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
-inline TR log_neg(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
-  return std::log2(2.0 * neg(rho1, std::move(sys), dim) + 1.0);
+inline TR log_neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
+  return std::log2(2.0 * neg(rho1, std::move(subsys), dim) + 1.0);
 }
 
 //******************************************************************************

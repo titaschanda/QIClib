@@ -416,7 +416,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
     return Ap.at(power).at(K, L);
   };
-  
+
 #if defined(_OPENMP)
 #pragma omp parallel for collapse(2)
 #endif

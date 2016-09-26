@@ -28,7 +28,8 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys, arma::uvec dim) {
+inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
+                arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& A1 = _internal::as_Mat(A);
 

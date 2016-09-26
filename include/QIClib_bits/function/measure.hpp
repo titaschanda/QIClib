@@ -306,7 +306,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
+inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -316,7 +316,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
 
 #ifndef QICLIB_NO_DEBUG
   arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(sys - 1));
+  arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -348,9 +348,9 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
   if (Dsys != Ks[0].eval().n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (sys.n_elem > dim.n_elem ||
-      arma::unique(sys).eval().n_elem != sys.n_elem ||
-      arma::any(sys > dim.n_elem) || arma::any(sys == 0))
+  if (subsys.n_elem > dim.n_elem ||
+      arma::unique(subsys).eval().n_elem != subsys.n_elem ||
+      arma::any(subsys > dim.n_elem) || arma::any(subsys == 0))
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
 
@@ -369,8 +369,8 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
 #endif
   for (arma::uword i = 0; i < Ks.size(); ++i) {
     mattype tmp =
-      checkK ? apply(rho, (Ks[i].eval() * Ks[i].eval().t()).eval(), sys, dim)
-             : apply(rho, Ks[i].eval(), sys, dim);
+      checkK ? apply(rho, (Ks[i].eval() * Ks[i].eval().t()).eval(), subsys, dim)
+             : apply(rho, Ks[i].eval(), subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -397,9 +397,9 @@ template <
                  T1, arma::Mat<T2> >::type> > > >::type>
 inline TR measure(const T1& rho1,
                   const std::initializer_list<arma::Mat<T2> >& Ks,
-                  arma::uvec sys, arma::uvec dim) {
+                  arma::uvec subsys, arma::uvec dim) {
   return measure(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks),
-                 std::move(sys), std::move(dim));
+                 std::move(subsys), std::move(dim));
 }
 
 //******************************************************************************
@@ -412,7 +412,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
+inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -422,7 +422,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
 
 #ifndef QICLIB_NO_DEBUG
   arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(sys - 1));
+  arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -454,9 +454,9 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
   if (Dsys != Ks.at(0).eval().n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (sys.n_elem > dim.n_elem ||
-      arma::unique(sys).eval().n_elem != sys.n_elem ||
-      arma::any(sys > dim.n_elem) || arma::any(sys == 0))
+  if (subsys.n_elem > dim.n_elem ||
+      arma::unique(subsys).eval().n_elem != subsys.n_elem ||
+      arma::any(subsys > dim.n_elem) || arma::any(subsys == 0))
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
 
@@ -467,15 +467,15 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
   arma::Col<trait::pT<T1> > prob(Ks.n_elem);
   arma::field<mattype> outstates(Ks.n_elem);
 
-#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) && \
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_MEASURE)) &&      \
   defined(_OPENMP)
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.n_elem; ++i) {
-    mattype tmp =
-      checkK
-        ? apply(rho, (Ks.at(i).eval() * Ks.at(i).eval().t()).eval(), sys, dim)
-        : tmp = apply(rho, Ks.at(i).eval(), sys, dim);
+    mattype tmp = checkK
+                    ? apply(rho, (Ks.at(i).eval() * Ks.at(i).eval().t()).eval(),
+                            subsys, dim)
+                    : tmp = apply(rho, Ks.at(i).eval(), subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -500,7 +500,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
+inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
                   arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -527,7 +527,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
   arma::uvec dim2(n);
   dim2.fill(dim);
 
-  return measure(rho, Ks, std::move(sys), std::move(dim2));
+  return measure(rho, Ks, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************
@@ -542,9 +542,9 @@ template <
                  T1, arma::Mat<T2> >::type> > > >::type>
 inline TR measure(const T1& rho1,
                   const std::initializer_list<arma::Mat<T2> >& Ks,
-                  arma::uvec sys, arma::uword dim = 2) {
+                  arma::uvec subsys, arma::uword dim = 2) {
   return measure(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks),
-                 std::move(sys), std::move(dim));
+                 std::move(subsys), std::move(dim));
 }
 
 //******************************************************************************
@@ -557,7 +557,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
+inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
                   arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -584,7 +584,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
   arma::uvec dim2(n);
   dim2.fill(dim);
 
-  return measure(rho, Ks, std::move(sys), std::move(dim2));
+  return measure(rho, Ks, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************
@@ -597,7 +597,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
+inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
@@ -608,7 +608,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
 
 #ifndef QICLIB_NO_DEBUG
   arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(sys - 1));
+  arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -630,9 +630,9 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
   if (Dsys != U.n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (sys.n_elem > dim.n_elem ||
-      arma::unique(sys).eval().n_elem != sys.n_elem ||
-      arma::any(sys > dim.n_elem) || arma::any(sys == 0))
+  if (subsys.n_elem > dim.n_elem ||
+      arma::unique(subsys).eval().n_elem != subsys.n_elem ||
+      arma::any(subsys > dim.n_elem) || arma::any(subsys == 0))
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
 
@@ -645,7 +645,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < U.n_cols; ++i) {
-    mattype tmp = apply(rho, (U.col(i) * U.col(i).t()).eval(), sys, dim);
+    mattype tmp = apply(rho, (U.col(i) * U.col(i).t()).eval(), subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -670,7 +670,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
+inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
                   arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
@@ -698,7 +698,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec sys,
   arma::uvec dim2(n);
   dim2.fill(dim);
 
-  return measure(rho, U, std::move(sys), std::move(dim2));
+  return measure(rho, U, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************
@@ -747,7 +747,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
-inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -771,19 +771,19 @@ inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (D != rho.n_rows)
     throw Exception("qic::measure_comp", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (sys.n_elem > dim.n_elem ||
-      arma::unique(sys).eval().n_elem != sys.n_elem ||
-      arma::any(sys > dim.n_elem) || arma::any(sys == 0))
+  if (subsys.n_elem > dim.n_elem ||
+      arma::unique(subsys).eval().n_elem != subsys.n_elem ||
+      arma::any(subsys > dim.n_elem) || arma::any(subsys == 0))
     throw Exception("qic::measure_comp", Exception::type::INVALID_SUBSYS);
 #endif
 
   const arma::uword n = dim.n_elem;
-  const arma::uword m = sys.n_elem;
+  const arma::uword m = subsys.n_elem;
 
   arma::uvec keep(n - m);
   arma::uword keep_count(0);
   for (arma::uword run = 0; run < n; ++run) {
-    if (!arma::any(sys == run + 1)) {
+    if (!arma::any(subsys == run + 1)) {
       keep.at(keep_count) = run + 1;
       ++keep_count;
     }
@@ -798,7 +798,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
-inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
+inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -821,7 +821,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
   arma::uvec dim2(n);
   dim2.fill(dim);
 
-  return measure_comp(rho, std::move(sys), std::move(dim2));
+  return measure_comp(rho, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************

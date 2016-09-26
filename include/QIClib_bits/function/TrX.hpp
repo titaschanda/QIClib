@@ -53,7 +53,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::TrX", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (dim.n_elem < subsys.n_elem || arma::any(subsys== 0) ||
+  if (dim.n_elem < subsys.n_elem || arma::any(subsys == 0) ||
       arma::any(subsys > dim.n_elem) ||
       subsys.n_elem != arma::unique(subsys).eval().n_elem)
     throw Exception("qic::TrX", Exception::type::INVALID_SUBSYS);
