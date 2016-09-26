@@ -31,7 +31,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   auto rho = _internal::as_Mat(rho1);  // force copy
 
   bool checkV = true;
@@ -52,22 +52,22 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::Tx", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
-      arma::any(sys > dim.n_elem) ||
-      sys.n_elem != arma::unique(sys).eval().n_elem)
+  if (dim.n_elem < subsys.n_elem || arma::any(subsys== 0) ||
+      arma::any(subsys> dim.n_elem) ||
+      subsys.n_elem != arma::unique(subsys).eval().n_elem)
     throw Exception("qic::Tx", Exception::type::INVALID_SUBSYS);
 #endif
 
   if (!checkV)
     rho *= rho.t();
 
-  if (sys.n_elem == dim.n_elem)
+  if (subsys.n_elem == dim.n_elem)
     return rho.st();
 
-  if (sys.n_elem == 0)
+  if (subsys.n_elem == 0)
     return rho;
 
-  _internal::dim_collapse_sys(dim, sys);
+  _internal::dim_collapse_sys(dim, subsys);
   const arma::uword n = dim.n_elem;
 
   arma::uword product[_internal::MAXQDIT];
@@ -95,7 +95,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
       I += product[i] * loop_counter[i];
       J += product[i] * loop_counter[i + n];
 
-      if (arma::any(sys == i + 1)) {
+      if (arma::any(subsys== i + 1)) {
         K += product[i] * loop_counter[i + n];
         L += product[i] * loop_counter[i];
       } else {
@@ -128,7 +128,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
+inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = true;
@@ -149,27 +149,27 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::Tx", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (dim.n_elem < sys.n_elem || arma::any(sys == 0) ||
-      arma::any(sys > dim.n_elem) ||
-      sys.n_elem != arma::unique(sys).eval().n_elem)
+  if (dim.n_elem < subsys.n_elem || arma::any(subsys== 0) ||
+      arma::any(subsys> dim.n_elem) ||
+      subsys.n_elem != arma::unique(subsys).eval().n_elem)
     throw Exception("qic::Tx", Exception::type::INVALID_SUBSYS);
 #endif
 
-  if (sys.n_elem == dim.n_elem) {
+  if (subsys.n_elem == dim.n_elem) {
     if (checkV)
       return rho.st();
     else
       return (rho * rho.t()).st();
   }
 
-  if (sys.n_elem == 0) {
+  if (subsys.n_elem == 0) {
     if (checkV)
       return rho;
     else
       return rho * rho.t();
   }
 
-  _internal::dim_collapse_sys(dim, sys);
+  _internal::dim_collapse_sys(dim, subsys);
   const arma::uword n = dim.n_elem;
 
   arma::uword product[_internal::MAXQDIT];
@@ -179,7 +179,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
 
-  auto worker = [n, checkV, &dim, &sys, &product,
+  auto worker = [n, checkV, &dim, &subsys, &product,
                  &rho](arma::uword I, arma::uword J) noexcept -> trait::eT<T1> {
     arma::uword K(0), L(0);
 
@@ -189,7 +189,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
       I /= dim.at(i);
       J /= dim.at(i);
 
-      if (arma::any(sys == i + 1)) {
+      if (arma::any(subsys== i + 1)) {
         K += product[i] * Jindex;
         L += product[i] * Iindex;
       } else {
@@ -198,7 +198,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
       }
     }
   
-    if (arma::any(sys==1)) {
+    if (arma::any(subsys==1)) {
       K += product[0] * J;
       L += product[0] * I;
     } else {
@@ -231,7 +231,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
+inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -255,7 +255,7 @@ inline TR Tx(const T1& rho1, arma::uvec sys, arma::uword dim = 2) {
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return Tx(rho, std::move(sys), std::move(dim2));
+  return Tx(rho, std::move(subsys), std::move(dim2));
 }
 
 //******************************************************************************

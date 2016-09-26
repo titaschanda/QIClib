@@ -51,7 +51,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (!((k.eval().n_rows == k.eval().n_cols) || k.eval().n_cols == 1))
+    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -159,7 +159,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (!((k.eval().n_rows == k.eval().n_cols) || (k.eval().n_cols == 1)))
+    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -330,7 +330,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec sys,
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (!((k.eval().n_rows == k.eval().n_cols) || k.eval().n_cols == 1))
+    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
@@ -436,7 +436,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec sys,
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (!((k.eval().n_rows == k.eval().n_cols) || k.eval().n_cols == 1))
+    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
