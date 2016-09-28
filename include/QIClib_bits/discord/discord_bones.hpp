@@ -24,8 +24,8 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1,
-          typename Enable = typename std::enable_if<
-            std::is_same<T1, arma::Mat<trait::eT<T1> > >::value, void>::type>
+          typename Enable =
+            typename std::enable_if<arma::is_Mat_only<T1>::value, void>::type>
 class discord_space;
 
 template <typename T1> class discord_space<T1> {
@@ -35,38 +35,37 @@ template <typename T1> class discord_space<T1> {
   // "discord_space requires Armadillo Mat object as template argument!");
 
  private:
-  T1* _rho{nullptr};
-  arma::uword _nodal{0};
-  arma::uword _n_cols{0};
-  arma::uword _n_rows{0};
+  T1 _rho{};
+  arma::uword _nodal{};
+  arma::uword _n_cols{};
+  arma::uword _n_rows{};
 
-  arma::uword _party_no{0};
-  arma::uvec _dim{0};
+  arma::uword _party_no{};
+  arma::uvec _dim{};
 
-  trait::pT<T1> _mutual_info{0};
-  trait::pT<T1> _result{0};
-  arma::Col<trait::pT<T1> > _tp{0};
-  trait::pT<T1> _result_reg{0};
-  arma::Col<trait::pT<T1> > _result_reg_all{0};
+  trait::pT<T1> _mutual_info{};
+  trait::pT<T1> _result{};
+  arma::Col<trait::pT<T1> > _tp{};
+  trait::pT<T1> _result_reg{};
+  arma::Col<trait::pT<T1> > _result_reg_all{};
 
-  bool _is_minfo_computed{0};
-  bool _is_computed{0};
-  bool _is_reg_computed{0};
-  bool _discord2{0};
-  bool _discord3{0};
+  bool _is_minfo_computed{false};
+  bool _is_computed{false};
+  bool _is_reg_computed{false};
+  bool _discord2{false};
+  bool _discord3{false};
 
   nlopt::algorithm _discord_global_opt{};
-  double _discord_global_xtol{0};
-  double _discord_global_ftol{0};
-  bool _discord_global{0};
+  double _discord_global_xtol{};
+  double _discord_global_ftol{};
+  bool _discord_global{false};
   nlopt::algorithm _discord_local_opt{};
-  double _discord_local_xtol{0};
-  double _discord_local_ftol{0};
-  arma::vec _discord_angle_range{0};
-  arma::vec _discord_angle_ini{0};
+  double _discord_local_xtol{};
+  double _discord_local_ftol{};
+  arma::vec _discord_angle_range{};
+  arma::vec _discord_angle_ini{};
 
-  inline void init(arma::uvec dim);
-  inline void check_size_change();
+  inline void init(arma::uvec);
   inline void minfo_p();
   inline void default_setting();
 
@@ -82,20 +81,22 @@ template <typename T1> class discord_space<T1> {
 
   //****************************************************************************
 
-  inline discord_space(T1* rho1, arma::uword nodal, arma::uvec dim);
-  inline discord_space(T1* rho1, arma::uword nodal, arma::uword dim = 2);
+  inline discord_space(const T1&, arma::uword, arma::uvec);
+  inline discord_space(T1&&, arma::uword, arma::uvec);
+  inline discord_space(const T1&, arma::uword, arma::uword = 2);
+  inline discord_space(T1&&, arma::uword, arma::uword = 2);
 
   //****************************************************************************
 
-  inline discord_space& global_algorithm(nlopt::algorithm a) noexcept;
-  inline discord_space& global_xtol(double a) noexcept;
-  inline discord_space& global_ftol(double a) noexcept;
-  inline discord_space& global_opt(bool a) noexcept;
-  inline discord_space& local_algorithm(nlopt::algorithm a) noexcept;
-  inline discord_space& local_xtol(double a) noexcept;
-  inline discord_space& local_ftol(double a) noexcept;
-  inline discord_space& angle_range(const arma::vec& a);
-  inline discord_space& initial_angle(const arma::vec& a);
+  inline discord_space& global_algorithm(nlopt::algorithm) noexcept;
+  inline discord_space& global_xtol(double) noexcept;
+  inline discord_space& global_ftol(double) noexcept;
+  inline discord_space& use_global_opt(bool) noexcept;
+  inline discord_space& local_algorithm(nlopt::algorithm) noexcept;
+  inline discord_space& local_xtol(double) noexcept;
+  inline discord_space& local_ftol(double) noexcept;
+  inline discord_space& angle_range(const arma::vec&);
+  inline discord_space& initial_angle(const arma::vec&);
 
   //****************************************************************************
 
@@ -105,12 +106,14 @@ template <typename T1> class discord_space<T1> {
   inline const trait::pT<T1>& result();
   inline const trait::pT<T1>& result_reg();
   inline const arma::Col<trait::pT<T1> >& result_reg_all();
-  inline discord_space& refresh();
+  inline discord_space& reset();
   inline discord_space& reset(arma::uword);
   inline discord_space& reset(arma::uword, arma::uvec);
   inline discord_space& reset(arma::uword, arma::uword);
-  inline discord_space& reset(T1*, arma::uword, arma::uvec);
-  inline discord_space& reset(T1*, arma::uword, arma::uword);
+  inline discord_space& reset(const T1&, arma::uword, arma::uvec);
+  inline discord_space& reset(T1&&, arma::uword, arma::uvec);
+  inline discord_space& reset(const T1&, arma::uword, arma::uword = 2);
+  inline discord_space& reset(T1&&, arma::uword, arma::uword = 2);
 };
 
 //******************************************************************************

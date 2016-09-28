@@ -68,25 +68,25 @@ class Exception : public std::exception {
     CUSTOM_EXCEPTION
   };
 
-  Exception(const std::string& where, const type& Type)
+  inline Exception(const std::string& where, const type& Type)
       : _where{where}, _msg{}, _type{Type}, _custom{} {
     _construct_exception_msg();
   }
 
-  Exception(const std::string& where, const std::string& custom)
+  inline Exception(const std::string& where, const std::string& custom)
       : _where{where}, _msg{}, _type{type::CUSTOM_EXCEPTION}, _custom{custom} {
     _construct_exception_msg();
     _msg += custom;
   }
 
-  const char* what() const noexcept override { return _msg.c_str(); }
+  inline const char* what() const noexcept override { return _msg.c_str(); }
 
  private:
   std::string _where, _msg;
   type _type;
   std::string _custom;
 
-  void _construct_exception_msg() {
+  inline void _construct_exception_msg() {
     _msg += "In ";
     _msg += _where;
     _msg += "(): ";

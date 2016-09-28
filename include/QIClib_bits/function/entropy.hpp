@@ -363,10 +363,12 @@ inline TR rel_entropy_prob(const std::vector<T1>& prob1,
 
 //****************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         std::is_arithmetic<T1>::value, T1>::type>
+template <
+  typename T1, typename T2,
+  typename TR = typename std::enable_if<
+    std::is_arithmetic<T1>::value || std::is_arithmetic<T2>::value, T1>::type>
 inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
-                           const std::initializer_list<T1>& prob2) {
+                           const std::initializer_list<T2>& prob2) {
   return rel_entropy_prob(static_cast<arma::Col<double> >(prob1),
                           static_cast<arma::Col<double> >(prob2));
 }
@@ -375,7 +377,7 @@ inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1> >::value ||
+            is_floating_point_var<trait::pT<T1>, trait::pT<T1> >::value ||
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
 inline TR rel_entropy(const T1& rho11, const T2& rho12) {

@@ -28,14 +28,14 @@ namespace _internal {
 //******************************************************************************
 
 template <typename T1> struct TO_PASS {
-  arma::Mat<trait::eT<T1> >& rho;
+  T1& rho;
   arma::Mat<trait::pT<T1> >& eye2;
   arma::Mat<trait::pT<T1> >& eye3;
   arma::Mat<trait::pT<T1> >& eye4;
   arma::uword nodal;
   arma::uword party_no;
 
-  TO_PASS(arma::Mat<trait::eT<T1> >& a, arma::Mat<trait::pT<T1> >& c,
+  TO_PASS(T1& a, arma::Mat<trait::pT<T1> >& c,
           arma::Mat<trait::pT<T1> >& d, arma::Mat<trait::pT<T1> >& e,
           arma::uword f, arma::uword g)
       : rho(a), eye2(c), eye3(d), eye4(e), nodal(f), party_no(g) {}
@@ -57,8 +57,7 @@ inline double disc_nlopt2(const std::vector<double>& x,
   trait::pT<T1> theta = static_cast<trait::pT<T1> >(x[0]);
   trait::pT<T1> phi = static_cast<trait::pT<T1> >(x[1]);
 
-  TO_PASS<arma::Mat<trait::eT<T1> > >* pB =
-    static_cast<TO_PASS<arma::Mat<trait::eT<T1> > >*>(my_func_data);
+  TO_PASS<T1>* pB = static_cast<TO_PASS<T1>*>(my_func_data);
 
   auto& u = SPM<trait::pT<T1> >::get_instance().basis2.at(0, 0);
   auto& d = SPM<trait::pT<T1> >::get_instance().basis2.at(1, 0);
@@ -121,8 +120,7 @@ inline double disc_nlopt3(const std::vector<double>& x,
   trait::pT<T1> phi2 = static_cast<trait::pT<T1> >(-x[3]);
   trait::pT<T1> del = static_cast<trait::pT<T1> >(x[4]);
 
-  TO_PASS<arma::Mat<trait::eT<T1> > >* pB =
-    static_cast<TO_PASS<arma::Mat<trait::eT<T1> > >*>(my_func_data);
+  TO_PASS<T1>* pB = static_cast<TO_PASS<T1>*>(my_func_data);
 
   auto& U = SPM<trait::pT<T1> >::get_instance().basis3.at(0, 0);
   auto& M = SPM<trait::pT<T1> >::get_instance().basis3.at(1, 0);
@@ -211,8 +209,7 @@ double def_nlopt2(const std::vector<double>& x, std::vector<double>& grad,
   trait::pT<T1> theta = static_cast<trait::pT<T1> >(x[0]);
   trait::pT<T1> phi = static_cast<trait::pT<T1> >(x[1]);
 
-  TO_PASS<arma::Mat<trait::eT<T1> > >* pB =
-    static_cast<TO_PASS<arma::Mat<trait::eT<T1> > >*>(my_func_data);
+  TO_PASS<T1>* pB = static_cast<TO_PASS<T1>*>(my_func_data);
 
   auto& u = SPM<trait::pT<T1> >::get_instance().basis2.at(0, 0);
   auto& d = SPM<trait::pT<T1> >::get_instance().basis2.at(1, 0);
@@ -266,8 +263,7 @@ double def_nlopt3(const std::vector<double>& x, std::vector<double>& grad,
   trait::pT<T1> phi2 = static_cast<trait::pT<T1> >(-x[3]);
   trait::pT<T1> del = static_cast<trait::pT<T1> >(x[4]);
 
-  TO_PASS<arma::Mat<trait::eT<T1> > >* pB =
-    static_cast<TO_PASS<arma::Mat<trait::eT<T1> > >*>(my_func_data);
+  TO_PASS<T1>* pB = static_cast<TO_PASS<T1>*>(my_func_data);
 
   auto& U = SPM<trait::pT<T1> >::get_instance().basis3.at(0, 0);
   auto& M = SPM<trait::pT<T1> >::get_instance().basis3.at(1, 0);

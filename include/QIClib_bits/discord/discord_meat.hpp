@@ -24,15 +24,15 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>::discord_space(T1* rho1, arma::uword nodal,
+inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
                                         arma::uvec dim)
-    : _rho(rho1), _nodal(nodal), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows),
+    : _rho(rho1), _nodal(nodal), _n_cols(_rho.n_cols), _n_rows(_rho.n_rows),
       _is_minfo_computed(false), _is_computed(false), _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
-  if (_rho->n_elem == 0)
+  if (_rho.n_elem == 0)
     throw Exception("qic::discord_space", Exception::type::ZERO_SIZE);
 
-  if (_rho->n_rows != _rho->n_cols)
+  if (_rho.n_rows != _rho.n_cols)
     throw Exception("qic::discord_space", Exception::type::MATRIX_NOT_SQUARE);
 #endif
 
@@ -42,15 +42,34 @@ inline discord_space<T1>::discord_space(T1* rho1, arma::uword nodal,
 //****************************************************************************
 
 template <typename T1>
-inline discord_space<T1>::discord_space(T1* rho1, arma::uword nodal,
-                                        arma::uword dim)
-    : _rho(rho1), _nodal(nodal), _n_cols(rho1->n_cols), _n_rows(rho1->n_rows),
-      _is_minfo_computed(false), _is_computed(false), _is_reg_computed(false) {
+inline discord_space<T1>::discord_space(T1&& rho1, arma::uword nodal,
+                                        arma::uvec dim)
+    : _rho(std::move(rho1)), _nodal(nodal), _n_cols(_rho.n_cols),
+      _n_rows(_rho.n_rows), _is_minfo_computed(false), _is_computed(false),
+      _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
-  if (_rho->n_elem == 0)
+  if (_rho.n_elem == 0)
     throw Exception("qic::discord_space", Exception::type::ZERO_SIZE);
 
-  if (_rho->n_rows != _rho->n_cols)
+  if (_rho.n_rows != _rho.n_cols)
+    throw Exception("qic::discord_space", Exception::type::MATRIX_NOT_SQUARE);
+#endif
+
+  init(std::move(dim));
+}
+
+//****************************************************************************
+
+template <typename T1>
+inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
+                                        arma::uword dim)
+    : _rho(rho1), _nodal(nodal), _n_cols(_rho.n_cols), _n_rows(_rho.n_rows),
+      _is_minfo_computed(false), _is_computed(false), _is_reg_computed(false) {
+#ifndef QICLIB_NO_DEBUG
+  if (_rho.n_elem == 0)
+    throw Exception("qic::discord_space", Exception::type::ZERO_SIZE);
+
+  if (_rho.n_rows != _rho.n_cols)
     throw Exception("qic::discord_space", Exception::type::MATRIX_NOT_SQUARE);
 
   if (dim == 0)
@@ -58,11 +77,38 @@ inline discord_space<T1>::discord_space(T1* rho1, arma::uword nodal,
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    QICLIB_ROUND_OFF(std::log(_rho->n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(_rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
 
+  init(std::move(dim2));
+}
+
+//****************************************************************************
+
+template <typename T1>
+inline discord_space<T1>::discord_space(T1&& rho1, arma::uword nodal,
+                                        arma::uword dim)
+    : _rho(std::move(rho1)), _nodal(nodal), _n_cols(_rho.n_cols),
+      _n_rows(_rho.n_rows), _is_minfo_computed(false), _is_computed(false),
+      _is_reg_computed(false) {
+#ifndef QICLIB_NO_DEBUG
+  if (_rho.n_elem == 0)
+    throw Exception("qic::discord_space", Exception::type::ZERO_SIZE);
+
+  if (_rho.n_rows != _rho.n_cols)
+    throw Exception("qic::discord_space", Exception::type::MATRIX_NOT_SQUARE);
+
+  if (dim == 0)
+    throw Exception("qic::discord_space", Exception::type::INVALID_DIMS);
+#endif
+
+  arma::uword n = static_cast<arma::uword>(
+    QICLIB_ROUND_OFF(std::log(_rho.n_rows) / std::log(dim)));
+
+  arma::uvec dim2(n);
+  dim2.fill(dim);
   init(std::move(dim2));
 }
 
@@ -76,11 +122,11 @@ template <typename T1> inline void discord_space<T1>::init(arma::uvec dim) {
   if (arma::any(_dim == 0))
     throw Exception("qic::discord_space", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(_dim) != _rho->n_rows)
+  if (arma::prod(_dim) != _rho.n_rows)
     throw Exception("qic::discord_space",
                     Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (_nodal <= 0 || _nodal > _party_no)
+  if (_nodal == 0 || _nodal > _party_no)
     throw Exception("qic::discord_space", "Invalid measured party index!");
 #endif
 
@@ -97,19 +143,19 @@ template <typename T1> inline void discord_space<T1>::init(arma::uvec dim) {
 }
 
 //****************************************************************************
-
+/*
 template <typename T1> inline void discord_space<T1>::check_size_change() {
   if (_rho->n_cols != _n_cols || _rho->n_rows != _n_rows)
     throw std::runtime_error(
       "qic::discord_space(): Matrix size changed! Use reset()!");
 }
-
+*/
 //****************************************************************************
 
 template <typename T1> inline void discord_space<T1>::default_setting() {
 
   if (_discord2) {
-    _discord_global_opt = nlopt::GN_DIRECT_L;
+    _discord_global_opt = nlopt::GN_DIRECT_L_RAND;
     _discord_global_xtol = 4.0e-2;
     _discord_global_ftol = 0;
     _discord_global = true;
@@ -122,7 +168,7 @@ template <typename T1> inline void discord_space<T1>::default_setting() {
   }
 
   if (_discord3) {
-    _discord_global_opt = nlopt::GN_DIRECT_L;
+    _discord_global_opt = nlopt::GN_DIRECT_L_RAND;
     _discord_global_xtol = 0.25;
     _discord_global_ftol = 0;
     _discord_global = true;
@@ -168,7 +214,7 @@ inline discord_space<T1>& discord_space<T1>::global_ftol(double a) noexcept {
 //****************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::global_opt(bool a) noexcept {
+inline discord_space<T1>& discord_space<T1>::use_global_opt(bool a) noexcept {
   _discord_global = a;
   _is_computed = false;
   return *this;
@@ -206,8 +252,6 @@ inline discord_space<T1>& discord_space<T1>::local_ftol(double a) noexcept {
 
 template <typename T1>
 inline discord_space<T1>& discord_space<T1>::angle_range(const arma::vec& a) {
-  check_size_change();
-
 #ifndef QICLIB_NO_DEBUG
   if (_discord2 && a.n_elem != 2)
     throw Exception(
@@ -229,8 +273,6 @@ inline discord_space<T1>& discord_space<T1>::angle_range(const arma::vec& a) {
 
 template <typename T1>
 inline discord_space<T1>& discord_space<T1>::initial_angle(const arma::vec& a) {
-  check_size_change();
-
 #ifndef QICLIB_NO_DEBUG
   if (_discord2 && a.n_elem != 2)
     throw Exception(
@@ -252,15 +294,19 @@ inline discord_space<T1>& discord_space<T1>::initial_angle(const arma::vec& a) {
 
 template <typename T1> inline void discord_space<T1>::minfo_p() {
   if (!_is_minfo_computed) {
-    arma::uvec party = arma::zeros<arma::uvec>(_party_no);
-    for (arma::uword i = 0; i < _party_no; i++) party.at(i) = i + 1;
 
-    arma::uvec rest = party;
-    rest.shed_row(_nodal - 1);
+    arma::uvec rest(_party_no - 1, arma::fill::zeros);
+    arma::uword counter(0);
+    for (arma::uword i = 0; i < _party_no; i++) {
+      if (_nodal != i + 1) {
+        rest.at(counter) = i + 1;
+        ++counter;
+      }
+    }
 
-    auto rho_A = TrX(*_rho, rest, _dim);
+    auto rho_A = TrX(_rho, std::move(rest), _dim);
     auto S_A = entropy(rho_A);
-    auto S_A_B = entropy(*_rho);
+    auto S_A_B = entropy(_rho);
     _mutual_info = S_A - S_A_B;
     _is_minfo_computed = true;
   }
@@ -269,7 +315,6 @@ template <typename T1> inline void discord_space<T1>::minfo_p() {
 //****************************************************************************
 
 template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
-  check_size_change();
   minfo_p();
 
   if (_discord2) {
@@ -280,15 +325,11 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
-    arma::Mat<trait::pT<T1> > eye3 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
-    arma::Mat<trait::pT<T1> > eye4 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
+    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
 
-    _internal::TO_PASS<arma::Mat<trait::eT<T1> > > pass(*_rho, eye2, eye3, eye4,
-                                                        _nodal, _party_no);
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _nodal, _party_no);
 
     std::vector<double> lb(2);
     std::vector<double> ub(2);
@@ -339,15 +380,11 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
-    arma::Mat<trait::pT<T1> > eye3 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
-    arma::Mat<trait::pT<T1> > eye4 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
+    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
 
-    _internal::TO_PASS<arma::Mat<trait::eT<T1> > > pass(*_rho, eye2, eye3, eye4,
-                                                        _nodal, _party_no);
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _nodal, _party_no);
 
     std::vector<double> lb(5);
     std::vector<double> ub(5);
@@ -395,12 +432,9 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
 
 template <typename T1>
 inline discord_space<T1>& discord_space<T1>::compute_reg() {
-  check_size_change();
   minfo_p();
 
   if (_discord2) {
-    arma::Col<trait::pT<T1> > ret(3);
-
     arma::uword dim1 = arma::prod(_dim);
     dim1 /= 2;
     arma::uword dim2(1);
@@ -408,12 +442,11 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
-    arma::Mat<trait::pT<T1> > eye3 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
-    arma::Mat<trait::pT<T1> > eye4 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
+    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+
+    arma::Col<trait::pT<T1> > ret(3);
 
     for (arma::uword i = 0; i < 3; ++i) {
       arma::Mat<std::complex<trait::pT<T1> > > proj1 =
@@ -433,10 +466,8 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
         proj2 = kron(kron(eye3, proj2), eye4);
       }
 
-      arma::Mat<std::complex<trait::pT<T1> > > rho_1 =
-        (proj1 * (*_rho) * proj1);
-      arma::Mat<std::complex<trait::pT<T1> > > rho_2 =
-        (proj2 * (*_rho) * proj2);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_1 = (proj1 * _rho * proj1);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_2 = (proj2 * _rho * proj2);
 
       trait::pT<T1> p1 = std::real(arma::trace(rho_1));
       trait::pT<T1> p2 = std::real(arma::trace(rho_2));
@@ -466,12 +497,9 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim1, dim1);
-    arma::Mat<trait::pT<T1> > eye3 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim2, dim2);
-    arma::Mat<trait::pT<T1> > eye4 =
-      arma::eye<arma::Mat<trait::pT<T1> > >(dim3, dim3);
+    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
 
     arma::Col<trait::pT<T1> > ret(3);
 
@@ -499,12 +527,9 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
         proj3 = kron(kron(eye3, proj3), eye4);
       }
 
-      arma::Mat<std::complex<trait::pT<T1> > > rho_1 =
-        (proj1 * (*_rho) * proj1);
-      arma::Mat<std::complex<trait::pT<T1> > > rho_2 =
-        (proj2 * (*_rho) * proj2);
-      arma::Mat<std::complex<trait::pT<T1> > > rho_3 =
-        (proj3 * (*_rho) * proj3);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_1 = (proj1 * _rho * proj1);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_2 = (proj2 * _rho * proj2);
+      arma::Mat<std::complex<trait::pT<T1> > > rho_3 = (proj3 * _rho * proj3);
 
       trait::pT<T1> p1 = std::real(arma::trace(rho_1));
       trait::pT<T1> p2 = std::real(arma::trace(rho_2));
@@ -537,7 +562,6 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
 
 template <typename T1>
 inline const arma::Col<trait::pT<T1> >& discord_space<T1>::opt_angles() {
-  check_size_change();
   if (!_is_computed)
     compute();
   return _tp;
@@ -546,7 +570,6 @@ inline const arma::Col<trait::pT<T1> >& discord_space<T1>::opt_angles() {
 //******************************************************************************
 
 template <typename T1> inline const trait::pT<T1>& discord_space<T1>::result() {
-  check_size_change();
   if (!_is_computed)
     compute();
   return _result;
@@ -556,7 +579,6 @@ template <typename T1> inline const trait::pT<T1>& discord_space<T1>::result() {
 
 template <typename T1>
 inline const trait::pT<T1>& discord_space<T1>::result_reg() {
-  check_size_change();
   if (!_is_reg_computed)
     compute_reg();
   return _result_reg;
@@ -566,7 +588,6 @@ inline const trait::pT<T1>& discord_space<T1>::result_reg() {
 
 template <typename T1>
 inline const arma::Col<trait::pT<T1> >& discord_space<T1>::result_reg_all() {
-  check_size_change();
   if (!_is_reg_computed)
     compute_reg();
   return _result_reg_all;
@@ -574,8 +595,7 @@ inline const arma::Col<trait::pT<T1> >& discord_space<T1>::result_reg_all() {
 
 //******************************************************************************
 
-template <typename T1> inline discord_space<T1>& discord_space<T1>::refresh() {
-  check_size_change();
+template <typename T1> inline discord_space<T1>& discord_space<T1>::reset() {
   _is_computed = false;
   _is_reg_computed = false;
   _is_minfo_computed = false;
@@ -591,22 +611,9 @@ inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal) {
   _is_reg_computed = false;
   _is_minfo_computed = false;
   _nodal = nodal;
-  _n_cols = _rho->n_cols;
-  _n_rows = _rho->n_rows;
 
 #ifndef QICLIB_NO_DEBUG
-  if (_rho->n_elem == 0)
-    throw Exception("qic::discord_space::reset", Exception::type::ZERO_SIZE);
-
-  if (_rho->n_rows != _rho->n_cols)
-    throw Exception("qic::discord_space::reset",
-                    Exception::type::MATRIX_NOT_SQUARE);
-
-  if (arma::prod(_dim) != _rho->n_rows)
-    throw Exception("qic::discord_space::reset",
-                    Exception::type::DIMS_MISMATCH_MATRIX);
-
-  if (_nodal <= 0 || _nodal > _party_no)
+  if (_nodal == 0 || _nodal > _party_no)
     throw Exception("qic::discord_space::reset",
                     "Invalid measured party index!");
 #endif
@@ -628,48 +635,141 @@ inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal) {
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal,
-                                                   arma::uvec dim) {
+inline discord_space<T1>&
+discord_space<T1>::reset(const T1& rho, arma::uword nodal, arma::uvec dim) {
+  _rho = rho;
+  _n_cols = _rho.n_cols;
+  _n_rows = _rho.n_rows;
   _dim = std::move(dim);
   _party_no = _dim.n_elem;
+
+#ifndef QICLIB_NO_DEBUG
+  if (_rho.n_elem == 0)
+    throw Exception("qic::discord_space::reset", Exception::type::ZERO_SIZE);
+
+  if (_rho.n_rows != _rho.n_cols)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::MATRIX_NOT_SQUARE);
+
+  if (arma::any(_dim == 0))
+    throw Exception("qic::discord_space::reset", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(_dim) != _rho.n_rows)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::DIMS_MISMATCH_MATRIX);
+#endif
+
   return reset(nodal);
 }
 
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal,
-                                                   arma::uword dim) {
+inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword nodal,
+                                                   arma::uvec dim) {
+  _rho = std::move(rho);
+  _n_cols = _rho.n_cols;
+  _n_rows = _rho.n_rows;
+  _dim = std::move(dim);
+  _party_no = _dim.n_elem;
 
 #ifndef QICLIB_NO_DEBUG
+  if (_rho.n_elem == 0)
+    throw Exception("qic::discord_space::reset", Exception::type::ZERO_SIZE);
+
+  if (_rho.n_rows != _rho.n_cols)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::MATRIX_NOT_SQUARE);
+
+  if (arma::any(_dim == 0))
+    throw Exception("qic::discord_space::reset", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(_dim) != _rho.n_rows)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::DIMS_MISMATCH_MATRIX);
+#endif
+
+  return reset(nodal);
+}
+
+//******************************************************************************
+
+template <typename T1>
+inline discord_space<T1>&
+discord_space<T1>::reset(const T1& rho, arma::uword nodal, arma::uword dim) {
+  _rho = rho;
+  _n_cols = _rho.n_cols;
+  _n_rows = _rho.n_rows;
+
+#ifndef QICLIB_NO_DEBUG
+  if (_rho.n_elem == 0)
+    throw Exception("qic::discord_space::reset", Exception::type::ZERO_SIZE);
+
+  if (_rho.n_rows != _rho.n_cols)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::MATRIX_NOT_SQUARE);
   if (dim == 0)
     throw Exception("qic::discord_space::reset", Exception::type::INVALID_DIMS);
 #endif
 
   arma::uword n = static_cast<arma::uword>(
-    QICLIB_ROUND_OFF(std::log(_rho->n_rows) / std::log(dim)));
+    QICLIB_ROUND_OFF(std::log(_rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return reset(nodal, std::move(dim2));
+  _dim = std::move(dim2);
+  _party_no = _dim.n_elem;
+
+#ifndef QICLIB_NO_DEBUG
+  if (arma::any(_dim == 0))
+    throw Exception("qic::discord_space::reset", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(_dim) != _rho.n_rows)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::DIMS_MISMATCH_MATRIX);
+#endif
+
+  return reset(nodal);
 }
 
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(T1* rho, arma::uword nodal,
-                                                   arma::uvec dim) {
-  _rho = rho;
-  return reset(nodal, std::move(dim));
-}
-
-//******************************************************************************
-
-template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(T1* rho, arma::uword nodal,
+inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword nodal,
                                                    arma::uword dim) {
-  _rho = rho;
-  return reset(nodal, dim);
+  _rho = std::move(rho);
+  _n_cols = _rho.n_cols;
+  _n_rows = _rho.n_rows;
+
+#ifndef QICLIB_NO_DEBUG
+  if (_rho.n_elem == 0)
+    throw Exception("qic::discord_space::reset", Exception::type::ZERO_SIZE);
+
+  if (_rho.n_rows != _rho.n_cols)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::MATRIX_NOT_SQUARE);
+  if (dim == 0)
+    throw Exception("qic::discord_space::reset", Exception::type::INVALID_DIMS);
+#endif
+
+  arma::uword n = static_cast<arma::uword>(
+    QICLIB_ROUND_OFF(std::log(_rho.n_rows) / std::log(dim)));
+
+  arma::uvec dim2(n);
+  dim2.fill(dim);
+  _dim = std::move(dim2);
+  _party_no = _dim.n_elem;
+
+#ifndef QICLIB_NO_DEBUG
+  if (arma::any(_dim == 0))
+    throw Exception("qic::discord_space::reset", Exception::type::INVALID_DIMS);
+
+  if (arma::prod(_dim) != _rho.n_rows)
+    throw Exception("qic::discord_space::reset",
+                    Exception::type::DIMS_MISMATCH_MATRIX);
+#endif
+
+  return reset(nodal);
 }
 
 //******************************************************************************

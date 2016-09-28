@@ -35,14 +35,14 @@ class Init final : public _internal::Singleton<const Init> {
  private:
   std::time_t date_start;
 
-  Init() : date_start(std::time(nullptr)) {
+  Init() noexcept : date_start(std::time(nullptr)) {
     std::cout << std::endl << ">>> Starting QIClib..." << std::endl;
     std::cout << ">>> " << std::ctime(&date_start) << std::endl;
   }
 
   ~Init() {
-    std::time_t date_end = std::time(nullptr);
-    std::time_t date_diff = date_end - date_start;
+    auto date_end = std::time(nullptr);
+    auto date_diff = date_end - date_start;
     auto minutes = date_diff / 60;
     auto hours = minutes / 60;
     std::cout << std::endl << ">>> Exiting QIClib..." << std::endl;
