@@ -27,6 +27,7 @@ template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1, T2>::value && is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR dsum(const T1& rho11, const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
@@ -60,6 +61,7 @@ template <typename T1, typename T2, typename... T3,
             is_arma_type_var<T1, T2, T3...>::value &&
               is_same_pT_var<T1, T2, T3...>::value,
             arma::Mat<typename eT_promoter_var<T1, T2, T3...>::type> >::type>
+
 inline TR dsum(const T1& rho1, const T2& rho2, const T3&... rho3) {
   return dsum(rho1, dsum(rho2, rho3...));
 }
@@ -69,6 +71,7 @@ inline TR dsum(const T1& rho1, const T2& rho2, const T3&... rho3) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+
 inline TR dsum(const arma::field<T1>& rho) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -102,6 +105,7 @@ inline TR dsum(const arma::field<T1>& rho) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+
 inline TR dsum(const std::vector<T1>& rho) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.size() == 0)
@@ -133,6 +137,7 @@ inline TR dsum(const std::vector<T1>& rho) {
 //******************************************************************************
 
 template <typename T1>
+
 inline arma::Mat<T1> dsum(const std::initializer_list<arma::Mat<T1> >& rho) {
   return dsum(static_cast<std::vector<arma::Mat<T1> > >(rho));
 }
@@ -142,6 +147,7 @@ inline arma::Mat<T1> dsum(const std::initializer_list<arma::Mat<T1> >& rho) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+
 inline TR dsum_pow(const T1& rho1, arma::uword n) {
   const auto& rho = _internal::as_Mat(rho1);
 

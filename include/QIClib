@@ -60,14 +60,14 @@
 #include "QIClib_bits/basic/dense_to_sparse.hpp"
 #include "QIClib_bits/basic/sparse_to_dense.hpp"
 
-#include "QIClib_bits/internal/algorithms.hpp"
-
+#include "QIClib_bits/internal/collapse.hpp"
 #include "QIClib_bits/function/Tx.hpp"
 #include "QIClib_bits/function/TrX.hpp"
 #include "QIClib_bits/function/sysperm.hpp"
+#include "QIClib_bits/function/sqrtm.hpp"
+#include "QIClib_bits/internal/methods.hpp"
 #include "QIClib_bits/function/powm.hpp"
 #include "QIClib_bits/function/expm.hpp"
-#include "QIClib_bits/function/sqrtm.hpp"
 #include "QIClib_bits/function/funcm.hpp"
 #include "QIClib_bits/function/tensor.hpp"
 #include "QIClib_bits/function/dsum.hpp"

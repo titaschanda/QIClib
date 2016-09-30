@@ -26,6 +26,7 @@ namespace qic {
 template <typename T1,
           typename = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
+
 inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -102,6 +103,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
 template <typename T1,
           typename = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
+
 inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
   const auto& rho = _internal::as_Mat(rho1);
 

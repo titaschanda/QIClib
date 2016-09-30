@@ -23,11 +23,13 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1, typename functor,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1> >::value,
-            arma::Mat<std::complex<trait::pT<T1> > > >::type>
-inline TR funcm_sym(const T1& rho1, functor P) {
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<std::complex<trait::pT<T1> > > >::type>
+
+inline TR funcm_sym(const T1& rho1,
+                    const std::function<std::complex<trait::pT<T1> >(
+                      std::complex<trait::pT<T1> >)>& P) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -62,11 +64,13 @@ inline TR funcm_sym(const T1& rho1, functor P) {
 
 //******************************************************************************
 
-template <typename T1, typename functor,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1> >::value,
-            arma::Mat<std::complex<trait::pT<T1> > > >::type>
-inline TR funcm_gen(const T1& rho1, functor P) {
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::pT<T1> >::value,
+                         arma::Mat<std::complex<trait::pT<T1> > > >::type>
+
+inline TR funcm_gen(const T1& rho1,
+                    const std::function<std::complex<trait::pT<T1> >(
+                      std::complex<trait::pT<T1> >)>& P) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG

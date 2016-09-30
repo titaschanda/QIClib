@@ -25,19 +25,12 @@ namespace qic {
 
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
-                         arma::Mat<trait::pT<T1> > >::type>
+                         arma::Mat<trait::eT<T1> > >::type>
+
 inline TR absm(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-
-#ifndef QICLIB_NO_DEBUG
-  if (rho.n_elem == 0)
-    throw Exception("qic::absm", Exception::type::ZERO_SIZE);
-
-  if (rho.n_rows != rho.n_cols)
-    throw Exception("qic::absm", Exception::type::MATRIX_NOT_SQUARE);
-#endif
-
-  return arma::real(sqrtm_sym((rho.t() * rho).eval()));
+  return _internal::absm_implement(rho,
+                                   typename _internal::absm_tag<T1>::type{});
 }
 
 //******************************************************************************

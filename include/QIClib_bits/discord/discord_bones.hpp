@@ -23,7 +23,7 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1,
+template <typename T1 = arma::cx_mat,
           typename Enable =
             typename std::enable_if<arma::is_Mat_only<T1>::value, void>::type>
 class discord_space;

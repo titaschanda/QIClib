@@ -26,7 +26,9 @@ namespace qic {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR gram_schmidt(const T1& rho1, bool normalize = true) {
+
+inline TR gram_schmidt(const T1& rho1,
+                       bool normalize = true) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -65,9 +67,11 @@ inline TR gram_schmidt(const T1& rho1, bool normalize = true) {
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<trait::pT<T1> >::value,
-                         std::vector<arma::Col<trait::eT<T1> > > >::type>
-inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
+                         is_floating_point_var<trait::GPT<T1> >::value,
+                         std::vector<arma::Col<T1> > >::type>
+
+inline TR gram_schmidt(const std::vector<arma::Col<T1> > rho,
+                       bool normalize = true) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.size() == 0)
     throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
@@ -76,14 +80,14 @@ inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
     if (ii.eval().n_elem == 0)
       throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
 
-  if (rho[0].eval().n_cols != 1)
-    throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
+  //if (rho[0].eval().n_cols != 1)
+  //  throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
 
   for (auto&& ii : rho)
-    if (ii.eval().n_rows != rho[0].eval().n_rows || ii.eval().n_cols != 1)
+    if (ii.n_rows != rho[0].n_rows || ii.n_cols != 1)
       throw Exception("qic::gram_schmidt", Exception::type::DIMS_NOT_EQUAL);
 
-  if (rho[0].eval().n_rows < rho.size())
+  if (rho[0].n_rows < rho.size())
     throw Exception("qic::gram_schmidt", "Invalid number of column vectors!");
 #endif
 
@@ -92,18 +96,17 @@ inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
   arma::uword count(0);
 
   for (arma::uword i = 0; i < rho.size(); ++i) {
-    trait::pT<T1> norm1 = arma::norm(ret[i]);
+    trait::GPT<T1> norm1 = arma::norm(ret[i]);
 
-    if (norm1 > _precision::eps<trait::pT<T1> >::value) {
-      ret2[count] = normalize ? (ret[i] / norm1).eval() : ret[i].eval();
+    if (norm1 > _precision::eps<trait::GPT<T1> >::value) {
+      ret2[count] = normalize ? (ret[i] / norm1).eval() : ret[i];
       ++count;
     } else
       continue;
 
     for (arma::uword j = i + 1; j < rho.size(); ++j) {
-      trait::eT<T1> r = normalize
-                          ? cdot(ret2[count - 1], ret[j])
-                          : cdot(ret2[count - 1], ret[j]) / (norm1 * norm1);
+      T1 r = normalize ? cdot(ret2[count - 1], ret[j])
+                       : cdot(ret2[count - 1], ret[j]) / (norm1 * norm1);
       ret[j] -= r * ret2[count - 1];
     }
   }
@@ -116,23 +119,23 @@ inline TR gram_schmidt(const std::vector<T1>& rho, bool normalize = true) {
 
 //******************************************************************************
 
-template <
-  typename T1,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<typename arma::get_pod_type<T1>::result>::value,
-    arma::Mat<T1> >::type>
-inline TR gram_schmidt(const std::initializer_list<arma::Mat<T1> >& rho,
+template <typename T1, typename TR = typename std::enable_if<
+                         is_floating_point_var<trait::GPT<T1> >::value,
+                         std::vector<arma::Col<T1> > >::type>
+
+inline TR gram_schmidt(const std::initializer_list<arma::Col<T1> >& rho,
                        bool normalize = true) {
-  return gram_schmidt(static_cast<std::vector<arma::Mat<T1> > >(rho),
+  return gram_schmidt(static_cast<std::vector<arma::Col<T1> > >(rho),
                       normalize);
 }
 
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         is_floating_point_var<trait::pT<T1> >::value,
-                         arma::field<arma::Col<trait::eT<T1> > > >::type>
-inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
+                         is_floating_point_var<trait::GPT<T1> >::value,
+                         arma::field<arma::Col<T1> > >::type>
+inline TR gram_schmidt(const arma::field<arma::Col<T1> >& rho,
+                       bool normalize = true) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
@@ -141,14 +144,14 @@ inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
     if (ii.eval().n_elem == 0)
       throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
 
-  if (rho.at(0).eval().n_cols != 1)
-    throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
+  //if (rho.at(0).eval().n_cols != 1)
+  //  throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
 
   for (auto&& ii : rho)
-    if (ii.eval().n_rows != rho.at(0).eval().n_rows || ii.eval().n_cols != 1)
+    if (ii.n_rows != rho.at(0).n_rows || ii.n_cols != 1)
       throw Exception("qic::gram_schmidt", Exception::type::DIMS_NOT_EQUAL);
 
-  if (rho.at(0).eval().n_rows < rho.n_elem)
+  if (rho.at(0).n_rows < rho.n_elem)
     throw Exception("qic::gram_schmidt", "Invalid number of column vectors!");
 #endif
 
@@ -157,9 +160,9 @@ inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
   arma::uword count(0);
 
   for (arma::uword i = 0; i < ret.n_elem; ++i) {
-    trait::pT<T1> norm1 = arma::norm(ret.at(i));
+    trait::GPT<T1> norm1 = arma::norm(ret.at(i));
 
-    if (norm1 > _precision::eps<trait::pT<T1> >::value) {
+    if (norm1 > _precision::eps<trait::GPT<T1> >::value) {
       ret2.at(count) =
         normalize ? (ret.at(i) / norm1).eval() : ret.at(i).eval();
       ++count;
@@ -167,9 +170,8 @@ inline TR gram_schmidt(const arma::field<T1>& rho, bool normalize = true) {
       continue;
 
     for (arma::uword j = i + 1; j < ret.n_elem; ++j) {
-      trait::eT<T1> r =
-        normalize ? cdot(ret2.at(count - 1), ret.at(j))
-                  : cdot(ret2.at(count - 1), ret.at(j)) / (norm1 * norm1);
+      T1 r = normalize ? cdot(ret2.at(count - 1), ret.at(j))
+                       : cdot(ret2.at(count - 1), ret.at(j)) / (norm1 * norm1);
       ret.at(j) -= r * ret2.at(count - 1);
     }
   }

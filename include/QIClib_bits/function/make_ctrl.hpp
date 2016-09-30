@@ -31,18 +31,19 @@ namespace qic {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
-                    arma::uvec dim) {
-  const auto& A1 = _internal::as_Mat(A);
+
+inline TR make_ctrl(const T1& A1, arma::uvec ctrl,
+                    arma::uvec subsys, arma::uvec dim) {
+  const auto& A = _internal::as_Mat(A1);
 
   arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
   arma::uword N = arma::prod(dim);
 
 #ifndef QICLIB_NO_DEBUG
-  if (A1.n_elem == 0)
+  if (A.n_elem == 0)
     throw Exception("qic::make_ctrl", Exception::type::ZERO_SIZE);
 
-  if (A1.n_rows != A1.n_cols)
+  if (A.n_rows != A.n_cols)
     throw Exception("qic::make_ctrl", Exception::type::MATRIX_NOT_SQUARE);
 
   for (arma::uword i = 1; i < ctrl.n_elem; ++i)
@@ -52,7 +53,7 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::make_ctrl", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim(subsys - 1)) != A1.n_rows)
+  if (arma::prod(dim(subsys - 1)) != A.n_rows)
     throw Exception("qic::make_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
   const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
@@ -92,7 +93,7 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
 
   arma::field<arma::Mat<trait::eT<T1> > > Ap(p_num + 1);
   for (arma::uword i = 0; i <= p_num; ++i)
-    Ap.at(i) = _internal::POWM_GEN_INT(A1, i);
+    Ap.at(i) = _internal::POWM_GEN_INT(A, i);
 
   arma::Mat<trait::eT<T1> > U(N, N, arma::fill::zeros);
 
@@ -182,18 +183,19 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
-                    arma::uvec dim) {
-  const auto& A1 = _internal::as_Mat(A);
+
+inline TR make_ctrl(const T1& A1, arma::uvec ctrl,
+                    arma::uvec subsys, arma::uvec dim) {
+  const auto& A = _internal::as_Mat(A1);
 
   arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
   arma::uword N = arma::prod(dim);
 
 #ifndef QICLIB_NO_DEBUG
-  if (A1.n_elem == 0)
+  if (A.n_elem == 0)
     throw Exception("qic::make_ctrl", Exception::type::ZERO_SIZE);
 
-  if (A1.n_rows != A1.n_cols)
+  if (A.n_rows != A.n_cols)
     throw Exception("qic::make_ctrl", Exception::type::MATRIX_NOT_SQUARE);
 
   for (arma::uword i = 1; i < ctrl.n_elem; ++i)
@@ -203,7 +205,7 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::make_ctrl", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim(subsys - 1)) != A1.n_rows)
+  if (arma::prod(dim(subsys - 1)) != A.n_rows)
     throw Exception("qic::make_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
   const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
@@ -238,7 +240,7 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
 
   arma::field<arma::Mat<trait::eT<T1> > > Ap(p_num + 1);
   for (arma::uword i = 0; i <= p_num; ++i)
-    Ap.at(i) = _internal::POWM_GEN_INT(A1, i);
+    Ap.at(i) = _internal::POWM_GEN_INT(A, i);
 
   arma::Mat<trait::eT<T1> > U(N, N);
 
@@ -320,9 +322,10 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys,
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys, arma::uword n,
-                    arma::uword dim = 2) {
-  const auto& A1 = _internal::as_Mat(A);
+
+inline TR make_ctrl(const T1& A1, arma::uvec ctrl,
+                    arma::uvec subsys, arma::uword n, arma::uword dim = 2) {
+  const auto& A = _internal::as_Mat(A1);
 
 #ifndef QICLIB_NO_DEBUG
   if (n == 0)
@@ -333,7 +336,7 @@ inline TR make_ctrl(const T1& A, arma::uvec ctrl, arma::uvec subsys, arma::uword
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return make_ctrl(A1, std::move(ctrl), std::move(subsys), std::move(dim2));
+  return make_ctrl(A, std::move(ctrl), std::move(subsys), std::move(dim2));
 }
 
 //*******************************************************************************

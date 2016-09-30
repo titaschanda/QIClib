@@ -31,7 +31,9 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
+
+inline TR TrX(const T1& rho1, arma::uvec subsys,
+              arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -158,7 +160,9 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
+
+inline TR TrX(const T1& rho1, arma::uvec subsys,
+              arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -299,7 +303,9 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
+
+inline TR TrX(const T1& rho1, arma::uvec subsys,
+              arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -334,8 +340,9 @@ namespace experimental {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec subsys,
-              arma::uvec dim) {
+
+inline TR TrX(const T1& rho1,
+              const arma::uvec& Sbasis, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 

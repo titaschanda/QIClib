@@ -25,8 +25,9 @@ namespace qic {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_arma_type_var<T1, T2>::value && is_same_pT_var<T1, T2>::value,
+            is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR tensor(const T1& rho11, const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
@@ -36,36 +37,35 @@ inline TR tensor(const T1& rho11, const T2& rho12) {
     throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 #endif
 
-  return arma::kron(rho1, rho2).eval();
+  return arma::kron(rho1, rho2);
 }
 
 //******************************************************************************
 
 template <typename T1, typename T2, typename... T3,
           typename TR = typename std::enable_if<
-            is_arma_type_var<T1, T2, T3...>::value &&
-              is_same_pT_var<T1, T2, T3...>::value,
+            is_same_pT_var<T1, T2, T3...>::value,
             arma::Mat<typename eT_promoter_var<T1, T2, T3...>::type> >::type>
+
 inline TR tensor(const T1& rho1, const T2& rho2, const T3&... rho3) {
-  return tensor(rho1.eval(), tensor(rho2, rho3...)).eval();
+  return tensor(rho1, tensor(rho2, rho3...));
 }
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR tensor(const arma::field<T1>& rho) {
+template <typename T1, typename TR = arma::Mat<T1> >
+
+inline TR tensor(const arma::field<arma::Mat<T1> >& rho) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 
   for (const auto& a : rho)
-    if (a.eval().n_elem == 0)
+    if (a.n_elem == 0)
       throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 #endif
 
-  auto ret = rho.at(0).eval();
+  auto ret = rho.eval();
 
   for (arma::uword i = 1; i < rho.n_elem; ++i) ret = tensor(ret, rho.at(i));
 
@@ -74,20 +74,19 @@ inline TR tensor(const arma::field<T1>& rho) {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR tensor(const std::vector<T1>& rho) {
+template <typename T1, typename TR = arma::Mat<T1> >
+
+inline TR tensor(const std::vector<arma::Mat<T1> >& rho) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.size() == 0)
     throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 
   for (const auto& a : rho)
-    if (a.eval().n_elem == 0)
+    if (a.n_elem == 0)
       throw Exception("qic::tensor", Exception::type::ZERO_SIZE);
 #endif
 
-  auto ret = rho[0].eval();
+  auto ret = rho[0];
 
   for (arma::uword i = 1; i < rho.size(); ++i) ret = tensor(ret, rho[i]);
 
@@ -97,6 +96,7 @@ inline TR tensor(const std::vector<T1>& rho) {
 //******************************************************************************
 
 template <typename T1>
+
 inline typename arma::Mat<T1>
 tensor(const std::initializer_list<arma::Mat<T1> >& rho) {
   return tensor(static_cast<std::vector<arma::Mat<T1> > >(rho));
@@ -104,9 +104,8 @@ tensor(const std::initializer_list<arma::Mat<T1> >& rho) {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+template <typename T1, typename TR = arma::Mat<trait::eT<T1> > >
+
 inline TR tensor_pow(const T1& rho1, arma::uword n) {
   const auto& rho = _internal::as_Mat(rho1);
 

@@ -27,6 +27,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value,
             typename arma::Mat<trait::pT<T1> >::template fixed<4, 4> >::type>
+
 inline TR std_to_HS(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -59,6 +60,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          typename arma::Mat<std::complex<trait::pT<T1> > >::
                            template fixed<4, 4> >::type>
+
 inline TR HS_to_std(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -67,7 +69,7 @@ inline TR HS_to_std(const T1& rho1) {
     throw Exception("qic::HS_to_std", Exception::type::ZERO_SIZE);
 
   if (!std::is_same<trait::eT<T1>, trait::pT<T1> >::value)
-    throw Exception("qic::HS_to_std", "Matrix is not real");
+    throw Exception("qic::HS_to_std", "Matrix is not real!");
 
   if (rho.n_rows != rho.n_cols)
     throw Exception("qic::HS_to_std", Exception::type::MATRIX_NOT_SQUARE);

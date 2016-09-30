@@ -24,6 +24,7 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1 = double>
+
 inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
   arma::uword m = mask.n_elem;
   arma::uword D = arma::prod(dim);
@@ -67,6 +68,7 @@ inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
 //******************************************************************************
 
 template <typename T1 = double>
+
 inline arma::Col<T1> mket(const arma::uvec& mask, arma::uword d = 2) {
   arma::uvec dim(mask.n_elem);
   dim.fill(d);
@@ -84,6 +86,7 @@ inline arma::Col<T1> mket(const arma::uvec& mask, arma::uword d = 2) {
 //******************************************************************************
 
 template <typename T1 = double>
+
 inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
   arma::uword m = mask.n_elem;
   arma::uword D = arma::prod(dim);
@@ -127,6 +130,7 @@ inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
 //******************************************************************************
 
 template <typename T1 = double>
+
 inline arma::Mat<T1> mproj(const arma::uvec& mask, arma::uword d = 2) {
   arma::uvec dim(mask.n_elem);
   dim.fill(d);

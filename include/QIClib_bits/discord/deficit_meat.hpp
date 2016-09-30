@@ -312,11 +312,19 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
 
-    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _nodal, _party_no);
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
+
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _nodal,
+                                _party_no);
 
     std::vector<double> lb(2);
     std::vector<double> ub(2);
@@ -367,11 +375,19 @@ template <typename T1> inline deficit_space<T1>& deficit_space<T1>::compute() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
 
-    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _nodal, _party_no);
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
+
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _nodal,
+                                _party_no);
 
     std::vector<double> lb(5);
     std::vector<double> ub(5);
@@ -427,9 +443,16 @@ inline deficit_space<T1>& deficit_space<T1>::compute_reg() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
+
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
 
     arma::Col<trait::pT<T1> > ret(3);
     
@@ -474,9 +497,16 @@ inline deficit_space<T1>& deficit_space<T1>::compute_reg() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
+
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
 
     arma::Col<trait::pT<T1> > ret(3);
     

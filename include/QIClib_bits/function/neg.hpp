@@ -26,12 +26,13 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = (rho.n_cols != 1);
-  
+
   if (rho.n_elem == 0)
     throw Exception("qic::neg", Exception::type::ZERO_SIZE);
 
@@ -69,6 +70,7 @@ inline TR neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR log_neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   return std::log2(2.0 * neg(rho1, std::move(subsys), std::move(dim)) + 1.0);
 }
@@ -78,12 +80,13 @@ inline TR log_neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = (rho.n_cols != 1);
-  
+
   if (rho.n_elem == 0)
     throw Exception("qic::neg", Exception::type::ZERO_SIZE);
 
@@ -109,6 +112,7 @@ inline TR neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR log_neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   return std::log2(2.0 * neg(rho1, std::move(subsys), dim) + 1.0);
 }

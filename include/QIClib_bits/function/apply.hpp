@@ -28,6 +28,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
                 arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -75,6 +76,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
                 arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -106,10 +108,11 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const std::vector<T2>& Ks) {
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
+inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -126,19 +129,18 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (k.eval().n_rows != k.eval().n_cols)
+    if (k.n_rows != k.n_cols)
       throw Exception("qic::apply", Exception::type::MATRIX_NOT_SQUARE);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks[0].eval().n_rows) ||
-        (k.eval().n_cols != Ks[0].eval().n_cols))
+    if ((k.n_rows != Ks[0].n_rows) || (k.n_cols != Ks[0].n_cols))
       throw Exception("qic::apply", Exception::type::DIMS_NOT_EQUAL);
 
-  if (Ks[0].eval().n_rows != rho.n_rows)
+  if (Ks[0].n_rows != rho.n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
   mattype ret(rho.n_rows, rho.n_rows, arma::fill::zeros);
 
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
@@ -151,8 +153,8 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks) {
 #pragma omp critical
 #endif
     {
-      ret += checkV ? Ks[i] * rho * Ks[i].eval().t()
-                    : Ks[i] * rho * rho.t() * Ks[i].eval().t();
+      ret +=
+        checkV ? Ks[i] * rho * Ks[i].t() : Ks[i] * rho * rho.t() * Ks[i].t();
     }
   }
   return ret;
@@ -162,10 +164,11 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks) {
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const arma::field<T2>& Ks) {
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
+inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -182,19 +185,18 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (k.eval().n_rows != k.eval().n_cols)
+    if (k.n_rows != k.n_cols)
       throw Exception("qic::apply", Exception::type::MATRIX_NOT_SQUARE);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks.at(0).eval().n_rows) ||
-        (k.eval().n_cols != Ks.at(0).eval().n_cols))
+    if ((k.n_rows != Ks.at(0).n_rows) || (k.n_cols != Ks.at(0).n_cols))
       throw Exception("qic::apply", Exception::type::DIMS_NOT_EQUAL);
 
-  if (Ks.at(0).eval().n_rows != rho.n_rows)
+  if (Ks.at(0).n_rows != rho.n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
   mattype ret(rho.n_rows, rho.n_rows, arma::fill::zeros);
 
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
@@ -207,8 +209,8 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks) {
 #pragma omp critical
 #endif
     {
-      ret += checkV ? Ks.at(i) * rho * Ks.at(i).eval().t()
-                    : Ks.at(i) * rho * rho.t() * Ks.at(i).eval().t();
+      ret += checkV ? Ks.at(i) * rho * Ks.at(i).t()
+                    : Ks.at(i) * rho * rho.t() * Ks.at(i).t();
     }
   }
   return ret;
@@ -216,12 +218,12 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks) {
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
-      is_same_pT_var<T1, arma::Mat<T2> >::value,
-    arma::Mat<typename eT_promoter_var<T1, arma::Mat<T2> >::type> >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
 inline TR apply(const T1& rho1,
                 const std::initializer_list<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -232,11 +234,12 @@ inline TR apply(const T1& rho1,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
-                arma::uvec dim) {
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
+inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
+                arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -256,12 +259,11 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (k.eval().n_rows != k.eval().n_cols)
+    if (k.n_rows != k.n_cols)
       throw Exception("qic::apply", Exception::type::MATRIX_NOT_SQUARE);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks[0].eval().n_rows) ||
-        (k.eval().n_cols != Ks[0].eval().n_cols))
+    if ((k.n_rows != Ks[0].n_rows) || (k.n_cols != Ks[0].n_cols))
       throw Exception("qic::apply", Exception::type::DIMS_NOT_EQUAL);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
@@ -270,7 +272,7 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
   if (D != rho.n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (Dsys != Ks[0].eval().n_rows)
+  if (Dsys != Ks[0].n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (subsys.n_elem > dim.n_elem ||
@@ -279,7 +281,7 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
     throw Exception("qic::apply", Exception::type::INVALID_SUBSYS);
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
   mattype ret(rho.n_rows, rho.n_rows, arma::fill::zeros);
 
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
@@ -287,14 +289,12 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.size(); ++i) {
+    auto tmp = apply(rho, Ks[i], subsys, dim);
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
 #pragma omp critical
 #endif
-    {
-      auto tmp = apply(rho, Ks[i], subsys, dim);
-      ret += checkV ? tmp : tmp * tmp.t();
-    }
+    { ret += checkV ? tmp : tmp * tmp.t(); }
   }
   return ret;
 }
@@ -303,11 +303,12 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
-                arma::uvec dim) {
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
+inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
+                arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -327,12 +328,11 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if (k.eval().n_rows != k.eval().n_cols)
+    if (k.n_rows != k.n_cols)
       throw Exception("qic::apply", Exception::type::MATRIX_NOT_SQUARE);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks.at(0).eval().n_rows) ||
-        (k.eval().n_cols != Ks.at(0).eval().n_cols))
+    if ((k.n_rows != Ks.at(0).n_rows) || (k.n_cols != Ks.at(0).n_cols))
       throw Exception("qic::apply", Exception::type::DIMS_NOT_EQUAL);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
@@ -341,7 +341,7 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
   if (D != rho.n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (Dsys != Ks.at(0).eval().n_rows)
+  if (Dsys != Ks.at(0).n_rows)
     throw Exception("qic::apply", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (subsys.n_elem > dim.n_elem ||
@@ -350,7 +350,7 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
     throw Exception("qic::apply", Exception::type::INVALID_SUBSYS);
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
   mattype ret(rho.n_rows, rho.n_rows, arma::fill::zeros);
 
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
@@ -358,30 +358,27 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.n_elem; ++i) {
+    auto tmp = apply(rho, Ks.at(i), subsys, dim);
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
 #pragma omp critical
 #endif
-    {
-      auto tmp = apply(rho, Ks.at(i), subsys, dim);
-      ret += checkV ? tmp : tmp * tmp.t();
-    }
+    { ret += checkV ? tmp : tmp * tmp.t(); }
   }
   return ret;
 }
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
-      is_same_pT_var<T1, arma::Mat<T2> >::value,
-    arma::Mat<typename eT_promoter_var<T1, arma::Mat<T2> >::type> >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
 inline TR apply(const T1& rho1, const std::initializer_list<arma::Mat<T2> >& Ks,
                 arma::uvec subsys, arma::uvec dim) {
-  const auto& rho = _internal::as_Mat(rho1);
-  return apply(rho, static_cast<std::vector<arma::Mat<T2> > >(Ks),
+  return apply(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks),
                std::move(subsys), std::move(dim));
 }
 
@@ -389,11 +386,12 @@ inline TR apply(const T1& rho1, const std::initializer_list<arma::Mat<T2> >& Ks,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
-                arma::uword dim = 2) {
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
+inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
+                arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -423,11 +421,12 @@ inline TR apply(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
-                arma::uword dim = 2) {
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
+inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
+                arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -455,12 +454,12 @@ inline TR apply(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
-      is_same_pT_var<T1, arma::Mat<T2> >::value,
-    arma::Mat<typename eT_promoter_var<T1, arma::Mat<T2> >::type> >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            arma::Mat<typename promote_var<trait::eT<T1>, T2>::type> >::type>
+
 inline TR apply(const T1& rho1, const std::initializer_list<arma::Mat<T2> >& Ks,
                 arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);

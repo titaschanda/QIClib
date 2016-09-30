@@ -33,6 +33,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
                      arma::uvec subsys, arma::uvec dim) {
   using eTR = typename eT_promoter_var<T1, T2>::type;
@@ -281,6 +282,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
                      arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -437,6 +439,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
               is_same_pT_var<T1, T2>::value,
             arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
+
 inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
                      arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -460,7 +463,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return apply_ctrl(rho, A, std::move(ctrl), std::move(subsys), std::move(dim2));
+  return apply_ctrl(rho, A, std::move(ctrl), std::move(subsys),
+                    std::move(dim2));
 }
 
 //******************************************************************************

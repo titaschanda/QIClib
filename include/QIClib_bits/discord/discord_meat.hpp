@@ -325,11 +325,19 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
 
-    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _nodal, _party_no);
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
+
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _nodal,
+                                _party_no);
 
     std::vector<double> lb(2);
     std::vector<double> ub(2);
@@ -380,11 +388,19 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
 
-    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _nodal, _party_no);
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
+
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _nodal,
+                                _party_no);
 
     std::vector<double> lb(5);
     std::vector<double> ub(5);
@@ -442,10 +458,17 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
 
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
+    
     arma::Col<trait::pT<T1> > ret(3);
 
     for (arma::uword i = 0; i < 3; ++i) {
@@ -475,11 +498,11 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
       trait::pT<T1> S_max = 0.0;
       if (p1 > _precision::eps<trait::pT<T1> >::value) {
         rho_1 /= p1;
-        S_max += p1 * entropy(rho_1);
+        S_max += p1 * entropy(TrX(rho_1,{_nodal},_dim));
       }
       if (p2 > _precision::eps<trait::pT<T1> >::value) {
         rho_2 /= p2;
-        S_max += p2 * entropy(rho_2);
+        S_max += p2 * entropy(TrX(rho_2,{_nodal},_dim));
       }
       ret.at(i) = _mutual_info + S_max;
     }
@@ -497,10 +520,17 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
     arma::uword dim3(1);
     for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
 
+    if ((_nodal == 1) || (_party_no == _nodal)) {
+      eye2.eye(dim1, dim1);
+    } else {
+      eye3.eye(dim2, dim2);
+      eye4.eye(dim3, dim3);
+    }
+    
     arma::Col<trait::pT<T1> > ret(3);
 
     for (arma::uword i = 0; i < 3; ++i) {
@@ -538,15 +568,15 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
       trait::pT<T1> S_max = 0.0;
       if (p1 > _precision::eps<trait::pT<T1> >::value) {
         rho_1 /= p1;
-        S_max += p1 * entropy(rho_1);
+        S_max += p1 * entropy(TrX(rho_1, {_nodal}, _dim));
       }
       if (p2 > _precision::eps<trait::pT<T1> >::value) {
         rho_2 /= p2;
-        S_max += p2 * entropy(rho_2);
+        S_max += p2 * entropy(TrX(rho_2, {_nodal}, _dim));
       }
       if (p3 > _precision::eps<trait::pT<T1> >::value) {
         rho_3 /= p3;
-        S_max += p3 * entropy(rho_3);
+        S_max += p3 * entropy(TrX(rho_3, {_nodal}, _dim));
       }
       ret.at(i) = _mutual_info + S_max;
     }

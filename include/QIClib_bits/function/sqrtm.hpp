@@ -26,6 +26,7 @@ namespace qic {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<std::complex<trait::pT<T1> > > >::type>
+
 inline TR sqrtm_sym(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -63,6 +64,7 @@ inline TR sqrtm_sym(const T1& rho1) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<std::complex<trait::pT<T1> > > >::type>
+
 inline TR sqrtm_gen(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
 

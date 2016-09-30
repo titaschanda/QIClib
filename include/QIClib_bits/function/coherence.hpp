@@ -26,6 +26,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR l1_coh(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
@@ -68,6 +69,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value ||
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
+
 inline TR l1_coh(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
@@ -100,6 +102,7 @@ inline TR l1_coh(const T1& rho1, const T2& U1) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR rel_entropy_coh(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
@@ -128,6 +131,7 @@ template <typename T1, typename T2,
             is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value ||
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
+
 inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);

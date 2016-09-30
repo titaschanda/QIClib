@@ -31,8 +31,9 @@ template <typename T1, typename T2,
             typename _internal::powm_tag<T1, T2>::ret_type>::type>
 
 inline TR powm_gen(const T1& rho1, const T2& P) {
+  const auto& rho = _internal::as_Mat(rho1);
   return _internal::powm_gen_implement(
-    rho1, P, typename _internal::powm_tag<T1, T2>::type{});
+    rho, P, typename _internal::powm_tag<T1, T2>::type{});
 }
 
 //******************************************************************************
@@ -43,9 +44,11 @@ template <typename T1, typename T2,
               (is_arma_type_var<T1>::value && std::is_unsigned<T2>::value &&
                std::is_integral<T2>::value),
             typename _internal::powm_tag<T1, T2>::ret_type>::type>
+
 inline TR powm_sym(const T1& rho1, const T2& P) {
+  const auto& rho = _internal::as_Mat(rho1);
   return _internal::powm_sym_implement(
-    rho1, P, typename _internal::powm_tag<T1, T2>::type{});
+    rho, P, typename _internal::powm_tag<T1, T2>::type{});
 }
 
 //******************************************************************************

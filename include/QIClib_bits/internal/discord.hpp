@@ -32,13 +32,14 @@ template <typename T1> struct TO_PASS {
   arma::Mat<trait::pT<T1> >& eye2;
   arma::Mat<trait::pT<T1> >& eye3;
   arma::Mat<trait::pT<T1> >& eye4;
+  arma::uvec& dim;
   arma::uword nodal;
   arma::uword party_no;
 
-  TO_PASS(T1& a, arma::Mat<trait::pT<T1> >& c,
-          arma::Mat<trait::pT<T1> >& d, arma::Mat<trait::pT<T1> >& e,
-          arma::uword f, arma::uword g)
-      : rho(a), eye2(c), eye3(d), eye4(e), nodal(f), party_no(g) {}
+  TO_PASS(T1& a, arma::Mat<trait::pT<T1> >& c, arma::Mat<trait::pT<T1> >& d,
+          arma::Mat<trait::pT<T1> >& e, arma::uvec& f, arma::uword g,
+          arma::uword h)
+      : rho(a), eye2(c), eye3(d), eye4(e), dim(f), nodal(g), party_no(h) {}
 
   ~TO_PASS() = default;
 
@@ -95,12 +96,12 @@ inline double disc_nlopt2(const std::vector<double>& x,
   trait::pT<T1> S_max = 0.0;
   if (p1 > _precision::eps<trait::pT<T1> >::value) {
     rho_1 /= p1;
-    S_max += p1 * entropy(rho_1);
+    S_max += p1 * entropy(TrX(rho_1, {pB->nodal}, pB->dim));
   }
 
   if (p2 > _precision::eps<trait::pT<T1> >::value) {
     rho_2 /= p2;
-    S_max += p2 * entropy(rho_2);
+    S_max += p2 * entropy(TrX(rho_2, {pB->nodal}, pB->dim));
   }
   return static_cast<double>(S_max);
 }
@@ -185,15 +186,15 @@ inline double disc_nlopt3(const std::vector<double>& x,
   trait::pT<T1> S_max = 0.0;
   if (p1 > _precision::eps<trait::pT<T1> >::value) {
     rho_1 /= p1;
-    S_max += p1 * entropy(rho_1);
+    S_max += p1 * entropy(TrX(rho_1, {pB->nodal}, pB->nodal));
   }
   if (p2 > _precision::eps<trait::pT<T1> >::value) {
     rho_2 /= p2;
-    S_max += p2 * entropy(rho_2);
+    S_max += p2 * entropy(TrX(rho_2, {pB->nodal}, pB->nodal));
   }
   if (p3 > _precision::eps<trait::pT<T1> >::value) {
     rho_3 /= p3;
-    S_max += p3 * entropy(rho_3);
+    S_max += p3 * entropy(TrX(rho_3, {pB->nodal}, pB->nodal));
   }
 
   return static_cast<double>(S_max);

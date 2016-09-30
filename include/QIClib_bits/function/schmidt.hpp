@@ -26,7 +26,9 @@ namespace qic {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Col<trait::pT<T1> > >::type>
-inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidt(const T1& rho1,
+                  const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
   bool checkV = (rho.n_cols != 1);
@@ -60,10 +62,12 @@ inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<
+          typename Enable = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
-inline bool schmidt(const T1& rho1, const arma::uvec& dim,
-                    arma::Col<trait::pT<T1> >& S, arma::Mat<trait::eT<T1> >& U,
+
+inline bool schmidt(const T1& rho1,
+                    const arma::uvec& dim, arma::Col<trait::pT<T1> >& S,
+                    arma::Mat<trait::eT<T1> >& U,
                     arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
@@ -108,10 +112,11 @@ inline bool schmidt(const T1& rho1, const arma::uvec& dim,
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<
+          typename Enable = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
-inline bool schmidt_full(const T1& rho1, const arma::uvec& dim,
-                         arma::Col<trait::pT<T1> >& S,
+
+inline bool schmidt_full(const T1& rho1,
+                         const arma::uvec& dim, arma::Col<trait::pT<T1> >& S,
                          arma::Mat<trait::eT<T1> >& U,
                          arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -159,7 +164,9 @@ inline bool schmidt_full(const T1& rho1, const arma::uvec& dim,
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidtA(const T1& rho1,
+                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -207,7 +214,9 @@ inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidtB(const T1& rho1,
+                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -255,7 +264,9 @@ inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::field<arma::Mat<trait::eT<T1> > > >::type>
-inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidtAB(const T1& rho1,
+                    const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -308,7 +319,9 @@ inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidtA_full(const T1& rho1,
+                        const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -357,7 +370,9 @@ inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
-inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidtB_full(const T1& rho1,
+                        const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -406,7 +421,9 @@ inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::field<arma::Mat<trait::eT<T1> > > >::type>
-inline TR schmidtAB_full(const T1& rho1, const arma::uvec& dim) {
+
+inline TR schmidtAB_full(const T1& rho1,
+                         const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 

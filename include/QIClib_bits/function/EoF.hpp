@@ -26,6 +26,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR EoF(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);

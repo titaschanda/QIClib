@@ -56,6 +56,15 @@ template <typename T1> using RR = typename std::remove_reference<T1>::type;
 template <typename T1> using RCV = typename std::remove_cv<T1>::type;
 
 template <typename T1>
+using pT2 = typename T1::pod_type;
+
+template <typename T1>
+using eT2 = typename T1::elem_type;
+
+template <typename T1>
+using GPT = typename arma::get_pod_type<T1>::result;
+
+template <typename T1>
 using pT = typename conditional_arma<trait::RR<T1> >::type::pod_type;
 
 template <typename T1>

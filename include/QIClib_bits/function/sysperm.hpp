@@ -31,6 +31,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
+
 inline TR sysperm(const T1& rho1, const arma::uvec& perm,
                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -152,9 +153,10 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR sysperm(const T1& rho1, const arma::uvec& perm,
-                  const arma::uvec& dim) {
-  const auto& rho = _internal::as_Mat(rho1);
+
+inline TR sysperm(const T1& rho1,
+                  const arma::uvec& perm, const arma::uvec& dim) {
+  const auto& rho = rho1.eval();
   const arma::uword n = dim.n_elem;
   bool checkV = (rho.n_cols != 1);
 
@@ -260,7 +262,9 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
 template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
-inline TR sysperm(const T1& rho1, const arma::uvec& perm, arma::uword dim = 2) {
+
+inline TR sysperm(const T1& rho1,
+                  const arma::uvec& perm, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG

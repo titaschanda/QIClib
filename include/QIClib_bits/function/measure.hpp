@@ -23,15 +23,15 @@ namespace qic {
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-      is_same_pT_var<T1, T2>::value,
-    std::tuple<
-      arma::uword, arma::Col<trait::pT<T1> >,
-      arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
+inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -48,24 +48,21 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
+    if ((k.n_rows != k.n_cols) && (k.n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks[0].eval().n_rows) ||
-        (k.eval().n_cols != Ks[0].eval().n_cols))
+    if ((k.n_rows != Ks[0].n_rows) || (k.n_cols != Ks[0].n_cols))
       throw Exception("qic::measure", Exception::type::DIMS_NOT_EQUAL);
 
-  if (Ks[0].eval().n_rows != rho.n_rows)
+  if (Ks[0].n_rows != rho.n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
-  bool checkK = false;
-  if (Ks[0].eval().n_cols == 1)
-    checkK = true;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
+  bool checkK = (Ks[0].n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.size());
   arma::field<mattype> outstates(Ks.size());
@@ -77,11 +74,10 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
 #endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
-      if (checkK)
-        tmp = Ks[i].eval() * Ks[i].eval().t() * rho * Ks[i].eval() *
-              Ks[i].eval().t();
+      if (!checkK)
+        tmp = Ks[i] * Ks[i].t() * rho * Ks[i] * Ks[i].t();
       else
-        tmp = Ks[i].eval() * rho * Ks[i].eval().t();
+        tmp = Ks[i] * rho * Ks[i].t();
       prob.at(i) = std::abs(arma::trace(tmp));
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -95,10 +91,10 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
 #endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
-      if (checkK)
-        tmp = Ks[i].eval() * Ks[i].eval().t() * rho;
+      if (!checkK)
+        tmp = Ks[i] * Ks[i].t() * rho;
       else
-        tmp = Ks[i].eval() * rho;
+        tmp = Ks[i] * rho;
       prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -113,14 +109,14 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks) {
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
-      is_same_pT_var<T1, arma::Mat<T2> >::value,
-    std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
-               arma::field<arma::Mat<typename eT_promoter_var<
-                 T1, arma::Mat<T2> >::type> > > >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
 inline TR measure(const T1& rho1,
                   const std::initializer_list<arma::Mat<T2> >& Ks) {
   return measure(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks));
@@ -128,15 +124,15 @@ inline TR measure(const T1& rho1,
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-      is_same_pT_var<T1, T2>::value,
-    std::tuple<
-      arma::uword, arma::Col<trait::pT<T1> >,
-      arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
+inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -153,24 +149,21 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
+    if ((k.n_rows != k.n_cols) && (k.n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks.at(0).eval().n_rows) ||
-        (k.eval().n_cols != Ks.at(0).eval().n_cols))
+    if ((k.n_rows != Ks.at(0).n_rows) || (k.n_cols != Ks.at(0).n_cols))
       throw Exception("qic::measure", Exception::type::DIMS_NOT_EQUAL);
 
-  if (Ks.at(0).eval().n_rows != rho.n_rows)
+  if (Ks.at(0).n_rows != rho.n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
-  bool checkK = false;
-  if (Ks.at(0).eval().n_cols == 1)
-    checkK = true;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
+  bool checkK = (Ks.at(0).n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.n_elem);
   arma::field<mattype> outstates(Ks.n_elem);
@@ -182,11 +175,10 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
 #endif
     for (arma::uword i = 0; i < Ks.n_elem; ++i) {
       mattype tmp;
-      if (checkK)
-        tmp = Ks.at(i).eval() * Ks.at(i).eval().t() * rho * Ks.at(i).eval() *
-              Ks.at(i).eval().t();
+      if (!checkK)
+        tmp = Ks.at(i) * Ks.at(i).t() * rho * Ks.at(i) * Ks.at(i).t();
       else
-        tmp = Ks.at(i).eval() * rho * Ks.at(i).eval().t();
+        tmp = Ks.at(i) * rho * Ks.at(i).t();
       prob.at(i) = std::abs(arma::trace(tmp));
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -200,10 +192,10 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks) {
 #endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
       mattype tmp;
-      if (checkK)
-        tmp = Ks.at(i).eval() * Ks.at(i).eval().t() * rho;
+      if (!checkK)
+        tmp = Ks.at(i) * Ks.at(i).t() * rho;
       else
-        tmp = Ks.at(i).eval() * rho;
+        tmp = Ks.at(i) * rho;
       prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -227,6 +219,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
+
 inline TR measure(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
@@ -289,16 +282,16 @@ inline TR measure(const T1& rho1, const T2& U1) {
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-      is_same_pT_var<T1, T2>::value,
-    std::tuple<
-      arma::uword, arma::Col<trait::pT<T1> >,
-      arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
-                  arma::uvec dim) {
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
+inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
+                  arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -318,13 +311,12 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
+    if ((k.n_rows != k.n_cols) && (k.n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks[0].eval().n_rows) ||
-        (k.eval().n_cols != Ks[0].eval().n_cols))
+    if ((k.n_rows != Ks[0].n_rows) || (k.n_cols != Ks[0].n_cols))
       throw Exception("qic::measure", Exception::type::DIMS_NOT_EQUAL);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
@@ -333,7 +325,7 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
   if (D != rho.n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (Dsys != Ks[0].eval().n_rows)
+  if (Dsys != Ks[0].n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (subsys.n_elem > dim.n_elem ||
@@ -342,11 +334,8 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
-
-  bool checkK = false;
-  if (Ks[0].eval().n_cols == 1)
-    checkK = true;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
+  bool checkK = (Ks[0].n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.size());
   arma::field<mattype> outstates(Ks.size());
@@ -356,9 +345,8 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.size(); ++i) {
-    mattype tmp =
-      checkK ? apply(rho, (Ks[i].eval() * Ks[i].eval().t()).eval(), subsys, dim)
-             : apply(rho, Ks[i].eval(), subsys, dim);
+    mattype tmp = !checkK ? apply(rho, (Ks[i] * Ks[i].t()).eval(), subsys, dim)
+                          : apply(rho, Ks[i], subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -375,14 +363,52 @@ inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
-      is_same_pT_var<T1, arma::Mat<T2> >::value,
-    std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
-               arma::field<arma::Mat<typename eT_promoter_var<
-                 T1, arma::Mat<T2> >::type> > > >::type>
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
+inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
+                  arma::uvec subsys, arma::uword dim = 2) {
+  const auto& rho = _internal::as_Mat(rho1);
+
+#ifndef QICLIB_NO_DEBUG
+  bool checkV = (rho.n_cols != 1);
+
+  if (rho.n_elem == 0)
+    throw Exception("qic::measure", Exception::type::ZERO_SIZE);
+
+  if (checkV)
+    if (rho.n_rows != rho.n_cols)
+      throw Exception("qic::measure",
+                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
+
+  if (dim == 0)
+    throw Exception("qic::measure", Exception::type::INVALID_DIMS);
+#endif
+
+  arma::uword n = static_cast<arma::uword>(
+    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
+
+  arma::uvec dim2(n);
+  dim2.fill(dim);
+
+  return measure(rho, Ks, std::move(subsys), std::move(dim2));
+}
+
+//******************************************************************************
+
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
 inline TR measure(const T1& rho1,
                   const std::initializer_list<arma::Mat<T2> >& Ks,
                   arma::uvec subsys, arma::uvec dim) {
@@ -392,16 +418,33 @@ inline TR measure(const T1& rho1,
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-      is_same_pT_var<T1, T2>::value,
-    std::tuple<
-      arma::uword, arma::Col<trait::pT<T1> >,
-      arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
-                  arma::uvec dim) {
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
+inline TR measure(const T1& rho1,
+                  const std::initializer_list<arma::Mat<T2> >& Ks,
+                  arma::uvec subsys, arma::uword dim = 2) {
+  return measure(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks),
+                 std::move(subsys), std::move(dim));
+}
+
+//******************************************************************************
+
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
+
+inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
+                  arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -421,13 +464,12 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != k.eval().n_cols) && (k.eval().n_cols != 1))
+    if ((k.n_rows != k.n_cols) && (k.n_cols != 1))
       throw Exception("qic::measure",
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 
   for (const auto& k : Ks)
-    if ((k.eval().n_rows != Ks.at(0).eval().n_rows) ||
-        (k.eval().n_cols != Ks.at(0).eval().n_cols))
+    if ((k.n_rows != Ks.at(0).n_rows) || (k.n_cols != Ks.at(0).n_cols))
       throw Exception("qic::measure", Exception::type::DIMS_NOT_EQUAL);
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
@@ -436,7 +478,7 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
   if (D != rho.n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (Dsys != Ks.at(0).eval().n_rows)
+  if (Dsys != Ks.at(0).n_rows)
     throw Exception("qic::measure", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (subsys.n_elem > dim.n_elem ||
@@ -445,10 +487,9 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
     throw Exception("qic::measure", Exception::type::INVALID_SUBSYS);
 #endif
 
-  using mattype = arma::Mat<typename eT_promoter_var<T1, T2>::type>;
-  bool checkK = false;
-  if (Ks.at(0).eval().n_cols == 1)
-    checkK = true;
+  using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
+  bool checkK = (Ks.at(0).n_cols != 1);
+
   arma::Col<trait::pT<T1> > prob(Ks.n_elem);
   arma::field<mattype> outstates(Ks.n_elem);
 
@@ -457,10 +498,9 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.n_elem; ++i) {
-    mattype tmp = checkK
-                    ? apply(rho, (Ks.at(i).eval() * Ks.at(i).eval().t()).eval(),
-                            subsys, dim)
-                    : tmp = apply(rho, Ks.at(i).eval(), subsys, dim);
+    mattype tmp = !checkK
+                    ? apply(rho, (Ks.at(i) * Ks.at(i).t()).eval(), subsys, dim)
+                    : apply(rho, Ks.at(i), subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -477,71 +517,16 @@ inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
 
 //******************************************************************************
 
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-      is_same_pT_var<T1, T2>::value,
-    std::tuple<
-      arma::uword, arma::Col<trait::pT<T1> >,
-      arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const std::vector<T2>& Ks, arma::uvec subsys,
-                  arma::uword dim = 2) {
-  const auto& rho = _internal::as_Mat(rho1);
+template <typename T1, typename T2,
+          typename TR = typename std::enable_if<
+            is_floating_point_var<trait::pT<T1>, trait::GPT<T2> >::value &&
+              is_all_same<trait::pT<T1>, trait::GPT<T2> >::value,
+            std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
+                       arma::field<arma::Mat<typename promote_var<
+                         trait::eT<T1>, T2>::type> > > >::type>
 
-#ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
-
-  if (rho.n_elem == 0)
-    throw Exception("qic::measure", Exception::type::ZERO_SIZE);
-
-  if (checkV)
-    if (rho.n_rows != rho.n_cols)
-      throw Exception("qic::measure",
-                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-
-  if (dim == 0)
-    throw Exception("qic::measure", Exception::type::INVALID_DIMS);
-#endif
-
-  arma::uword n = static_cast<arma::uword>(
-    QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
-
-  arma::uvec dim2(n);
-  dim2.fill(dim);
-
-  return measure(rho, Ks, std::move(subsys), std::move(dim2));
-}
-
-//******************************************************************************
-
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<arma::Mat<T2> > >::value &&
-      is_same_pT_var<T1, arma::Mat<T2> >::value,
-    std::tuple<arma::uword, arma::Col<trait::pT<T1> >,
-               arma::field<arma::Mat<typename eT_promoter_var<
-                 T1, arma::Mat<T2> >::type> > > >::type>
-inline TR measure(const T1& rho1,
-                  const std::initializer_list<arma::Mat<T2> >& Ks,
+inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
                   arma::uvec subsys, arma::uword dim = 2) {
-  return measure(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks),
-                 std::move(subsys), std::move(dim));
-}
-
-//******************************************************************************
-
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-      is_same_pT_var<T1, T2>::value,
-    std::tuple<
-      arma::uword, arma::Col<trait::pT<T1> >,
-      arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
-inline TR measure(const T1& rho1, const arma::field<T2>& Ks, arma::uvec subsys,
-                  arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -578,6 +563,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
+
 inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -648,6 +634,7 @@ template <
     std::tuple<
       arma::uword, arma::Col<trait::pT<T1> >,
       arma::field<arma::Mat<typename eT_promoter_var<T1, T2>::type> > > >::type>
+
 inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
                   arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -683,6 +670,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
+
 inline TR measure_comp(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
@@ -720,6 +708,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
+
 inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
@@ -768,6 +757,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             std::is_floating_point<trait::pT<T1> >::value,
             std::tuple<arma::uword, arma::Col<trait::pT<T1> > > >::type>
+
 inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 

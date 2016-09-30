@@ -26,6 +26,7 @@ namespace qic {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+
 inline TR entropy(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
@@ -57,6 +58,7 @@ inline TR entropy(const T1& rho1) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
+
 inline TR shannon(const T1& prob1) {
   const auto& prob = _internal::as_Mat(prob1);
 
@@ -85,6 +87,7 @@ inline TR shannon(const T1& prob1) {
 
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<T1>::value, T1>::type>
+
 inline TR shannon(const std::vector<T1>& prob1) {
   return shannon(_internal::as_type<arma::Col<T1> >::from(prob1));
 }
@@ -93,6 +96,7 @@ inline TR shannon(const std::vector<T1>& prob1) {
 
 template <typename T1, typename TR = typename std::enable_if<
                          std::is_arithmetic<T1>::value, T1>::type>
+
 inline TR shannon(const std::initializer_list<T1>& prob1) {
   return shannon(static_cast<arma::Col<double> >(prob1));
 }
@@ -102,7 +106,9 @@ inline TR shannon(const std::initializer_list<T1>& prob1) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
-inline TR renyi(const T1& rho1, const trait::pT<T1>& alpha) {
+
+inline TR renyi(const T1& rho1,
+                const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -148,7 +154,9 @@ inline TR renyi(const T1& rho1, const trait::pT<T1>& alpha) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
-inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
+
+inline TR renyi_prob(const T1& prob1,
+                     const trait::eT<T1>& alpha) {
   const auto& prob2 = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -194,6 +202,7 @@ template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_floating_point_var<T1>::value && std::is_arithmetic<T2>::value,
             T1>::type>
+
 inline TR renyi_prob(const std::vector<T1>& prob1, const T2& alpha) {
   return renyi_prob(_internal::as_type<arma::Col<T1> >::from(prob1),
                     static_cast<T1>(alpha));
@@ -205,6 +214,7 @@ template <
   typename T1, typename T2,
   typename TR = typename std::enable_if<
     std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value, T1>::type>
+
 inline TR renyi_prob(const std::initializer_list<T1>& prob1, const T2& alpha) {
   return renyi_prob(static_cast<arma::Col<double> >(prob1),
                     static_cast<double>(alpha));
@@ -215,7 +225,9 @@ inline TR renyi_prob(const std::initializer_list<T1>& prob1, const T2& alpha) {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          trait::pT<T1> >::value>
-inline TR tsallis(const T1& rho1, const trait::pT<T1>& alpha) {
+
+inline TR tsallis(const T1& rho1,
+                  const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -253,7 +265,9 @@ inline TR tsallis(const T1& rho1, const trait::pT<T1>& alpha) {
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
-inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
+
+inline TR tsallis_prob(const T1& prob1,
+                       const trait::eT<T1>& alpha) {
   const auto& prob2 = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -292,6 +306,7 @@ template <typename T1, typename T2,
           typename TR = typename std::enable_if<
             is_floating_point_var<T1>::value && std::is_arithmetic<T2>::value,
             T1>::type>
+
 inline TR tsallis_prob(const std::vector<T1>& prob1, const T2& alpha) {
   return tsallis_prob(_internal::as_type<arma::Col<T1> >::from(prob1),
                       static_cast<T1>(alpha));
@@ -303,6 +318,7 @@ template <
   typename T1, typename T2,
   typename TR = typename std::enable_if<
     std::is_arithmetic<T1>::value && std::is_arithmetic<T2>::value, T1>::type>
+
 inline TR tsallis_prob(const std::initializer_list<T1>& prob1,
                        const T2& alpha) {
   return tsallis_prob(static_cast<arma::Col<double> >(prob1),
@@ -314,7 +330,9 @@ inline TR tsallis_prob(const std::initializer_list<T1>& prob1,
 template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
-inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
+
+inline TR rel_entropy_prob(const T1& prob11,
+                           const T1& prob12) {
   const auto& prob1 = _internal::as_Mat(prob11);
   const auto& prob2 = _internal::as_Mat(prob12);
 
@@ -355,6 +373,7 @@ inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
 
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<T1>::value, T1>::type>
+
 inline TR rel_entropy_prob(const std::vector<T1>& prob1,
                            const std::vector<T1>& prob2) {
   return rel_entropy_prob(_internal::as_type<arma::Col<T1> >::from(prob1),
@@ -367,6 +386,7 @@ template <
   typename T1, typename T2,
   typename TR = typename std::enable_if<
     std::is_arithmetic<T1>::value || std::is_arithmetic<T2>::value, T1>::type>
+
 inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
                            const std::initializer_list<T2>& prob2) {
   return rel_entropy_prob(static_cast<arma::Col<double> >(prob1),
@@ -377,10 +397,12 @@ inline TR rel_entropy_prob(const std::initializer_list<T1>& prob1,
 
 template <typename T1, typename T2,
           typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T1> >::value ||
+            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value ||
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
-inline TR rel_entropy(const T1& rho11, const T2& rho12) {
+
+inline TR rel_entropy(const T1& rho11,
+                      const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
 

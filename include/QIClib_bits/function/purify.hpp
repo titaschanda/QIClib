@@ -26,6 +26,7 @@ namespace qic {
 template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Col<trait::eT<T1> > >::type>
+
 inline TR
 purify(const T1& rho1,
        const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
