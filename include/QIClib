@@ -32,6 +32,7 @@
 #include <tuple>
 #include <random>
 #include <limits>
+#include <chrono>
 
 
 #include "QIClib_bits/basic/macro.hpp"
@@ -42,6 +43,7 @@
 #include "QIClib_bits/internal/as_arma.hpp"
 
 #include "QIClib_bits/class/init.hpp"
+#include "QIClib_bits/class/stop_watch.hpp"
 #include "QIClib_bits/class/exception.hpp"
 #include "QIClib_bits/class/constants.hpp"
 #include "QIClib_bits/class/random_devices.hpp"

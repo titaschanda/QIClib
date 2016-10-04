@@ -60,13 +60,15 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
+  //for (arma::sword i = n - 2; i >= 0; --i)
+  //  product[i] = product[i + 1] * dim.at(i + 1);
+  for (arma::uword i = 1; i < n; ++i)
+    product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   arma::uword productr[_internal::MAXQDIT];
   productr[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(perm.at(i + 1) - 1);
+  for (arma::uword i = 1; i < n; ++i)
+    productr[n - 1 - i] = productr[n - i] * dim.at(perm.at(n - i) - 1);
 
   if (checkV) {
     arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols,
@@ -156,7 +158,7 @@ template <typename T1,
 
 inline TR sysperm(const T1& rho1,
                   const arma::uvec& perm, const arma::uvec& dim) {
-  const auto& rho = rho1.eval();
+  const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
   bool checkV = (rho.n_cols != 1);
 
@@ -182,8 +184,8 @@ inline TR sysperm(const T1& rho1,
 
   arma::uword productr[_internal::MAXQDIT];
   productr[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(perm.at(i + 1) - 1);
+  for (arma::uword i = 1; i < n; ++i)
+    productr[n - 1 - i] = productr[n - i] * dim.at(perm.at(n - i) - 1);
 
   if (checkV) {
     arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_rows);
@@ -194,11 +196,12 @@ inline TR sysperm(const T1& rho1,
       arma::uword Iindex[_internal::MAXQDIT];
       arma::uword Jindex[_internal::MAXQDIT];
 
-      for (arma::sword i = n - 1; i > 0; --i) {
-        Iindex[i] = I % dim.at(i);
-        Jindex[i] = J % dim.at(i);
-        I /= dim.at(i);
-        J /= dim.at(i);
+      //for (arma::sword i = n - 1; i > 0; --i) {
+      for (arma::uword i = 1; i < n; ++i) {
+        Iindex[i] = I % dim.at(n - i);
+        Jindex[i] = J % dim.at(n - i);
+        I /= dim.at(n - i);
+        J /= dim.at(n - i);
       }
       Iindex[0] = I;
       Jindex[0] = J;
@@ -213,7 +216,7 @@ inline TR sysperm(const T1& rho1,
     };
 
 #if defined(_OPENMP)
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for schedule(static)
 #endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II < rho.n_rows; ++II)
@@ -230,9 +233,9 @@ inline TR sysperm(const T1& rho1,
 
       arma::uword Iindex[_internal::MAXQDIT];
 
-      for (arma::sword i = n - 1; i > 0; --i) {
-        Iindex[i] = I % dim.at(i);
-        I /= dim.at(i);
+      for (arma::uword i = 1; i < n; ++i) {
+        Iindex[i] = I % dim.at(n - i);
+        I /= dim.at(n - i);
       }
       Iindex[0] = I;
 
@@ -245,7 +248,7 @@ inline TR sysperm(const T1& rho1,
     };
 
 #if defined(_OPENMP)
-#pragma omp parallel
+#pragma omp parallel for schedule(static)
 #endif
     for (arma::uword II = 0; II < rho.n_rows; ++II) rho_ret.at(II) = worker(II);
 

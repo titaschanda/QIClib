@@ -70,8 +70,10 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
+  //for (arma::sword i = n - 2; i >= 0; --i)
+  //  product[i] = product[i + 1] * dim.at(i + 1);
+  for (arma::uword i = 1; i < n; ++i)
+    product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   const arma::uword loop_no = 2 * n;
   constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
@@ -170,27 +172,27 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
-
-  arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
+  //for (arma::sword i = n - 2; i >= 0; --i)
+  for (arma::uword i = 1; i < n; ++i)
+    product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   auto worker = [n, checkV, &dim, &subsys, &product,
                  &rho](arma::uword I, arma::uword J) noexcept -> trait::eT<T1> {
     arma::uword K(0), L(0);
 
-    for (arma::sword i = n - 1; i > 0; --i) {
-      arma::uword Iindex = I % dim.at(i);
-      arma::uword Jindex = J % dim.at(i);
-      I /= dim.at(i);
-      J /= dim.at(i);
+    for (arma::uword i = 1; i < n; ++i) {
+      //for (arma::sword i = n - 1; i > 0; --i) {
+      arma::uword Iindex = I % dim.at(n - i);
+      arma::uword Jindex = J % dim.at(n - i);
+      I /= dim.at(n - i);
+      J /= dim.at(n - i);
 
-      if (arma::any(subsys == i + 1)) {
-        K += product[i] * Jindex;
-        L += product[i] * Iindex;
+      if (arma::any(subsys == n - i + 1)) {
+        K += product[n - i] * Jindex;
+        L += product[n - i] * Iindex;
       } else {
-        K += product[i] * Iindex;
-        L += product[i] * Jindex;
+        K += product[n - i] * Iindex;
+        L += product[n - i] * Jindex;
       }
     }
 
@@ -208,8 +210,10 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
       return rho.at(K) * std::conj(rho.at(L));
   };
 
+  arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
+  
 #if defined(_OPENMP)
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for schedule(static)
 #endif
   for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
     for (arma::uword II = 0; II < rho.n_rows; ++II)

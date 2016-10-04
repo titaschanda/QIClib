@@ -414,7 +414,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   };
 
 #if defined(_OPENMP)
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for schedule(static)
 #endif
   for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
     for (arma::uword II = 0; II < rho.n_rows; ++II) {

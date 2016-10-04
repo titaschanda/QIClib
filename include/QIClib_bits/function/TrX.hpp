@@ -90,13 +90,18 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  for (arma::sword i = n - 2; i > -1; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
+  //for (arma::sword i = n - 2; i > -1; --i)
+  //  product[i] = product[i + 1] * dim.at(i + 1);
+  for (arma::uword i = 1; i < n; ++i)
+    product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   arma::uword productr[_internal::MAXQDIT];
   productr[n - m - 1] = 1;
-  for (arma::sword i = n - m - 2; i > -1; --i)
-    productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
+  //for (arma::sword i = n - m - 2; i > -1; --i)
+  //  productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
+  for (arma::uword i = 1; i < n - m; ++i)
+    productr[n - m - 1 - i] =
+      productr[n - m - i] * dim.at(keep.at(n - m - i) - 1);
 
   arma::Mat<trait::eT<T1> > tr_rho(dimkeep, dimkeep, arma::fill::zeros);
 
@@ -219,8 +224,10 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  for (arma::sword i = n - 2; i > -1; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
+  //for (arma::sword i = n - 2; i > -1; --i)
+  //  product[i] = product[i + 1] * dim.at(i + 1);
+  for (arma::uword i = 1; i < n; ++i)
+    product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   arma::Mat<trait::eT<T1> > tr_rho(dimkeep, dimkeep);
 
@@ -230,11 +237,12 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
     arma::uword Kindex[_internal::MAXQDIT];
     arma::uword Lindex[_internal::MAXQDIT];
 
-    for (arma::sword i = n - m - 1; i > 0; --i) {
-      Kindex[i] = K % dim.at(keep[i] - 1);
-      Lindex[i] = L % dim.at(keep[i] - 1);
-      K /= dim.at(keep[i] - 1);
-      L /= dim.at(keep[i] - 1);
+    //for (arma::sword i = n - m - 1; i > 0; --i) {
+    for (arma::uword i = 1; i < n - m; ++i) {
+      Kindex[i] = K % dim.at(keep[n - m - i] - 1);
+      Lindex[i] = L % dim.at(keep[n - m - i] - 1);
+      K /= dim.at(keep[n - m - i] - 1);
+      L /= dim.at(keep[n - m - i] - 1);
     }
     Kindex[0] = K;
     Lindex[0] = L;
@@ -244,7 +252,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
     trait::eT<T1> ret = static_cast<trait::eT<T1> >(0);
 
     const arma::uword loop_no = m;
-    constexpr auto loop_no_buffer = _internal::MAXQDIT;
+    constexpr auto loop_no_buffer = _internal::MAXQDIT + 1;
     arma::uword loop_counter[loop_no_buffer] = {0};
     arma::uword MAX[loop_no_buffer];
 
@@ -285,7 +293,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
   };
 
 #if defined(_OPENMP)
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for schedule(static)
 #endif
   for (arma::uword LL = 0; LL < dimkeep; ++LL) {
     for (arma::uword KK = 0; KK < dimkeep; ++KK)
