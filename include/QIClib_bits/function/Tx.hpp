@@ -70,8 +70,6 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  //for (arma::sword i = n - 2; i >= 0; --i)
-  //  product[i] = product[i + 1] * dim.at(i + 1);
   for (arma::uword i = 1; i < n; ++i)
     product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
@@ -172,7 +170,6 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  //for (arma::sword i = n - 2; i >= 0; --i)
   for (arma::uword i = 1; i < n; ++i)
     product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
@@ -181,7 +178,6 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
     arma::uword K(0), L(0);
 
     for (arma::uword i = 1; i < n; ++i) {
-      //for (arma::sword i = n - 1; i > 0; --i) {
       arma::uword Iindex = I % dim.at(n - i);
       arma::uword Jindex = J % dim.at(n - i);
       I /= dim.at(n - i);
@@ -211,7 +207,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   };
 
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
-  
+
 #if defined(_OPENMP)
 #pragma omp parallel for schedule(static)
 #endif

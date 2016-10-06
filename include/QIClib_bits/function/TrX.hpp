@@ -90,15 +90,11 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  //for (arma::sword i = n - 2; i > -1; --i)
-  //  product[i] = product[i + 1] * dim.at(i + 1);
   for (arma::uword i = 1; i < n; ++i)
     product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   arma::uword productr[_internal::MAXQDIT];
   productr[n - m - 1] = 1;
-  //for (arma::sword i = n - m - 2; i > -1; --i)
-  //  productr[i] = productr[i + 1] * dim.at(keep.at(i + 1) - 1);
   for (arma::uword i = 1; i < n - m; ++i)
     productr[n - m - 1 - i] =
       productr[n - m - i] * dim.at(keep.at(n - m - i) - 1);
@@ -126,8 +122,9 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
     for (arma::uword i = 0; i < n; ++i) {
       if (arma::any(subsys == i + 1)) {
-        I += product[i] * loop_counter[i];
-        J += product[i] * loop_counter[i];
+        auto tmp = product[i] * loop_counter[i];
+        I += tmp;
+        J += tmp;
 
       } else {
         I += product[i] * loop_counter[i];
@@ -224,8 +221,6 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  //for (arma::sword i = n - 2; i > -1; --i)
-  //  product[i] = product[i + 1] * dim.at(i + 1);
   for (arma::uword i = 1; i < n; ++i)
     product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
@@ -237,18 +232,15 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
     arma::uword Kindex[_internal::MAXQDIT];
     arma::uword Lindex[_internal::MAXQDIT];
 
-    //for (arma::sword i = n - m - 1; i > 0; --i) {
     for (arma::uword i = 1; i < n - m; ++i) {
-      Kindex[i] = K % dim.at(keep[n - m - i] - 1);
-      Lindex[i] = L % dim.at(keep[n - m - i] - 1);
+      Kindex[n - m - i] = K % dim.at(keep[n - m - i] - 1);
+      Lindex[n - m - i] = L % dim.at(keep[n - m - i] - 1);
       K /= dim.at(keep[n - m - i] - 1);
       L /= dim.at(keep[n - m - i] - 1);
     }
     Kindex[0] = K;
     Lindex[0] = L;
 
-    arma::uword Iindex[_internal::MAXQDIT];
-    arma::uword Jindex[_internal::MAXQDIT];
     trait::eT<T1> ret = static_cast<trait::eT<T1> >(0);
 
     const arma::uword loop_no = m;
@@ -267,15 +259,15 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
       for (arma::uword i = 0; i < n; ++i) {
         if (arma::any(subsys == i + 1)) {
-          Iindex[i] = Jindex[i] = loop_counter[countI];
+          auto tmp = product[i] * loop_counter[countI];
+          I += tmp;
+          J += tmp;
           ++countI;
         } else {
-          Iindex[i] = Kindex[countK];
-          Jindex[i] = Lindex[countK];
+          I += product[i] * Kindex[countK];
+          J += product[i] * Lindex[countK];
           ++countK;
         }
-        I += product[i] * Iindex[i];
-        J += product[i] * Jindex[i];
       }
 
       ret += checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));

@@ -29,8 +29,8 @@ namespace _internal {
 
 // More efficient than iterative counterpart, as iterative one needs
 // extra copy constructor
-template <typename T1, typename T2,
-          typename TR = arma::Mat<trait::eT<T1> > >
+template <typename T1, typename T2, typename TR = arma::Mat<trait::eT<T1> > >
+
 inline TR POWM_GEN_INT(const T1& rho, const T2& P) {
   if (P == 0) {
     arma::uword n = rho.n_rows;
@@ -78,6 +78,7 @@ struct powm_tag : std::conditional<
 
 template <typename T1, typename T2,
           typename TR = arma::Mat<std::complex<trait::pT<T1> > > >
+
 inline TR powm_gen_implement(const T1& rho, const T2& P, nonint_tag<T1>) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -99,8 +100,8 @@ inline TR powm_gen_implement(const T1& rho, const T2& P, nonint_tag<T1>) {
 //******************************************************************************
 
 template <typename T1, typename T2, typename TR = arma::Mat<trait::eT<T1> > >
-inline TR powm_gen_implement(const T1& rho, const T2& P,
-                             int_tag<T1>) {
+
+inline TR powm_gen_implement(const T1& rho, const T2& P, int_tag<T1>) {
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -119,6 +120,7 @@ inline TR powm_gen_implement(const T1& rho, const T2& P,
 //******************************************************************************
 
 template <typename T1, typename T2, typename TR = arma::Mat<trait::eT<T1> > >
+
 inline TR powm_gen_implement(const T1& rho, const T2& P, uint_tag<T1>) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -135,8 +137,8 @@ inline TR powm_gen_implement(const T1& rho, const T2& P, uint_tag<T1>) {
 
 template <typename T1, typename T2,
           typename TR = arma::Mat<std::complex<trait::pT<T1> > > >
-inline TR powm_sym_implement(const T1& rho, const T2& P,
-                             nonint_tag<T1>) {
+
+inline TR powm_sym_implement(const T1& rho, const T2& P, nonint_tag<T1>) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::powm_sym", Exception::type::ZERO_SIZE);
@@ -170,8 +172,8 @@ inline TR powm_sym_implement(const T1& rho, const T2& P,
 //******************************************************************************
 
 template <typename T1, typename T2, typename TR = arma::Mat<trait::eT<T1> > >
-inline TR powm_sym_implement(const T1& rho, const T2& P,
-                             int_tag<T1>) {
+
+inline TR powm_sym_implement(const T1& rho, const T2& P, int_tag<T1>) {
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::powm_sym", Exception::type::ZERO_SIZE);
@@ -188,8 +190,8 @@ inline TR powm_sym_implement(const T1& rho, const T2& P,
 //******************************************************************************
 
 template <typename T1, typename T2, typename TR = arma::Mat<trait::eT<T1> > >
-inline TR powm_sym_implement(const T1& rho1, const T2& P,
-                             uint_tag<T1>) {
+
+inline TR powm_sym_implement(const T1& rho1, const T2& P, uint_tag<T1>) {
   const auto& rho = as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -206,6 +208,7 @@ inline TR powm_sym_implement(const T1& rho1, const T2& P,
 //******************************************************************************
 
 template <typename T1, typename TR = arma::Mat<trait::eT<T1> > >
+
 inline TR TENSOR_POW(const T1& rho, arma::uword n) {
   if (n == 1) {
     return rho;
@@ -223,13 +226,9 @@ inline TR TENSOR_POW(const T1& rho, arma::uword n) {
 
 //******************************************************************************
 
-template <typename T1> struct real_tag {
-  typedef real_tag type;
-};
+template <typename T1> struct real_tag { typedef real_tag type; };
 
-template <typename T1> struct cplx_tag {
-  typedef cplx_tag type;
-};
+template <typename T1> struct cplx_tag { typedef cplx_tag type; };
 
 template <typename T1>
 struct absm_tag
@@ -239,8 +238,9 @@ struct absm_tag
 //******************************************************************************
 
 template <typename T1, typename TR = arma::Mat<trait::eT<T1> > >
+
 inline TR absm_implement(const T1& rho, real_tag<T1>) {
-  
+
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::absm", Exception::type::ZERO_SIZE);
@@ -255,8 +255,9 @@ inline TR absm_implement(const T1& rho, real_tag<T1>) {
 //******************************************************************************
 
 template <typename T1, typename TR = arma::Mat<trait::eT<T1> > >
+
 inline TR absm_implement(const T1& rho, cplx_tag<T1>) {
-  
+
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
     throw Exception("qic::absm", Exception::type::ZERO_SIZE);

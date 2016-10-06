@@ -29,7 +29,7 @@ namespace _internal {
 
 template <typename T> class Singleton {
  protected:
-  Singleton() noexcept = default;
+  Singleton() noexcept(std::is_nothrow_constructible<T>::value) = default;
   Singleton(const Singleton&) = delete;
   Singleton& operator=(const Singleton&) = delete;
   virtual ~Singleton() = default;

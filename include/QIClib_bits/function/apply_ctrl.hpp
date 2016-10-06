@@ -97,13 +97,13 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  for (arma::sword i = n - 2; i >= 0; --i)
-    product[i] = product[i + 1] * dim.at(i + 1);
+  for (arma::uword i = 1; i < n; ++i)
+    product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
   arma::uword productr[_internal::MAXQDIT];
   productr[m - 1] = 1;
-  for (arma::sword i = m - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(subsys.at(i) - 1);
+  for (arma::uword i = 1; i < m; ++i)
+    productr[m - 1 - i] = productr[m - i] * dim.at(subsys.at(m - i) - 1);
 
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
@@ -344,8 +344,8 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   arma::uword productr[_internal::MAXQDIT];
   productr[m - 1] = 1;
-  for (arma::sword i = m - 2; i >= 0; --i)
-    productr[i] = productr[i + 1] * dim.at(subsys.at(i) - 1);
+  for (arma::uword i = 1; i < m; ++i)
+    productr[m - 1 - i] = productr[m - i] * dim.at(subsys.at(m - i) - 1);
 
   arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
@@ -363,16 +363,16 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     arma::uword Jindex[_internal::MAXQDIT];
     arma::uword count1(0);
 
-    for (arma::sword i = n - 1; i > 0; --i) {
-      Iindex[i] = I % dim.at(i);
-      Jindex[i] = J % dim.at(i);
-      I /= dim.at(i);
-      J /= dim.at(i);
+    for (arma::uword i = 1; i < n; ++i) {
+      Iindex[n - i] = I % dim.at(n - i);
+      Jindex[n - i] = J % dim.at(n - i);
+      I /= dim.at(n - i);
+      J /= dim.at(n - i);
 
-      if (arma::any(keep == i + 1) && (Iindex[i] != Jindex[i]))
+      if (arma::any(keep == n - i + 1) && (Iindex[n - i] != Jindex[n - i]))
         return static_cast<trait::eT<T2> >(0);
 
-      count1 += (arma::any(ctrl == i + 1) && Iindex[i] != 0) ? 1 : 0;
+      count1 += (arma::any(ctrl == n - i + 1) && Iindex[n - i] != 0) ? 1 : 0;
     }
 
     Iindex[0] = I;

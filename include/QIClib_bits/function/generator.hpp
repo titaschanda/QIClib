@@ -48,10 +48,15 @@ inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
   product[m - 1] = 1;
   arma::uword index = 0;
 
-  for (arma::sword i = m - 2; i >= 0; --i) {
+  /* for (arma::sword i = m - 2; i >= 0; --i) {
     product[i] = product[i + 1] * dim.at(i + 1);
     index += product[i] * mask.at(i);
+    }*/
+  for (arma::uword i = 1; i < m; ++i) {
+    product[m - 1 - i] = product[m - i] * dim.at(m - i);
+    index += product[m - 1 - i] * mask.at(m - 1 - i);
   }
+
   index += mask.at(m - 1);
 
   arma::Col<T1> ret(D, arma::fill::zeros);
@@ -110,9 +115,9 @@ inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
   product[m - 1] = 1;
   arma::uword index = 0;
 
-  for (arma::sword i = m - 2; i >= 0; --i) {
-    product[i] = product[i + 1] * dim.at(i + 1);
-    index += product[i] * mask.at(i);
+  for (arma::uword i = 1; i < m; ++i) {
+    product[m - 1 - i] = product[m - i] * dim.at(m - i);
+    index += product[m - 1 - i] * mask.at(m - 1 - i);
   }
   index += mask.at(m - 1);
 

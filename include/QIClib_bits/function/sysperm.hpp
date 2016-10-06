@@ -23,7 +23,7 @@ namespace qic {
 
 //******************************************************************************
 
-#ifdef QICLIB_USE_SERIAL_PERM
+#ifdef QICLIB_USE_SERIAL_SYSPERM
 // USE SERIAL ALGORITHM
 
 //******************************************************************************
@@ -60,8 +60,6 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
-  //for (arma::sword i = n - 2; i >= 0; --i)
-  //  product[i] = product[i + 1] * dim.at(i + 1);
   for (arma::uword i = 1; i < n; ++i)
     product[n - 1 - i] = product[n - i] * dim.at(n - i);
 
@@ -156,8 +154,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR sysperm(const T1& rho1,
-                  const arma::uvec& perm, const arma::uvec& dim) {
+inline TR sysperm(const T1& rho1, const arma::uvec& perm,
+                  const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
   bool checkV = (rho.n_cols != 1);
@@ -190,16 +188,15 @@ inline TR sysperm(const T1& rho1,
   if (checkV) {
     arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_rows);
 
-    auto worker = [n, &dim, &perm, &productr, &rho](arma::uword I, arma::uword J)
-      noexcept -> trait::eT<T1> {
+    auto worker = [n, &dim, &perm, &productr, &rho](
+      arma::uword I, arma::uword J) noexcept -> trait::eT<T1> {
 
       arma::uword Iindex[_internal::MAXQDIT];
       arma::uword Jindex[_internal::MAXQDIT];
 
-      //for (arma::sword i = n - 1; i > 0; --i) {
       for (arma::uword i = 1; i < n; ++i) {
-        Iindex[i] = I % dim.at(n - i);
-        Jindex[i] = J % dim.at(n - i);
+        Iindex[n - i] = I % dim.at(n - i);
+        Jindex[n - i] = J % dim.at(n - i);
         I /= dim.at(n - i);
         J /= dim.at(n - i);
       }
@@ -234,7 +231,7 @@ inline TR sysperm(const T1& rho1,
       arma::uword Iindex[_internal::MAXQDIT];
 
       for (arma::uword i = 1; i < n; ++i) {
-        Iindex[i] = I % dim.at(n - i);
+        Iindex[n - i] = I % dim.at(n - i);
         I /= dim.at(n - i);
       }
       Iindex[0] = I;
@@ -266,8 +263,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR sysperm(const T1& rho1,
-                  const arma::uvec& perm, arma::uword dim = 2) {
+inline TR sysperm(const T1& rho1, const arma::uvec& perm, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG

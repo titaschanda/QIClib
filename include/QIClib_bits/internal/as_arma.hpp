@@ -101,9 +101,17 @@ as_SpMat(const arma::SpBase<trait::eT<T1>, T1>& A) {
 
 template <typename out_type> class as_type {
  public:
-  inline static const out_type& from(const out_type& A) { return A; }
+  static inline const out_type& from(const out_type& A) { return A; }
 
-  template <typename T1> inline static out_type from(const T1& A) {
+  template <typename T1, typename = typename std::enable_if<
+                           std::is_base_of<out_type, T1>::value>::type>
+  static inline const out_type& from(const T1& A) {
+    return static_cast<const out_type&>(A);
+  }
+
+  template <typename T1, typename = typename std::enable_if<
+                           !std::is_base_of<out_type, T1>::value>::type>
+  static inline out_type from(const T1& A) {
     return arma::conv_to<out_type>::from(A);
   }
 };

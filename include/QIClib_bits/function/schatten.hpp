@@ -23,9 +23,7 @@ namespace qic {
 
 //******************************************************************************
 
-template <typename T1,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
+template <typename T1, typename TR = trait::pT<T1> >
 
 inline TR schatten(const T1& rho1, const trait::pT<T1>& p) {
   const auto& rho = _internal::as_Mat(rho1);
@@ -75,39 +73,6 @@ inline TR schatten(const T1& rho1, const trait::pT<T1>& p) {
     1.0 / p);
   }
   //return std::pow(std::real(arma::trace(powm_sym(absm(rho), p))), 1.0 / p);
-}
-
-//******************************************************************************
-
-template <
-  typename T1, typename T2,
-  typename TR = typename std::enable_if<
-    is_floating_point_var<trait::pT<T1> >::value && std::is_integral<T2>::value,
-    trait::pT<T1> >::type>
-
-inline TR schatten(const T1& rho1, const T2& p) {
-  const auto& rho = _internal::as_Mat(rho1);
-
-#ifndef QICLIB_NO_DEBUG
-  if (rho.n_elem == 0)
-    throw Exception("qic::schatten", Exception::type::ZERO_SIZE);
-
-  if (rho.n_rows != rho.n_cols)
-    throw Exception("qic::schatten", Exception::type::MATRIX_NOT_SQUARE);
-    
-  if (p < 0)
-    throw Exception("qic::schatten", Exception::type::OUT_OF_RANGE);
-#endif
-
-  if (p == 0.0)
-    return arma::rank(rho);
-
-  if (p == arma::Datum<T2>::inf)
-    return arma::svd(rho).at(0);
-
-  else
-    return std::pow(std::real(arma::trace(powm_sym(absm(rho), p))),
-                    1.0 / static_cast<trait::pT<T1> >(p));
 }
 
 //******************************************************************************
