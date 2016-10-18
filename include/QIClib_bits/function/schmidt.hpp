@@ -309,7 +309,7 @@ inline TR schmidtAB(const T1& rho1,
     if (!check)
       throw std::runtime_error("qic::schmidtAB(): Decomposition failed!");
     ret.at(0) = std::move(U);
-    ret.at(1) = std::move(arma::conj(V));
+    ret.at(1) = arma::conj(V);
     return ret;
   }
 }
@@ -467,7 +467,7 @@ inline TR schmidtAB_full(const T1& rho1,
     if (!check)
       throw std::runtime_error("qic::schmidtAB_full(): Decomposition failed!");
     ret.at(0) = std::move(U);
-    ret.at(1) = std::move(arma::conj(V));
+    ret.at(1) = arma::conj(V);
     return ret;
   }
 }

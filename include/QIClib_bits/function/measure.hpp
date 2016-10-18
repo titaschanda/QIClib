@@ -104,7 +104,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
 
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
-  return std::make_tuple(result, prob, outstates);
+  return std::make_tuple(result, std::move(prob), std::move(outstates));
 }
 
 //******************************************************************************
@@ -206,7 +206,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
 
-  return std::make_tuple(result, prob, outstates);
+  return std::make_tuple(result, std::move(prob), std::move(outstates));
 }
 
 //******************************************************************************
@@ -277,7 +277,7 @@ inline TR measure(const T1& rho1, const T2& U1) {
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
 
-  return std::make_tuple(result, prob, outstates);
+  return std::make_tuple(result, std::move(prob), std::move(outstates));
 }
 
 //******************************************************************************
@@ -358,7 +358,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
 
-  return std::make_tuple(result, prob, outstates);
+  return std::make_tuple(result, std::move(prob), std::move(outstates));
 }
 
 //******************************************************************************
@@ -430,7 +430,7 @@ inline TR measure(const T1& rho1,
                   const std::initializer_list<arma::Mat<T2> >& Ks,
                   arma::uvec subsys, arma::uword dim = 2) {
   return measure(rho1, static_cast<std::vector<arma::Mat<T2> > >(Ks),
-                 std::move(subsys), std::move(dim));
+                 std::move(subsys), dim);
 }
 
 //******************************************************************************
@@ -512,7 +512,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
 
-  return std::make_tuple(result, prob, outstates);
+  return std::make_tuple(result, std::move(prob), std::move(outstates));
 }
 
 //******************************************************************************
@@ -621,7 +621,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
 
-  return std::make_tuple(result, prob, outstates);
+  return std::make_tuple(result, std::move(prob), std::move(outstates));
 }
 
 //******************************************************************************
@@ -699,7 +699,7 @@ inline TR measure_comp(const T1& rho1) {
   std::discrete_distribution<arma::uword> dd(prob.begin(), prob.end());
   arma::uword result = dd(rdevs.rng);
 
-  return std::make_tuple(result, prob);
+  return std::make_tuple(result, std::move(prob));
 }
 
 //******************************************************************************
