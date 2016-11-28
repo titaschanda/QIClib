@@ -44,7 +44,7 @@ inline TR HS_dist(const T1& rho11, const T2& rho12) {
 #endif
 
   auto rho3 = (rho1 - rho2).eval();
-  return std::real(arma::trace(rho3 * rho3.t()));
+  return std::real(arma::trace(rho3.t() * rho3));
 }
 
 //******************************************************************************

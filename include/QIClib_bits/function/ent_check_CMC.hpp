@@ -85,7 +85,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim) {
     }
   }
 
-  C *= C.t();
+  C = C.t() * C;
   auto Ctr = arma::eig_sym(C);
   auto rhoA = TrX(rho, {2}, {dim, dim});
   auto rhoB = TrX(rho, {1}, {dim, dim});
@@ -191,7 +191,7 @@ inline bool ent_check_CMC(const T1& rho1, arma::uword dim1, arma::uword dim2) {
     }
   }
 
-  C *= C.t();
+  C = C.t() * C;
   auto Ctr = arma::eig_sym(C);
   auto rhoA = TrX(rho, {2}, {dim1, dim2});
   auto rhoB = TrX(rho, {1}, {dim1, dim2});
