@@ -1,3 +1,6 @@
+[![QIClib](qic.png)](https://titaschanda.github.io/QIClib)
+
+
 # [Quantum Information and Computation library (QIClib)](https://titaschanda.github.io/QIClib)
 Version 1.0 - March 18, 2017 
 =================================
