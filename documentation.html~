@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Documentation - QIClib</title>
     <link rel="icon" href="qic.png" type="image/png">
-    <meta name="author" content="Titas Chanda" />
+    <meta name="author" content="Titas Chanda" >
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -84,7 +84,7 @@
 
 	  <a name="classes"></a>
 	  <b>Classes and constants</b><br>
-	  <ul>
+	  
 	    <table>
 	      <tbody>
 		<!--		<tr><td><a href="#eps"> _precision::eps     </td><td>  </td><td> Precision for floating point arithmetic</td></tr>
@@ -109,14 +109,14 @@
 		
 	      </tbody>
 	    </table>
-	  </ul>
+	  
 	  <br>
 
 
 
 	  <a name="functions"></a>
 	  <b>Functions</b><br>
-	  <ul>
+	  
 	    <table>
 	      <tbody>
 		<tr><td><a href="#is_Hermitian"> is_Hermitian </a> </td><td>  </td><td> Hermiticity check</td></tr>
@@ -309,9 +309,9 @@
 
 		<tr><td><a href="#tr_dist"> tr_dist </a> </td><td>  </td><td>Trace distance between two density matrices</td></tr>
 		
-		<tr><td><a href="#HS_dist"> bures_dist </a> </td><td>  </td><td>Bures distance between two density matrices</td></tr>
+		<tr><td><a href="#bures_dist"> Bures_dist </a> </td><td>  </td><td>Bures distance between two density matrices</td></tr>
 
-		<tr><td><a href="#HS_dist"> fidelity </a> </td><td>  </td><td>Fidelity between two density matrices</td></tr>
+		<tr><td><a href="#fidelity"> fidelity </a> </td><td>  </td><td>Fidelity between two density matrices</td></tr>
 		
 
 		<tr><td>  </td><td>  </td><td> </td></tr>
@@ -336,7 +336,7 @@
 
 	      </tbody>
 	    </table>
-	  </ul>
+	  
 	  <a href="#top">Go to top</a>
 	  <br><br>
 
@@ -349,7 +349,7 @@
 	    <li> <b>Note:</b> If you want to use old API's for discord like function, define <code>QICLIB_USE_OLD_DISCORD</code> macro 
 	    before including <code>QIClib</code> header. See  <a href="#macro">preprocessor macros in QIClib</a> for details. Old API's for 
 	    discord like functions are not maintained anymore.</li> <br>
-	    
+		</ul>
 	    <table>
 	      <tbody>
 
@@ -1375,9 +1375,8 @@
 	  <b>absm(A)</b><br>
 	  <ul>
 	    <li>Matrix absolute value of a square matrix.</li>
-	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>). Always returns real
-	    matrix (<code>mat</code>).</li>
-	    <li>Returns <code>sqrtm_sym(rho.t()*rho)</code>.</li>
+	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
+	    <li>Returns <code>sqrtm_sym(A.t()*A)</code>. Return type is same as that of <code>A</code>.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	<hr><br>
@@ -1396,14 +1395,29 @@
 
 
 	  <a name="purify"></a>
-	  <b>purify(rho)<br>purify(rho, tol)</b><br>
+	  <b>purify(A)<br>purify(A, tol)</b><br>
 	  <ul>
 	    <li> Minimal purification of a density matrix. Returns <code>vec</code> or <code>cx_vec</code> depending on the
-	    type of <code>rho</code>.</li>
+	    type of <code>A</code>.</li>
 	    
 	    <li> <code>tol</code> is optional. By default, <code>tol</code> is equal to the floating point precision used in QIClib.
 	    See  <a href="#macro">preprocessor macros in QIClib</a> for details.
-	    Eigenvalues (of <code>rho</code>) less than <code>tol</code> are treated zero.</li>
+	    Eigenvalues (of <code>A</code>) less than <code>tol</code> are treated zero.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
+
+
+	<a name="gram_schmidt"></a>
+	  <b>gram_schmidt(A)<br>gram_schmidt(A, normalize = true)</b><br>
+	  <ul>
+	    <li> Modified Gram-Schmidt orthogonalization.</li>
+		 <li> <code>A</code> can be either a matrix (<code>mat</code> or <code>cx_mat</code>) or 
+		  <code>std::vector</code>/<code><a href = "http://arma.sourceforge.net/docs.html#field">field</a></code> of vectors 
+		  (<code>vec</code> or <code>cx_vec</code>).    
+	    
+	    <li> <code>normalize</code> is optional. By default, it is <code>true</code>. If it is <code>false</code> then 
+	    orthogonal vectors will not be normalized.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
 	  <hr><br>
@@ -2076,7 +2090,7 @@
 	  <a name="concurrence"></a>
 	  <b>concurrence(A) </b><br>
 	  <ul>
-	    <li> Concurrence of a two-qubit quantum state.</li><br>
+	    <li> Concurrence of a two-qubit quantum state.</li>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) of dimension 4.</li>
 	  </ul>
 	  <a href="#top">Go to top</a>
@@ -2086,7 +2100,7 @@
 	  <a name="EoF"></a>
 	  <b>EoF(A) </b><br>
 	  <ul>
-	    <li> Entanglement of formation of a two-qubit quantum state.</li><br>
+	    <li> Entanglement of formation of a two-qubit quantum state.</li>
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>) or column vector  
 	      (<code>vec</code> or <code>cx_vec</code>) of dimension 4.</li>
 	  </ul>
@@ -2097,7 +2111,8 @@
 	  <a name="ent_check_CMC"></a>
 	  <b>ent_check_CMC(A, dim) <br > ent_check_CMC(A, dim1, dim2) </b><br><br>
 	  <ul>
-	    <li> To check if a bipartite state is entangled or not (based on covariant matrix formulation, 
+	    <li> To check if a bipartite state is entangled or not (based on covariant matrix formulation (<i>Phys. Rev. A <b>78</b>, 052319 (2008),
+	    Proposition IV.2</i>), 
 	    can be used to detect bound entangled states)</li>
 	    
 	    <li> <code>A</code> has to be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li>
@@ -2198,6 +2213,22 @@
 	  <hr><br>
 
 
+	<a name="l1_coh"></a>
+	  <b>l1_coh(A)<br>l1_coh(A, U)</b><br>
+	  <ul>
+	    <li> l1-norm coherence of a quantum state.</li>
+		 <li> <code>A</code> can be either a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector 
+		  (<code>vec</code> or <code>cx_vec</code>).    
+	    
+	    <li> <code>U</code> is a Unitary matrix (<code>mat</code> or <code>cx_mat</code>) to rotate the state for obtaining 
+	    	coherence with respect to desired basis.</li>
+	  </ul>
+	  <a href="#top">Go to top</a>
+	  <hr><br>
+
+
+
+
 	  <a name="HS_dist"></a>
 	  <b>HS_dist(A, B) </b><br>
 	  <ul>
@@ -2221,7 +2252,7 @@
 
 
 	  <a name="bures_dist"></a>
-	  <b>bures_dist(A, B) </b><br>
+	  <b>Bures_dist(A, B) </b><br>
 	  <ul>
 	    <li> Bures distance between two density matrices.</li>
 	    <li> <code>A</code> and <code>B</code> have to be square matrices 
@@ -2281,7 +2312,7 @@
 		<li> In the last case, the set of Kraus operators <code>Ks</code> acts on the whole quantum state <code>A</code>. 
 		      The dimension of the Kraus operators <code>Ks</code> must match the dimension of the quantum state <code>A</code>.</li>
 	      
-	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>/<code>Ks</code>. 
+	    <li> <b>Note:</b> Return type is deduced from the element types of <code>A</code> and <code>U</code>/<code>Ks</code>. 
 	    For simplicity use <code>auto</code> to deduce the return type.</li>
 	      
 	    <li> Example:
@@ -2336,7 +2367,7 @@
 	    <li> Indices in <code>subsys</code> and <code>ctrl</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
 	      second party has the index <i>2</i> and so on.</li>
 	        
-	    <li> <b>Note:</b> Return type is deduced from the element types of <code>rho</code> and <code>U</code>. For simplicity use
+	    <li> <b>Note:</b> Return type is deduced from the element types of <code>A</code> and <code>U</code>. For simplicity use
 	      <code>auto</code> to deduce the return type.</li>
 	      
 	    <li> Example:
@@ -2404,21 +2435,21 @@
 
 
 	  <a name="measure"></a>
-	  <b>std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(cx_mat rho, Ks) <br> 
-	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(mat rho, Ks) <br>
-	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(cx_mat rho, Ks, subsys, dim)<br> 
-	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; A = measure(mat rho, Ks, subsys, dim)
+	  <b>std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; result = measure(cx_mat A, Ks) <br> 
+	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; result = measure(mat A, Ks) <br>
+	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; result = measure(cx_mat A, Ks, subsys, dim)<br> 
+	    std::tuple&lt;uword, vec, field&lt;MATRIX_TYPE&gt; &gt; result = measure(mat A, Ks, subsys, dim)
 	  </b>
 	  <br>
 	  <ul>
-	    <li>To measure a quantum state <code>rho</code> using a set of Kraus or projection operators <code>Ks</code>. 
+	    <li>To measure a quantum state <code>A</code> using a set of Kraus or projection operators <code>Ks</code>. 
 	    Returns <code>std::tuple</code> of: 1. result of the measurement 
 	    (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), 
 	      2. vector of outcome probabilities (<code>vec</code>), 
 	      and 3. <code><a href = "http://arma.sourceforge.net/docs.html#field">
 		  field</a></code> of post-measurement normalized states (<code>field&lt;cx_mat&gt;</code> or <code>field&lt;mat&gt;</code>).</li>
 
-	    <li> <code>rho</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
 	      <code>cx_vec</code>).</li>
 
 	    <li> <code>Ks</code> can be a <code>std::vector</code>  or a 
@@ -2427,10 +2458,10 @@
 	      <code>vec</code>). It can also be a <code>cx_mat</code> or <code>mat</code>, where each column will be treated as projection 
 	      operators.</li>
 
-	    <li> First two functions measure the whole quantum state <code>rho</code>, and the dimension of the operators in <code>Ks</code> 
-	      must match the dimension of <code>rho</code>.</li>
+	    <li> First two functions measure the whole quantum state <code>A</code>, and the dimension of the operators in <code>Ks</code> 
+	      must match the dimension of <code>A</code>.</li>
 
-	    <li> Last two functions partially measure the subsystems of the state <code>rho</code>. The indices of measured subsystems
+	    <li> Last two functions partially measure the subsystems of the state <code>A</code>. The indices of measured subsystems
 	     are specified in <code>subsys</code> (<code>uvec</code>).    
 	      The dimension of the operators in <code>Ks</code> must match the dimension of subsystems specified 
 	      in <code>subsys</code>.</li>
@@ -2448,24 +2479,24 @@
 	    <li> Indices in <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
 	      second party has the index <i>2</i> and so on.</li>
 
-	    <li> <b>Note:</b> <code>MATRIX_TYPE</code> is deduced from the element types of <code>rho</code> and <code>Ks</code>. 
+	    <li> <b>Note:</b> <code>MATRIX_TYPE</code> is deduced from the element types of <code>A</code> and <code>Ks</code>. 
 	    For simplicity use
 	      <code>auto</code> to deduce return type.</li>
 	    <li> Example:
 	      <pre>
-		cx_mat rho1 = randRho(2); // 2x2 random density matrix
+		cx_mat A1 = randRho(2); // 2x2 random density matrix
 
 		std::vector<cx_mat> Ks = {spm.basis2(0,1), spm.basis2(1,1)};
 		  // std::vector of projection operators in \sigma_x direction
 
-		auto A = measure(rho1, Ks); // measurement
+		auto result1 = measure(A1, Ks); // measurement
 		std::get<0>(A); // measurement result
 		std::get<1>(A); // outcome probabilities
 		std::get<2>(A); // post measurement normalised states
 			
-		cx_mat rho2 = randRho(8); //8x8 random density matrix
+		cx_mat A2 = randRho(8); //8x8 random density matrix
 
-		auto B = measure(rho2, Ks, {2}, {2,2,2}); measure the 2nd party
+		auto result2 = measure(A2, Ks, {2}, {2,2,2}); measure the 2nd party
 	      </pre>
 	    </li>
 	  </ul>
@@ -2476,20 +2507,20 @@
 
 
 	  <a name="measure_comp"></a>
-	  <b>std::tuple&lt;uword, vec&gt; A = measure_comp(rho) <br> 
-	    std::tuple&lt;uword, vec&gt; A = measure_comp(rho, subsys, dim) 
+	  <b>std::tuple&lt;uword, vec&gt; result = measure_comp(A) <br> 
+	    std::tuple&lt;uword, vec&gt; result = measure_comp(A, subsys, dim) 
 	  </b>
 	  <br>
 	  <ul>
-	    <li>To measure a quantum state <code>rho</code> in the computational basis. Returns <code>std::tuple</code> 
+	    <li>To measure a quantum state <code>A</code> in the computational basis. Returns <code>std::tuple</code> 
 	      of: 1. result of the measurement (<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>) 
 	      and 2. vector of outcome probabilities (<code>vec</code>).</li>
 
-	    <li> <code>rho</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
+	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>) or a column vector (<code>vec</code> or 
 	      <code>cx_vec</code>).</li>
 
 	    <li> The first function measures the whole quantum state, where as the last function partially measures the subsystems of the state 
-	      <code>rho</code>, where the indices of measured subsystems are specified in <code>subsys</code>.</li>
+	      <code>A</code>, where the indices of measured subsystems are specified in <code>subsys</code>.</li>
 
 	    <li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
 	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
@@ -2503,15 +2534,15 @@
 
 	    <li> Example:
 	      <pre>
-		cx_mat rho1 = randRho(2); // 2x2 random density matrix
+		cx_mat A1 = randRho(2); // 2x2 random density matrix
 
-		auto A = measure_comp(rho1); // measurement
+		auto result1 = measure_comp(A1); // measurement
 		std::get<0>(A); // measurement result
 		std::get<1>(A); //  outcome probabilities
 		    
-		cx_mat rho2 = randRho(8); //8x8 random density matrix
+		cx_mat A2 = randRho(8); //8x8 random density matrix
 
-		auto B = measure_comp(rho2, {2}, {2,2,2}); measure the 2nd party
+		auto result2 = measure_comp(A2, {2}, {2,2,2}); measure the 2nd party
 	      </pre>
 	    </li>
 	  </ul>
@@ -2523,433 +2554,164 @@
 
 	  <hr><hr>
 
-	  <h3>Discord like functions</h3>
+	  <h3>Classes for Quantum Discord like features</h3>
 	  <hr> <br>
 
+		<ul>
+	    <li> <b>Note:</b> These features depend on <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>. </li> 
+	    <li> <b>Note:</b> If you want to use old API's for discord like function, define <code>QICLIB_USE_OLD_DISCORD</code> macro 
+	    before including <code>QIClib</code> header. See  <a href="#macro">preprocessor macros in QIClib</a> for details. Old API's for 
+	    discord like functions are not maintained anymore.</li> <br>
+		</ul>
+	
+	<hr>
 
-
-
-	  <a name="discord"></a>
-	  <b>discord(A, subsys, dim)</b><br><br>
+	  <a name="discord_space"></a>
+	  <a name="deficit_space"></a>
+	  <b>discord_space&lt;MATRIX_TYPE&gt; <br>
+	  deficit_space&lt;MATRIX_TYPE&gt;</b>
+	  <br>
 	  <ul>
-	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type 
-	      containing the index of measured subsystem.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qubit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>discord</code> returns a <code>vec</code>, where the first term is the value of quantum discord and 2nd and 
-	      3rd are optimized values of &theta; and &phi; respectively;</li><br>
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has 
-	      the index <i>2</i> and so on.</li><br>
-	    <li> <b>Helper functions:</b><br>
-	      <code>discord</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
-	      <ul>
-		<li> <code>void set_discord_global(bool a = true)</code> : Set whether global optimization will be performed 
-		  (<code>true</code>) or not (<code>false</code>).</li><br>
-		<li> <code>void set_discord_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
-		<li> <code>void set_discord_global_xtol(double a = 4e-2)</code> : Set global optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_discord_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
-
-		<li> <code>void set_discord_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
-		<li> <code>void set_discord_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_discord_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
-
-		<li> <code>void set_discord_theta_phi_range(double a = 1,double b = 2)</code>: Set &theta;-&phi; range as multiples of &pi;.</li><br>
-		<li> <code>void set_discord_theta_phi_initial(double a = 0.1,double b = 0.1)</code>: Set inital &theta;-&phi; value as multiples of &pi;.</li><br>
-		<li> <code>void set_discord_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
-	      </ul>
-	    </li><br>
-
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(8); // 8x8 density matrix
-
-		// change default global optimization algorithm
-		set_discord_global_opt(nlopt::GN_DIRECT_L_RAND);
-
-		// change default local optimization algorithm
-		set_discord_local_opt(nlopt::LN_SBPLX);
-
-		double disc = discord(A, 2, {2, 2, 2})(0); 
-		// measurement is done on 2nd party
-		
-		double theta = discord(A, 2, {2, 2, 2})(1); //optimized theta value
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-
-	  <a name="discord3"></a>
-	  <b>discord3(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the 
-	      index of measured subsystem.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qutrit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party 
-	      has the index <i>2</i> and so on.</li><br>  
-	    <li> <b>Helper functions:</b><br>
-	      <code>discord3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
-	      <ul>
-		<li> <code>void set_discord3_global(bool a = true)</code> : Set whether global optimization will be performed 
-		  (<code>true</code>) or not (<code>false</code>).</li><br>
-		<li> <code>void set_discord3_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
-		<li> <code>void set_discord3_global_xtol(double a = 0.25)</code> : Set global optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_discord3_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
-
-		<li> <code>void set_discord3_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
-		<li> <code>void set_discord3_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_discord3_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
-
-		<li> <code>void set_discord3_angle_range(vec a = 2 * ones&lt;vec&gt;(5) )</code>: Set range of angles as multiples of &pi;.</li><br>
-		<li> <code>void set_discord3_angle_initial(vec a = 0.1 * ones&lt;vec&gt;(5) )</code>: Set inital values of angles as multiples of &pi;.</li><br>
-		<li> <code>void set_discord3_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
-	      </ul>
-	    </li><br>
-
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(18); // 18x18 density matrix
-		
-		// change default global optimization algorithm
-		set_discord3_global_opt(nlopt::GN_DIRECT_L_RAND);
-
-		// change default local optimization algorithm
-		set_discord3_local_opt(nlopt::LN_SBPLX);
-
-		double disc = discord3(A, 2, {2, 3, 3}); // measurement is done on 2nd party
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-
-
-
-	  <a name=discord_reg></a>
-	  <b>discord_reg(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer 
-	      type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qubit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>discord_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
-	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
-	      is the actual constrained regular quantum discord.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
-	      index <i>2</i> and so on.</li><br>  
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(8); // 8x8 density matrix
-		
-		vec disc = discord_reg(A, 2, {2, 2, 2}); 
-		// measurement is done on 2nd party
-
-		double Cdisk = min(disk); // Constrained regular quantum discord
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-
-
-
-	  <a name="discord3_reg"></a>
-	  <b>discord3_reg(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Constrained regular quantum discord of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
-	      integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qutrit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>discord3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
-	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
-	      is the actual constrained regular quantum discord.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has 
-	      the index <i>2</i> and so on.</li><br>  
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(18); // 18x18 density matrix
-
-		vec disc = discord3_reg(A, 2, {2, 3, 3}); 
-		// measurement is done on 2nd party
-
-		double Cdisk = min(disk); // Constrained regular quantum discord
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-	  <a name=deficit></a>
-	  <b>deficit(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned integer type containing the 
-	      index of measured subsystem.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qubit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>deficit</code> returns a <code>vec</code>, where the first term is the value of quantum work deficit and 2nd 
-	      and 3rd are optimized values of &theta; and &phi; respectively;</li><br>
+	    <li><code>discord_space</code> provides computational space for calculating quantum discord 
+	    (actual as well as constrained-regular, as discussed in <i>Phys. Rev. A 92, 062301 (2015), Sec. III.A, Case 4</i>) 
+	    for quantum states when measurement is done over a qubit or qutrit system, <code>deficit_space</code> does the  same for one-way 
+	    quantum work deficit. 
+	    Both have same syntaxes, so for the demonstration purpose, we will talk about <code>discord_space</code> only.
 	    
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has 
-	      the index <i>2</i> and so on.</li><br>  
-	    <li> <b>Helper functions:</b><br>
-	      <code>deficit</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
-	      <ul>
-		<li> <code>void set_deficit_global(bool a = true)</code> : Set whether global optimization will be 
-		  performed (<code>true</code>) or not (<code>false</code>).</li><br>
-		<li> <code>void set_deficit_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
-		<li> <code>void set_deficit_global_xtol(double a = 4e-2)</code> : Set global optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_deficit_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
+	    <li>Works for real or complex density matrices (<code>mat</code> or <code>cx_mat</code>). <code>MATRIX_TYPE</code> denotes the 
+	    the data type of the density matrix i.e., <code>mat</code> or <code>cx_mat</code>.</li>
+	    
+	    
+	    <li> <b>Constructors:</b> <br> 
+	    <code>discord_space&lt;MATRIX_TYPE&gt;(A, subsys, dim)</code> <br>
+	    <code>discord_space&lt;MATRIX_TYPE&gt;(A, subsys)</code> <br>
+	    <ul>
+	    	<li> <code>A</code> is a square matrix of type <code>MATRIX_TYPE</code>.</li>
 
-		<li> <code>void set_deficit_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
-		<li> <code>void set_deficit_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_deficit_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
+	    	<li> <code>subsys</code> is a  unsigned integer type 
+	    	(<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), which denotes the index of measured subsystem.
+	    	Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li>
 
-		<li> <code>void set_deficit_theta_phi_range(double a = 1,double b = 2)</code>: Set &theta;-&phi; range as multiples of &pi;.</li><br>
-		<li> <code>void set_deficit_theta_phi_initial(double a = 0.1,double b = 0.1)</code>: Set inital &theta;-&phi; value as multiples of &pi;.</li><br>
-		<li> <code>void set_deficit_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
-	      </ul>
-	    </li><br>
+	    	<li> <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.<code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
+		</ul>	    	
+	    </li>
+	    
+	    <li><b>Member functions:</b> <br>
+	    <ul>
+
+	    	<li> <code>.result()</code>: Computes quantum discord, and returns the result. This function will keep the value cached in the memory. 
+	    	Further use of this function will return the cached value, rather than computing discord all over again.</li>
+
+	    	<li> <code>.result_reg()</code>: Computes constrained-regular quantum discord, and returns the result. 
+	    	This function will keep the value cached in the memory. 
+	    	Further use of this function will return the cached value, rather than computing constrained-regular quantum 
+	    	discord all over again.</li>
+
+	    	<li> <code>.compute()</code>: Computes quantum discord whenever called. This function will rewrite the cached result to
+	    	the new one. One can use <code>.result()</code> to get the new value (see the following example).</li>
+
+			<li> <code>.compute_reg()</code>: Computes constrained-regular quantum discord whenever called. This function will rewrite the cached result to
+	    	the new one. One can use <code>.result_reg()</code> to get the new value (see the following example).</li>
+
+	    	<li> <code>.reset()</code>: This will reset the state of <code>discord_space</code> to the default settings. All cached values 
+	    	will be forgotten.</li>
+
+	    	<li> <code>.reset(subsys)</code>: This will reset the state of <code>discord_space</code> to the default settings. All cached values 
+	    	will be forgotten. <code>subsys</code> is a  unsigned integer type 
+	    	(<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), which denotes the index of <b>new</b> 
+	    	measured subsystem.
+	    	Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on.</li>
+
+	      <li> <code>.reset(A, subsys, dim)</code>: This will reset the state of <code>discord_space</code> to the default settings. All cached values 
+	    	will be forgotten. <code>A</code> is the <b>new</b> density matrix (square matrix) of type <code>MATRIX_TYPE</code>.
+	    	<code>subsys</code> is a  unsigned integer type 
+	    	(<code><a href = "http://arma.sourceforge.net/docs.html#uword">uword</a></code>), which denotes the index of <b>new</b> 
+	    	measured subsystem.
+	    	Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
+	      second party has the index <i>2</i> and so on. <code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.<code>dim</code> is optional. It can be either <i>unsigned integer</i> type 
+	    (<code><a href="http://arma.sourceforge.net/docs.html#uword">uword</a></code>) or <code>uvec</code> containing 
+	    dimensions of every subsystem. When it is unsigned integer type, all subsystems are supposed to have same dimensions 
+	    (equal to <code>dim</code>). By default, it is <i>2</i>. 
+	      If different subsystems have different dimensions, use <code>dim</code> as a <code>uvec</code> 
+	      containing dimensions of every subsystem.</li>
+	    </ul></li>
+	    
+	    <li> <b>Helper member functions:</b> These functions are there to change the settings of the optimization processes done 
+	    by <a href = "http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a>, to fine tune the result. In general, users can overlook
+	    these functions, and default settings will be used.
+	    <br>
+	    
+	    <ul>
+			<li> <code>.use_global_opt(bool a = true)</code>: Set whether global optimization will be performed (<code>true</code>) 
+			or not (<code>false</code>).</li>
+			
+			<li> <code>.global_algorithm(nlopt::algorithm a = nlopt::GN_DIRECT_L_RAND)</code>: Set global optimization algorithm.</li>
+			
+			<li> <code>.global_xtol(double a)</code>: Set global optimization <i>xtol</i>. By default, it is <code>4e-2</code> for
+			qubit systems, and <code>0.25</code> for qutrit systems.</li>
+			
+			<li> <code>.global_ftol(double a = 0)</code>: Set global optimization <i>ftol</i>.</li>
+
+			<li> <code>.local_algorithm(nlopt::algorithm a = nlopt::LN_COBYLA)</code>: Set local optimization algorithm.</li>
+			
+			<li> <code>.local_xtol(double a)</code>: Set local optimization <i>xtol</i>.</li>
+			
+			<li> <code>.local_ftol(double a = 0)</code>: Set local optimization <i>ftol</i>.</li>
+
+			<li> <code>.angle_range(const vec& a)</code>: Set the ranges of angles (parameters of unitary matrices) as multiples of &pi;.
+			For qubit systems, default is <code>{1, 2}</code>, and for qutrit systems, default is <code>{2, 2, 2, 2, 2}</code>.</li> 
+			
+			<li> <code>.initial_angle(const vec& a)</code>: Set the initial values of angles as multiples of &pi;.
+			For qubit systems, default is <code>{0.1, 0.1}</code>, and for qutrit systems, default is 
+			<code>{0.1, 0.1, 0.1, 0.1, 0.1}</code>.</li> 
+		 </ul>
+	    </li>
 
 	    <li> Example:
 	      <pre>
-		cx_mat A = randRho(8); // 8x8 density matrix
+		cx_mat A = randRho(8); // 8x8 density matrix (3-qubit)
+
+		// create discord_space, we measure the 2nd party to compute discord
+		discord_space<cx_mat> DSpace(A, {2});		
 		
-		// change default global optimization algorithm
-		set_deficit_global_opt(nlopt::GN_DIRECT_L_RAND);
+		// calculate discord
+		double DResult = DSpace.result();
 
-		// change default local optimization algorithm
-		set_deficit_local_opt(nlopt::LN_SBPLX);
+		// change local optimization algorithm,
+		// then compute the discord,
+		// and get the result in one line --->
+		double DResult = DSpace.local_algorithm(nlopt::LN_SBPLX).compute().result().
+	
+		
+		cx_mat B = randRho(12); // new 2x3x2 density matrix
+		
+		// using same discord_space for new density matrix,
+		// measurement on 2nd party (qutrit)
+		DSpace.reset(B, {2}, {2, 3, 2});
+		
+		double new_DResult = Dspace.result(); 
 
-		double def = deficit(A, 2, {2, 2, 2})(0); 
-		// measurement is done on 2nd party
-
-		double theta = deficit(A, 2, {2, 2, 2})(1); 
-		// optimized theta value
 	      </pre>
 	    </li>
 	  </ul>
 	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-
-	  <a name=deficit3></a>
-	  <b>deficit3(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
-	      integer type containing the index of measured subsystem.</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qutrit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, 
-	      second party has the index <i>2</i> and so on.</li><br>  
-	    <li> <b>Helper functions:</b><br>
-	      <code>deficit3</code> has various helper functions, to fine tune the result. All of these functions have local linkage.<br><br>
-	      <ul>
-		<li> <code>void set_deficit3_global(bool a = true)</code> : Set whether global optimization will be 
-		  performed (<code>true</code>) or not (<code>false</code>).</li><br>
-		<li> <code>void set_deficit3_global_opt(nlopt::algorithm a = nlopt::GN_DIRECT_L)</code> : Set global optimization algorithm.</li><br>
-		<li> <code>void set_deficit3_global_xtol(double a = 0.25)</code> : Set global optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_deficit3_global_ftol(double a = 0)</code> : Set global optimization <i>ftol</i>.</li><br>
-
-		<li> <code>void set_deficit3_local_opt(nlopt::algorithm a = nlopt::LN_COBYLA)</code> : Set local optimization algorithm.</li><br>
-		<li> <code>void set_deficit3_local_xtol(double a = _precision::eps)</code> : Set local optimization <i>xtol</i>.</li><br>
-		<li> <code>void set_deficit3_local_ftol(double a = 0)</code> : Set local optimization <i>ftol</i>.</li><br>
-
-		<li> <code>void set_deficit3_angle_range(vec a = 2 * ones&lt;vec&gt;(5) )</code>: Set range of angles as multiples of &pi;.</li><br>
-		<li> <code>void set_deficit3_angle_initial(vec a = 0.1 * ones&lt;vec&gt;(5) )</code>: Set inital values of angles as multiples of &pi;.</li><br>
-		<li> <code>void set_deficit3_prob_tol(double a = _presicion::eps)</code>: Set floating point presicion for probability calculations.</li>
-	      </ul>
-	    </li><br>
-
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(18); // 18x18 density matrix
-		
-		// change default global optimization algorithm
-		set_deficit3_global_opt(nlopt::GN_DIRECT_L_RAND);
-
-		// change default local optimization algorithm
-		set_deficit3_local_opt(nlopt::LN_SBPLX);
-
-		double def = deficit3(A, 2, {2, 3, 3}); // measurement is done on 2nd party
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-
-
-
-	  <a name=deficit_reg></a>
-	  <b>deficit_reg(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
-	      integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qubit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>deficit_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
-	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
-	      is the actual constrained regular quantum work deficit.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party 
-	      has the index <i>2</i> and so on.</li><br>  
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(8); // 8x8 density matrix
-		
-		vec disc = deficit_reg(A, 2, {2, 2, 2}); 
-		// measurement is done on 2nd party
-
-		double Cdisk = min(disk); // Constrained regular quantum work deficit
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-	  <hr> <br>
-
-
-
-
-
-
-
-	  <a name=deficit3_reg></a>
-	  <b>deficit3_reg(A, subsys, dim)</b><br><br>
-	  <ul>
-	    <li>Constrained regular quantum work deficit of a quantum state <code>A</code>, where <code>subsys</code> is a unsigned 
-	      integer type containing the index of measured subsystem. Here the measurement is only done in the eigenvectors of 3 spin matrices</li><br>
-	    <li> <code>A</code> has be a square matrix (<code>mat</code> or <code>cx_mat</code>).</li><br>
-	    <li> Measured subsystem has to be a qutrit system.</li><br>
-	    <li> <code>dim</code> is a  <code>uvec</code> containing dimensions of every subystem.</li><br>
-	    <li> <code>deficit3_reg</code> returns a <code>vec</code>, where the 1st element is due to measurement on x direction, 
-	      2nd for measurement on y direction and 3rd for measurement on z direction. <code>min</code> of the returned <code>vec</code> 
-	      is the actual constrained regular quantum work deficit.</li><br> 
-	    <li> Indices for <code>subsys</code> start from <i>1</i>, i.e., first party has the index <i>1</i>, second party has the 
-	      index <i>2</i> and so on.</li><br>  
-	    <li> Example:
-	      <pre>
-		cx_mat A = randRho(18); // 18x18 density matrix
-		
-		vec disc = deficit3_reg(A, 2, {2, 3, 3}); 
-		// measurement is done on 2nd party
-
-		double Cdisk = min(disk); // Constrained regular quantum work deficit
-	      </pre>
-	    </li>
-	  </ul>
-	  <a href="#top">Go to top</a>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2973,14 +2735,13 @@
 	      </ul>
 	    </li>
 
-	    <br>
+	    
 
 	    
-	    <li><b>How do I use QIClib?</b><br>
+	    <li><b>How do I use QIClib in my project?</b><br>
 	      See <a href ="index.html#getting-started"> getting started</a> section.
 	    </li>
 	    
-	    <br>
 
 
 	    
@@ -2988,21 +2749,18 @@
 	      See <a href="index.html#found-an-issue-or-bug">this</a>.
 	    </li>
 	    
-	    <br>
 
 
 	    <li><b>How do I use XYZ function properly?</b><br>
 	      See <a href="#top">API documentation</a>. If you still have concerns, see <a href= "index.html#got-a-problem-or-question">this</a>.
 	    </li>
 	    
-	    <br>
 
 
 	    <li><b>Can you implement certain features, which are useful for my work?</b><br>
 	      Yes, see <a href= "index.html#requesting-a-feature">this</a>.
 	    </li>
 	    
-	    <br>
 
 
 	    
@@ -3022,8 +2780,6 @@
 	    </li>
 
 
-
-	    <br>
 	    
 
 	    <li><b>I know C++98, but do not know much about C++11. Can I use QIClib?</b><br>
@@ -3032,10 +2788,6 @@
 	      e.g., in <a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a> add <code>-std=c++11</code> flag during compilation.
 	    </li>
 	    
-
-
-
-	    <br>
 
 	    
 	    <li><b>Can I use C++11 <code>auto</code> with QIClib functions?</b><br>
@@ -3077,25 +2829,144 @@
 
 
 	    
-	    <li><b>Do QIClib uses C++14 features?</b><br>
-	      No, only C++11 features have been used, since many compilers do not support C++14 fully. C++14 features like <i>auto return 
-		type deductions for functions</i> have been avoided by using template meta-programming.
+	    <li><b>Does QIClib use C++14 features?</b><br>
+	      No, only C++11 features have been used. 
+	      C++14 features like <i>auto return type deductions for functions</i> have been avoided by using template meta-programming.
+	      But users are requested to use latest C++14/17 features, which increase efficiency and usability.
 	    </li>
 	    
-	    <br>
-
-
+	
+		<li><b>Does QIClib use multi-threaded algorithms for computations?</b><br>
+			Yes and No. There are several ways to develop multi-threaded or parallel applications using QIClib. 
+			<ul>
+				<li> Using high performance multi-threaded <a href = "http://www.netlib.org/lapack/">LAPACK</a> and 
+				  <a href = "http://www.netlib.org/blas">BLAS</a> replacements like <a href = "http://www.openblas.net/">OpenBLAS</a>, 
+			  		<a href = "https://software.intel.com/en-us/intel-mkl">Intel MKL</a>, or 
+			  		<a href = "http://developer.amd.com/tools-and-sdks/archive/amd-core-math-library-acml/"> AMD ACML</a>.</li>
+				
+				<li> Loop parallelization using <a href="http://www.openmp.org/">OpenMP</a> or others similar libraries. </li>
+				
+				<li> <a href="#TrX">TrX</a>, <a href="#Tx">Tx</a>, <a href="#sysperm">sysperm</a>, <a href="#apply">apply</a>, 
+				<a href="#apply_ctrl">apply_ctrl</a>, <a href="#make_ctrl">make_ctrl</a>, <a href="#measure">measure</a>,
+				and <a href="#measure_comp">measure_comp</a> have <i>optional</i> multi-threaded algorithms if 
+				<a href="http://www.openmp.org/">OpenMP</a> is enabled in compiler argument, i.e., <code>-fopenmp</code> in 
+				<a href="https://gcc.gnu.org/">gcc</a> or <a href = "http://clang.llvm.org/">clang</a>. For this, define
+				<code>QICLIB_USE_OPENMP</code> macro before  before including <code>QIClib</code> header. One can individually enable
+				multi-threading in those mentioned functions. For this, see  <a href="#macro">preprocessor macros in QIClib</a> for details.
+				</ul>
+		
+			 <b>Note:</b> These three procedures of parallelization do not mix well. Use only one of the procedures. For best performance,
+			 try to use only one of first two methods.</li>  
 
 	  </ul>
 
 	  <a href="#top">Go to top</a>
 
 
+	  <hr><hr>
+	  <a name="macro"></a>
+	  <h3>Helper preprocessor macros</h3>
+	  <hr> <br>
+		QIClib can be configured by defining following macros before including <code>QIClib</code> header.
+		
+		<br><br>
+
+
+		<table>
+	      <tbody>
+
+		<tr><td> QICLIB_MAXQDIT_COUNT </td><td>  </td><td> Maximum number of qudits that can be handled by QIClib.
+		By default, it is 40.</td></tr>
+		
+		<tr><td> QICLIB_FLOAT_PRECISION </td><td>  </td><td> Precision for <code>float</code>. By default, it is
+		<code>100.0 * std::numeric_limits&lt;float&gt;::epsilon()<code>.</td></tr>
+
+		<tr><td> QICLIB_DOUBLE_PRECISION </td><td>  </td><td> Precision for <code>double</code>. By default, it is
+		<code>100.0 * std::numeric_limits&lt;double&gt;::epsilon()<code>.</td></tr>
+
+		<tr><td> QICLIB_NO_INIT_MESSAGE </td><td>  </td><td> Disable printing of messages by <code><a href="#init">Init</a></code>
+		 class.</td></tr>
+
+	
+		<tr><td> QICLIB_NO_SPM </td><td>  </td><td> Disable instantiation of <code><a href="#spm">SPM</a></code>
+		 class.</td></tr>		
+		
+		<tr><td> QICLIB_NO_GATES </td><td>  </td><td> Disable instantiation of <code><a href="#gates">GATES</a></code>
+		 class.</td></tr>
+		
+		<tr><td> QICLIB_DONT_USE_NLOPT </td><td>  </td><td> QIClib will not use 
+		<a href="http://ab-initio.mit.edu/wiki/index.php/NLopt">NLopt</a> dependent features.</td></tr>
+		 
+		 <tr><td>  QICLIB_USE_OLD_DISCORD </td><td>  </td><td> QIClib will use old discord syntaxes (before version 1.0.0).</td></tr>
+				
+		<tr><td>  QICLIB_USE_OPENMP </td><td>  </td><td> QIClib will use multi-threaded algorithms for 
+		<a href="#TrX">TrX</a>, <a href="#Tx">Tx</a>, <a href="#sysperm">sysperm</a>, <a href="#apply">apply</a>, 
+				<a href="#apply_ctrl">apply_ctrl</a>, <a href="#make_ctrl">make_ctrl</a>, <a href="#measure">measure</a>,
+				and <a href="#measure_comp">measure_comp</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+		
+	
+		<tr><td>  QICLIB_USE_OPENMP_TRX </td><td>  </td><td> QIClib will use multi-threaded algorithm for 
+		<a href="#TrX">TrX</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+
+
+		<tr><td>  QICLIB_USE_OPENMP_TX </td><td>  </td><td> QIClib will use multi-threaded algorithm for 
+		<a href="#Tx">Tx</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+
+		<tr><td>  QICLIB_USE_OPENMP_SYSPERM </td><td>  </td><td> QIClib will use multi-threaded algorithm for 
+		<a href="#sysperm">sysperm</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+
+		<tr><td>  QICLIB_USE_OPENMP_APPLY </td><td>  </td><td> QIClib will use multi-threaded algorithms for 
+		<a href="#apply">apply</a> and 
+				<a href="#apply_ctrl">apply_ctrl</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+
+		<tr><td>  QICLIB_USE_OPENMP_MAKE_CTRL </td><td>  </td><td> QIClib will use multi-threaded algorithm for 
+		<a href="#make_ctrl">make_ctrl</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+
+	
+		<tr><td>  QICLIB_USE_OPENMP_MEASURE </td><td>  </td><td> QIClib will use multi-threaded algorithms for 
+		<a href="#measure">measure</a> and 
+				<a href="#measure_comp">measure_comp</a> if <a href="http://www.openmp.org/">OpenMP</a> is enabled.</td></tr>
+
+
+
+	      </tbody>
+	    </table>
+     <br>
 
 	  <hr><hr>
-	  <a name=api_additions></a>
+	  <a name="api_additions"></a>
 	  <h3>API Additions</h3>
 	  <hr> <br>
+
+		<b>Version 1.0</b><br><br>
+	  <ul>
+		<li>Bug fix in <code><a href="#tsallis_prob">tsallis_prob</a></code>.</li>
+    	<li>Added <code><a href="#gram_schmidt">gram_schmidt</a></code>.</li>
+    	<li>Added <code><a href="#dense_to_sparse">dense_to_sparse</a></code>, 
+    		<code><a href="#sparse_to_dense">sparse_to_dense</a></code>.</li>
+    	<li>Added <code><a href="#discord_space">discord_space</a></code>, <code><a href="#deficit_space">deficit_space</a></code>.</li>
+    	<li>Added <code><a href="#is_Normal">is_Normal</a></code>.</li>
+    	<li>Added <code><a href="#rel_entropy">rel_entropy</a></code>, <code><a href="#rel_entropy_prob">rel_entropy_prob</a></code>.</li>
+		<li>Added coherence measures, <code><a href="#l1_coh">l1_coh</a></code> and 
+			<code><a href="#rel_entropy_coh">rel_entropy_coh</a></code>.</li>
+		<li>Added <code><a href="#schmidt">schmidt_full</a></code>.</li>
+		<li>Added <a href="#macro">macro features</a> to fine tune the library behavior.</li>
+		<li><code>std::runtime_error</code> exception for <code>eig_sym/eig_gen</code> decomposition.</li>
+		<li><code>std::runtime_error</code> exception for <code>qr</code> decomposition.</li>
+		<li>Added <code><a href="#randPerm">randPerm</a></code>.</li>
+		<li>Added <code><a href="#make_ctrl">make_ctrl</a></code>.</li>
+		<li>Default template parameter of <code><a href="#mket"mket></a></code>, <code><a href="#mproj">mproj</a></code> is now 
+			<code>double</code>.</li>
+		<li>Optional multi-threaded algorithm for <a href="#TrX">TrX</a>, <a href="#Tx">Tx</a>, <a href="#sysperm">sysperm</a>, <a href="#apply">apply</a>, 
+				<a href="#apply_ctrl">apply_ctrl</a>, <a href="#make_ctrl">make_ctrl</a>, <a href="#measure">measure</a>,
+				and <a href="#measure_comp">measure_comp</a>.</li>	  
+	  
+	  
+	   </ul>
+	
+
+
+
 
 	  <b>Version 0.0.4</b><br><br>
 	  <ul>
