@@ -6,10 +6,7 @@ It is a header only template library, using [Armadillo](http://arma.sourceforge.
 
 Getting started
 ---------------
-[QIClib](https://titaschanda.github.io/QIClib) is a header only library, so there is no need to compile the source.
-
-
-Download [QIClib](https://titaschanda.github.io/QIClib) either from official [website](https://titaschanda.github.io/QIClib) or using `git clone` with the command
+[QIClib](https://titaschanda.github.io/QIClib) is a header only library, so there is no need to compile the source. Download [QIClib](https://titaschanda.github.io/QIClib) either from official [website](https://titaschanda.github.io/QIClib) or using `git clone` with the command
    
      git clone https://github.com/titaschanda/QIClib.
 
