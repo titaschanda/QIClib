@@ -1,4 +1,4 @@
-[![QIClib](qic.png = 15*10)](https://titaschanda.github.io/QIClib)
+[<img src="qic.png" width="200">](https://titaschanda.github.io/QIClib)
 
 
 # [Quantum Information and Computation library (QIClib)](https://titaschanda.github.io/QIClib)
