@@ -78,12 +78,12 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
   //**************************************************************************
 
   typename arma::Mat<std::complex<T1> >::template fixed<2, 2>
-  U2(T1 theta, const arma::Col<T1>& unit) const {
+  U2(T1 theta, const arma::Col<T1>& unitV) const {
 #ifndef QICLIB_NO_DEBUG
-    if (unit.size() != 3)
+    if (unitV.size() != 3)
       throw Exception("qic::GATES::U2", "Vector is not 3-dimensional!");
 
-    if (std::abs(arma::norm(unit) - 1.0) > _precision::eps<T1>::value)
+    if (std::abs(arma::norm(unitV) - 1.0) > _precision::eps<T1>::value)
       throw Exception("qic::GATES::U2", "Vector is not unit vector!");
 #endif
 
@@ -93,7 +93,7 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
 
     return std::cos(0.5 * theta) * ret +
            I * std::sin(0.5 * theta) *
-             (unit.at(0) * X + unit.at(1) * Y + unit.at(2) * Z);
+             (unitV.at(0) * X + unitV.at(1) * Y + unitV.at(2) * Z);
   }
 
   //**************************************************************************

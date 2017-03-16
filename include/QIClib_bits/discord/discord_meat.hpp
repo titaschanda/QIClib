@@ -24,9 +24,9 @@ namespace qic {
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
+inline discord_space<T1>::discord_space(const T1& rho, arma::uword subsys,
                                         arma::uvec dim)
-    : _rho(rho1), _nodal(nodal), _n_cols(_rho.n_cols), _n_rows(_rho.n_rows),
+    : _rho(rho), _subsys(subsys), _n_cols(_rho.n_cols), _n_rows(_rho.n_rows),
       _is_minfo_computed(false), _is_computed(false), _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho.n_elem == 0)
@@ -42,9 +42,9 @@ inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
 //****************************************************************************
 
 template <typename T1>
-inline discord_space<T1>::discord_space(T1&& rho1, arma::uword nodal,
+inline discord_space<T1>::discord_space(T1&& rho, arma::uword subsys,
                                         arma::uvec dim)
-    : _rho(std::move(rho1)), _nodal(nodal), _n_cols(_rho.n_cols),
+    : _rho(std::move(rho)), _subsys(subsys), _n_cols(_rho.n_cols),
       _n_rows(_rho.n_rows), _is_minfo_computed(false), _is_computed(false),
       _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
@@ -61,9 +61,9 @@ inline discord_space<T1>::discord_space(T1&& rho1, arma::uword nodal,
 //****************************************************************************
 
 template <typename T1>
-inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
+inline discord_space<T1>::discord_space(const T1& rho, arma::uword subsys,
                                         arma::uword dim)
-    : _rho(rho1), _nodal(nodal), _n_cols(_rho.n_cols), _n_rows(_rho.n_rows),
+    : _rho(rho), _subsys(subsys), _n_cols(_rho.n_cols), _n_rows(_rho.n_rows),
       _is_minfo_computed(false), _is_computed(false), _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
   if (_rho.n_elem == 0)
@@ -88,9 +88,9 @@ inline discord_space<T1>::discord_space(const T1& rho1, arma::uword nodal,
 //****************************************************************************
 
 template <typename T1>
-inline discord_space<T1>::discord_space(T1&& rho1, arma::uword nodal,
+inline discord_space<T1>::discord_space(T1&& rho, arma::uword subsys,
                                         arma::uword dim)
-    : _rho(std::move(rho1)), _nodal(nodal), _n_cols(_rho.n_cols),
+    : _rho(std::move(rho)), _subsys(subsys), _n_cols(_rho.n_cols),
       _n_rows(_rho.n_rows), _is_minfo_computed(false), _is_computed(false),
       _is_reg_computed(false) {
 #ifndef QICLIB_NO_DEBUG
@@ -126,12 +126,12 @@ template <typename T1> inline void discord_space<T1>::init(arma::uvec dim) {
     throw Exception("qic::discord_space",
                     Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (_nodal == 0 || _nodal > _party_no)
+  if (_subsys == 0 || _subsys > _party_no)
     throw Exception("qic::discord_space", "Invalid measured party index!");
 #endif
 
-  _discord2 = (_dim.at(_nodal - 1) == 2);
-  _discord3 = (_dim.at(_nodal - 1) == 3);
+  _discord2 = (_dim.at(_subsys - 1) == 2);
+  _discord3 = (_dim.at(_subsys - 1) == 3);
 
 #ifndef QICLIB_NO_DEBUG
   if (!_discord2 && !_discord3)
@@ -298,7 +298,7 @@ template <typename T1> inline void discord_space<T1>::minfo_p() {
     arma::uvec rest(_party_no - 1, arma::fill::zeros);
     arma::uword counter(0);
     for (arma::uword i = 0; i < _party_no; i++) {
-      if (_nodal != i + 1) {
+      if (_subsys != i + 1) {
         rest.at(counter) = i + 1;
         ++counter;
       }
@@ -321,22 +321,22 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     arma::uword dim1 = arma::prod(_dim);
     dim1 /= 2;
     arma::uword dim2(1);
-    for (arma::uword i = 0; i < _nodal - 1; ++i) dim2 *= _dim.at(i);
+    for (arma::uword i = 0; i < _subsys - 1; ++i) dim2 *= _dim.at(i);
     arma::uword dim3(1);
-    for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
+    for (arma::uword i = _subsys; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;  //(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;  //(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;  //(dim3, dim3, arma::fill::eye);
 
-    if ((_nodal == 1) || (_party_no == _nodal)) {
+    if ((_subsys == 1) || (_party_no == _subsys)) {
       eye2.eye(dim1, dim1);
     } else {
       eye3.eye(dim2, dim2);
       eye4.eye(dim3, dim3);
     }
 
-    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _nodal,
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _subsys,
                                 _party_no);
 
     std::vector<double> lb(2);
@@ -384,22 +384,22 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::compute() {
     arma::uword dim1 = arma::prod(_dim);
     dim1 /= 3;
     arma::uword dim2(1);
-    for (arma::uword i = 0; i < _nodal - 1; ++i) dim2 *= _dim.at(i);
+    for (arma::uword i = 0; i < _subsys - 1; ++i) dim2 *= _dim.at(i);
     arma::uword dim3(1);
-    for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
+    for (arma::uword i = _subsys; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;  //(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;  //(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;  //(dim3, dim3, arma::fill::eye);
 
-    if ((_nodal == 1) || (_party_no == _nodal)) {
+    if ((_subsys == 1) || (_party_no == _subsys)) {
       eye2.eye(dim1, dim1);
     } else {
       eye3.eye(dim2, dim2);
       eye4.eye(dim3, dim3);
     }
 
-    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _nodal,
+    _internal::TO_PASS<T1> pass(_rho, eye2, eye3, eye4, _dim, _subsys,
                                 _party_no);
 
     std::vector<double> lb(5);
@@ -454,21 +454,21 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
     arma::uword dim1 = arma::prod(_dim);
     dim1 /= 2;
     arma::uword dim2(1);
-    for (arma::uword i = 0; i < _nodal - 1; ++i) dim2 *= _dim.at(i);
+    for (arma::uword i = 0; i < _subsys - 1; ++i) dim2 *= _dim.at(i);
     arma::uword dim3(1);
-    for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
+    for (arma::uword i = _subsys; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;  //(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;  //(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;  //(dim3, dim3, arma::fill::eye);
 
-    if ((_nodal == 1) || (_party_no == _nodal)) {
+    if ((_subsys == 1) || (_party_no == _subsys)) {
       eye2.eye(dim1, dim1);
     } else {
       eye3.eye(dim2, dim2);
       eye4.eye(dim3, dim3);
     }
-    
+
     arma::Col<trait::pT<T1> > ret(3);
 
     for (arma::uword i = 0; i < 3; ++i) {
@@ -478,10 +478,10 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
       arma::Mat<std::complex<trait::pT<T1> > > proj2 =
         SPM<trait::pT<T1> >::get_instance().proj2.at(1, i + 1);
 
-      if (_nodal == 1) {
+      if (_subsys == 1) {
         proj1 = kron(proj1, eye2);
         proj2 = kron(proj2, eye2);
-      } else if (_party_no == _nodal) {
+      } else if (_party_no == _subsys) {
         proj1 = kron(eye2, proj1);
         proj2 = kron(eye2, proj2);
       } else {
@@ -498,11 +498,11 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
       trait::pT<T1> S_max = 0.0;
       if (p1 > _precision::eps<trait::pT<T1> >::value) {
         rho_1 /= p1;
-        S_max += p1 * entropy(TrX(rho_1,{_nodal},_dim));
+        S_max += p1 * entropy(TrX(rho_1, {_subsys}, _dim));
       }
       if (p2 > _precision::eps<trait::pT<T1> >::value) {
         rho_2 /= p2;
-        S_max += p2 * entropy(TrX(rho_2,{_nodal},_dim));
+        S_max += p2 * entropy(TrX(rho_2, {_subsys}, _dim));
       }
       ret.at(i) = _mutual_info + S_max;
     }
@@ -516,21 +516,21 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
     arma::uword dim1 = arma::prod(_dim);
     dim1 /= 3;
     arma::uword dim2(1);
-    for (arma::uword i = 0; i < _nodal - 1; ++i) dim2 *= _dim.at(i);
+    for (arma::uword i = 0; i < _subsys - 1; ++i) dim2 *= _dim.at(i);
     arma::uword dim3(1);
-    for (arma::uword i = _nodal; i < _party_no; ++i) dim3 *= _dim.at(i);
+    for (arma::uword i = _subsys; i < _party_no; ++i) dim3 *= _dim.at(i);
 
-    arma::Mat<trait::pT<T1> > eye2;//(dim1, dim1, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye3;//(dim2, dim2, arma::fill::eye);
-    arma::Mat<trait::pT<T1> > eye4;//(dim3, dim3, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye2;  //(dim1, dim1, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye3;  //(dim2, dim2, arma::fill::eye);
+    arma::Mat<trait::pT<T1> > eye4;  //(dim3, dim3, arma::fill::eye);
 
-    if ((_nodal == 1) || (_party_no == _nodal)) {
+    if ((_subsys == 1) || (_party_no == _subsys)) {
       eye2.eye(dim1, dim1);
     } else {
       eye3.eye(dim2, dim2);
       eye4.eye(dim3, dim3);
     }
-    
+
     arma::Col<trait::pT<T1> > ret(3);
 
     for (arma::uword i = 0; i < 3; ++i) {
@@ -543,11 +543,11 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
       arma::Mat<std::complex<trait::pT<T1> > > proj3 =
         SPM<trait::pT<T1> >::get_instance().proj3.at(2, i + 1);
 
-      if (_nodal == 1) {
+      if (_subsys == 1) {
         proj1 = kron(proj1, eye2);
         proj2 = kron(proj2, eye2);
         proj3 = kron(proj3, eye2);
-      } else if (_party_no == _nodal) {
+      } else if (_party_no == _subsys) {
         proj1 = kron(eye2, proj1);
         proj2 = kron(eye2, proj2);
         proj3 = kron(eye2, proj3);
@@ -568,15 +568,15 @@ inline discord_space<T1>& discord_space<T1>::compute_reg() {
       trait::pT<T1> S_max = 0.0;
       if (p1 > _precision::eps<trait::pT<T1> >::value) {
         rho_1 /= p1;
-        S_max += p1 * entropy(TrX(rho_1, {_nodal}, _dim));
+        S_max += p1 * entropy(TrX(rho_1, {_subsys}, _dim));
       }
       if (p2 > _precision::eps<trait::pT<T1> >::value) {
         rho_2 /= p2;
-        S_max += p2 * entropy(TrX(rho_2, {_nodal}, _dim));
+        S_max += p2 * entropy(TrX(rho_2, {_subsys}, _dim));
       }
       if (p3 > _precision::eps<trait::pT<T1> >::value) {
         rho_3 /= p3;
-        S_max += p3 * entropy(TrX(rho_3, {_nodal}, _dim));
+        S_max += p3 * entropy(TrX(rho_3, {_subsys}, _dim));
       }
       ret.at(i) = _mutual_info + S_max;
     }
@@ -636,20 +636,20 @@ template <typename T1> inline discord_space<T1>& discord_space<T1>::reset() {
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal) {
+inline discord_space<T1>& discord_space<T1>::reset(arma::uword subsys) {
   _is_computed = false;
   _is_reg_computed = false;
   _is_minfo_computed = false;
-  _nodal = nodal;
+  _subsys = subsys;
 
 #ifndef QICLIB_NO_DEBUG
-  if (_nodal == 0 || _nodal > _party_no)
+  if (_subsys == 0 || _subsys > _party_no)
     throw Exception("qic::discord_space::reset",
                     "Invalid measured party index!");
 #endif
 
-  _discord2 = (_dim(_nodal - 1) == 2);
-  _discord3 = (_dim(_nodal - 1) == 3);
+  _discord2 = (_dim(_subsys - 1) == 2);
+  _discord3 = (_dim(_subsys - 1) == 3);
 
 #ifndef QICLIB_NO_DEBUG
   if (!_discord2 && !_discord3)
@@ -666,7 +666,7 @@ inline discord_space<T1>& discord_space<T1>::reset(arma::uword nodal) {
 
 template <typename T1>
 inline discord_space<T1>&
-discord_space<T1>::reset(const T1& rho, arma::uword nodal, arma::uvec dim) {
+discord_space<T1>::reset(const T1& rho, arma::uword subsys, arma::uvec dim) {
   _rho = rho;
   _n_cols = _rho.n_cols;
   _n_rows = _rho.n_rows;
@@ -689,13 +689,13 @@ discord_space<T1>::reset(const T1& rho, arma::uword nodal, arma::uvec dim) {
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  return reset(nodal);
+  return reset(subsys);
 }
 
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword nodal,
+inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword subsys,
                                                    arma::uvec dim) {
   _rho = std::move(rho);
   _n_cols = _rho.n_cols;
@@ -719,14 +719,14 @@ inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword nodal,
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  return reset(nodal);
+  return reset(subsys);
 }
 
 //******************************************************************************
 
 template <typename T1>
 inline discord_space<T1>&
-discord_space<T1>::reset(const T1& rho, arma::uword nodal, arma::uword dim) {
+discord_space<T1>::reset(const T1& rho, arma::uword subsys, arma::uword dim) {
   _rho = rho;
   _n_cols = _rho.n_cols;
   _n_rows = _rho.n_rows;
@@ -759,13 +759,13 @@ discord_space<T1>::reset(const T1& rho, arma::uword nodal, arma::uword dim) {
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  return reset(nodal);
+  return reset(subsys);
 }
 
 //******************************************************************************
 
 template <typename T1>
-inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword nodal,
+inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword subsys,
                                                    arma::uword dim) {
   _rho = std::move(rho);
   _n_cols = _rho.n_cols;
@@ -799,7 +799,7 @@ inline discord_space<T1>& discord_space<T1>::reset(T1&& rho, arma::uword nodal,
                     Exception::type::DIMS_MISMATCH_MATRIX);
 #endif
 
-  return reset(nodal);
+  return reset(subsys);
 }
 
 //******************************************************************************

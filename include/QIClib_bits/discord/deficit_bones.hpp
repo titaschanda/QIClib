@@ -36,7 +36,7 @@ template <typename T1> class deficit_space<T1> {
 
  private:
   T1 _rho{};
-  arma::uword _nodal{};
+  arma::uword _subsys{};
   arma::uword _n_cols{};
   arma::uword _n_rows{};
 
