@@ -110,7 +110,7 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
 
-inline TR bures_dist(const T1& rho11, const T2& rho12) {
+inline TR Bures_dist(const T1& rho11, const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
 

@@ -80,8 +80,8 @@ inline TR gram_schmidt(const std::vector<arma::Col<T1> > rho,
     if (ii.eval().n_elem == 0)
       throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
 
-  //if (rho[0].eval().n_cols != 1)
-  //  throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
+  if (rho[0].eval().n_cols != 1)
+    throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
 
   for (auto&& ii : rho)
     if (ii.n_rows != rho[0].n_rows || ii.n_cols != 1)
@@ -144,8 +144,8 @@ inline TR gram_schmidt(const arma::field<arma::Col<T1> >& rho,
     if (ii.eval().n_elem == 0)
       throw Exception("qic::gram_schmidt", Exception::type::ZERO_SIZE);
 
-  //if (rho.at(0).eval().n_cols != 1)
-  //  throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
+  if (rho.at(0).eval().n_cols != 1)
+    throw Exception("qic::gram_schmidt", Exception::type::MATRIX_NOT_CVECTOR);
 
   for (auto&& ii : rho)
     if (ii.n_rows != rho.at(0).n_rows || ii.n_cols != 1)
