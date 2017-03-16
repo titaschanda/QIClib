@@ -24,7 +24,7 @@ Version 0.0.4 - April 20, 2016
     - added is_diagonalizable
 
 Version 0.0.5 - Development version
-    - bug fix to tsallis_prob
+    - bug fix in tsallis_prob
     - added gram_schmidt
     - added dense_to_sparse, sparse_to_dense
     - added discord_space, deficit_space
@@ -39,4 +39,4 @@ Version 0.0.5 - Development version
 	- added randPerm
 	- added make_ctrl
 	- default template parameter of mket(), mproj() is now double
-	- optional threaded algorithm for TrX, Tx, sysperm, apply, apply_ctrl, make_ctrl, measure 
+	- optional multi-threaded algorithm for TrX, Tx, sysperm, apply, apply_ctrl, make_ctrl, measure 
