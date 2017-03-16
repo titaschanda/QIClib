@@ -1,4 +1,4 @@
-[<div style="text-align:center"><img src="qic.png" width="100"></div>](https://titaschanda.github.io/QIClib)
+[<p align="center"><img src="qic.png" width="100"></p>](https://titaschanda.github.io/QIClib)
 
 
 # [Quantum Information and Computation library (QIClib)](https://titaschanda.github.io/QIClib)
