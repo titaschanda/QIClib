@@ -2,7 +2,7 @@
 
 
 # [Quantum Information and Computation library (QIClib)](https://titaschanda.github.io/QIClib)
-Version 1.0 - March 18, 2017 
+Version 1.0 - March 20, 2017 
 =================================
 [QIClib](https://titaschanda.github.io/QIClib) is a mordern C++11 library for general purpose quantum computing, supporting Linux, Windows and Mac OS X. 
 It is a header only template library, using [Armadillo](http://arma.sourceforge.net/) (developed by Conrad Sanderson et al., Data61, Australia) for highly efficient linear algebra calculations, and if available, the [NLopt](http://ab-initio.mit.edu/wiki/index.php/NLopt) nonlinear optimization library for certain features.
