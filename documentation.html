@@ -24,8 +24,8 @@
       <a href="sample.html" class="btn">Sample Codes</a>
       <br>
       <a href="https://github.com/titaschanda/QIClib" class="btn">View on <br> GitHub</a>
-      <a href="https://github.com/titaschanda/QIClib/archive/v0.0.4.3.zip" class="btn">Download .zip <br> v1.0.0</a>
-      <a href="https://github.com/titaschanda/QIClib/archive/v0.0.4.3.tar.gz" class="btn">Download .tar.gz <br> v1.0.0</a>
+      <a href="https://github.com/titaschanda/QIClib/archive/v1.0.0.zip" class="btn">Download .zip <br> v1.0.0</a>
+      <a href="https://github.com/titaschanda/QIClib/archive/v1.0.0.tar.gz" class="btn">Download .tar.gz <br> v1.0.0</a>
 
     </section>
 
@@ -281,7 +281,7 @@
 		    quantum state</td></tr>
 
 		<tr><td><a href="#ent_check_CMC"> ent_check_CMC </a> </td><td>  </td><td> To check if a bipartite state 
-		    is entangled or not (based on covariant matrix formulation, can be used to detect bound entangled states)</td></tr>
+		    is entangled or not (based on covariant matrix criteria, can be used to detect bound entangled states)</td></tr>
 		
 		<tr><td><a href="#schmidt"> schmidt, schmidt_full </a> </td><td>  </td><td> Schmidt decomposition of a 
 		    bipartite pure state</td></tr>
@@ -2111,7 +2111,7 @@
 	  <a name="ent_check_CMC"></a>
 	  <b>ent_check_CMC(A, dim) <br > ent_check_CMC(A, dim1, dim2) </b><br><br>
 	  <ul>
-	    <li> To check if a bipartite state is entangled or not (based on covariant matrix formulation (<i>Phys. Rev. A <b>78</b>, 052319 (2008),
+	    <li> To check if a bipartite state is entangled or not (based on covariant matrix criteria (<i>Phys. Rev. A <b>78</b>, 052319 (2008),
 	    Proposition IV.2</i>), 
 	    can be used to detect bound entangled states)</li>
 	    
@@ -2144,7 +2144,7 @@
 	    <li> <code>dim</code> is a <code>uvec</code> of two elements, containing dimensions of each party.</li>
 	    
 	    <li> <code>S</code> is a real vector containing Schmidt coefficients. <code>U</code> and <code>V</code> are matrices that 
-	      store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron( U.col(i) , V.col(i) )</code>.</li>
+	      store Schmidt vectors column-wise, such that <code>A = &Sigma;<sub>i</sub> S(i) * kron(U.col(i), V.col(i))</code>.</li>
 
 		 <li>	<code>schmidt_full</code> gives full Schmidt basis on both sides (i.e., <code>U</code> and <code>V</code>).</li>      
 	      
