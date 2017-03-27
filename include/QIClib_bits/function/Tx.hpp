@@ -32,9 +32,11 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
+inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
+             bool is_Hermitian = false) {
   auto rho = _internal::as_Mat(rho1);  // force copy
   bool checkV = (rho.n_cols != 1);
+  (void)is_Hermitian;  // do not need this in serial algorithm
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -127,7 +129,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
+inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
+             bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -208,13 +211,32 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
 
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
 
+  if (is_Hermitian) {
 #if defined(_OPENMP)
 #pragma omp parallel for schedule(static)
 #endif
-  for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
-    for (arma::uword II = 0; II < rho.n_rows; ++II)
-      tr_rho.at(II, JJ) = worker(II, JJ);
+    for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
+      for (arma::uword II = 0; II <= JJ; ++II)
+        tr_rho.at(II, JJ) = worker(II, JJ);
+    }
+
+    
+    for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
+      for (arma::uword II = JJ + 1; II < rho.n_rows; ++II)
+        tr_rho.at(II, JJ) = std::conj(tr_rho.at(JJ, II));
+    }
+
+  } else {
+
+#if defined(_OPENMP)
+#pragma omp parallel for schedule(static)
+#endif
+    for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
+      for (arma::uword II = 0; II < rho.n_rows; ++II)
+        tr_rho.at(II, JJ) = worker(II, JJ);
+    }
   }
+
   return tr_rho;
 }
 
@@ -228,7 +250,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
+inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
+             bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -250,7 +273,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return Tx(rho, std::move(subsys), std::move(dim2));
+  return Tx(rho, std::move(subsys), std::move(dim2), is_Hermitian);
 }
 
 //******************************************************************************

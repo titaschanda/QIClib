@@ -32,8 +32,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR TrX(const T1& rho1, arma::uvec subsys,
-              arma::uvec dim) {
+inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
+              bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -138,7 +138,9 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
       }
     }
 
-    tr_rho.at(K, L) += checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));
+    if ((is_Hermitian && L >= K) || (!is_Hermitian))
+      tr_rho.at(K, L) +=
+        checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));
 
     ++loop_counter[0];
     while (loop_counter[p1] == MAX[p1]) {
@@ -147,6 +149,12 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
       if (loop_counter[p1] != MAX[p1])
         p1 = 0;
     }
+  }
+
+  if (is_Hermitian) {
+    for (arma::uword L = 0; L < dimkeep; ++L)
+      for (arma::uword K = L + 1; K < dimkeep; ++K)
+        tr_rho.at(K, L) = std::conj(tr_rho.at(L, K));
   }
 
   return tr_rho;
@@ -163,8 +171,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR TrX(const T1& rho1, arma::uvec subsys,
-              arma::uvec dim) {
+inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
+              bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -284,12 +292,28 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
     return ret;
   };
 
+  if (is_Hermitian) {
 #if defined(_OPENMP)
 #pragma omp parallel for schedule(static)
 #endif
-  for (arma::uword LL = 0; LL < dimkeep; ++LL) {
-    for (arma::uword KK = 0; KK < dimkeep; ++KK)
-      tr_rho.at(KK, LL) = worker(KK, LL);
+    for (arma::uword LL = 0; LL < dimkeep; ++LL) {
+      for (arma::uword KK = 0; KK <= LL; ++KK)
+        tr_rho.at(KK, LL) = worker(KK, LL);
+    }
+
+    for (arma::uword LL = 0; LL < dimkeep; ++LL) {
+      for (arma::uword KK = LL + 1; KK < dimkeep; ++KK)
+        tr_rho.at(KK, LL) = std::conj(tr_rho.at(LL, KK));
+    }
+
+  } else {
+#if defined(_OPENMP)
+#pragma omp parallel for schedule(static)
+#endif
+    for (arma::uword LL = 0; LL < dimkeep; ++LL) {
+      for (arma::uword KK = 0; KK < dimkeep; ++KK)
+        tr_rho.at(KK, LL) = worker(KK, LL);
+    }
   }
   return tr_rho;
 }
@@ -304,8 +328,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR TrX(const T1& rho1, arma::uvec subsys,
-              arma::uword dim = 2) {
+inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
+              bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -328,7 +352,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys,
 
   arma::uvec dim2(n);
   dim2.fill(dim);
-  return TrX(rho, std::move(subsys), std::move(dim2));
+  return TrX(rho, std::move(subsys), std::move(dim2), is_Hermitian);
 }
 
 //******************************************************************************
@@ -341,8 +365,8 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_arma_type_var<T1>::value, arma::Mat<trait::eT<T1> > >::type>
 
-inline TR TrX(const T1& rho1,
-              const arma::uvec& Sbasis, arma::uvec subsys, arma::uvec dim) {
+inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec subsys,
+              arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
