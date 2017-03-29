@@ -2504,9 +2504,9 @@
 		  // std::vector of projection operators in \sigma_x direction
 
 		auto result1 = measure(A1, Ks); // measurement
-		std::get<0>(A); // measurement result
-		std::get<1>(A); // outcome probabilities
-		std::get<2>(A); // post measurement normalised states
+		std::get<0>(A1); // measurement result
+		std::get<1>(A1); // outcome probabilities
+		std::get<2>(A1); // post measurement normalised states
 			
 		cx_mat A2 = randRho(8); //8x8 random density matrix
 
@@ -2551,8 +2551,8 @@
 		cx_mat A1 = randRho(2); // 2x2 random density matrix
 
 		auto result1 = measure_comp(A1); // measurement
-		std::get<0>(A); // measurement result
-		std::get<1>(A); //  outcome probabilities
+		std::get<0>(A1); // measurement result
+		std::get<1>(A1); //  outcome probabilities
 		    
 		cx_mat A2 = randRho(8); //8x8 random density matrix
 
