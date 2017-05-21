@@ -55,14 +55,11 @@ template <typename T1> using RR = typename std::remove_reference<T1>::type;
 
 template <typename T1> using RCV = typename std::remove_cv<T1>::type;
 
-template <typename T1>
-using pT2 = typename T1::pod_type;
+template <typename T1> using pT2 = typename T1::pod_type;
 
-template <typename T1>
-using eT2 = typename T1::elem_type;
+template <typename T1> using eT2 = typename T1::elem_type;
 
-template <typename T1>
-using GPT = typename arma::get_pod_type<T1>::result;
+template <typename T1> using GPT = typename arma::get_pod_type<T1>::result;
 
 template <typename T1>
 using pT = typename conditional_arma<trait::RR<T1> >::type::pod_type;
@@ -76,116 +73,154 @@ using eT = typename conditional_arma<trait::RR<T1> >::type::elem_type;
 
 //****************************************************************************
 
-template <typename T1, typename... T2>
-struct is_arma_type_var : std::false_type {};
+template <typename T1, typename... T2> struct is_arma_type_var {
+  static constexpr bool value = std::false_type::value;
+};
 
-template <typename T1>
-struct is_arma_type_var<T1> : arma::is_arma_type<trait::RR<T1> > {};
-
-template <typename T1, typename T2, typename... T3>
-struct is_arma_type_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_arma_type_var<T1>::value &&
-                                   is_arma_type_var<T2, T3...>::value> {};
-
-//****************************************************************************
-
-template <typename T1, typename... T2>
-struct is_arma_sparse_type_var : std::false_type {};
-
-template <typename T1>
-struct is_arma_sparse_type_var<T1> : arma::is_arma_sparse_type<trait::RR<T1> > {
+template <typename T1> struct is_arma_type_var<T1> {
+  static constexpr bool value = arma::is_arma_type<trait::RR<T1> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
-struct is_arma_sparse_type_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_arma_sparse_type_var<T1>::value &&
-                                   is_arma_sparse_type_var<T2, T3...>::value> {
+struct is_arma_type_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_arma_type_var<T1>::value
+                            &&is_arma_type_var<T2, T3...>::value > ::value;
 };
 
 //****************************************************************************
 
-template <typename T1, typename... T2>
-struct is_floating_point_var : std::false_type {};
+template <typename T1, typename... T2> struct is_arma_sparse_type_var {
+  static constexpr bool value = std::false_type::value;
+};
 
-template <typename T1>
-struct is_floating_point_var<T1> : std::is_floating_point<T1> {};
-
-template <typename T1, typename T2, typename... T3>
-struct is_floating_point_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_floating_point_var<T1>::value &&
-                                   is_floating_point_var<T2, T3...>::value> {};
-
-//****************************************************************************
-
-template <typename T1> struct is_complex : std::false_type {};
-
-template <typename T1> struct is_complex<std::complex<T1> > : std::true_type {};
-
-template <typename T1>
-struct is_complex<const std::complex<T1> > : std::true_type {};
-
-template <typename T1>
-struct is_complex<volatile std::complex<T1> > : std::true_type {};
-
-template <typename T1>
-struct is_complex<const volatile std::complex<T1> > : std::true_type {};
-
-//****************************************************************************
-
-template <typename T1, typename... T2>
-struct is_complex_var : std::false_type {};
-
-template <typename T1> struct is_complex_var<T1> : is_complex<T1> {};
+template <typename T1> struct is_arma_sparse_type_var<T1> {
+  static constexpr bool value =
+    arma::is_arma_sparse_type<trait::RR<T1> >::value;
+};
 
 template <typename T1, typename T2, typename... T3>
-struct is_complex_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_complex<T1>::value &&
-                                   is_complex_var<T2, T3...>::value> {};
+struct is_arma_sparse_type_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_arma_sparse_type_var<T1>::value &&
+                            is_arma_sparse_type_var<T2, T3...>::value > ::value;
+};
 
 //****************************************************************************
 
-template <typename T1> struct is_complex_fp : std::false_type {};
+template <typename T1, typename... T2> struct is_floating_point_var {
+  static constexpr bool value = std::false_type::value;
+};
 
-template <typename T1>
-struct is_complex_fp<std::complex<T1> >
-  : std::integral_constant<bool, is_floating_point_var<T1>::value> {};
-
-template <typename T1>
-struct is_complex_fp<const std::complex<T1> >
-  : std::integral_constant<bool, is_floating_point_var<T1>::value> {};
-
-template <typename T1>
-struct is_complex_fp<volatile std::complex<T1> >
-  : std::integral_constant<bool, is_floating_point_var<T1>::value> {};
-
-template <typename T1>
-struct is_complex_fp<const volatile std::complex<T1> >
-  : std::integral_constant<bool, is_floating_point_var<T1>::value> {};
-
-//****************************************************************************
-
-template <typename T1, typename... T2>
-struct is_complex_fp_var : std::false_type {};
-
-template <typename T1> struct is_complex_fp_var<T1> : is_complex_fp<T1> {};
+template <typename T1> struct is_floating_point_var<T1> {
+  static constexpr bool value = std::is_floating_point<T1>::value;
+};
 
 template <typename T1, typename T2, typename... T3>
-struct is_complex_fp_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_complex_fp<T1>::value &&
-                                   is_complex_fp_var<T2, T3...>::value> {};
+struct is_floating_point_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_floating_point_var<T1>::value
+                            &&is_floating_point_var<T2, T3...>::value > ::value;
+};
 
 //****************************************************************************
 
-template <typename T1, typename... T2>
-struct is_fp_arma_type_var : std::false_type {};
+template <typename T1> struct is_complex {
+  static constexpr bool value = std::false_type::value;
+};
 
-template <typename T1>
-struct is_fp_arma_type_var<T1> : std::is_floating_point<trait::pT<T1> > {};
+template <typename T1> struct is_complex<std::complex<T1> > {
+  static constexpr bool value = std::true_type::value;
+};
+
+template <typename T1> struct is_complex<const std::complex<T1> > {
+  static constexpr bool value = std::true_type::value;
+};
+
+template <typename T1> struct is_complex<volatile std::complex<T1> > {
+  static constexpr bool value = std::true_type::value;
+};
+
+template <typename T1> struct is_complex<const volatile std::complex<T1> > {
+  static constexpr bool value = std::true_type::value;
+};
+
+//****************************************************************************
+
+template <typename T1, typename... T2> struct is_complex_var {
+  static constexpr bool value = std::false_type::value;
+};
+
+template <typename T1> struct is_complex_var<T1> {
+  static constexpr bool value = is_complex<T1>::value;
+};
 
 template <typename T1, typename T2, typename... T3>
-struct is_fp_arma_type_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_fp_arma_type_var<T1>::value &&
-                                   is_fp_arma_type_var<T2, T3...>::value> {};
+struct is_complex_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_complex<T1>::value
+                            &&is_complex_var<T2, T3...>::value > ::value;
+};
+
+//****************************************************************************
+
+template <typename T1> struct is_complex_fp {
+  static constexpr bool value = std::false_type::value;
+};
+
+template <typename T1> struct is_complex_fp<std::complex<T1> > {
+  static constexpr bool value =
+    std::integral_constant<bool, is_floating_point_var<T1>::value>::value;
+};
+
+template <typename T1> struct is_complex_fp<const std::complex<T1> > {
+  static constexpr bool value =
+    std::integral_constant<bool, is_floating_point_var<T1>::value>::value;
+};
+
+template <typename T1> struct is_complex_fp<volatile std::complex<T1> > {
+  static constexpr bool value =
+    std::integral_constant<bool, is_floating_point_var<T1>::value>::value;
+};
+
+template <typename T1> struct is_complex_fp<const volatile std::complex<T1> > {
+  static constexpr bool value =
+    std::integral_constant<bool, is_floating_point_var<T1>::value>::value;
+};
+
+//****************************************************************************
+
+template <typename T1, typename... T2> struct is_complex_fp_var {
+  static constexpr bool value = std::false_type::value;
+};
+
+template <typename T1> struct is_complex_fp_var<T1> {
+  static constexpr bool value = is_complex_fp<T1>::value;
+};
+
+template <typename T1, typename T2, typename... T3>
+struct is_complex_fp_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_complex_fp<T1>::value
+                            &&is_complex_fp_var<T2, T3...>::value > ::value;
+};
+
+//****************************************************************************
+
+template <typename T1, typename... T2> struct is_fp_arma_type_var {
+  static constexpr bool value = std::false_type::value;
+};
+
+template <typename T1> struct is_fp_arma_type_var<T1> {
+  static constexpr bool value = std::is_floating_point<trait::pT<T1> >::value;
+};
+
+template <typename T1, typename T2, typename... T3>
+struct is_fp_arma_type_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_fp_arma_type_var<T1>::value
+                            &&is_fp_arma_type_var<T2, T3...>::value > ::value;
+};
 
 //****************************************************************************
 
@@ -219,36 +254,46 @@ struct eT_promoter_var<T1, T2, T3...> {
 
 //****************************************************************************
 
-template <typename T1, typename... T2> struct is_all_same : std::true_type {};
+template <typename T1, typename... T2> struct is_all_same {
+  static constexpr bool value = std::false_type::value;
+};
 
-template <typename T1, typename T2>
-struct is_all_same<T1, T2> : std::is_same<trait::RR<T1>, trait::RR<T2> > {};
+template <typename T1, typename T2> struct is_all_same<T1, T2> {
+  static constexpr bool value =
+    std::is_same<trait::RR<T1>, trait::RR<T2> >::value;
+};
 
 template <typename T1, typename T2, typename... T3>
-struct is_all_same<T1, T2, T3...>
-  : std::integral_constant<bool,
-                           std::is_same<trait::RR<T1>, trait::RR<T2> >::value &&
-                             is_all_same<T1, T3...>::value> {};
+struct is_all_same<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        std::is_same<trait::RR<T1>, trait::RR<T2> >::value
+                            &&is_all_same<T1, T3...>::value > ::value;
+};
 
 //****************************************************************************
 
-template <typename T1, typename... T2>
-struct is_same_pT_var : std::false_type {};
+template <typename T1, typename... T2> struct is_same_pT_var {
+  static constexpr bool value = std::false_type::value;
+};
 
-template <typename T1>
-struct is_same_pT_var<T1>
-  : std::integral_constant<bool, arma::is_arma_type<T1>::value> {};
+template <typename T1> struct is_same_pT_var<T1> {
+  static constexpr bool value =
+    std::integral_constant<bool, arma::is_arma_type<T1>::value>::value;
+};
 
-template <typename T1, typename T2>
-struct is_same_pT_var<T1, T2>
-  : std::integral_constant<
-      bool, arma::is_arma_type<T1>::value && arma::is_arma_type<T2>::value &&
-              std::is_same<trait::pT<T1>, trait::pT<T2> >::value> {};
+template <typename T1, typename T2> struct is_same_pT_var<T1, T2> {
+  static constexpr bool
+    value = std::integral_constant < bool,
+    arma::is_arma_type<T1>::value &&arma::is_arma_type<T2>::value
+        &&std::is_same<trait::pT<T1>, trait::pT<T2> >::value > ::value;
+};
 
 template <typename T1, typename T2, typename... T3>
-struct is_same_pT_var<T1, T2, T3...>
-  : std::integral_constant<bool, is_same_pT_var<T1, T2>::value &&
-                                   is_same_pT_var<T1, T3...>::value> {};
+struct is_same_pT_var<T1, T2, T3...> {
+  static constexpr bool value = std::integral_constant < bool,
+                        is_same_pT_var<T1, T2>::value
+                            &&is_same_pT_var<T1, T3...>::value > ::value;
+};
 
 //*****************************************************************************
 

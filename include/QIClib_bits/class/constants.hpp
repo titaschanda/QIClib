@@ -69,21 +69,10 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
     proj3{3, 4};
 
   struct {
-    const typename arma::Col<T1>::template fixed<4> phim{
-      static_cast<T1>(std::sqrt(0.5)), static_cast<T1>(0.0),
-      static_cast<T1>(0.0), static_cast<T1>(-std::sqrt(0.5))};
-
-    const typename arma::Col<T1>::template fixed<4> phip{
-      static_cast<T1>(std::sqrt(0.5)), static_cast<T1>(0.0),
-      static_cast<T1>(0.0), static_cast<T1>(std::sqrt(0.5))};
-
-    const typename arma::Col<T1>::template fixed<4> psim{
-      static_cast<T1>(0.0), static_cast<T1>(std::sqrt(0.5)),
-      static_cast<T1>(-std::sqrt(0.5)), static_cast<T1>(0.0)};
-
-    const typename arma::Col<T1>::template fixed<4> psip{
-      static_cast<T1>(0.0), static_cast<T1>(std::sqrt(0.5)),
-      static_cast<T1>(std::sqrt(0.5)), static_cast<T1>(0.0)};
+    typename arma::Col<T1>::template fixed<4> phim { };
+    typename arma::Col<T1>::template fixed<4> phip { };
+    typename arma::Col<T1>::template fixed<4> psim { };
+    typename arma::Col<T1>::template fixed<4> psip { };
   } bell;
 
  private:
@@ -158,10 +147,10 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 
     //**************************************************************************
 
-    // bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
-    // bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
-    // bell.psim << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
-    // bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
+    bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
+    bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
+    bell.psim << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
+    bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
   }
   ~SPM() = default;
 };
