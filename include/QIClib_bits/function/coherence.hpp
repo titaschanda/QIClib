@@ -54,7 +54,7 @@ inline TR l1_coh(const T1& rho1) {
 
     for (arma::uword ii = 0; ii < rho.n_rows; ++ii) {
       for (arma::uword jj = 0; jj < rho.n_rows; ++jj) {
-        ret += ii != jj ? std::abs(rho.at(ii) * std::conj(rho.at(jj))) : 0.0;
+        ret += ii != jj ? std::abs(rho.at(ii) * _internal::conj2(rho.at(jj))) : 0.0;
       }
     }
   }
