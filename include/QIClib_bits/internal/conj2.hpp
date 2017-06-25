@@ -28,14 +28,14 @@ namespace _internal {
 //******************************************************************************
 
 template <typename T1, typename TR = typename std::enable_if<
-                         std::is_arithmatic<T1>::value, T1>::type>
+                         std::is_arithmetic<T1>::value, T1>::type>
 
 inline TR conj2(const T1& value) { return value;}
 
 //******************************************************************************
 
 template <typename T1,
-          typename TR = typename std::enable_if<std::is_arithmatic<T1>::value,
+          typename TR = typename std::enable_if<std::is_arithmetic<T1>::value,
                                                 std::complex<T1> >::type>
 
 inline TR conj2(const std::complex<T1>& value) {
