@@ -206,7 +206,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
     if (checkV)
       return rho.at(K, L);
     else
-      return rho.at(K) * std::conj(rho.at(L));
+      return rho.at(K) * _internal::conj2(rho.at(L));
   };
 
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
@@ -223,7 +223,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
     
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = JJ + 1; II < rho.n_rows; ++II)
-        tr_rho.at(II, JJ) = std::conj(tr_rho.at(JJ, II));
+        tr_rho.at(II, JJ) = _internal::conj2(tr_rho.at(JJ, II));
     }
 
   } else {

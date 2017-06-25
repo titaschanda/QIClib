@@ -140,7 +140,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
     if ((is_Hermitian && L >= K) || (!is_Hermitian))
       tr_rho.at(K, L) +=
-        checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));
+        checkV ? rho.at(I, J) : rho.at(I) * _internal::conj2(rho.at(J));
 
     ++loop_counter[0];
     while (loop_counter[p1] == MAX[p1]) {
@@ -154,7 +154,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   if (is_Hermitian) {
     for (arma::uword L = 0; L < dimkeep; ++L)
       for (arma::uword K = L + 1; K < dimkeep; ++K)
-        tr_rho.at(K, L) = std::conj(tr_rho.at(L, K));
+        tr_rho.at(K, L) = _internal::conj2(tr_rho.at(L, K));
   }
 
   return tr_rho;
@@ -278,7 +278,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
         }
       }
 
-      ret += checkV ? rho.at(I, J) : rho.at(I) * std::conj(rho.at(J));
+      ret += checkV ? rho.at(I, J) : rho.at(I) * _internal::conj2(rho.at(J));
 
       ++loop_counter[0];
       while (loop_counter[p1] == MAX[p1]) {
@@ -303,7 +303,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
     for (arma::uword LL = 0; LL < dimkeep; ++LL) {
       for (arma::uword KK = LL + 1; KK < dimkeep; ++KK)
-        tr_rho.at(KK, LL) = std::conj(tr_rho.at(LL, KK));
+        tr_rho.at(KK, LL) = _internal::conj2(tr_rho.at(LL, KK));
     }
 
   } else {
@@ -482,8 +482,9 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec subsys,
         }
       }
 
-      tr_rho.at(K, L) += checkV ? rho.at(Icount, Jcount)
-                                : rho.at(Icount) * std::conj(rho.at(Jcount));
+      tr_rho.at(K, L) += checkV
+                           ? rho.at(Icount, Jcount)
+                           : rho.at(Icount) * _internal::conj2(rho.at(Jcount));
     }
 
     ++loop_counter[0];

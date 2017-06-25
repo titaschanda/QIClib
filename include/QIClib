@@ -41,6 +41,7 @@
 #include "QIClib_bits/internal/constants.hpp"
 #include "QIClib_bits/internal/singleton.hpp"
 #include "QIClib_bits/internal/as_arma.hpp"
+#include "QIClib_bits/internal/conj2.hpp"
 
 #include "QIClib_bits/class/init.hpp"
 #include "QIClib_bits/class/stop_watch.hpp"
