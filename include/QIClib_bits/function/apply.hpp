@@ -35,7 +35,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
   const auto& A1 = _internal::as_Mat(A);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
@@ -82,7 +82,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
@@ -96,7 +96,7 @@ inline TR apply(const T1& rho1, const T2& A, arma::uvec subsys,
     throw Exception("qic::apply", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -114,7 +114,7 @@ template <typename T1, typename T2,
 
 inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -170,7 +170,7 @@ template <typename T1, typename T2,
 
 inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -241,11 +241,11 @@ template <typename T1, typename T2,
 inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
                 arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(subsys - 1));
+  const arma::uword D = arma::prod(dim);
+  const arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
@@ -310,11 +310,11 @@ template <typename T1, typename T2,
 inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
                 arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(subsys - 1));
+  const arma::uword D = arma::prod(dim);
+  const arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
@@ -393,9 +393,10 @@ template <typename T1, typename T2,
 inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
                 arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
-
+  
 #ifndef QICLIB_NO_DEBUG
+  const bool checkV = (rho.n_cols != 1);
+  
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
 
@@ -408,7 +409,7 @@ inline TR apply(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
     throw Exception("qic::apply", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -428,9 +429,10 @@ template <typename T1, typename T2,
 inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
                 arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
-
+  
 #ifndef QICLIB_NO_DEBUG
+  const bool checkV = (rho.n_cols != 1);
+
   if (rho.n_elem == 0)
     throw Exception("qic::apply", Exception::type::ZERO_SIZE);
 
@@ -443,7 +445,7 @@ inline TR apply(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
     throw Exception("qic::apply", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);

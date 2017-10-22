@@ -41,7 +41,7 @@ inline TR concurrence(const T1& rho1) {
     throw Exception("qic::concurrence", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-  auto& S2 = SPM<trait::pT<T1> >::get_instance().S.at(2);
+  const auto& S2 = SPM<trait::pT<T1> >::get_instance().S.at(2);
 
   typename arma::Mat<std::complex<trait::pT<T1> > >::template fixed<4, 4> pbar =
     rho * arma::kron(S2, S2) * arma::conj(rho) * arma::kron(S2, S2);

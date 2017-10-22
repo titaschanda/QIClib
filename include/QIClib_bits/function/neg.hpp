@@ -31,7 +31,7 @@ inline TR neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::neg", Exception::type::ZERO_SIZE);

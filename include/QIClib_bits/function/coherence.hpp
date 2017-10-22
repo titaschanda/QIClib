@@ -29,7 +29,7 @@ template <typename T1,
 
 inline TR l1_coh(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -73,7 +73,7 @@ template <typename T1, typename T2,
 inline TR l1_coh(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0 || U.n_elem == 0)
@@ -105,7 +105,7 @@ template <typename T1,
 
 inline TR rel_entropy_coh(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -135,7 +135,7 @@ template <typename T1, typename T2,
 inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0 || U.n_elem == 0)

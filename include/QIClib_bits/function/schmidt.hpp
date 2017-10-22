@@ -31,7 +31,7 @@ inline TR schmidt(const T1& rho1,
                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -70,7 +70,7 @@ inline bool schmidt(const T1& rho1,
                     arma::Mat<trait::eT<T1> >& U,
                     arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -97,7 +97,7 @@ inline bool schmidt(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
 
   } else {
     bool ret = arma::svd_econ(
@@ -105,7 +105,7 @@ inline bool schmidt(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
   }
 }
 
@@ -120,7 +120,7 @@ inline bool schmidt_full(const T1& rho1,
                          arma::Mat<trait::eT<T1> >& U,
                          arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -147,7 +147,7 @@ inline bool schmidt_full(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
 
   } else {
     bool ret = arma::svd(U, S, V, arma::reshape(rho, dim.at(1), dim.at(0)).st(),
@@ -155,7 +155,7 @@ inline bool schmidt_full(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
   }
 }
 
@@ -168,7 +168,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR schmidtA(const T1& rho1,
                    const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -218,7 +218,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR schmidtB(const T1& rho1,
                    const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -235,7 +235,7 @@ inline TR schmidtB(const T1& rho1,
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::schmidtB", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if ((dim.n_elem) != 2)
+  if (dim.n_elem != 2)
     throw Exception("qic::schmidtB", Exception::type::NOT_BIPARTITE);
 #endif
 
@@ -323,7 +323,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR schmidtA_full(const T1& rho1,
                         const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -374,7 +374,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR schmidtB_full(const T1& rho1,
                         const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -425,7 +425,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR schmidtAB_full(const T1& rho1,
                          const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)

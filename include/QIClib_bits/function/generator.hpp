@@ -26,8 +26,8 @@ namespace qic {
 template <typename T1 = double>
 
 inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
-  arma::uword m = mask.n_elem;
-  arma::uword D = arma::prod(dim);
+  const arma::uword m = mask.n_elem;
+  const arma::uword D = arma::prod(dim);
 
 #ifndef QICLIB_NO_DEBUG
   if (m == 0)
@@ -48,10 +48,6 @@ inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
   product[m - 1] = 1;
   arma::uword index = 0;
 
-  /* for (arma::sword i = m - 2; i >= 0; --i) {
-    product[i] = product[i + 1] * dim.at(i + 1);
-    index += product[i] * mask.at(i);
-    }*/
   for (arma::uword i = 1; i < m; ++i) {
     product[m - 1 - i] = product[m - i] * dim.at(m - i);
     index += product[m - 1 - i] * mask.at(m - 1 - i);
@@ -66,12 +62,6 @@ inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
 
 //******************************************************************************
 
-// inline arma::cx_vec mket(const arma::uvec& mask, const arma::uvec& dim) {
-//  return mket<arma::cx_double>(mask, dim);
-//}
-
-//******************************************************************************
-
 template <typename T1 = double>
 
 inline arma::Col<T1> mket(const arma::uvec& mask, arma::uword d = 2) {
@@ -82,19 +72,11 @@ inline arma::Col<T1> mket(const arma::uvec& mask, arma::uword d = 2) {
 
 //******************************************************************************
 
-// inline arma::cx_vec mket(const arma::uvec& mask, arma::uword d = 2) {
-//  arma::uvec dim(mask.n_elem);
-//  dim.fill(d);
-//  return mket<arma::cx_double>(mask, dim);
-//}
-
-//******************************************************************************
-
 template <typename T1 = double>
 
 inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
-  arma::uword m = mask.n_elem;
-  arma::uword D = arma::prod(dim);
+  const arma::uword m = mask.n_elem;
+  const arma::uword D = arma::prod(dim);
 
 #ifndef QICLIB_NO_DEBUG
   if (m == 0)
@@ -128,12 +110,6 @@ inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
 
 //******************************************************************************
 
-// inline arma::cx_mat mproj(const arma::uvec& mask, const arma::uvec& dim) {
-//  return mproj<arma::cx_double>(mask, dim);
-//}
-
-//******************************************************************************
-
 template <typename T1 = double>
 
 inline arma::Mat<T1> mproj(const arma::uvec& mask, arma::uword d = 2) {
@@ -141,14 +117,6 @@ inline arma::Mat<T1> mproj(const arma::uvec& mask, arma::uword d = 2) {
   dim.fill(d);
   return mproj<T1>(mask, dim);
 }
-
-//******************************************************************************
-
-// inline arma::cx_mat mproj(const arma::uvec& mask, arma::uword d = 2) {
-//  arma::uvec dim(mask.n_elem);
-//  dim.fill(d);
-//  return mproj<arma::cx_double>(mask, dim);
-//}
 
 //******************************************************************************
 

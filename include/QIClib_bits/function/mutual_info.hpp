@@ -31,7 +31,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::mutual_info", Exception::type::ZERO_SIZE);
@@ -71,7 +71,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
                       arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
-  arma::uvec sys12 = arma::join_cols(sys1, sys2);
+  const arma::uvec sys12 = arma::join_cols(sys1, sys2);
 
 #ifndef QICLIB_NO_DEBUG
   bool checkV = (rho.n_cols != 1);
@@ -148,7 +148,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::mutual_info", Exception::type::ZERO_SIZE);
@@ -162,7 +162,7 @@ inline TR mutual_info(const T1& rho1, arma::uvec sys1, arma::uvec sys2,
     throw Exception("qic::mutual_info", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);

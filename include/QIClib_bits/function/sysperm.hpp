@@ -36,7 +36,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -69,8 +69,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
     productr[n - 1 - i] = productr[n - i] * dim.at(perm.at(n - i) - 1);
 
   if (checkV) {
-    arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols,
-                                      arma::fill::zeros);
+    arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_cols);
 
     const arma::uword loop_no = 2 * n;
     constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
@@ -107,7 +106,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
     return rho_ret;
 
   } else {
-    arma::Col<trait::eT<T1> > rho_ret(rho.n_rows, arma::fill::zeros);
+    arma::Col<trait::eT<T1> > rho_ret(rho.n_rows);
 
     const arma::uword loop_no = n;
     constexpr auto loop_no_buffer = _internal::MAXQDIT + 1;
@@ -158,7 +157,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
                   const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const arma::uword n = dim.n_elem;
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -213,7 +212,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
     };
 
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for collapse(2)
 #endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II < rho.n_rows; ++II)
@@ -245,7 +244,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
     };
 
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for
 #endif
     for (arma::uword II = 0; II < rho.n_rows; ++II) rho_ret.at(II) = worker(II);
 

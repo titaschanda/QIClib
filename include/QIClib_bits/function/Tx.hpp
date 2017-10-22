@@ -35,7 +35,7 @@ template <typename T1,
 inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
              bool is_Hermitian = false) {
   auto rho = _internal::as_Mat(rho1);  // force copy
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
   (void)is_Hermitian;  // do not need this in serial algorithm
 
 #ifndef QICLIB_NO_DEBUG
@@ -132,7 +132,7 @@ template <typename T1,
 inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
              bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -213,7 +213,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
   if (is_Hermitian) {
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for
 #endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II <= JJ; ++II)
@@ -229,7 +229,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   } else {
 
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for collapse(2)
 #endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II < rho.n_rows; ++II)
@@ -268,7 +268,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
     throw Exception("qic::Tx", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);

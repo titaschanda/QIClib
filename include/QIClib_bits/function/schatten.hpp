@@ -72,7 +72,6 @@ inline TR schatten(const T1& rho1, const trait::pT<T1>& p) {
       eigvec.t())),
     1.0 / p);
   }
-  //return std::pow(std::real(arma::trace(powm_sym(absm(rho), p))), 1.0 / p);
 }
 
 //******************************************************************************

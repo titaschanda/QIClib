@@ -29,7 +29,7 @@ template <typename T1,
 
 inline TR entropy(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -110,7 +110,7 @@ template <typename T1,
 inline TR renyi(const T1& rho1,
                 const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -229,7 +229,7 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR tsallis(const T1& rho1,
                   const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -406,8 +406,8 @@ inline TR rel_entropy(const T1& rho11,
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
 
-  bool checkV1 = (rho1.n_cols != 1);
-  bool checkV2 = (rho2.n_cols != 1);
+  const bool checkV1 = (rho1.n_cols != 1);
+  const bool checkV2 = (rho2.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho1.n_elem == 0 || rho2.n_elem == 0)

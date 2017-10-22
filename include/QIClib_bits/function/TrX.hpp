@@ -35,7 +35,7 @@ template <typename T1,
 inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
               bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -76,17 +76,17 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   const arma::uword n = dim.n_elem;
   const arma::uword m = subsys.n_elem;
 
-  arma::uvec keep(n - m);
+  arma::uword keep[_internal::MAXQDIT];
   arma::uword keep_count(0);
   for (arma::uword run = 0; run < n; ++run) {
     if (!arma::any(subsys == run + 1)) {
-      keep.at(keep_count) = run + 1;
+      keep[keep_count] = run + 1;
       ++keep_count;
     }
   }
 
-  arma::uword dimtrace = arma::prod(dim(subsys - 1));
-  arma::uword dimkeep = rho.n_rows / dimtrace;
+  const arma::uword dimtrace = arma::prod(dim(subsys - 1));
+  const arma::uword dimkeep = rho.n_rows / dimtrace;
 
   arma::uword product[_internal::MAXQDIT];
   product[n - 1] = 1;
@@ -97,7 +97,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   productr[n - m - 1] = 1;
   for (arma::uword i = 1; i < n - m; ++i)
     productr[n - m - 1 - i] =
-      productr[n - m - i] * dim.at(keep.at(n - m - i) - 1);
+      productr[n - m - i] * dim.at(keep[n - m - i] - 1);
 
   arma::Mat<trait::eT<T1> > tr_rho(dimkeep, dimkeep, arma::fill::zeros);
 
@@ -118,26 +118,23 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   arma::uword p1 = 0;
 
   while (loop_counter[loop_no] == 0) {
-    arma::uword I(0), J(0), K(0), L(0), n_to_k(0);
+    arma::uword I(0), J(0), K(0), L(0);
 
     for (arma::uword i = 0; i < n; ++i) {
       if (arma::any(subsys == i + 1)) {
-        auto tmp = product[i] * loop_counter[i];
-        I += tmp;
-        J += tmp;
+        I += product[i] * loop_counter[i];
+        J += product[i] * loop_counter[i];
 
       } else {
         I += product[i] * loop_counter[i];
         J += product[i] * loop_counter[i + n];
       }
-
-      if (arma::any(keep == i + 1)) {
-        K += productr[n_to_k] * loop_counter[i];
-        L += productr[n_to_k] * loop_counter[i + n];
-        ++n_to_k;
-      }
     }
-
+    for (arma::uword i = 0; i < n - m; ++i) {
+      K += productr[i] * loop_counter[keep[i] - 1];
+      L += productr[i] * loop_counter[keep[i] + n - 1];
+    }
+    
     if ((is_Hermitian && L >= K) || (!is_Hermitian))
       tr_rho.at(K, L) +=
         checkV ? rho.at(I, J) : rho.at(I) * _internal::conj2(rho.at(J));
@@ -174,7 +171,7 @@ template <typename T1,
 inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
               bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -263,21 +260,18 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
     arma::uword p1 = 0;
 
     while (loop_counter[loop_no] == 0) {
-      arma::uword I(0), J(0), countK(0), countI(0);
+      arma::uword I(0), J(0);
 
-      for (arma::uword i = 0; i < n; ++i) {
-        if (arma::any(subsys == i + 1)) {
-          auto tmp = product[i] * loop_counter[countI];
-          I += tmp;
-          J += tmp;
-          ++countI;
-        } else {
-          I += product[i] * Kindex[countK];
-          J += product[i] * Lindex[countK];
-          ++countK;
-        }
+      for (arma::uword i = 0; i < m; ++i) {
+        I += product[subsys.at(i) - 1] * loop_counter[i];
+        J += product[subsys.at(i) - 1] * loop_counter[i];
       }
 
+      for (arma::uword i = 0; i < n - m; ++i) {
+          I += product[keep[i] - 1] * Kindex[i];
+          J += product[keep[i] - 1] * Lindex[i];
+      }
+      
       ret += checkV ? rho.at(I, J) : rho.at(I) * _internal::conj2(rho.at(J));
 
       ++loop_counter[0];
@@ -294,7 +288,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
   if (is_Hermitian) {
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for
 #endif
     for (arma::uword LL = 0; LL < dimkeep; ++LL) {
       for (arma::uword KK = 0; KK <= LL; ++KK)
@@ -308,7 +302,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
   } else {
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for collapse(2)
 #endif
     for (arma::uword LL = 0; LL < dimkeep; ++LL) {
       for (arma::uword KK = 0; KK < dimkeep; ++KK)
@@ -333,7 +327,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::TrX", Exception::type::ZERO_SIZE);
@@ -347,7 +341,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
     throw Exception("qic::TrX", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
