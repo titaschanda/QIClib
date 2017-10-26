@@ -29,23 +29,22 @@ namespace _internal {
 
 inline void num_to_lexi(arma::uword n, const arma::uvec& dim,
                         arma::uword* result) noexcept {
-  for (arma::uword i = 0; i < dim.n_elem; ++i) {
-    result[dim.n_elem - i - 1] = n % (dim.at(dim.n_elem - i - 1));
-    n /= (dim.at(dim.n_elem - i - 1));
+  for (arma::uword i = 1; i < dim.n_elem; ++i) {
+    result[dim.n_elem - i] = n % (dim.at(dim.n_elem - i));
+    n /= (dim.at(dim.n_elem - i));
   }
+  result[0] = n;
 }
 
 //******************************************************************************
 inline arma::uword lexi_to_num(const arma::uword* index,
                                const arma::uvec& dim) noexcept {
-  arma::uword product[_internal::MAXQDIT];
-  product[dim.n_elem - 1] = 1;
+  arma::uword product(1);
   arma::uword I = 0;
 
   for (arma::uword i = 1; i < dim.n_elem; ++i) {
-    product[dim.n_elem - i - 1] =
-      product[dim.n_elem - i] * dim.at(dim.n_elem - i);
-    I += product[dim.n_elem - i - 1] * index[dim.n_elem - i - 1];
+    product *= dim.at(dim.n_elem - i);
+    I += product * index[dim.n_elem - i - 1];
   }
   return I + index[dim.n_elem - 1];
 }

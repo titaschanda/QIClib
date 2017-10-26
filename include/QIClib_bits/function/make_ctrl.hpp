@@ -60,8 +60,6 @@ inline TR make_ctrl(const T1& A1, arma::uvec ctrl, arma::uvec subsys,
     throw Exception("qic::make_ctrl", Exception::type::INVALID_SUBSYS);
 #endif
 
-  _internal::dim_collapse_sys_ctrl(dim, subsys, ctrl);
-
   const arma::uword DT = arma::prod(dim);
   const arma::uword sizeT = dim.n_elem;
   const arma::uword sizeS = subsys.n_elem;
@@ -129,11 +127,11 @@ inline TR make_ctrl(const T1& A1, arma::uvec ctrl, arma::uvec subsys,
       for (arma::uword M = 0; M < DS; ++M) {
         if (sizeC == 0) {
           auto W = worker_mix(1, M, N, R);
-          U(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
+          U.at(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
         } else
           for (arma::uword p = 0; p < d; ++p) {
             auto W = worker_mix(p, M, N, R);
-            U(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
+            U.at(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
           }
       }
     }

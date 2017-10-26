@@ -79,8 +79,6 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
 #endif
 
-  _internal::dim_collapse_sys_ctrl(dim, subsys, ctrl);
-
   const arma::uword sizeT = dim.n_elem;
   const arma::uword sizeS = subsys.n_elem;
   const arma::uword sizeC = ctrl.n_elem;
@@ -96,7 +94,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   const arma::uvec dimK = dim(keep - 1);
   const arma::uword DK = arma::prod(dimK);
-
+  
   const arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
   arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
@@ -136,7 +134,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
           indexT[subsys.at(j) - 1] = indexS[j];
         }
         ret +=
-          Ap.at(_p).at(_M, N) * rho.at(_internal::lexi_to_num(indexT, dim));
+          Ap.at(_p).at(_M, N) * rho(_internal::lexi_to_num(indexT, dim));
       }
 
       return std::make_pair(ret, _I);
@@ -152,12 +150,13 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
       for (arma::uword M = 0; M < DS; ++M) {
         if (sizeC == 0) {
           auto W = worker_pure(1, M, R);
-          rho_ret(W.second) = W.first;
-        } else
+          rho_ret.at(W.second) = W.first;
+        } else {
           for (arma::uword p = 0; p < d; ++p) {
             auto W = worker_pure(p, M, R);
-            rho_ret(W.second) = W.first;
+            rho_ret.at(W.second) = W.first;
           }
+        }
       }
     }
 
@@ -165,61 +164,131 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   } else {
 
-    auto worker_mix =
-      [sizeS, sizeC, DS, &ctrl, &subsys, &dim, &keep, &dimS, &dimK,
-       &Ap](arma::uword _p, arma::uword _M, arma::uword _N, arma::uword _R)
-        noexcept -> std::tuple<trait::eT<T2>, arma::uword, arma::uword> {
+    arma::uvec dimC = dim(ctrl - 1);
+    arma::uword DC = arma::prod(dimC);
 
-      arma::uword indexT[_internal::MAXQDIT];
-      arma::uword indexS[_internal::MAXQDIT];
-      arma::uword indexK[_internal::MAXQDIT];
+    auto worker_mix = [sizeS, sizeC, DS, DC, &ctrl, &subsys, &dim, &keep, &dimS,
+                       &dimK, &dimC, &Ap,
+                       &rho](arma::uword _p, arma::uword _M1, arma::uword _R1,
+                             arma::uword _q, arma::uword _M2, arma::uword _R2)
+      noexcept -> std::tuple<trait::eT<T2>, arma::uword, arma::uword> {
 
+      arma::uword indexTR[_internal::MAXQDIT];
+      arma::uword indexSR[_internal::MAXQDIT];
+      arma::uword indexKR[_internal::MAXQDIT];
+      arma::uword indexCR[_internal::MAXQDIT];
+
+      arma::uword indexTC[_internal::MAXQDIT];
+      arma::uword indexSC[_internal::MAXQDIT];
+      arma::uword indexKC[_internal::MAXQDIT];
+      arma::uword indexCC[_internal::MAXQDIT];
+
+      _internal::num_to_lexi(_p, dimC, indexCR);
+      _internal::num_to_lexi(_q, dimC, indexCC);
       for (arma::uword i = 0; i < sizeC; ++i) {
-        indexT[ctrl.at(i) - 1] = _p;
+        indexTR[ctrl.at(i) - 1] = indexCR[i];
+        indexTC[ctrl.at(i) - 1] = indexCC[i];
       }
-
-      _internal::num_to_lexi(_R, dimK, indexK);
+      
+      _internal::num_to_lexi(_R1, dimK, indexKR);
+      _internal::num_to_lexi(_R2, dimK, indexKC);
       for (arma::uword i = 0; i < keep.n_elem; ++i) {
-        indexT[keep.at(i) - 1] = indexK[i];
+        indexTR[keep.at(i) - 1] = indexKR[i];
+        indexTC[keep.at(i) - 1] = indexKC[i];
       }
 
-      _internal::num_to_lexi(_M, dimS, indexS);
+      _internal::num_to_lexi(_M1, dimS, indexSR);
+      _internal::num_to_lexi(_M2, dimS, indexSC);
       for (arma::uword i = 0; i < sizeS; ++i) {
-        indexT[subsys.at(i) - 1] = indexS[i];
+        indexTR[subsys.at(i) - 1] = indexSR[i];
+        indexTC[subsys.at(i) - 1] = indexSC[i];
       }
 
-      arma::uword _I = _internal::lexi_to_num(indexT, dim);
-      _internal::num_to_lexi(_N, dimS, indexS);
-      for (arma::uword j = 0; j < sizeS; ++j) {
-        indexT[subsys.at(j) - 1] = indexS[j];
-      }
-      arma::uword _J = _internal::lexi_to_num(indexT, dim);
+      bool r_equal(true), c_equal(true);
+      arma::uword r_value(1), c_value(1);
 
-      return std::make_tuple(Ap.at(_p).at(_M, _N), _I, _J);
+      if (sizeC > 0 ) {
+        r_value = indexCR[0];
+        c_value = indexCC[0];
+       
+        for (arma::uword i = 1; i < sizeC; ++i ) {
+          if (indexCR[i] != r_value) {
+            r_equal = false;
+            break;
+          }
+        }
+
+        for (arma::uword i = 1; i < sizeC; ++i ) {
+          if (indexCC[i] != c_value) {
+            c_equal = false;
+            break;
+          }
+        }
+      }
+      
+      arma::uword _I = _internal::lexi_to_num(indexTR, dim);
+      arma::uword _J = _internal::lexi_to_num(indexTC, dim);
+      eTR ret(0);
+      
+      for (arma::uword N1 = 0; N1 < DS; ++N1) {
+
+        _internal::num_to_lexi(N1, dimS, indexSR);
+        
+        for (arma::uword j = 0; j < sizeS; ++j) {
+          indexTR[subsys.at(j) - 1] = indexSR[j];
+        }
+
+        trait::eT<T2> r_coeff =
+          r_equal ? Ap.at(r_value).at(_M1, N1)
+            : (_M1 == N1 ? 1 : 0);
+
+        for (arma::uword N2 = 0; N2 < DS; ++N2) {
+
+          _internal::num_to_lexi(N2, dimS, indexSC);
+        
+          for (arma::uword j = 0; j < sizeS; ++j) {
+            indexTC[subsys.at(j) - 1] = indexSC[j];
+          }
+
+          trait::eT<T2> c_coeff =
+              c_equal ? _internal::conj2(Ap.at(c_value).at(_M2, N2))
+              : (_M2 == N2 ? 1 : 0);
+
+          ret += r_coeff *
+                 rho.at(_internal::lexi_to_num(indexTR, dim),
+                        _internal::lexi_to_num(indexTC, dim)) * c_coeff;
+        }
+      }
+      return std::make_tuple(ret, _I, _J);
     };
 
-    arma::Mat<trait::eT<T2> > U(DT, DT, arma::fill::eye);
+    arma::Mat<eTR> ret_rho(rho);
 
 #if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
   defined(_OPENMP)
-#pragma omp parallel for collapse(2)
+#pragma omp parallel for collapse(4)
 #endif
-    for (arma::uword R = 0; R < DK; ++R) {
-      for (arma::uword N = 0; N < DS; ++N) {
-        for (arma::uword M = 0; M < DS; ++M) {
-          if (sizeC == 0) {
-            auto W = worker_mix(1, M, N, R);
-            U(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
-          } else
-            for (arma::uword p = 0; p < d; ++p) {
-              auto W = worker_mix(p, M, N, R);
-              U(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
+    for (arma::uword R1 = 0; R1 < DK; ++R1) {
+      for (arma::uword R2 = 0; R2 < DK; ++R2) {
+        for (arma::uword M1 = 0; M1 < DS; ++M1) {
+          for (arma::uword M2 = 0; M2 < DS; ++M2) {
+            if (sizeC == 0) {
+              auto W = worker_mix(1, M1, R1, 1, M2, R2);
+              ret_rho.at(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
+            } else {
+              for (arma::uword p = 0; p < DC; ++p) {
+                for (arma::uword q = 0; q < DC; ++q) {
+                  auto W = worker_mix(p, M1, R1, q, M2, R2);
+                  ret_rho.at(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
+                }
+              }
             }
+          }
         }
       }
     }
 
-    return U * rho * U.t();
+    return ret_rho;
   }
 }
 

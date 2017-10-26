@@ -44,13 +44,12 @@ inline arma::Col<T1> mket(const arma::uvec& mask, const arma::uvec& dim) {
       throw Exception("qic::mket", Exception::type::SUBSYS_MISMATCH_DIMS);
 #endif
 
-  arma::uword product[_internal::MAXQDIT];
-  product[m - 1] = 1;
+  arma::uword product(1);
   arma::uword index = 0;
 
   for (arma::uword i = 1; i < m; ++i) {
-    product[m - 1 - i] = product[m - i] * dim.at(m - i);
-    index += product[m - 1 - i] * mask.at(m - 1 - i);
+    product *= dim.at(m - i);
+    index += product * mask.at(m - 1 - i);
   }
 
   index += mask.at(m - 1);
@@ -93,13 +92,12 @@ inline arma::Mat<T1> mproj(const arma::uvec& mask, const arma::uvec& dim) {
       throw Exception("qic::mproj", Exception::type::SUBSYS_MISMATCH_DIMS);
 #endif
 
-  arma::uword product[_internal::MAXQDIT];
-  product[m - 1] = 1;
+  arma::uword product(1);
   arma::uword index = 0;
 
   for (arma::uword i = 1; i < m; ++i) {
-    product[m - 1 - i] = product[m - i] * dim.at(m - i);
-    index += product[m - 1 - i] * mask.at(m - 1 - i);
+    product *= dim.at(m - i);
+    index += product * mask.at(m - 1 - i);
   }
   index += mask.at(m - 1);
 

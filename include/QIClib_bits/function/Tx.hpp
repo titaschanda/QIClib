@@ -89,19 +89,19 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   arma::uword p1 = 0;
 
   while (loop_counter[loop_no] == 0) {
-    arma::uword I(0), J(0), K(0), L(0);
+    arma::uword I(0), J(0);
 
     for (arma::uword i = 0; i < n; ++i) {
       I += product[i] * loop_counter[i];
       J += product[i] * loop_counter[i + n];
+    }
 
-      if (arma::any(subsys == i + 1)) {
-        K += product[i] * loop_counter[i + n];
-        L += product[i] * loop_counter[i];
-      } else {
-        K += product[i] * loop_counter[i];
-        L += product[i] * loop_counter[i + n];
-      }
+    arma::uword K(I), L(J);
+    for (arma::uword i = 0; i < subsys.n_elem; ++i) {
+      K += product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1 + n];
+      L -= product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1 + n];
+      L += product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1];
+      K -= product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1];
     }
 
     if (I > K)
@@ -168,6 +168,9 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
       return rho * rho.t();
   }
 
+  if (!checkV)
+    is_Hermitian = true;
+  
   _internal::dim_collapse_sys(dim, subsys);
   const arma::uword n = dim.n_elem;
 
@@ -212,6 +215,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
 
   if (is_Hermitian) {
+    
 #if defined(_OPENMP)
 #pragma omp parallel for
 #endif
@@ -220,7 +224,6 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
         tr_rho.at(II, JJ) = worker(II, JJ);
     }
 
-    
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = JJ + 1; II < rho.n_rows; ++II)
         tr_rho.at(II, JJ) = _internal::conj2(tr_rho.at(JJ, II));

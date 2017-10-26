@@ -31,6 +31,11 @@
 #define QICLIB_MAXQDIT_COUNT 40
 #endif
 
+
+#ifndef QICLIB_DC_USE_LIMIT
+#define QICLIB_DC_USE_LIMIT 20
+#endif
+
 // floating point precision
 #ifndef QICLIB_FLOAT_PRECISION
 #define QICLIB_FLOAT_PRECISION (100.0 * std::numeric_limits<float>::epsilon())
