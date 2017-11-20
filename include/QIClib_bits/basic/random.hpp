@@ -293,10 +293,9 @@ template <typename T1 = arma::cx_double,
             is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Mat<T1> randHermitian(const arma::uword& m) {
   auto& I = _internal::cond_I<T1>::value;
-  arma::Mat<T1> ret =
-    2.0 * randU<arma::Mat<T1> >(m, m) -
-    (static_cast<typename arma::get_pod_type<T1>::result>(1.0) + I) *
-      arma::ones<arma::Mat<T1> >(m, m);
+  arma::Mat<T1> ret = randN<arma::Mat<T1> >(m, m);
+  // - (static_cast<typename arma::get_pod_type<T1>::result>(1.0) + I) *
+  // arma::ones<arma::Mat<T1> >(m, m);
 
   return ret + ret.t();
 }
