@@ -68,7 +68,7 @@ inline TR randU(const arma::uword& N,
 
   } else {
     auto& I = _internal::cond_I<trait::eT<T1> >::value;
-    ret.imbue([&dis, &I]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
+    ret.imbue([&dis]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
   }
   return ret;
 }
@@ -95,7 +95,7 @@ inline TR randU(const arma::uword& m, const arma::uword& n,
 
   } else {
     auto& I = _internal::cond_I<trait::eT<T1> >::value;
-    ret.imbue([&dis, &I]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
+    ret.imbue([&dis]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
   }
   return ret;
 }
@@ -150,7 +150,7 @@ inline TR randN(const arma::uword& N,
 
   } else {
     auto& I = _internal::cond_I<trait::eT<T1> >::value;
-    ret.imbue([&dis, &I]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
+    ret.imbue([&dis]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
   }
   return ret;
 }
@@ -178,7 +178,7 @@ inline TR randN(const arma::uword& m, const arma::uword& n,
 
   } else {
     auto& I = _internal::cond_I<trait::eT<T1> >::value;
-    ret.imbue([&dis, &I]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
+    ret.imbue([&dis]() { return dis(rdevs.rng) + I * dis(rdevs.rng); });
   }
   return ret;
 }
@@ -242,7 +242,7 @@ inline TR randI(const arma::uword& N, const arma::Col<TA>& range = {0, 1000}) {
 
   } else {
     auto& I = _internal::cond_I<trait::eT<T1> >::value;
-    ret.imbue([&dis, &I]() {
+    ret.imbue([&dis]() {
       return static_cast<trait::pT<T1> >(dis(rdevs.rng)) +
              I * static_cast<trait::pT<T1> >(dis(rdevs.rng));
     });
@@ -277,7 +277,7 @@ inline TR randI(const arma::uword& m, const arma::uword& n,
 
   } else {
     auto& I = _internal::cond_I<trait::eT<T1> >::value;
-    ret.imbue([&dis, &I]() {
+    ret.imbue([&dis]() {
       return static_cast<trait::pT<T1> >(dis(rdevs.rng)) +
              I * static_cast<trait::pT<T1> >(dis(rdevs.rng));
     });
