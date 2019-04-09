@@ -23,6 +23,8 @@
 #define _QICLIB_NUM_HPP_
 
 #include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "macro.hpp"
 #include <armadillo>
 
 namespace qic {

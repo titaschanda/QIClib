@@ -19,13 +19,12 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef _QICLIB_ENTROPY_HPP_
 #define _QICLIB_ENTROPY_HPP_
 
 #include "../basic/type_traits.hpp"
-#include "../class/exception.hpp"
 #include "../class/constants.hpp"
+#include "../class/exception.hpp"
 #include "../internal/as_arma.hpp"
 #include <armadillo>
 
@@ -117,8 +116,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, trait::pT<T1> >::type>
 
-inline TR renyi(const T1& rho1,
-                const trait::pT<T1>& alpha) {
+inline TR renyi(const T1& rho1, const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
   const bool checkV = (rho.n_cols != 1);
 
@@ -165,8 +163,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 
-inline TR renyi_prob(const T1& prob1,
-                     const trait::eT<T1>& alpha) {
+inline TR renyi_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   const auto& prob2 = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -236,8 +233,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          trait::pT<T1> >::value>
 
-inline TR tsallis(const T1& rho1,
-                  const trait::pT<T1>& alpha) {
+inline TR tsallis(const T1& rho1, const trait::pT<T1>& alpha) {
   const auto& rho = _internal::as_Mat(rho1);
   const bool checkV = (rho.n_cols != 1);
 
@@ -276,8 +272,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 
-inline TR tsallis_prob(const T1& prob1,
-                       const trait::eT<T1>& alpha) {
+inline TR tsallis_prob(const T1& prob1, const trait::eT<T1>& alpha) {
   const auto& prob2 = _internal::as_Mat(prob1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -341,8 +336,7 @@ template <typename T1,
           typename TR = typename std::enable_if<
             is_floating_point_var<trait::eT<T1> >::value, trait::eT<T1> >::type>
 
-inline TR rel_entropy_prob(const T1& prob11,
-                           const T1& prob12) {
+inline TR rel_entropy_prob(const T1& prob11, const T1& prob12) {
   const auto& prob1 = _internal::as_Mat(prob11);
   const auto& prob2 = _internal::as_Mat(prob12);
 
@@ -411,8 +405,7 @@ template <typename T1, typename T2,
               is_same_pT_var<T1, T2>::value,
             trait::pT<T1> >::type>
 
-inline TR rel_entropy(const T1& rho11,
-                      const T2& rho12) {
+inline TR rel_entropy(const T1& rho11, const T2& rho12) {
   const auto& rho1 = _internal::as_Mat(rho11);
   const auto& rho2 = _internal::as_Mat(rho12);
 

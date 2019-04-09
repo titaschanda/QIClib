@@ -46,7 +46,7 @@ Note that submitting a pull request, providing the needed changes to introduced 
 
 License
 -------
-Copyright (c) 2015 - 2017  Titas Chanda, titas DOT chanda AT gmail DOT com
+Copyright (c) 2015 - 2019  Titas Chanda, titas DOT chanda AT gmail DOT com
 
 [QIClib](https://titaschanda.github.io/QIClib) is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

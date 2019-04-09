@@ -23,6 +23,7 @@
 #define _QICLIB_NEG_HPP_
 
 #include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
 #include "../class/exception.hpp"
 #include "../internal/as_arma.hpp"
 #include <armadillo>
