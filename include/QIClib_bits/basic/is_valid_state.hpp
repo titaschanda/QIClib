@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,16 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_IS_VALID_STATE_HPP_
+#define _QICLIB_IS_VALID_STATE_HPP_
+
+#include "../class/constants.hpp"
+#include "../internal/as_arma.hpp"
+#include "is_Hermitian.hpp"
+#include "is_pure.hpp"
+#include "type_traits.hpp"
+#include <armadillo>
+
 namespace qic {
 
 template <typename T1,
@@ -29,11 +39,11 @@ inline bool is_valid_state(
   const trait::pT<T1>& tol = _precision::eps<trait::pT<T1> >::value) {
   const auto& rho = _internal::as_Mat(rho1);
 
-  if (!is_Hermitian(rho, tol, 10 * tol)) {
-    return false;
-
-  } else if (is_pure(rho, true, tol)) {
+  if (is_pure(rho, true, tol)) {
     return true;
+
+  } else if (!is_Hermitian(rho, tol, 10 * tol)) {
+    return false;
 
   } else {
     if (std::abs(std::abs(arma::trace(rho)) - 1.0) > tol ||
@@ -45,3 +55,5 @@ inline bool is_valid_state(
 }
 
 }  // namespace qic
+
+#endif

@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,13 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_SPARSE_TO_DENSE_HPP_
+#define _QICLIB_SPARSE_TO_DENSE_HPP_
+
+#include "../internal/as_arma.hpp"
+#include "type_traits.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -34,3 +41,5 @@ inline TR sparse_to_dense(const T1& rho1) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

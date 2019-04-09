@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,12 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_INTERNAL_CONJ2_HPP_
+#define _QICLIB_INTERNAL_CONJ2_HPP_
+
+#include "../basic/type_traits.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //************************************************************************
@@ -30,7 +36,9 @@ namespace _internal {
 template <typename T1, typename TR = typename std::enable_if<
                          std::is_arithmetic<T1>::value, T1>::type>
 
-inline TR conj2(const T1& value) { return value;}
+inline TR conj2(const T1& value) {
+  return value;
+}
 
 //******************************************************************************
 
@@ -47,3 +55,5 @@ inline TR conj2(const std::complex<T1>& value) {
 }  // namespace _internal
 
 }  // namespace qic
+
+#endif

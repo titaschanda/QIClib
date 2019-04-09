@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_INTERNAL_METHODS_HPP_
+#define _QICLIB_INTERNAL_METHODS_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -53,18 +61,18 @@ inline TR POWM_GEN_INT(const T1& rho, const T2& P) {
 //******************************************************************************
 
 template <typename T1> struct int_tag {
-  typedef int_tag type;
-  typedef arma::Mat<trait::eT<T1> > ret_type;
+  using type = int_tag;
+  using ret_type = arma::Mat<trait::eT<T1> >;
 };
 
 template <typename T1> struct uint_tag {
-  typedef uint_tag type;
-  typedef arma::Mat<trait::eT<T1> > ret_type;
+  using type = uint_tag;
+  using ret_type = arma::Mat<trait::eT<T1> >;
 };
 
 template <typename T1> struct nonint_tag {
-  typedef nonint_tag type;
-  typedef arma::Mat<std::complex<trait::pT<T1> > > ret_type;
+  using type = nonint_tag;
+  using ret_type = arma::Mat<std::complex<trait::pT<T1> > >;
 };
 
 template <typename T1, typename T2>
@@ -226,14 +234,14 @@ inline TR TENSOR_POW(const T1& rho, arma::uword n) {
 
 //******************************************************************************
 
-template <typename T1> struct real_tag { typedef real_tag type; };
+template <typename T1> struct real_tag { using type = real_tag; };
 
-template <typename T1> struct cplx_tag { typedef cplx_tag type; };
+template <typename T1> struct cplx_tag { using type = cplx_tag; };
 
 template <typename T1>
 struct absm_tag
-  : std::conditional<std::is_same<trait::eT<T1>, trait::pT<T1> >::value,
-                     real_tag<T1>, cplx_tag<T1> >::type {};
+    : std::conditional<std::is_same<trait::eT<T1>, trait::pT<T1> >::value,
+                       real_tag<T1>, cplx_tag<T1> >::type {};
 
 //******************************************************************************
 
@@ -276,3 +284,5 @@ inline TR absm_implement(const T1& rho, cplx_tag<T1>) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

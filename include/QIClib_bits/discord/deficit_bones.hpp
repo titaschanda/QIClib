@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,13 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_DEFICIT_BONES_HPP_
+#define _QICLIB_DEFICIT_BONES_HPP_
+
+#include "../basic/type_traits.hpp"
+#include <armadillo>
+#include <nlopt.hpp>
+
 namespace qic {
 
 //******************************************************************************
@@ -29,10 +36,6 @@ template <typename T1,
 class deficit_space;
 
 template <typename T1> class deficit_space<T1> {
-
-  // static_assert(
-  // std::is_same<T1, arma::Mat<trait::eT<T1> > >::value,
-  // "deficit_space requires Armadillo Mat object as template argument!");
 
  private:
   T1 _rho{};
@@ -117,3 +120,5 @@ template <typename T1> class deficit_space<T1> {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

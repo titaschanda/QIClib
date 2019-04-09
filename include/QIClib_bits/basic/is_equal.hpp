@@ -19,6 +19,14 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_IS_EQUAL_HPP_
+#define _QICLIB_IS_EQUAL_HPP_
+
+#include "../class/constants.hpp"
+#include "../internal/as_arma.hpp"
+#include "type_traits.hpp"
+#include <armadillo>
+
 namespace qic {
 
 template <typename T1, typename T2,
@@ -65,3 +73,5 @@ is_equal(const T1& rho11, const T2& rho12, bool typecheck = false,
 }
 
 }  // namespace qic
+
+#endif

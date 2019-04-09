@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_INTERNAL_DISCORD_HPP_
+#define _QICLIB_INTERNAL_DISCORD_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -129,13 +136,15 @@ inline double disc_nlopt3(const std::vector<double>& x,
 
   arma::Mat<std::complex<trait::pT<T1> > > proj1 =
     std::cos(theta1) * std::cos(theta2) * U -
-    std::exp(I * phi1) * (std::exp(I * del) * std::sin(theta1) *
-                            std::cos(theta2) * std::cos(theta3) +
-                          std::sin(theta2) * std::sin(theta3)) *
+    std::exp(I * phi1) *
+      (std::exp(I * del) * std::sin(theta1) * std::cos(theta2) *
+         std::cos(theta3) +
+       std::sin(theta2) * std::sin(theta3)) *
       M +
-    std::exp(I * phi2) * (-std::exp(I * del) * std::sin(theta1) *
-                            std::cos(theta2) * std::sin(theta3) +
-                          std::sin(theta2) * std::cos(theta3)) *
+    std::exp(I * phi2) *
+      (-std::exp(I * del) * std::sin(theta1) * std::cos(theta2) *
+         std::sin(theta3) +
+       std::sin(theta2) * std::cos(theta3)) *
       D;
 
   arma::Mat<std::complex<trait::pT<T1> > > proj2 =
@@ -145,13 +154,15 @@ inline double disc_nlopt3(const std::vector<double>& x,
 
   arma::Mat<std::complex<trait::pT<T1> > > proj3 =
     std::cos(theta1) * std::sin(theta2) * U +
-    std::exp(I * phi1) * (-std::exp(I * del) * std::sin(theta1) *
-                            std::sin(theta2) * std::cos(theta3) +
-                          std::cos(theta2) * std::sin(theta3)) *
+    std::exp(I * phi1) *
+      (-std::exp(I * del) * std::sin(theta1) * std::sin(theta2) *
+         std::cos(theta3) +
+       std::cos(theta2) * std::sin(theta3)) *
       M -
-    std::exp(I * phi2) * (std::exp(I * del) * std::sin(theta1) *
-                            std::sin(theta2) * std::sin(theta3) +
-                          std::cos(theta2) * std::cos(theta3)) *
+    std::exp(I * phi2) *
+      (std::exp(I * del) * std::sin(theta1) * std::sin(theta2) *
+         std::sin(theta3) +
+       std::cos(theta2) * std::cos(theta3)) *
       D;
 
   proj1 *= proj1.t();
@@ -272,13 +283,15 @@ double def_nlopt3(const std::vector<double>& x, std::vector<double>& grad,
 
   arma::Mat<std::complex<trait::pT<T1> > > proj1 =
     std::cos(theta1) * std::cos(theta2) * U -
-    std::exp(I * phi1) * (std::exp(I * del) * std::sin(theta1) *
-                            std::cos(theta2) * std::cos(theta3) +
-                          std::sin(theta2) * std::sin(theta3)) *
+    std::exp(I * phi1) *
+      (std::exp(I * del) * std::sin(theta1) * std::cos(theta2) *
+         std::cos(theta3) +
+       std::sin(theta2) * std::sin(theta3)) *
       M +
-    std::exp(I * phi2) * (-std::exp(I * del) * std::sin(theta1) *
-                            std::cos(theta2) * std::sin(theta3) +
-                          std::sin(theta2) * std::cos(theta3)) *
+    std::exp(I * phi2) *
+      (-std::exp(I * del) * std::sin(theta1) * std::cos(theta2) *
+         std::sin(theta3) +
+       std::sin(theta2) * std::cos(theta3)) *
       D;
 
   arma::Mat<std::complex<trait::pT<T1> > > proj2 =
@@ -288,13 +301,15 @@ double def_nlopt3(const std::vector<double>& x, std::vector<double>& grad,
 
   arma::Mat<std::complex<trait::pT<T1> > > proj3 =
     std::cos(theta1) * std::sin(theta2) * U +
-    std::exp(I * phi1) * (-std::exp(I * del) * std::sin(theta1) *
-                            std::sin(theta2) * std::cos(theta3) +
-                          std::cos(theta2) * std::sin(theta3)) *
+    std::exp(I * phi1) *
+      (-std::exp(I * del) * std::sin(theta1) * std::sin(theta2) *
+         std::cos(theta3) +
+       std::cos(theta2) * std::sin(theta3)) *
       M -
-    std::exp(I * phi2) * (std::exp(I * del) * std::sin(theta1) *
-                            std::sin(theta2) * std::sin(theta3) +
-                          std::cos(theta2) * std::cos(theta3)) *
+    std::exp(I * phi2) *
+      (std::exp(I * del) * std::sin(theta1) * std::sin(theta2) *
+         std::sin(theta3) +
+       std::cos(theta2) * std::cos(theta3)) *
       D;
 
   proj1 *= proj1.t();
@@ -336,3 +351,5 @@ double def_nlopt3(const std::vector<double>& x, std::vector<double>& grad,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_GATES_HPP_
+#define _QICLIB_GATES_HPP_
+
+#include "../basic/macro.hpp"
+#include "../basic/type_traits.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/constants.hpp"
+#include "../internal/singleton.hpp"
+#include "constants.hpp"
+#include "exception.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -149,3 +161,5 @@ static const GATES<float>& gatesf _QICLIB_UNUSED_ =
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

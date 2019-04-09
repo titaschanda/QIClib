@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,15 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_CONSTANTS_HPP_
+#define _QICLIB_CONSTANTS_HPP_
+
+#include "../basic/macro.hpp"
+#include "../basic/type_traits.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/singleton.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -27,19 +36,20 @@ namespace _precision {
 
 //******************************************************************************
 
-template <typename T, typename Enable = typename std::enable_if<
-                        std::is_arithmetic<trait::RCV<T> >::value, void>::type>
+template <typename T,
+          typename Enable = typename std::enable_if<
+            std::is_arithmetic<trait::DECAY<T> >::value, void>::type>
 struct eps;
 
 template <typename T> struct eps<T> {
   static constexpr T value =
-    std::is_integral<trait::RCV<T> >::value
+    std::is_integral<trait::DECAY<T> >::value
       ? 0
-      : (std::is_same<trait::RCV<T>, float>::value
+      : (std::is_same<trait::DECAY<T>, float>::value
            ? QICLIB_FLOAT_PRECISION  // std::numeric_limits<T>::epsilon()
-           : (std::is_same<trait::RCV<T>, double>::value
+           : (std::is_same<trait::DECAY<T>, double>::value
                 ? QICLIB_DOUBLE_PRECISION  // std::numeric_limits<T>::epsilon()
-                : 100.0 * std::numeric_limits<trait::RCV<T> >::epsilon()));
+                : 100.0 * std::numeric_limits<trait::DECAY<T> >::epsilon()));
 };
 
 template <typename T> constexpr T eps<T>::value;
@@ -56,7 +66,6 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
   friend class _internal::Singleton<const SPM<T1> >;
 
  public:
-
   arma::field<typename arma::Mat<std::complex<T1> >::template fixed<2, 2> > S{
     4};
   arma::field<typename arma::Col<std::complex<T1> >::template fixed<2> > basis2{
@@ -69,10 +78,10 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
     proj3{3, 4};
 
   struct {
-    typename arma::Col<T1>::template fixed<4> phim { };
-    typename arma::Col<T1>::template fixed<4> phip { };
-    typename arma::Col<T1>::template fixed<4> psim { };
-    typename arma::Col<T1>::template fixed<4> psip { };
+    typename arma::Col<T1>::template fixed<4> phim{};
+    typename arma::Col<T1>::template fixed<4> phip{};
+    typename arma::Col<T1>::template fixed<4> psim{};
+    typename arma::Col<T1>::template fixed<4> psip{};
   } bell;
 
  private:
@@ -167,3 +176,5 @@ static const SPM<float>& spmf _QICLIB_UNUSED_ = SPM<float>::get_instance();
 //******************************************************************************
 
 }  // namespace qic
+
+#endif
