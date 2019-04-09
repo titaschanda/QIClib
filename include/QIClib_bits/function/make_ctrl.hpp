@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,18 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_MAKE_CTRL_HPP_
+#define _QICLIB_MAKE_CTRL_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/constants.hpp"
+#include "../internal/lexi.hpp"
+#include "../internal/methods.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //*******************************************************************************
@@ -30,13 +42,13 @@ template <typename T1, typename TR = typename std::enable_if<
 inline TR make_ctrl(const T1& A1, arma::uvec ctrl, arma::uvec subsys,
                     arma::uvec dim) {
   const auto& A = _internal::as_Mat(A1);
-  
-  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl); 
+
+  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
 
   const arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
   const arma::uvec dimS = dim(subsys - 1);
   const arma::uword DS = arma::prod(dimS);
-  
+
 #ifndef QICLIB_NO_DEBUG
   if (A.n_elem == 0)
     throw Exception("qic::make_ctrl", Exception::type::ZERO_SIZE);
@@ -87,7 +99,6 @@ inline TR make_ctrl(const T1& A1, arma::uvec ctrl, arma::uvec subsys,
     [sizeS, sizeC, DS, &ctrl, &subsys, &dim, &keep, &dimS, &dimK,
      &Ap](arma::uword _p, arma::uword _M, arma::uword _N, arma::uword _R)
       noexcept -> std::tuple<trait::eT<T1>, arma::uword, arma::uword> {
-
     arma::uword indexT[_internal::MAXQDIT];
     arma::uword indexS[_internal::MAXQDIT];
     arma::uword indexK[_internal::MAXQDIT];
@@ -165,3 +176,5 @@ inline TR make_ctrl(const T1& A1, arma::uvec ctrl, arma::uvec subsys,
 //*******************************************************************************
 
 }  // namespace qic
+
+#endif

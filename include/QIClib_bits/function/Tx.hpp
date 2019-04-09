@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_TX_HPP_
+#define _QICLIB_TX_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/collapse.hpp"
+#include "../internal/conj2.hpp"
+#include "../internal/constants.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -170,7 +181,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
   if (!checkV)
     is_Hermitian = true;
-  
+
   _internal::dim_collapse_sys(dim, subsys);
   const arma::uword n = dim.n_elem;
 
@@ -215,7 +226,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
 
   if (is_Hermitian) {
-    
+
 #if defined(_OPENMP)
 #pragma omp parallel for
 #endif
@@ -282,3 +293,5 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

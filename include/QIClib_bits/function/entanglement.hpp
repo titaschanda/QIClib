@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_ENTANGLEMENT_HPP_
+#define _QICLIB_ENTANGLEMENT_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -57,3 +65,5 @@ inline TR entanglement(const T1& rho1, arma::uvec dim) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

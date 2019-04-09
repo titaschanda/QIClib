@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_TRX_HPP_
+#define _QICLIB_TRX_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/collapse.hpp"
+#include "../internal/conj2.hpp"
+#include "../internal/constants.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -69,7 +80,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
   if (!checkV)
     is_Hermitian = true;
-  
+
   _internal::dim_collapse_sys(dim, subsys);
   const arma::uword n = dim.n_elem;
   const arma::uword m = subsys.n_elem;
@@ -95,7 +106,6 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
 
   auto worker = [n, m, checkV, &dim, &keep, &subsys, &product,
                  &rho](arma::uword K, arma::uword L) noexcept -> trait::eT<T1> {
-
     arma::uword Kindex[_internal::MAXQDIT];
     arma::uword Lindex[_internal::MAXQDIT];
 
@@ -127,13 +137,13 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
       for (arma::uword i = 0; i < m; ++i) {
         I += product[subsys.at(i) - 1] * loop_counter[i];
       }
-      
+
       arma::uword J(I);
       for (arma::uword i = 0; i < n - m; ++i) {
-          I += product[keep[i] - 1] * Kindex[i];
-          J += product[keep[i] - 1] * Lindex[i];
+        I += product[keep[i] - 1] * Kindex[i];
+        J += product[keep[i] - 1] * Lindex[i];
       }
-      
+
       ret += checkV ? rho.at(I, J) : rho.at(I) * _internal::conj2(rho.at(J));
 
       ++loop_counter[0];
@@ -149,7 +159,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   };
 
   if (is_Hermitian) {
-#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_TRX)) &&      \
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_TRX)) &&          \
   defined(_OPENMP)
 #pragma omp parallel for
 #endif
@@ -164,7 +174,7 @@ inline TR TrX(const T1& rho1, arma::uvec subsys, arma::uvec dim,
     }
 
   } else {
-#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_TRX)) &&    \
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_TRX)) &&          \
   defined(_OPENMP)
 #pragma omp parallel for collapse(2)
 #endif
@@ -235,9 +245,6 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec subsys,
 
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::TrX", Exception::type::INVALID_DIMS);
-
-  //  if (arma::prod(dim) != p.n_rows)
-  //  throw Exception("qic::TrX", Exception::type::DIMS_MISMATCH_MATRIX);
 
   if (dim.n_elem < subsys.n_elem || arma::any(subsys == 0) ||
       arma::any(subsys > dim.n_elem) ||
@@ -360,3 +367,5 @@ inline TR TrX(const T1& rho1, const arma::uvec& Sbasis, arma::uvec subsys,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

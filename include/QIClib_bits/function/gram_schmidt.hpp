@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,15 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_GRAM_SCHMIDT_HPP_
+#define _QICLIB_GRAM_SCHMIDT_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -27,8 +36,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
 
-inline TR gram_schmidt(const T1& rho1,
-                       bool normalize = true) {
+inline TR gram_schmidt(const T1& rho1, bool normalize = true) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
@@ -182,3 +190,5 @@ inline TR gram_schmidt(const arma::field<arma::Col<T1> >& rho,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

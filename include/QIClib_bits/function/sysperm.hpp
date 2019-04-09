@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_SYSPERM_HPP_
+#define _QICLIB_SYSPERM_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/constants.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -188,8 +197,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
     arma::Mat<trait::eT<T1> > rho_ret(rho.n_rows, rho.n_rows);
 
     auto worker = [n, &dim, &perm, &productr, &rho](
-      arma::uword I, arma::uword J) noexcept -> trait::eT<T1> {
-
+                    arma::uword I, arma::uword J) noexcept -> trait::eT<T1> {
       arma::uword Iindex[_internal::MAXQDIT];
       arma::uword Jindex[_internal::MAXQDIT];
 
@@ -225,8 +233,7 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm,
     arma::Col<trait::eT<T1> > rho_ret(rho.n_rows);
 
     auto worker = [n, &dim, &perm, &productr, &rho](arma::uword I)
-      noexcept -> trait::eT<T1> {
-
+                    noexcept -> trait::eT<T1> {
       arma::uword Iindex[_internal::MAXQDIT];
 
       for (arma::uword i = 1; i < n; ++i) {
@@ -291,3 +298,5 @@ inline TR sysperm(const T1& rho1, const arma::uvec& perm, arma::uword dim = 2) {
 //******************************************************************************
 
 }  //  namespace qic
+
+#endif

@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_APPLY_CTRL_HPP_
+#define _QICLIB_APPLY_CTRL_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/conj2.hpp"
+#include "../internal/constants.hpp"
+#include "../internal/lexi.hpp"
+#include "../internal/methods.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -94,7 +106,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 
   const arma::uvec dimK = dim(keep - 1);
   const arma::uword DK = arma::prod(dimK);
-  
+
   const arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
   arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
@@ -105,8 +117,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     auto worker_pure = [sizeS, sizeC, DS, &ctrl, &subsys, &dim, &keep, &dimS,
                         &dimK, &Ap,
                         &rho](arma::uword _p, arma::uword _M, arma::uword _R)
-      noexcept -> std::pair<eTR, arma::uword> {
-
+                         noexcept -> std::pair<eTR, arma::uword> {
       arma::uword indexT[_internal::MAXQDIT];
       arma::uword indexS[_internal::MAXQDIT];
       arma::uword indexK[_internal::MAXQDIT];
@@ -133,8 +144,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
         for (arma::uword j = 0; j < sizeS; ++j) {
           indexT[subsys.at(j) - 1] = indexS[j];
         }
-        ret +=
-          Ap.at(_p).at(_M, N) * rho(_internal::lexi_to_num(indexT, dim));
+        ret += Ap.at(_p).at(_M, N) * rho(_internal::lexi_to_num(indexT, dim));
       }
 
       return std::make_pair(ret, _I);
@@ -167,12 +177,11 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     arma::uvec dimC = dim(ctrl - 1);
     arma::uword DC = arma::prod(dimC);
 
-    auto worker_mix = [sizeS, sizeC, DS, DC, &ctrl, &subsys, &dim, &keep, &dimS,
-                       &dimK, &dimC, &Ap,
-                       &rho](arma::uword _p, arma::uword _M1, arma::uword _R1,
-                             arma::uword _q, arma::uword _M2, arma::uword _R2)
-      noexcept -> std::tuple<trait::eT<T2>, arma::uword, arma::uword> {
-
+    auto worker_mix =
+      [sizeS, sizeC, DS, DC, &ctrl, &subsys, &dim, &keep, &dimS, &dimK, &dimC,
+       &Ap, &rho](arma::uword _p, arma::uword _M1, arma::uword _R1,
+                  arma::uword _q, arma::uword _M2, arma::uword _R2)
+        noexcept -> std::tuple<trait::eT<T2>, arma::uword, arma::uword> {
       arma::uword indexTR[_internal::MAXQDIT];
       arma::uword indexSR[_internal::MAXQDIT];
       arma::uword indexKR[_internal::MAXQDIT];
@@ -189,7 +198,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
         indexTR[ctrl.at(i) - 1] = indexCR[i];
         indexTC[ctrl.at(i) - 1] = indexCC[i];
       }
-      
+
       _internal::num_to_lexi(_R1, dimK, indexKR);
       _internal::num_to_lexi(_R2, dimK, indexKC);
       for (arma::uword i = 0; i < keep.n_elem; ++i) {
@@ -207,56 +216,56 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
       bool r_equal(true), c_equal(true);
       arma::uword r_value(1), c_value(1);
 
-      if (sizeC > 0 ) {
+      if (sizeC > 0) {
         r_value = indexCR[0];
         c_value = indexCC[0];
-       
-        for (arma::uword i = 1; i < sizeC; ++i ) {
+
+        for (arma::uword i = 1; i < sizeC; ++i) {
           if (indexCR[i] != r_value) {
             r_equal = false;
             break;
           }
         }
 
-        for (arma::uword i = 1; i < sizeC; ++i ) {
+        for (arma::uword i = 1; i < sizeC; ++i) {
           if (indexCC[i] != c_value) {
             c_equal = false;
             break;
           }
         }
       }
-      
+
       arma::uword _I = _internal::lexi_to_num(indexTR, dim);
       arma::uword _J = _internal::lexi_to_num(indexTC, dim);
       eTR ret(0);
-      
+
       for (arma::uword N1 = 0; N1 < DS; ++N1) {
 
         _internal::num_to_lexi(N1, dimS, indexSR);
-        
+
         for (arma::uword j = 0; j < sizeS; ++j) {
           indexTR[subsys.at(j) - 1] = indexSR[j];
         }
 
         trait::eT<T2> r_coeff =
-          r_equal ? Ap.at(r_value).at(_M1, N1)
-            : (_M1 == N1 ? 1 : 0);
+          r_equal ? Ap.at(r_value).at(_M1, N1) : (_M1 == N1 ? 1 : 0);
 
         for (arma::uword N2 = 0; N2 < DS; ++N2) {
 
           _internal::num_to_lexi(N2, dimS, indexSC);
-        
+
           for (arma::uword j = 0; j < sizeS; ++j) {
             indexTC[subsys.at(j) - 1] = indexSC[j];
           }
 
           trait::eT<T2> c_coeff =
-              c_equal ? _internal::conj2(Ap.at(c_value).at(_M2, N2))
-              : (_M2 == N2 ? 1 : 0);
+            c_equal ? _internal::conj2(Ap.at(c_value).at(_M2, N2))
+                    : (_M2 == N2 ? 1 : 0);
 
           ret += r_coeff *
                  rho.at(_internal::lexi_to_num(indexTR, dim),
-                        _internal::lexi_to_num(indexTC, dim)) * c_coeff;
+                        _internal::lexi_to_num(indexTC, dim)) *
+                 c_coeff;
         }
       }
       return std::make_tuple(ret, _I, _J);
@@ -330,3 +339,5 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif
