@@ -62,8 +62,8 @@ class GATES final : public _internal::Singleton<const GATES<T1> > {
         Y(SPM<T1>::get_instance().S.at(2)),
         Z(arma::real(SPM<T1>::get_instance().S.at(3))) {
 
-    Had << std::sqrt(0.5) << std::sqrt(0.5) << arma::endr << std::sqrt(0.5)
-        << -std::sqrt(0.5) << arma::endr;
+    Had  = {{T1(std::sqrt(0.5)), T1(std::sqrt(0.5))},
+            {T1(std::sqrt(0.5)), T1(-std::sqrt(0.5))}};
 
     //**************************************************************************
 

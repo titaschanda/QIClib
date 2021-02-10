@@ -303,7 +303,6 @@ template <typename T1 = arma::cx_double,
           typename = typename std::enable_if<
             is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Mat<T1> randHermitian(const arma::uword& m) {
-  auto& I = _internal::cond_I<T1>::value;
   arma::Mat<T1> ret = randN<arma::Mat<T1> >(m, m);
 
   return ret + ret.t();

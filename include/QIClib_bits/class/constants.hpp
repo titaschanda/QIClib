@@ -87,42 +87,45 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
  private:
   SPM() : bell() {
 
-    S.at(0) << 1.0 << 0.0 << arma::endr << 0.0 << 1.0 << arma::endr;
+    S.at(0) = {{std::complex<T1>(1.0), std::complex<T1>(0.0)},
+               {std::complex<T1>(0.0), std::complex<T1>(1.0)}};
 
-    S.at(1) << 0.0 << 1.0 << arma::endr << 1.0 << 0.0 << arma::endr;
+    S.at(1) = {{std::complex<T1>(0.0), std::complex<T1>(1.0)},
+               {std::complex<T1>(1.0), std::complex<T1>(0.0)}};
 
-    S.at(2) << 0.0 << std::complex<T1>(0.0, -1.0) << arma::endr
-            << std::complex<T1>(0.0, 1.0) << arma::endr;
+    S.at(2) = {{std::complex<T1>(0.0), std::complex<T1>(0.0, -1.0)},
+               {std::complex<T1>(0.0, 1.0), std::complex<T1>(0.0)}};
 
-    S.at(3) << 1.0 << 0.0 << arma::endr << 0.0 << -1.0 << arma::endr;
+    S.at(3) = {{std::complex<T1>(1.0), std::complex<T1>(0.0)},
+               {std::complex<T1>(0.0), std::complex<T1>(-1.0)}};
 
     //**************************************************************************
 
-    basis2.at(0, 0) << 1.0 << 0.0;
-    basis2.at(1, 0) << 0.0 << 1.0;
+    basis2.at(0, 0) = {std::complex<T1>(1.0), std::complex<T1>(0.0)};
+    basis2.at(1, 0) = {std::complex<T1>(0.0), std::complex<T1>(1.0)};
 
-    basis2.at(0, 1) << std::sqrt(0.5) << std::sqrt(0.5);
-    basis2.at(1, 1) << std::sqrt(0.5) << -std::sqrt(0.5);
+    basis2.at(0, 1) = {std::complex<T1>(std::sqrt(0.5)), std::complex<T1>(std::sqrt(0.5))};
+    basis2.at(1, 1) = {std::complex<T1>(std::sqrt(0.5)), std::complex<T1>(-std::sqrt(0.5))};
 
-    basis2.at(0, 2) << std::sqrt(0.5) << std::complex<T1>(0.0, std::sqrt(0.5));
-    basis2.at(1, 2) << std::sqrt(0.5) << std::complex<T1>(0.0, -std::sqrt(0.5));
+    basis2.at(0, 2) = {std::complex<T1>(std::sqrt(0.5)), std::complex<T1>(0.0, std::sqrt(0.5))};
+    basis2.at(1, 2) = {std::complex<T1>(std::sqrt(0.5)), std::complex<T1>(0.0, -std::sqrt(0.5))};
 
     basis2.at(0, 3) = basis2.at(0, 0);
     basis2.at(1, 3) = basis2.at(1, 0);
 
     //**************************************************************************
 
-    basis3.at(0, 0) << 1.0 << 0.0 << 0.0;
-    basis3.at(1, 0) << 0.0 << 1.0 << 0.0;
-    basis3.at(2, 0) << 0.0 << 0.0 << 1.0;
+    basis3.at(0, 0) = {1.0, 0.0, 0.0};
+    basis3.at(1, 0) = {0.0, 1.0, 0.0};
+    basis3.at(2, 0) = {0.0, 0.0, 1.0};
 
-    basis3.at(0, 1) << 0.5 << std::sqrt(0.5) << 0.5;
-    basis3.at(1, 1) << -std::sqrt(0.5) << 0.0 << std::sqrt(0.5);
-    basis3.at(2, 1) << 0.5 << -std::sqrt(0.5) << 0.5;
+    basis3.at(0, 1) = {0.5, std::sqrt(0.5), 0.5};
+    basis3.at(1, 1) = {-std::sqrt(0.5), 0.0, std::sqrt(0.5)};
+    basis3.at(2, 1) = {0.5, -std::sqrt(0.5), 0.5};
 
-    basis3.at(0, 2) << -0.5 << std::complex<T1>(0.0, -std::sqrt(0.5)) << 0.5;
-    basis3.at(1, 2) << std::sqrt(0.5) << 0.0 << std::sqrt(0.5);
-    basis3.at(2, 2) << -0.5 << std::complex<T1>(0.0, std::sqrt(0.5)) << 0.5;
+    basis3.at(0, 2) = {-0.5, std::complex<T1>(0.0, -std::sqrt(0.5)), 0.5};
+    basis3.at(1, 2) = {std::sqrt(0.5), 0.0, std::sqrt(0.5)};
+    basis3.at(2, 2) = {-0.5, std::complex<T1>(0.0, std::sqrt(0.5)), 0.5};
 
     basis3.at(0, 3) = basis3.at(0, 0);
     basis3.at(1, 3) = basis3.at(1, 0);
@@ -156,10 +159,10 @@ class SPM final : public _internal::Singleton<const SPM<T1> > {
 
     //**************************************************************************
 
-    bell.phim << std::sqrt(0.5) << 0.0 << 0.0 << -std::sqrt(0.5);
-    bell.phip << std::sqrt(0.5) << 0.0 << 0.0 << std::sqrt(0.5);
-    bell.psim << 0.0 << std::sqrt(0.5) << -std::sqrt(0.5) << 0.0;
-    bell.psip << 0.0 << std::sqrt(0.5) << std::sqrt(0.5) << 0.0;
+    bell.phim = {T1(std::sqrt(0.5)), 0.0, 0.0, T1(-std::sqrt(0.5))};
+    bell.phip = {T1(std::sqrt(0.5)), 0.0, 0.0, T1(std::sqrt(0.5))};
+    bell.psim = {0.0, T1(std::sqrt(0.5)), T1(-std::sqrt(0.5)), 0.0};
+    bell.psip = {0.0, T1(std::sqrt(0.5)), T1(std::sqrt(0.5)), 0.0};
   }
   ~SPM() = default;
 };
