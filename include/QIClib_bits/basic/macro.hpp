@@ -42,7 +42,7 @@
 
 // floating point precision
 #ifndef QICLIB_FLOAT_PRECISION
-#define QICLIB_FLOAT_PRECISION (100.0 * std::numeric_limits<float>::epsilon())
+#define QICLIB_FLOAT_PRECISION (1000.0 * std::numeric_limits<float>::epsilon())
 #endif
 #ifndef QICLIB_DOUBLE_PRECISION
 #define QICLIB_DOUBLE_PRECISION (100.0 * std::numeric_limits<double>::epsilon())
