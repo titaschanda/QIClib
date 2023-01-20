@@ -82,7 +82,7 @@ inline TR shannon(const T1& prob1) {
                 -_precision::eps<trait::pT<T1> >::value) ||
       std::abs(arma::accu(prob) - static_cast<trait::pT<T1> >(1.0)) >
         _precision::eps<trait::pT<T1> >::value)
-        throw Exception("qic::shannon", "Invalid probaility distribution!");
+    throw Exception("qic::shannon", "Invalid probaility distribution!");
 #endif
 
   trait::eT<T1> S = 0.0;
