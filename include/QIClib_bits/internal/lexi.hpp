@@ -19,10 +19,9 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _QICLIB_INTERNAL_CONJ2_HPP_
-#define _QICLIB_INTERNAL_CONJ2_HPP_
+#ifndef _QICLIB_INTERNAL_LEXI_HPP_
+#define _QICLIB_INTERNAL_LEXI_HPP_
 
-#include "../basic/type_traits.hpp"
 #include <armadillo>
 
 namespace qic {
@@ -33,21 +32,26 @@ namespace _internal {
 
 //******************************************************************************
 
-template <typename T1, typename TR = typename std::enable_if<
-                         std::is_arithmetic<T1>::value, T1>::type>
-
-inline TR conj2(const T1& value) {
-  return value;
+inline void num_to_lexi(arma::uword n, const arma::uvec& dim,
+                        arma::uword* result) noexcept {
+  for (arma::uword i = 1; i < dim.n_elem; ++i) {
+    result[dim.n_elem - i] = n % (dim.at(dim.n_elem - i));
+    n /= (dim.at(dim.n_elem - i));
+  }
+  result[0] = n;
 }
 
 //******************************************************************************
+inline arma::uword lexi_to_num(const arma::uword* index,
+                               const arma::uvec& dim) noexcept {
+  arma::uword product(1);
+  arma::uword I = 0;
 
-template <typename T1,
-          typename TR = typename std::enable_if<std::is_arithmetic<T1>::value,
-                                                std::complex<T1> >::type>
-
-inline TR conj2(const std::complex<T1>& value) {
-  return std::conj(value);
+  for (arma::uword i = 1; i < dim.n_elem; ++i) {
+    product *= dim.at(dim.n_elem - i);
+    I += product * index[dim.n_elem - i - 1];
+  }
+  return I + index[dim.n_elem - 1];
 }
 
 //******************************************************************************

@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,15 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_NEG_HPP_
+#define _QICLIB_NEG_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -31,7 +40,7 @@ inline TR neg(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::neg", Exception::type::ZERO_SIZE);
@@ -120,3 +129,5 @@ inline TR log_neg(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_CONCURRENCE_HPP_
+#define _QICLIB_CONCURRENCE_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -41,7 +50,7 @@ inline TR concurrence(const T1& rho1) {
     throw Exception("qic::concurrence", Exception::type::NOT_QUBIT_SUBSYS);
 #endif
 
-  auto& S2 = SPM<trait::pT<T1> >::get_instance().S.at(2);
+  const auto& S2 = SPM<trait::pT<T1> >::get_instance().S.at(2);
 
   typename arma::Mat<std::complex<trait::pT<T1> > >::template fixed<4, 4> pbar =
     rho * arma::kron(S2, S2) * arma::conj(rho) * arma::kron(S2, S2);
@@ -62,3 +71,5 @@ inline TR concurrence(const T1& rho1) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

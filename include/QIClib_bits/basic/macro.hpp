@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,11 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_MACRO_HPP_
+#define _QICLIB_MACRO_HPP_
+
+#include <armadillo>
+
 // GCC unused variable warning
 #if (__GNUC__ && !__clang__)
 #define _QICLIB_UNUSED_ __attribute__((unused))
@@ -29,6 +34,10 @@
 // Maximum qudit count
 #ifndef QICLIB_MAXQDIT_COUNT
 #define QICLIB_MAXQDIT_COUNT 40
+#endif
+
+#ifndef QICLIB_DC_USE_LIMIT
+#define QICLIB_DC_USE_LIMIT 20
 #endif
 
 // floating point precision
@@ -110,4 +119,6 @@
 
 #if defined(QICLIB_USE_OPENMP_MAKE_CTRL) && defined(_OPENMP)
 #undef QICLIB_USE_SERIAL_MAKE_CTRL
+#endif
+
 #endif

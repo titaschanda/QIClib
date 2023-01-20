@@ -5,7 +5,7 @@
  *
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -22,6 +22,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_INIT_HPP_
+#define _QICLIB_INIT_HPP_
+
+#include "../basic/macro.hpp"
+#include "../internal/singleton.hpp"
+#include <armadillo>
 
 #ifdef QICLIB_INIT
 
@@ -61,4 +68,5 @@ static const Init& init _QICLIB_UNUSED_ = Init::get_instance();
 
 }  // namespace qic
 
+#endif
 #endif

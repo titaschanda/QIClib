@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,14 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_SCHMIDT_HPP_
+#define _QICLIB_SCHMIDT_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -27,11 +35,10 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Col<trait::pT<T1> > >::type>
 
-inline TR schmidt(const T1& rho1,
-                  const arma::uvec& dim) {
+inline TR schmidt(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -65,12 +72,11 @@ template <typename T1,
           typename Enable = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 
-inline bool schmidt(const T1& rho1,
-                    const arma::uvec& dim, arma::Col<trait::pT<T1> >& S,
-                    arma::Mat<trait::eT<T1> >& U,
+inline bool schmidt(const T1& rho1, const arma::uvec& dim,
+                    arma::Col<trait::pT<T1> >& S, arma::Mat<trait::eT<T1> >& U,
                     arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -97,7 +103,7 @@ inline bool schmidt(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
 
   } else {
     bool ret = arma::svd_econ(
@@ -105,7 +111,7 @@ inline bool schmidt(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
   }
 }
 
@@ -115,12 +121,12 @@ template <typename T1,
           typename Enable = typename std::enable_if<
             is_floating_point_var<trait::pT<T1> >::value, void>::type>
 
-inline bool schmidt_full(const T1& rho1,
-                         const arma::uvec& dim, arma::Col<trait::pT<T1> >& S,
+inline bool schmidt_full(const T1& rho1, const arma::uvec& dim,
+                         arma::Col<trait::pT<T1> >& S,
                          arma::Mat<trait::eT<T1> >& U,
                          arma::Mat<trait::eT<T1> >& V) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -147,7 +153,7 @@ inline bool schmidt_full(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
 
   } else {
     bool ret = arma::svd(U, S, V, arma::reshape(rho, dim.at(1), dim.at(0)).st(),
@@ -155,7 +161,7 @@ inline bool schmidt_full(const T1& rho1,
 
     if (ret == true)
       V = arma::conj(V);
-    return (ret);
+    return ret;
   }
 }
 
@@ -165,10 +171,9 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
 
-inline TR schmidtA(const T1& rho1,
-                   const arma::uvec& dim) {
+inline TR schmidtA(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -215,10 +220,9 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
 
-inline TR schmidtB(const T1& rho1,
-                   const arma::uvec& dim) {
+inline TR schmidtB(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -235,7 +239,7 @@ inline TR schmidtB(const T1& rho1,
   if (arma::prod(dim) != rho.n_rows)
     throw Exception("qic::schmidtB", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if ((dim.n_elem) != 2)
+  if (dim.n_elem != 2)
     throw Exception("qic::schmidtB", Exception::type::NOT_BIPARTITE);
 #endif
 
@@ -265,8 +269,7 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::field<arma::Mat<trait::eT<T1> > > >::type>
 
-inline TR schmidtAB(const T1& rho1,
-                    const arma::uvec& dim) {
+inline TR schmidtAB(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
   bool checkV = (rho.n_cols != 1);
 
@@ -320,10 +323,9 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
 
-inline TR schmidtA_full(const T1& rho1,
-                        const arma::uvec& dim) {
+inline TR schmidtA_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -371,10 +373,9 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::Mat<trait::eT<T1> > >::type>
 
-inline TR schmidtB_full(const T1& rho1,
-                        const arma::uvec& dim) {
+inline TR schmidtB_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -422,10 +423,9 @@ template <typename T1, typename TR = typename std::enable_if<
                          is_floating_point_var<trait::pT<T1> >::value,
                          arma::field<arma::Mat<trait::eT<T1> > > >::type>
 
-inline TR schmidtAB_full(const T1& rho1,
-                         const arma::uvec& dim) {
+inline TR schmidtAB_full(const T1& rho1, const arma::uvec& dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -475,3 +475,5 @@ inline TR schmidtAB_full(const T1& rho1,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

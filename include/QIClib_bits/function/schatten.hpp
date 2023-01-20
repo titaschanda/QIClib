@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,15 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_SCHATTEN_HPP_
+#define _QICLIB_SCHATTEN_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -34,7 +43,7 @@ inline TR schatten(const T1& rho1, const trait::pT<T1>& p) {
 
   if (rho.n_rows != rho.n_cols)
     throw Exception("qic::schatten", Exception::type::MATRIX_NOT_SQUARE);
-    
+
   if (p < 0)
     throw Exception("qic::schatten", Exception::type::OUT_OF_RANGE);
 #endif
@@ -51,30 +60,31 @@ inline TR schatten(const T1& rho1, const trait::pT<T1>& p) {
     arma::Col<trait::pT<T1> > eigval;
     arma::Mat<trait::eT<T1> > eigvec;
 
-  if (rhoH.n_rows > 20) {
-    bool check = arma::eig_sym(eigval, eigvec, rhoH, "dc");
-    if (!check)
-      throw std::runtime_error("qic::schatten(): Decomposition failed!");
+    if (rhoH.n_rows > 20) {
+      bool check = arma::eig_sym(eigval, eigvec, rhoH, "dc");
+      if (!check)
+        throw std::runtime_error("qic::schatten(): Decomposition failed!");
 
-  } else {
-    bool check = arma::eig_sym(eigval, eigvec, rhoH, "std");
-    if (!check)
-      throw std::runtime_error("qic::schatten(): Decomposition failed!");
-  }
+    } else {
+      bool check = arma::eig_sym(eigval, eigvec, rhoH, "std");
+      if (!check)
+        throw std::runtime_error("qic::schatten(): Decomposition failed!");
+    }
 
-  return std::pow(
-    std::real(arma::trace(
-      eigvec *
-      arma::diagmat(arma::pow(
-        _internal::as_type<arma::Col<std::complex<trait::pT<T1> > > >::from(
-          eigval),
-        p / 2.0)) *
-      eigvec.t())),
-    1.0 / p);
+    return std::pow(
+      std::real(arma::trace(
+        eigvec *
+        arma::diagmat(arma::pow(
+          _internal::as_type<arma::Col<std::complex<trait::pT<T1> > > >::from(
+            eigval),
+          p / 2.0)) *
+        eigvec.t())),
+      1.0 / p);
   }
-  //return std::pow(std::real(arma::trace(powm_sym(absm(rho), p))), 1.0 / p);
 }
 
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

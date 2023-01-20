@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_RANDOM_HPP_
+#define _QICLIB_RANDOM_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../class/random_devices.hpp"
+#include "../internal/constants.hpp"
+#include "type_traits.hpp"
+#include <armadillo>
 
 namespace qic {
 
@@ -292,11 +303,7 @@ template <typename T1 = arma::cx_double,
           typename = typename std::enable_if<
             is_complex_fp<T1>::value || is_floating_point_var<T1>::value>::type>
 inline arma::Mat<T1> randHermitian(const arma::uword& m) {
-  auto& I = _internal::cond_I<T1>::value;
-  arma::Mat<T1> ret =
-    2.0 * randU<arma::Mat<T1> >(m, m) -
-    (static_cast<typename arma::get_pod_type<T1>::result>(1.0) + I) *
-      arma::ones<arma::Mat<T1> >(m, m);
+  arma::Mat<T1> ret = randN<arma::Mat<T1> >(m, m);
 
   return ret + ret.t();
 }
@@ -360,3 +367,5 @@ inline arma::uvec randPerm(arma::uword n, arma::uword start = 0) {
 //****************************************************************************
 
 }  // namespace qic
+
+#endif

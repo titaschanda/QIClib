@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,16 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_MEASURE_HPP_
+#define _QICLIB_MEASURE_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/constants.hpp"
+#include "../class/exception.hpp"
+#include "../class/random_devices.hpp"
+#include "../internal/as_arma.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -33,7 +43,7 @@ template <typename T1, typename T2,
 
 inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -62,7 +72,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
 #endif
 
   using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
-  bool checkK = (Ks[0].n_cols != 1);
+  const bool checkK = (Ks[0].n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.size());
   arma::field<mattype> outstates(Ks.size());
@@ -73,11 +83,8 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
 #pragma omp parallel for
 #endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
-      mattype tmp;
-      if (!checkK)
-        tmp = Ks[i] * Ks[i].t() * rho * Ks[i] * Ks[i].t();
-      else
-        tmp = Ks[i] * rho * Ks[i].t();
+      mattype tmp = checkK ? Ks[i] * rho * Ks[i].t()
+                           : Ks[i] * Ks[i].t() * rho * Ks[i] * Ks[i].t();
       prob.at(i) = std::abs(arma::trace(tmp));
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -90,11 +97,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks) {
 #pragma omp parallel for
 #endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
-      mattype tmp;
-      if (!checkK)
-        tmp = Ks[i] * Ks[i].t() * rho;
-      else
-        tmp = Ks[i] * rho;
+      mattype tmp = checkK ? Ks[i] * rho : Ks[i] * Ks[i].t() * rho;
       prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -134,7 +137,7 @@ template <typename T1, typename T2,
 
 inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -163,7 +166,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
 #endif
 
   using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
-  bool checkK = (Ks.at(0).n_cols != 1);
+  const bool checkK = (Ks.at(0).n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.n_elem);
   arma::field<mattype> outstates(Ks.n_elem);
@@ -174,11 +177,9 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
 #pragma omp parallel for
 #endif
     for (arma::uword i = 0; i < Ks.n_elem; ++i) {
-      mattype tmp;
-      if (!checkK)
-        tmp = Ks.at(i) * Ks.at(i).t() * rho * Ks.at(i) * Ks.at(i).t();
-      else
-        tmp = Ks.at(i) * rho * Ks.at(i).t();
+      mattype tmp = checkK
+                      ? Ks.at(i) * rho * Ks.at(i).t()
+                      : Ks.at(i) * Ks.at(i).t() * rho * Ks.at(i) * Ks.at(i).t();
       prob.at(i) = std::abs(arma::trace(tmp));
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -191,11 +192,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks) {
 #pragma omp parallel for
 #endif
     for (arma::uword i = 0; i < Ks.size(); ++i) {
-      mattype tmp;
-      if (!checkK)
-        tmp = Ks.at(i) * Ks.at(i).t() * rho;
-      else
-        tmp = Ks.at(i) * rho;
+      mattype tmp = checkK ? Ks.at(i) * rho : Ks.at(i) * Ks.at(i).t() * rho;
       prob.at(i) = std::pow(arma::norm(_internal::as_Col(tmp)), 2);
 
       if (prob.at(i) > _precision::eps<trait::pT<T1> >::value)
@@ -223,7 +220,7 @@ template <
 inline TR measure(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -293,11 +290,11 @@ template <typename T1, typename T2,
 inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
                   arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(subsys - 1));
+  const arma::uword D = arma::prod(dim);
+  const arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -335,7 +332,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
 #endif
 
   using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
-  bool checkK = (Ks[0].n_cols != 1);
+  const bool checkK = (Ks[0].n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.size());
   arma::field<mattype> outstates(Ks.size());
@@ -345,8 +342,8 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.size(); ++i) {
-    mattype tmp = !checkK ? apply(rho, (Ks[i] * Ks[i].t()).eval(), subsys, dim)
-                          : apply(rho, Ks[i], subsys, dim);
+    mattype tmp = checkK ? apply(rho, Ks[i], subsys, dim)
+                         : apply(rho, (Ks[i] * Ks[i].t()).eval(), subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -376,7 +373,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -390,7 +387,7 @@ inline TR measure(const T1& rho1, const std::vector<arma::Mat<T2> >& Ks,
     throw Exception("qic::measure", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -446,11 +443,11 @@ template <typename T1, typename T2,
 inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
                   arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(subsys - 1));
+  const arma::uword D = arma::prod(dim);
+  const arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -488,7 +485,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
 #endif
 
   using mattype = arma::Mat<typename promote_var<trait::eT<T1>, T2>::type>;
-  bool checkK = (Ks.at(0).n_cols != 1);
+  const bool checkK = (Ks.at(0).n_cols != 1);
 
   arma::Col<trait::pT<T1> > prob(Ks.n_elem);
   arma::field<mattype> outstates(Ks.n_elem);
@@ -498,9 +495,9 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
 #pragma omp parallel for
 #endif
   for (arma::uword i = 0; i < Ks.n_elem; ++i) {
-    mattype tmp = !checkK
-                    ? apply(rho, (Ks.at(i) * Ks.at(i).t()).eval(), subsys, dim)
-                    : apply(rho, Ks.at(i), subsys, dim);
+    mattype tmp = checkK
+                    ? apply(rho, Ks.at(i), subsys, dim)
+                    : apply(rho, (Ks.at(i) * Ks.at(i).t()).eval(), subsys, dim);
 
     prob.at(i) = checkV ? std::abs(arma::trace(tmp))
                         : std::pow(arma::norm(_internal::as_Col(tmp)), 2);
@@ -530,7 +527,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -544,7 +541,7 @@ inline TR measure(const T1& rho1, const arma::field<arma::Mat<T2> >& Ks,
     throw Exception("qic::measure", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -568,11 +565,11 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
                   arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
-  arma::uword D = arma::prod(dim);
-  arma::uword Dsys = arma::prod(dim(subsys - 1));
+  const arma::uword D = arma::prod(dim);
+  const arma::uword Dsys = arma::prod(dim(subsys - 1));
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -641,7 +638,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
   const auto& U = _internal::as_Mat(U1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure", Exception::type::ZERO_SIZE);
@@ -655,7 +652,7 @@ inline TR measure(const T1& rho1, const T2& U1, arma::uvec subsys,
     throw Exception("qic::measure", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -673,7 +670,7 @@ template <typename T1,
 
 inline TR measure_comp(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -713,8 +710,8 @@ inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uvec dim) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
-  arma::uword D = arma::prod(dim);
+  const bool checkV = (rho.n_cols != 1);
+  const arma::uword D = arma::prod(dim);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);
@@ -762,7 +759,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
   const auto& rho = _internal::as_Mat(rho1);
 
 #ifndef QICLIB_NO_DEBUG
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
   if (rho.n_elem == 0)
     throw Exception("qic::measure_comp", Exception::type::ZERO_SIZE);
@@ -773,7 +770,7 @@ inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
                       Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -785,3 +782,5 @@ inline TR measure_comp(const T1& rho1, arma::uvec subsys, arma::uword dim = 2) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

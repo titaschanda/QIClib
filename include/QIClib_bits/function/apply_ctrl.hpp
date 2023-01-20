@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,12 +19,19 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_APPLY_CTRL_HPP_
+#define _QICLIB_APPLY_CTRL_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/conj2.hpp"
+#include "../internal/constants.hpp"
+#include "../internal/lexi.hpp"
+#include "../internal/methods.hpp"
+#include <armadillo>
+
 namespace qic {
-
-//******************************************************************************
-
-#ifdef QICLIB_USE_SERIAL_APPLY
-// USE SERIAL ALGORITHM
 
 //******************************************************************************
 
@@ -41,8 +48,14 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   const auto& rho = _internal::as_Mat(rho1);
   const auto& A1 = _internal::as_Mat(A);
 
-  bool checkV = (rho.n_cols != 1);
-  arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
+  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
+
+  const bool checkV = (rho.n_cols != 1);
+  const arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
+
+  const arma::uword DT = arma::prod(dim);
+  const arma::uvec dimS = dim(subsys - 1);
+  const arma::uword DS = arma::prod(dimS);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -66,13 +79,11 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
   if (dim.n_elem == 0 || arma::any(dim == 0))
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_DIMS);
 
-  if (arma::prod(dim) != rho.n_rows)
+  if (DT != rho.n_rows)
     throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
 
-  if (arma::prod(dim(subsys - 1)) != A1.n_rows)
+  if (DS != A1.n_rows)
     throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
-
-  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
 
   if (ctrlsubsys.n_elem > dim.n_elem ||
       arma::unique(ctrlsubsys).eval().n_elem != ctrlsubsys.n_elem ||
@@ -80,357 +91,215 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
 #endif
 
-  _internal::dim_collapse_sys_ctrl(dim, subsys, ctrl);
+  const arma::uword sizeT = dim.n_elem;
+  const arma::uword sizeS = subsys.n_elem;
+  const arma::uword sizeC = ctrl.n_elem;
 
-  const arma::uword n = dim.n_elem;
-  const arma::uword m = subsys.n_elem;
-  const arma::uword o = ctrl.n_elem;
-
-  arma::uvec keep(n - m);
+  arma::uvec keep(sizeT - sizeS - sizeC);
   arma::uword keep_count(0);
-  for (arma::uword run = 0; run < n; ++run) {
-    if (!arma::any(subsys == run + 1)) {
+  for (arma::uword run = 0; run < sizeT; ++run) {
+    if (!arma::any(ctrlsubsys == run + 1)) {
       keep.at(keep_count) = run + 1;
       ++keep_count;
     }
   }
 
-  arma::uword product[_internal::MAXQDIT];
-  product[n - 1] = 1;
-  for (arma::uword i = 1; i < n; ++i)
-    product[n - 1 - i] = product[n - i] * dim.at(n - i);
+  const arma::uvec dimK = dim(keep - 1);
+  const arma::uword DK = arma::prod(dimK);
 
-  arma::uword productr[_internal::MAXQDIT];
-  productr[m - 1] = 1;
-  for (arma::uword i = 1; i < m; ++i)
-    productr[m - 1 - i] = productr[m - i] * dim.at(subsys.at(m - i) - 1);
-
-  arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
+  const arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
 
   arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
   for (arma::uword i = 0; i <= p_num; ++i)
     Ap.at(i) = _internal::POWM_GEN_INT(A1, i);
 
   if (!checkV) {
-    arma::Col<eTR> rho_ret(rho.n_rows, arma::fill::zeros);
+    auto worker_pure = [sizeS, sizeC, DS, &ctrl, &subsys, &dim, &keep, &dimS,
+                        &dimK, &Ap,
+                        &rho](arma::uword _p, arma::uword _M, arma::uword _R)
+                         noexcept -> std::pair<eTR, arma::uword> {
+      arma::uword indexT[_internal::MAXQDIT];
+      arma::uword indexS[_internal::MAXQDIT];
+      arma::uword indexK[_internal::MAXQDIT];
 
-    const arma::uword loop_no = 2 * n;
-    constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
-    arma::uword loop_counter[loop_no_buffer] = {0};
-    arma::uword MAX[loop_no_buffer];
-
-    for (arma::uword i = 0; i < n; ++i) {
-      MAX[i] = dim.at(i);
-      if (arma::any(keep == i + 1))
-        MAX[i + n] = 1;
-      else
-        MAX[i + n] = dim.at(i);
-    }
-    MAX[loop_no] = 2;
-
-    arma::uword p1 = 0;
-
-    while (loop_counter[loop_no] == 0) {
-      arma::uword count1(0), count2(0);
-
-      for (arma::uword i = 0; i < n; ++i) {
-        count1 += (arma::any(ctrl == i + 1) && loop_counter[i] != 0) ? 1 : 0;
-        count2 += loop_counter[i + n] == 0 ? 1 : 0;
+      for (arma::uword i = 0; i < sizeC; ++i) {
+        indexT[ctrl.at(i) - 1] = _p;
       }
 
-      if ((count1 != o) && (count2 == n)) {
-        arma::uword I(0);
-        for (arma::uword i = 0; i < n; ++i) I += product[i] * loop_counter[i];
-        rho_ret.at(I) = static_cast<eTR>(rho.at(I));
+      _internal::num_to_lexi(_R, dimK, indexK);
+      for (arma::uword i = 0; i < keep.n_elem; ++i) {
+        indexT[keep.at(i) - 1] = indexK[i];
+      }
 
-      } else if (count1 == o) {
-        arma::uword I(0), J(0), K(0), L(0);
-        arma::uword power = o == 0 ? 1 : 0;
+      _internal::num_to_lexi(_M, dimS, indexS);
+      for (arma::uword i = 0; i < sizeS; ++i) {
+        indexT[subsys.at(i) - 1] = indexS[i];
+      }
 
-        for (arma::uword i = 0; i < n; ++i) {
-          if (arma::any(keep == i + 1)) {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i];
+      arma::uword _I = _internal::lexi_to_num(indexT, dim);
+      eTR ret(0);
 
-          } else {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i + n];
-          }
+      for (arma::uword N = 0; N < DS; ++N) {
+        _internal::num_to_lexi(N, dimS, indexS);
+        for (arma::uword j = 0; j < sizeS; ++j) {
+          indexT[subsys.at(j) - 1] = indexS[j];
+        }
+        ret += Ap.at(_p).at(_M, N) * rho(_internal::lexi_to_num(indexT, dim));
+      }
 
-          arma::uword count3(0);
-          while (arma::any(subsys == i + 1)) {
-            if (subsys.at(count3) != i + 1) {
-              ++count3;
-            } else {
-              K += productr[count3] * loop_counter[i];
-              L += productr[count3] * loop_counter[i + n];
-              break;
-            }
+      return std::make_pair(ret, _I);
+    };
+
+    arma::Col<eTR> rho_ret(rho);
+
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
+  defined(_OPENMP)
+#pragma omp parallel for collapse(2)
+#endif
+    for (arma::uword R = 0; R < DK; ++R) {
+      for (arma::uword M = 0; M < DS; ++M) {
+        if (sizeC == 0) {
+          auto W = worker_pure(1, M, R);
+          rho_ret.at(W.second) = W.first;
+        } else {
+          for (arma::uword p = 0; p < d; ++p) {
+            auto W = worker_pure(p, M, R);
+            rho_ret.at(W.second) = W.first;
           }
         }
-
-        if (o != 0) {
-          arma::uword count4(1);
-          for (arma::uword j = 1; j < o; ++j)
-            count4 +=
-              loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1] ? 1
-                                                                           : 0;
-          power = count4 == o ? loop_counter[ctrl.at(0) - 1] : 0;
-        }
-        rho_ret.at(I) += Ap.at(power).at(K, L) * rho.at(J);
-      }
-
-      ++loop_counter[0];
-      while (loop_counter[p1] == MAX[p1]) {
-        loop_counter[p1] = 0;
-        loop_counter[++p1]++;
-        if (loop_counter[p1] != MAX[p1])
-          p1 = 0;
       }
     }
+
     return rho_ret;
 
   } else {
-    arma::Mat<trait::eT<T2> > U(rho.n_rows, rho.n_rows, arma::fill::zeros);
 
-    const arma::uword loop_no = 2 * n;
-    constexpr auto loop_no_buffer = 2 * _internal::MAXQDIT + 1;
-    arma::uword loop_counter[loop_no_buffer] = {0};
-    arma::uword MAX[loop_no_buffer];
+    arma::uvec dimC = dim(ctrl - 1);
+    arma::uword DC = arma::prod(dimC);
 
-    for (arma::uword i = 0; i < n; ++i) {
-      MAX[i] = dim.at(i);
-      if (arma::any(keep == i + 1))
-        MAX[i + n] = 1;
-      else
-        MAX[i + n] = dim.at(i);
-    }
-    MAX[loop_no] = 2;
+    auto worker_mix =
+      [sizeS, sizeC, DS, DC, &ctrl, &subsys, &dim, &keep, &dimS, &dimK, &dimC,
+       &Ap, &rho](arma::uword _p, arma::uword _M1, arma::uword _R1,
+                  arma::uword _q, arma::uword _M2, arma::uword _R2)
+        noexcept -> std::tuple<trait::eT<T2>, arma::uword, arma::uword> {
+      arma::uword indexTR[_internal::MAXQDIT];
+      arma::uword indexSR[_internal::MAXQDIT];
+      arma::uword indexKR[_internal::MAXQDIT];
+      arma::uword indexCR[_internal::MAXQDIT];
 
-    arma::uword p1 = 0;
+      arma::uword indexTC[_internal::MAXQDIT];
+      arma::uword indexSC[_internal::MAXQDIT];
+      arma::uword indexKC[_internal::MAXQDIT];
+      arma::uword indexCC[_internal::MAXQDIT];
 
-    while (loop_counter[loop_no] == 0) {
-      arma::uword count1(0), count2(0);
-      for (arma::uword i = 0; i < n; ++i) {
-        count1 += (arma::any(ctrl == i + 1) && loop_counter[i] != 0) ? 1 : 0;
-        count2 += loop_counter[i + n] == 0 ? 1 : 0;
+      _internal::num_to_lexi(_p, dimC, indexCR);
+      _internal::num_to_lexi(_q, dimC, indexCC);
+      for (arma::uword i = 0; i < sizeC; ++i) {
+        indexTR[ctrl.at(i) - 1] = indexCR[i];
+        indexTC[ctrl.at(i) - 1] = indexCC[i];
       }
 
-      if ((count1 != o) && (count2 == n)) {
-        arma::uword I(0);
-        for (arma::uword i = 0; i < n; ++i) I += product[i] * loop_counter[i];
-        U.at(I, I) = static_cast<trait::eT<T2> >(1.0);
+      _internal::num_to_lexi(_R1, dimK, indexKR);
+      _internal::num_to_lexi(_R2, dimK, indexKC);
+      for (arma::uword i = 0; i < keep.n_elem; ++i) {
+        indexTR[keep.at(i) - 1] = indexKR[i];
+        indexTC[keep.at(i) - 1] = indexKC[i];
+      }
 
-      } else if (count1 == o) {
-        arma::uword I(0), J(0), K(0), L(0);
-        arma::uword power = o == 0 ? 1 : 0;
+      _internal::num_to_lexi(_M1, dimS, indexSR);
+      _internal::num_to_lexi(_M2, dimS, indexSC);
+      for (arma::uword i = 0; i < sizeS; ++i) {
+        indexTR[subsys.at(i) - 1] = indexSR[i];
+        indexTC[subsys.at(i) - 1] = indexSC[i];
+      }
 
-        for (arma::uword i = 0; i < n; ++i) {
-          if (arma::any(keep == i + 1)) {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i];
+      bool r_equal(true), c_equal(true);
+      arma::uword r_value(1), c_value(1);
 
-          } else {
-            I += product[i] * loop_counter[i];
-            J += product[i] * loop_counter[i + n];
+      if (sizeC > 0) {
+        r_value = indexCR[0];
+        c_value = indexCC[0];
+
+        for (arma::uword i = 1; i < sizeC; ++i) {
+          if (indexCR[i] != r_value) {
+            r_equal = false;
+            break;
+          }
+        }
+
+        for (arma::uword i = 1; i < sizeC; ++i) {
+          if (indexCC[i] != c_value) {
+            c_equal = false;
+            break;
+          }
+        }
+      }
+
+      arma::uword _I = _internal::lexi_to_num(indexTR, dim);
+      arma::uword _J = _internal::lexi_to_num(indexTC, dim);
+      eTR ret(0);
+
+      for (arma::uword N1 = 0; N1 < DS; ++N1) {
+
+        _internal::num_to_lexi(N1, dimS, indexSR);
+
+        for (arma::uword j = 0; j < sizeS; ++j) {
+          indexTR[subsys.at(j) - 1] = indexSR[j];
+        }
+
+        trait::eT<T2> r_coeff =
+          r_equal ? Ap.at(r_value).at(_M1, N1) : (_M1 == N1 ? 1 : 0);
+
+        for (arma::uword N2 = 0; N2 < DS; ++N2) {
+
+          _internal::num_to_lexi(N2, dimS, indexSC);
+
+          for (arma::uword j = 0; j < sizeS; ++j) {
+            indexTC[subsys.at(j) - 1] = indexSC[j];
           }
 
-          arma::uword counter(0);
-          while (arma::any(subsys == i + 1)) {
-            if (subsys.at(counter) != i + 1) {
-              ++counter;
+          trait::eT<T2> c_coeff =
+            c_equal ? _internal::conj2(Ap.at(c_value).at(_M2, N2))
+                    : (_M2 == N2 ? 1 : 0);
+
+          ret += r_coeff *
+                 rho.at(_internal::lexi_to_num(indexTR, dim),
+                        _internal::lexi_to_num(indexTC, dim)) *
+                 c_coeff;
+        }
+      }
+      return std::make_tuple(ret, _I, _J);
+    };
+
+    arma::Mat<eTR> ret_rho(rho);
+
+#if (defined(QICLIB_USE_OPENMP) || defined(QICLIB_USE_OPENMP_APPLY)) &&        \
+  defined(_OPENMP)
+#pragma omp parallel for collapse(4)
+#endif
+    for (arma::uword R1 = 0; R1 < DK; ++R1) {
+      for (arma::uword R2 = 0; R2 < DK; ++R2) {
+        for (arma::uword M1 = 0; M1 < DS; ++M1) {
+          for (arma::uword M2 = 0; M2 < DS; ++M2) {
+            if (sizeC == 0) {
+              auto W = worker_mix(1, M1, R1, 1, M2, R2);
+              ret_rho.at(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
             } else {
-              K += productr[counter] * loop_counter[i];
-              L += productr[counter] * loop_counter[i + n];
-              break;
+              for (arma::uword p = 0; p < DC; ++p) {
+                for (arma::uword q = 0; q < DC; ++q) {
+                  auto W = worker_mix(p, M1, R1, q, M2, R2);
+                  ret_rho.at(std::get<1>(W), std::get<2>(W)) = std::get<0>(W);
+                }
+              }
             }
           }
         }
-
-        if (o != 0) {
-          arma::uword counter_1(1);
-          for (arma::uword j = 1; j < o; ++j)
-            counter_1 +=
-              loop_counter[ctrl.at(0) - 1] == loop_counter[ctrl.at(j) - 1] ? 1
-                                                                           : 0;
-          power = counter_1 == o ? loop_counter[ctrl.at(0) - 1] : 0;
-        }
-        U.at(I, J) = Ap.at(power).at(K, L);
-      }
-
-      ++loop_counter[0];
-      while (loop_counter[p1] == MAX[p1]) {
-        loop_counter[p1] = 0;
-        loop_counter[++p1]++;
-        if (loop_counter[p1] != MAX[p1])
-          p1 = 0;
       }
     }
-    return U * rho * U.t();
+
+    return ret_rho;
   }
 }
-
-//******************************************************************************
-
-#else
-// USE PARALLEL ALGORITHM
-
-//******************************************************************************
-
-template <typename T1, typename T2,
-          typename TR = typename std::enable_if<
-            is_floating_point_var<trait::pT<T1>, trait::pT<T2> >::value &&
-              is_same_pT_var<T1, T2>::value,
-            arma::Mat<typename eT_promoter_var<T1, T2>::type> >::type>
-
-inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
-                     arma::uvec subsys, arma::uvec dim) {
-  const auto& rho = _internal::as_Mat(rho1);
-  const auto& A1 = _internal::as_Mat(A);
-
-  bool checkV = (rho.n_cols != 1);
-  arma::uword d = ctrl.n_elem > 0 ? dim.at(ctrl.at(0) - 1) : 1;
-
-#ifndef QICLIB_NO_DEBUG
-  if (rho.n_elem == 0)
-    throw Exception("qic::apply_ctrl", Exception::type::ZERO_SIZE);
-
-  if (A1.n_elem == 0)
-    throw Exception("qic::apply_ctrl", Exception::type::ZERO_SIZE);
-
-  if (checkV)
-    if (rho.n_rows != rho.n_cols)
-      throw Exception("qic::apply_ctrl",
-                      Exception::type::MATRIX_NOT_SQUARE_OR_CVECTOR);
-
-  if (A1.n_rows != A1.n_cols)
-    throw Exception("qic::apply_ctrl", Exception::type::MATRIX_NOT_SQUARE);
-
-  for (arma::uword i = 1; i < ctrl.n_elem; ++i)
-    if (dim.at(ctrl.at(i) - 1) != d)
-      throw Exception("qic::apply_ctrl", Exception::type::DIMS_NOT_EQUAL);
-
-  if (dim.n_elem == 0 || arma::any(dim == 0))
-    throw Exception("qic::apply_ctrl", Exception::type::INVALID_DIMS);
-
-  if (arma::prod(dim) != rho.n_rows)
-    throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
-
-  if (arma::prod(dim(subsys - 1)) != A1.n_rows)
-    throw Exception("qic::apply_ctrl", Exception::type::DIMS_MISMATCH_MATRIX);
-
-  const arma::uvec ctrlsubsys = arma::join_cols(subsys, ctrl);
-
-  if (ctrlsubsys.n_elem > dim.n_elem ||
-      arma::unique(ctrlsubsys).eval().n_elem != ctrlsubsys.n_elem ||
-      arma::any(ctrlsubsys > dim.n_elem) || arma::any(ctrlsubsys == 0))
-    throw Exception("qic::apply_ctrl", Exception::type::INVALID_SUBSYS);
-#endif
-
-  _internal::dim_collapse_sys_ctrl(dim, subsys, ctrl);
-
-  const arma::uword n = dim.n_elem;
-  const arma::uword m = subsys.n_elem;
-  const arma::uword o = ctrl.n_elem;
-
-  arma::uvec keep(n - m);
-  arma::uword keep_count(0);
-  for (arma::uword run = 0; run < n; ++run) {
-    if (!arma::any(subsys == run + 1)) {
-      keep.at(keep_count) = run + 1;
-      ++keep_count;
-    }
-  }
-
-  arma::uword productr[_internal::MAXQDIT];
-  productr[m - 1] = 1;
-  for (arma::uword i = 1; i < m; ++i)
-    productr[m - 1 - i] = productr[m - i] * dim.at(subsys.at(m - i) - 1);
-
-  arma::uword p_num = std::max(static_cast<arma::uword>(1), d - 1);
-
-  arma::field<arma::Mat<trait::eT<T2> > > Ap(p_num + 1);
-  for (arma::uword i = 0; i <= p_num; ++i)
-    Ap.at(i) = _internal::POWM_GEN_INT(A1, i);
-
-  arma::Mat<trait::eT<T2> > U(rho.n_rows, rho.n_rows);
-
-  auto worker = [n, o, &dim, &subsys, &ctrl, &keep, &productr,
-                 &Ap](arma::uword I, arma::uword J) noexcept -> trait::eT<T2> {
-
-    bool equality_check = I == J;
-    arma::uword Iindex[_internal::MAXQDIT];
-    arma::uword Jindex[_internal::MAXQDIT];
-    arma::uword count1(0);
-
-    for (arma::uword i = 1; i < n; ++i) {
-      Iindex[n - i] = I % dim.at(n - i);
-      Jindex[n - i] = J % dim.at(n - i);
-      I /= dim.at(n - i);
-      J /= dim.at(n - i);
-
-      if (arma::any(keep == n - i + 1) && (Iindex[n - i] != Jindex[n - i]))
-        return static_cast<trait::eT<T2> >(0);
-
-      count1 += (arma::any(ctrl == n - i + 1) && Iindex[n - i] != 0) ? 1 : 0;
-    }
-
-    Iindex[0] = I;
-    Jindex[0] = J;
-
-    if (arma::any(keep == 1) && (Iindex[0] != Jindex[0]))
-      return static_cast<trait::eT<T2> >(0);
-
-    count1 += (arma::any(ctrl == 1) && Iindex[0] != 0) ? 1 : 0;
-
-    if (equality_check && count1 != o)
-      return static_cast<trait::eT<T2> >(1);
-    else if (count1 != o)
-      return static_cast<trait::eT<T2> >(0);
-
-    arma::uword K(0), L(0);
-    for (arma::uword i = 0; i < n; ++i) {
-      arma::uword count2(0);
-      while (arma::any(subsys == i + 1)) {
-        if (subsys.at(count2) != i + 1) {
-          ++count2;
-        } else {
-          K += productr[count2] * Iindex[i];
-          L += productr[count2] * Jindex[i];
-          break;
-        }
-      }
-    }
-
-    arma::uword power = o == 0 ? 1 : 0;
-    if (o != 0) {
-      arma::uword count3(1);
-      for (arma::uword j = 1; j < o; ++j)
-        count3 += Iindex[ctrl.at(0) - 1] == Jindex[ctrl.at(j) - 1] ? 1 : 0;
-      power = count3 == o ? Jindex[ctrl.at(0) - 1] : 0;
-    }
-
-    return Ap.at(power).at(K, L);
-  };
-
-#if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
-#endif
-  for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
-    for (arma::uword II = 0; II < rho.n_rows; ++II) {
-      U.at(II, JJ) = worker(II, JJ);
-    }
-  }
-
-  if (checkV)
-    return U * rho * U.t();
-  else
-    return U * rho;
-}
-
-//******************************************************************************
-
-#endif
 
 //******************************************************************************
 
@@ -458,7 +327,7 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
     throw Exception("qic::apply_ctrl", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -470,3 +339,5 @@ inline TR apply_ctrl(const T1& rho1, const T2& A, arma::uvec ctrl,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

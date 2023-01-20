@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_TYPE_TRAITS_HPP_
+#define _QICLIB_TYPE_TRAITS_HPP_
+
+#include <armadillo>
+#include <type_traits>
 
 namespace qic {
 
@@ -55,6 +61,8 @@ template <typename T1> using RR = typename std::remove_reference<T1>::type;
 
 template <typename T1> using RCV = typename std::remove_cv<T1>::type;
 
+template <typename T1> using DECAY = typename std::decay<T1>::type;
+
 template <typename T1> using pT2 = typename T1::pod_type;
 
 template <typename T1> using eT2 = typename T1::elem_type;
@@ -62,10 +70,10 @@ template <typename T1> using eT2 = typename T1::elem_type;
 template <typename T1> using GPT = typename arma::get_pod_type<T1>::result;
 
 template <typename T1>
-using pT = typename conditional_arma<trait::RR<T1> >::type::pod_type;
+using pT = typename conditional_arma<DECAY<T1> >::type::pod_type;
 
 template <typename T1>
-using eT = typename conditional_arma<trait::RR<T1> >::type::elem_type;
+using eT = typename conditional_arma<DECAY<T1> >::type::elem_type;
 
 //****************************************************************************
 
@@ -78,7 +86,7 @@ template <typename T1, typename... T2> struct is_arma_type_var {
 };
 
 template <typename T1> struct is_arma_type_var<T1> {
-  static constexpr bool value = arma::is_arma_type<trait::RR<T1> >::value;
+  static constexpr bool value = arma::is_arma_type<trait::DECAY<T1> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
@@ -96,7 +104,7 @@ template <typename T1, typename... T2> struct is_arma_sparse_type_var {
 
 template <typename T1> struct is_arma_sparse_type_var<T1> {
   static constexpr bool value =
-    arma::is_arma_sparse_type<trait::RR<T1> >::value;
+    arma::is_arma_sparse_type<trait::DECAY<T1> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
@@ -113,7 +121,8 @@ template <typename T1, typename... T2> struct is_floating_point_var {
 };
 
 template <typename T1> struct is_floating_point_var<T1> {
-  static constexpr bool value = std::is_floating_point<T1>::value;
+  static constexpr bool value =
+    std::is_floating_point<trait::DECAY<T1> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
@@ -152,13 +161,13 @@ template <typename T1, typename... T2> struct is_complex_var {
 };
 
 template <typename T1> struct is_complex_var<T1> {
-  static constexpr bool value = is_complex<T1>::value;
+  static constexpr bool value = is_complex<trait::DECAY<T1> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
 struct is_complex_var<T1, T2, T3...> {
   static constexpr bool value = std::integral_constant < bool,
-                        is_complex<T1>::value
+                        is_complex<trait::DECAY<T1> >::value
                             &&is_complex_var<T2, T3...>::value > ::value;
 };
 
@@ -195,13 +204,13 @@ template <typename T1, typename... T2> struct is_complex_fp_var {
 };
 
 template <typename T1> struct is_complex_fp_var<T1> {
-  static constexpr bool value = is_complex_fp<T1>::value;
+  static constexpr bool value = is_complex_fp<trait::DECAY<T1> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
 struct is_complex_fp_var<T1, T2, T3...> {
   static constexpr bool value = std::integral_constant < bool,
-                        is_complex_fp<T1>::value
+                        is_complex_fp<trait::DECAY<T1> >::value
                             &&is_complex_fp_var<T2, T3...>::value > ::value;
 };
 
@@ -260,13 +269,13 @@ template <typename T1, typename... T2> struct is_all_same {
 
 template <typename T1, typename T2> struct is_all_same<T1, T2> {
   static constexpr bool value =
-    std::is_same<trait::RR<T1>, trait::RR<T2> >::value;
+    std::is_same<trait::DECAY<T1>, trait::DECAY<T2> >::value;
 };
 
 template <typename T1, typename T2, typename... T3>
 struct is_all_same<T1, T2, T3...> {
   static constexpr bool value = std::integral_constant < bool,
-                        std::is_same<trait::RR<T1>, trait::RR<T2> >::value
+                        std::is_same<trait::DECAY<T1>, trait::DECAY<T2> >::value
                             &&is_all_same<T1, T3...>::value > ::value;
 };
 
@@ -278,14 +287,16 @@ template <typename T1, typename... T2> struct is_same_pT_var {
 
 template <typename T1> struct is_same_pT_var<T1> {
   static constexpr bool value =
-    std::integral_constant<bool, arma::is_arma_type<T1>::value>::value;
+    std::integral_constant<bool,
+                           arma::is_arma_type<trait::DECAY<T1> >::value>::value;
 };
 
 template <typename T1, typename T2> struct is_same_pT_var<T1, T2> {
   static constexpr bool
     value = std::integral_constant < bool,
-    arma::is_arma_type<T1>::value &&arma::is_arma_type<T2>::value
-        &&std::is_same<trait::pT<T1>, trait::pT<T2> >::value > ::value;
+    arma::is_arma_type<trait::DECAY<T1> >::value
+        &&arma::is_arma_type<trait::DECAY<T2> >::value
+          &&std::is_same<trait::pT<T1>, trait::pT<T2> >::value > ::value;
 };
 
 template <typename T1, typename T2, typename... T3>
@@ -298,3 +309,5 @@ struct is_same_pT_var<T1, T2, T3...> {
 //*****************************************************************************
 
 }  // namespace qic
+
+#endif

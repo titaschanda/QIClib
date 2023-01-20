@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,15 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_IS_HERMITIAN_HPP_
+#define _QICLIB_IS_HERMITIAN_HPP_
+
+#include "../class/constants.hpp"
+#include "../internal/as_arma.hpp"
+#include "is_equal.hpp"
+#include "type_traits.hpp"
+#include <armadillo>
+
 namespace qic {
 
 template <typename T1, typename = typename std::enable_if<
@@ -27,6 +36,7 @@ inline bool is_Hermitian(
   const T1& rho1,
   const trait::pT<T1>& atol = _precision::eps<trait::pT<T1> >::value,
   const trait::pT<T1>& rtol = 10 * _precision::eps<trait::pT<T1> >::value) {
+
   const auto& rho = _internal::as_Mat(rho1);
 
   const arma::uword n = rho.n_rows;
@@ -40,3 +50,5 @@ inline bool is_Hermitian(
 }
 
 }  // namespace qic
+
+#endif

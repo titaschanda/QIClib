@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,17 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_TX_HPP_
+#define _QICLIB_TX_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/collapse.hpp"
+#include "../internal/conj2.hpp"
+#include "../internal/constants.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -35,7 +46,7 @@ template <typename T1,
 inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
              bool is_Hermitian = false) {
   auto rho = _internal::as_Mat(rho1);  // force copy
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
   (void)is_Hermitian;  // do not need this in serial algorithm
 
 #ifndef QICLIB_NO_DEBUG
@@ -89,19 +100,19 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   arma::uword p1 = 0;
 
   while (loop_counter[loop_no] == 0) {
-    arma::uword I(0), J(0), K(0), L(0);
+    arma::uword I(0), J(0);
 
     for (arma::uword i = 0; i < n; ++i) {
       I += product[i] * loop_counter[i];
       J += product[i] * loop_counter[i + n];
+    }
 
-      if (arma::any(subsys == i + 1)) {
-        K += product[i] * loop_counter[i + n];
-        L += product[i] * loop_counter[i];
-      } else {
-        K += product[i] * loop_counter[i];
-        L += product[i] * loop_counter[i + n];
-      }
+    arma::uword K(I), L(J);
+    for (arma::uword i = 0; i < subsys.n_elem; ++i) {
+      K += product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1 + n];
+      L -= product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1 + n];
+      L += product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1];
+      K -= product[subsys.at(i) - 1] * loop_counter[subsys.at(i) - 1];
     }
 
     if (I > K)
@@ -132,7 +143,7 @@ template <typename T1,
 inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
              bool is_Hermitian = false) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -167,6 +178,9 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
     else
       return rho * rho.t();
   }
+
+  if (!checkV)
+    is_Hermitian = true;
 
   _internal::dim_collapse_sys(dim, subsys);
   const arma::uword n = dim.n_elem;
@@ -212,15 +226,15 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   arma::Mat<trait::eT<T1> > tr_rho(rho.n_rows, rho.n_rows);
 
   if (is_Hermitian) {
+
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for
 #endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II <= JJ; ++II)
         tr_rho.at(II, JJ) = worker(II, JJ);
     }
 
-    
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = JJ + 1; II < rho.n_rows; ++II)
         tr_rho.at(II, JJ) = _internal::conj2(tr_rho.at(JJ, II));
@@ -229,7 +243,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uvec dim,
   } else {
 
 #if defined(_OPENMP)
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for collapse(2)
 #endif
     for (arma::uword JJ = 0; JJ < rho.n_rows; ++JJ) {
       for (arma::uword II = 0; II < rho.n_rows; ++II)
@@ -268,7 +282,7 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
     throw Exception("qic::Tx", Exception::type::INVALID_DIMS);
 #endif
 
-  arma::uword n = static_cast<arma::uword>(
+  const arma::uword n = static_cast<arma::uword>(
     QICLIB_ROUND_OFF(std::log(rho.n_rows) / std::log(dim)));
 
   arma::uvec dim2(n);
@@ -279,3 +293,5 @@ inline TR Tx(const T1& rho1, arma::uvec subsys, arma::uword dim = 2,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

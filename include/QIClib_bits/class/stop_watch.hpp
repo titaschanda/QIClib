@@ -5,7 +5,7 @@
  *
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -23,27 +23,29 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_STOP_WATCH_HPP_
+#define _QICLIB_STOP_WATCH_HPP_
+
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
 
 class stop_watch {
-  private:
-   std::chrono::steady_clock::time_point start{}, end{};
+ private:
+  std::chrono::steady_clock::time_point start{}, end{};
 
-  public:
-  stop_watch() noexcept : start{std::chrono::steady_clock::now()},
-                           end{start} {}
+ public:
+  stop_watch() noexcept : start{std::chrono::steady_clock::now()}, end{start} {}
 
   stop_watch(const stop_watch&) = default;
   stop_watch(stop_watch&&) = default;
 
   stop_watch& operator=(const stop_watch&) = default;
   stop_watch& operator=(stop_watch&&) = default;
-  
-  inline void tic() noexcept {
-    start = end = std::chrono::steady_clock::now();
-  }
+
+  inline void tic() noexcept { start = end = std::chrono::steady_clock::now(); }
 
   inline const stop_watch& toc() noexcept {
     end = std::chrono::steady_clock::now();
@@ -56,8 +58,8 @@ class stop_watch {
       .count();
   }
 
-  friend inline std::ostream& operator<<(std::ostream&, const stop_watch&); 
-}; 
+  friend inline std::ostream& operator<<(std::ostream&, const stop_watch&);
+};
 
 //******************************************************************************
 
@@ -67,3 +69,5 @@ inline std::ostream& operator<<(std::ostream& os, const stop_watch& clock) {
 }
 
 }  // namespace qic
+
+#endif

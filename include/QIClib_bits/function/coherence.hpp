@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -19,6 +19,15 @@
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _QICLIB_COHERENCE_HPP_
+#define _QICLIB_COHERENCE_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/as_arma.hpp"
+#include "../internal/conj2.hpp"
+#include <armadillo>
+
 namespace qic {
 
 //******************************************************************************
@@ -29,7 +38,7 @@ template <typename T1,
 
 inline TR l1_coh(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -54,7 +63,8 @@ inline TR l1_coh(const T1& rho1) {
 
     for (arma::uword ii = 0; ii < rho.n_rows; ++ii) {
       for (arma::uword jj = 0; jj < rho.n_rows; ++jj) {
-        ret += ii != jj ? std::abs(rho.at(ii) * _internal::conj2(rho.at(jj))) : 0.0;
+        ret +=
+          ii != jj ? std::abs(rho.at(ii) * _internal::conj2(rho.at(jj))) : 0.0;
       }
     }
   }
@@ -73,7 +83,7 @@ template <typename T1, typename T2,
 inline TR l1_coh(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0 || U.n_elem == 0)
@@ -105,7 +115,7 @@ template <typename T1,
 
 inline TR rel_entropy_coh(const T1& rho1) {
   const auto& rho = _internal::as_Mat(rho1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0)
@@ -135,7 +145,7 @@ template <typename T1, typename T2,
 inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
   const auto& rho = _internal::as_Mat(rho1);
   const auto& U = _internal::as_Mat(U1);
-  bool checkV = (rho.n_cols != 1);
+  const bool checkV = (rho.n_cols != 1);
 
 #ifndef QICLIB_NO_DEBUG
   if (rho.n_elem == 0 || U.n_elem == 0)
@@ -163,3 +173,5 @@ inline TR rel_entropy_coh(const T1& rho1, const T2& U1) {
 //******************************************************************************
 
 }  // namespace qic
+
+#endif

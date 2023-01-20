@@ -1,7 +1,7 @@
 /*
  * QIClib (Quantum information and computation library)
  *
- * Copyright (c) 2015 - 2017  Titas Chanda (titas.chanda@gmail.com)
+ * Copyright (c) 2015 - 2019  Titas Chanda (titas.chanda@gmail.com)
  *
  * This file is part of QIClib.
  *
@@ -18,6 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with QIClib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _QICLIB_DEFICIT_MEAT_HPP_
+#define _QICLIB_DEFICIT_MEAT_HPP_
+
+#include "../basic/type_traits.hpp"
+#include "../class/exception.hpp"
+#include "../internal/discord.hpp"
+#include "deficit_bones.hpp"
+#include <armadillo>
+#include <nlopt.hpp>
 
 namespace qic {
 
@@ -771,3 +781,5 @@ inline deficit_space<T1>& deficit_space<T1>::reset(T1&& rho, arma::uword subsys,
 //******************************************************************************
 
 }  // namespace qic
+
+#endif
