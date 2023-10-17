@@ -197,15 +197,15 @@ inline double disc_nlopt3(const std::vector<double>& x,
   trait::pT<T1> S_max = 0.0;
   if (p1 > _precision::eps<trait::pT<T1> >::value) {
     rho_1 /= p1;
-    S_max += p1 * entropy(TrX(rho_1, {pB->nodal}, pB->nodal));
+    S_max += p1 * entropy(TrX(rho_1, {pB->nodal}, pB->dim));
   }
   if (p2 > _precision::eps<trait::pT<T1> >::value) {
     rho_2 /= p2;
-    S_max += p2 * entropy(TrX(rho_2, {pB->nodal}, pB->nodal));
+    S_max += p2 * entropy(TrX(rho_2, {pB->nodal}, pB->dim));
   }
   if (p3 > _precision::eps<trait::pT<T1> >::value) {
     rho_3 /= p3;
-    S_max += p3 * entropy(TrX(rho_3, {pB->nodal}, pB->nodal));
+    S_max += p3 * entropy(TrX(rho_3, {pB->nodal}, pB->dim));
   }
 
   return static_cast<double>(S_max);
